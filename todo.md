@@ -258,3 +258,15 @@
 - [x] Küçük ekranlarda zaman çizelgesi okunurluğunu ve akışını düzenlemek.
 - [x] Masaüstü ve mobil görünümler ile üretim paketini doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## GitHub Entegrasyonu
+
+- [x] GitHub entegrasyonu yapılandırmasını doğrulamak.
+- [x] GitHub entegrasyonunu etkinleştirmek.
+- [x] Bağlantı durumunu ve yönetim paneli yönlendirmesini doğrulamak.
+
+## GitHub README
+
+- [x] Proje komutları ve klasör yapısını doğrulamak.
+- [x] Türkçe kurulum, geliştirme ve Git akışı rehberini yazmak.
+- [x] README içeriğini gözden geçirip teslim etmek.

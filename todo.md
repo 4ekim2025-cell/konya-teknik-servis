@@ -126,3 +126,13 @@
 - [x] Seçili cihaz ve arızayı WhatsApp mesajına aktarmak.
 - [x] Masaüstü ve mobil görünüm ile seçim akışını doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## İlçe Seçimi, Ergonomi ve İletişim Bilgileri
+
+- [x] Akıllı Ön Bilgi akışına ilçe seçimi adımı eklemek.
+- [x] WhatsApp mesajına cihaz, arıza ve ilçe bilgisini eklemek.
+- [x] Akıllı Ön Bilgi bölümünü daha ferah ve ergonomik biçimde düzenlemek.
+- [x] Logo alanını 550×150px’e taşıyıp üst boşluğu azaltmak.
+- [x] Site genelindeki telefon numaralarını 05511858773 olarak güncellemek.
+- [x] Yeni akışı masaüstü ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

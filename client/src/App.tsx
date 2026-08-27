@@ -13,6 +13,7 @@ function Routes() {
   const path = location.endsWith("/") ? location : `${location}/`;
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.querySelectorAll<HTMLAnchorElement>('a[href="tel:+905555555555"]').forEach((link) => link.href = "tel:+905511858773");
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement("link"); canonical.setAttribute("rel", "canonical"); document.head.append(canonical); }
     canonical.setAttribute("href", window.location.href);

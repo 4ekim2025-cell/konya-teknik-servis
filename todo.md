@@ -59,3 +59,11 @@
 - [x] Yeni görselde kart ve metin kontrastını düzenlemek.
 - [x] Güncellenen hero alanını geniş ekran ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## İkonlu Üst Navigasyon
+
+- [x] Menü öğeleri için anlamlı ikon eşleşmelerini belirlemek.
+- [x] Masaüstü ve mobil üst menüye ikonları ve aktif durumları eklemek.
+- [x] Menü görsel hiyerarşisini, boşluklarını ve hover durumlarını iyileştirmek.
+- [x] Güncellenen navigasyonu masaüstü ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

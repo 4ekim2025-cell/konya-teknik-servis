@@ -292,3 +292,12 @@
 - [x] Boyut, format ve yükleme davranışı optimizasyonlarını uygulamak.
 - [x] Vercel yapılandırması ile üretim paketini doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Rota Bazlı Kod Bölme ve Görsel Yükleme Durumu
+
+- [x] Uygulama girişindeki paketleme ve rota bağımlılıklarını değerlendirmek.
+- [x] Sayfa bileşenlerini rota bazlı gecikmeli yüklemek.
+- [x] Görseller için erişilebilir iskelet/yükleme durumunu eklemek.
+- [x] Büyük istemci bağımlılıklarını ayrı üretim paketlerine bölmek.
+- [x] Üretim paket boyutlarını ve görsel yükleme deneyimini doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

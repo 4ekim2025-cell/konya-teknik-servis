@@ -176,3 +176,12 @@
 - [x] Verilen hizmet markalarını marka sayfası ve ilgili yönlendirmelerde güncellemek.
 - [x] Yeni menü, form ve marka alanlarını masaüstü ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Aktif Navigasyon ve Marka Kapsamları
+
+- [x] Aktif navigasyon öğesini daha görünür durum etiketiyle belirginleştirmek.
+- [x] Hizmet markaları için cihaz grubu kapsamlarını tanımlamak.
+- [x] Marka listesinde kapsam etiketlerini düzenli biçimde göstermek.
+- [x] Markaları ana sayfa ve hizmet keşif alanlarında vurgulamak.
+- [x] Masaüstü ve mobil görünümü doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

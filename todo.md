@@ -136,3 +136,14 @@
 - [x] Site genelindeki telefon numaralarını 05511858773 olarak güncellemek.
 - [x] Yeni akışı masaüstü ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Boş Logo Alanı ve Akıllı Ön Bilgi Yeniden Düzeni
+
+- [x] Logo görselini kaldırıp 550×150px boş logo alanını doğru yükseklikte uygulamak.
+- [x] Akıllı Ön Bilgi başlığını, cihaz seçimini ve içerik genişliğini yenilemek.
+- [x] Marka/model metin alanını ve seçim özetini WhatsApp mesajına eklemek.
+- [x] WhatsApp yönlendirmesi öncesi kısa başarı bildirimi göstermek.
+- [x] Hizmet kartlarındaki vurgulu etiketleri ve Hizmet Bölgesi bölümünü kaldırmak.
+- [x] Footer düzenini güncellemek.
+- [x] Yeni tasarımı ve etkileşimleri doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

@@ -204,3 +204,13 @@
 - [x] Hizmet detay sayfalarındaki marka görünürlüğünü cihazla ilgili kapsam kartlarıyla artırmak.
 - [x] Masaüstü ve mobil görünümleri doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Mobil Form ve Marka Detayları
+
+- [x] Mobil cihaz seçici kartlarında metin taşmasını gidermek.
+- [x] Ana sayfadaki süreç yaklaşımı mesajını güncellemek.
+- [x] Her hizmet markası için arıza ve onarım süreci detay sayfaları oluşturmak.
+- [x] Marka kartlarına anlamlı cihaz kategori ikonları eklemek.
+- [x] Marka ana sayfasını kategorisiz, sade bir keşif düzenine dönüştürmek.
+- [x] Yeni rota ve responsive düzenleri masaüstü/mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

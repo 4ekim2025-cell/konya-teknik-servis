@@ -270,3 +270,9 @@
 - [x] Proje komutları ve klasör yapısını doğrulamak.
 - [x] Türkçe kurulum, geliştirme ve Git akışı rehberini yazmak.
 - [x] README içeriğini gözden geçirip teslim etmek.
+
+## README Depo Bağlantısı
+
+- [x] GitHub depo bağlantısını doğrulamak.
+- [x] Doğrulanan bağlantıyı README dosyasına eklemek.
+- [x] README bağlantısını gözden geçirip teslim etmek.

@@ -2,6 +2,10 @@
 
 Konya’da beyaz eşya ve küçük ev aletleri için **WhatsApp servis talebi**, **Ön Bilgi Formu** ve **online cihaz takip** akışını öne çıkaran mobil öncelikli tanıtım sitesidir.
 
+## GitHub deposu
+
+Proje kaynak kodu: [github.com/4ekim2025-cell/konya-teknik-servis](https://github.com/4ekim2025-cell/konya-teknik-servis)
+
 ## Teknoloji
 
 | Alan | Teknoloji |

@@ -301,3 +301,9 @@
 - [x] Büyük istemci bağımlılıklarını ayrı üretim paketlerine bölmek.
 - [x] Üretim paket boyutlarını ve görsel yükleme deneyimini doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## GitHub Gönderimi
+
+- [ ] Yerel çalışma ağacını ve uzak depo durumunu doğrulamak.
+- [ ] Tüm değişiklikleri ana dala kaydedip göndermek.
+- [ ] Uzak depodaki son gönderimi doğrulamak.

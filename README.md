@@ -6,6 +6,8 @@ Konya’da beyaz eşya ve küçük ev aletleri için **WhatsApp servis talebi**,
 
 Proje kaynak kodu: [github.com/4ekim2025-cell/konya-teknik-servis](https://github.com/4ekim2025-cell/konya-teknik-servis)
 
+Vercel üzerinden dağıtım için proje özelindeki [adım adım Vercel rehberini](docs/vercel-deployment.md) inceleyin.
+
 ## Teknoloji
 
 | Alan | Teknoloji |

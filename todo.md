@@ -276,3 +276,11 @@
 - [x] GitHub depo bağlantısını doğrulamak.
 - [x] Doğrulanan bağlantıyı README dosyasına eklemek.
 - [x] README bağlantısını gözden geçirip teslim etmek.
+
+## Vercel Dağıtım Yapılandırması
+
+- [x] Vercel SPA yönlendirme kuralını doğrulamak.
+- [x] `vercel.json` dosyasını eklemek.
+- [x] Proje özelinde adım adım Vercel dağıtım rehberini yazmak.
+- [x] Üretim paketini ve yönlendirme yapılandırmasını doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

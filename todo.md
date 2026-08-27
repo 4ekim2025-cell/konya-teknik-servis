@@ -84,3 +84,10 @@
 - [x] Hero bilgi kartlarının boyutlarını ve okunurluğunu artırmak.
 - [x] Masaüstü ve mobil akışları doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Hizmetler Tetikleyicisi Konumu
+
+- [x] Hizmetler menüsünü logonun altındaki ikincil çubuğa taşımak.
+- [x] Mega menüyü yeni tetikleyici konumuyla hizalamak.
+- [x] Masaüstü ve mobil görünümü doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

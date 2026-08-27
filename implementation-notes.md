@@ -5,3 +5,5 @@
 - Yapılandırılmış veri ile kullanıcıya görünen marka metinleri EŞLİ TEKNİK adına güncellenecektir.
 
 Akıllı Ön Bilgi alanı şu anda cihaz, belirti, ilçe ve marka/model bilgisini taşımaktadır. Bu akışa, Diğer cihaz ve Diğer arıza için şartlı serbest metin alanları eklenerek WhatsApp mesajında kullanıcının kendi tanımının yer alması sağlanacaktır. Ana sayfada bu alan, Online Servis Takibi bölümünden hemen sonra konumlandırılacaktır.
+
+Üst navigasyondaki arama alanı ayrı bir form olarak tanımlanmıştır ve kaldırılacaktır. Menü yazıları, boş 300×100px logo alanıyla daha dengeli bir hiyerarşi oluşturacak biçimde büyütülecektir. Hizmet verilen markalar, bağımsız bir marka listesinde kullanıcı tarafından sağlanan güncel adlarla sunulacaktır.

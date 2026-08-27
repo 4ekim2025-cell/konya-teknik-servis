@@ -168,3 +168,11 @@
 - [x] Akıllı Ön Bilgi alanını Online Servis Takibi altına taşımak.
 - [x] Yeni akışı ve yerleşimi doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Menü Sadeleştirme ve Hizmet Markaları
+
+- [x] Üst menüdeki arama alanını kaldırmak ve menü ölçüsünü dengelemek.
+- [x] Ön Bilgi Formundaki numara işaretlerinin dolgu rengini kaldırmak.
+- [x] Verilen hizmet markalarını marka sayfası ve ilgili yönlendirmelerde güncellemek.
+- [x] Yeni menü, form ve marka alanlarını masaüstü ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

@@ -12,3 +12,11 @@
 - [x] Görsel, başlık ve üç adımlı akışın boşluklarını yeniden düzenlemek.
 - [x] Yenilenen bölümü masaüstü ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Kurumsal Turuncu ve Metin Ölçeği
+
+- [x] Kırmızı belirteçlerin kullanım kapsamını incelemek.
+- [x] Kurumsal turuncu belirteçlerini ve kontrast durumlarını uygulamak.
+- [x] Küçük yardımcı metinleri okunaklı bir ölçeğe yükseltmek.
+- [x] Güncellenen görünümü masaüstü ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

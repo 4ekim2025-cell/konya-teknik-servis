@@ -51,3 +51,11 @@
 - [x] Bilgi kartlarını dolu görsel alanla ilişkilendirerek orta bölgeye taşımak.
 - [x] Yeni hero kompozisyonunu geniş ekran ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Çoklu Cihaz Hero Kompozisyonu
+
+- [x] Bilgi kartlarını üst-orta hizaya taşımak.
+- [x] Çamaşır makinesi, bulaşık makinesi ve fırını içeren insan içermeyen özgün görseli üretmek.
+- [x] Yeni görselde kart ve metin kontrastını düzenlemek.
+- [x] Güncellenen hero alanını geniş ekran ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

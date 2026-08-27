@@ -81,3 +81,8 @@
 /* Geniş ekran düzeltmesi: cover görüntü alanını tamamen doldurur; kartlar boşluk yerine cihazın solundaki canlı alana oturur. */
 @media(min-width:1200px){.hero-image{background-size:cover;background-position:67% center}.hero-promises{position:absolute;top:50%;right:28%;width:340px;margin-top:0;transform:translateY(-41%)}}
 @media(min-width:861px) and (max-width:1199px){.hero-promises{transform:translateX(-95px)}}
+
+/* Çoklu cihaz hero kompozisyonu: kart grubu üst-orta hizada, üç cihaz onarım sahnesinin önünde kalır. */
+.hero-image{background-image:linear-gradient(90deg,rgba(35,25,21,.97) 0%,rgba(35,25,21,.9) 34%,rgba(35,25,21,.47) 57%,rgba(35,25,21,.08) 100%),url("/manus-storage/konya-teknik-hero-multi-appliance-v4_3b8f86ec.jpg");background-position:center;background-size:cover}
+@media(min-width:1200px){.hero-promises{top:128px;right:28%;transform:none}}
+@media(max-width:860px){.hero-image{background-image:linear-gradient(90deg,rgba(35,25,21,.95) 0%,rgba(35,25,21,.79) 60%,rgba(35,25,21,.22) 100%),url("/manus-storage/konya-teknik-hero-multi-appliance-v4_3b8f86ec.jpg");background-position:66% center;background-size:cover}}

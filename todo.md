@@ -250,3 +250,11 @@
 - [x] Bakım ve Parça Rehberi bölümünü tüm marka detay sayfalarından kaldırmak.
 - [x] Kaldırma sonrasında sayfa hiyerarşisi ve bağlantı akışını doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Online Cihaz Takip Zaman Çizelgesi
+
+- [x] Onarım aşamalarını müşterinin anlayacağı zaman çizelgesi adımlarıyla tanımlamak.
+- [x] Online takip sayfasına görsel zaman çizelgesi bileşenini eklemek.
+- [x] Küçük ekranlarda zaman çizelgesi okunurluğunu ve akışını düzenlemek.
+- [x] Masaüstü ve mobil görünümler ile üretim paketini doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

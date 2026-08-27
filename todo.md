@@ -35,3 +35,12 @@
 - [x] Takip bölümünde kullanılacak özgün görseli üretmek ve bağlamak.
 - [x] Güncellenen alanları masaüstü ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Hero Sıkılaştırma ve Okunurluk
+
+- [x] Hero alanındaki boşluğu kapatacak kart ve içerik yerleşimini belirlemek.
+- [x] İnsan içermeyen, daha aydınlık özgün hero görselini üretmek ve uygulamak.
+- [x] Sağdaki hizmet kartlarını sola çekmek ve görsel üzerindeki ağırlığı dengelemek.
+- [x] Site genelindeki 11–12px yardımcı metinleri daha okunur ölçeğe taşımak.
+- [x] Güncellenen alanları masaüstü ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

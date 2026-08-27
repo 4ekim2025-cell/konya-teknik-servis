@@ -147,3 +147,13 @@
 - [x] Footer düzenini güncellemek.
 - [x] Yeni tasarımı ve etkileşimleri doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Mobil Öncelikli Form ve Footer Düzeni
+
+- [x] Logo alanını 300×100px ölçüsüne güncellemek.
+- [x] Fırın ve ocağı birleştirip “Diğer” cihaz seçeneğini eklemek.
+- [x] Cihaz kartlarındaki dolu daire görünümünü kaldırmak.
+- [x] Footer iletişim alanını dördüncü sütuna taşımak.
+- [x] Mobil öncelikli responsive kırılımları iyileştirmek.
+- [x] Masaüstü ve mobil düzeni doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

@@ -304,6 +304,6 @@
 
 ## GitHub Gönderimi
 
-- [ ] Yerel çalışma ağacını ve uzak depo durumunu doğrulamak.
-- [ ] Tüm değişiklikleri ana dala kaydedip göndermek.
-- [ ] Uzak depodaki son gönderimi doğrulamak.
+- [x] Yerel çalışma ağacını ve uzak depo durumunu doğrulamak.
+- [x] Tüm değişiklikleri ana dala kaydedip göndermek.
+- [x] Uzak depodaki son gönderimi doğrulamak.

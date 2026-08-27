@@ -214,3 +214,15 @@
 - [x] Marka ana sayfasını kategorisiz, sade bir keşif düzenine dönüştürmek.
 - [x] Yeni rota ve responsive düzenleri masaüstü/mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Menü, Hero ve Marka Vurgusu
+
+- [x] Ana menü etkileşimlerinde daha yumuşak köşe yarıçapı uygulamak.
+- [x] Hero bilgi kartlarının içeriklerini ortalamak.
+- [x] Blog navigasyonunu ve blog modülünü kaldırmak.
+- [x] Hizmet sayfalarındaki “öne çıkan markalar” ifadesini kaldırmak.
+- [x] Ana sayfada markalara ayrılmış güçlü bir bölüm oluşturmak.
+- [x] Ana menüye Hizmetlerimiz bağlantısı eklemek.
+- [x] İkincil menüdeki form ve açıklama öğelerini Hizmetler’in sağına yaklaştırmak.
+- [x] Masaüstü ve mobil görünümleri doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

@@ -75,3 +75,12 @@
 - [x] Tüm ana içerik kabuklarını tutarlı maksimum 1530px genişliğe taşımak.
 - [x] Masaüstü ve mobil navigasyon ile sayfa genişliklerini doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Menü Etkileşimi ve Hero Kartları
+
+- [x] Mega menünün dış alana tıklanınca kapanmasını sağlamak.
+- [x] Mega menüye sık görülen arızalar için hızlı erişimler eklemek.
+- [x] Mobil menüye akordiyonlu cihaz kategorileri eklemek.
+- [x] Hero bilgi kartlarının boyutlarını ve okunurluğunu artırmak.
+- [x] Masaüstü ve mobil akışları doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

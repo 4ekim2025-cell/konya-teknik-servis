@@ -20,3 +20,10 @@
 - [x] Küçük yardımcı metinleri okunaklı bir ölçeğe yükseltmek.
 - [x] Güncellenen görünümü masaüstü ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Akıllı Ön Bilgi Yeniden Tasarımı
+
+- [x] Mevcut arıza seçici görünümünün hiyerarşi ve yoğunluk sorunlarını incelemek.
+- [x] Bölümü daha sade bilgi kartları ve daha anlaşılır seçim akışıyla yeniden tasarlamak.
+- [x] Yeni bileşen düzenini masaüstü ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

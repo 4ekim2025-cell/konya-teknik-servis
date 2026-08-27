@@ -77,3 +77,7 @@
 
 @media(min-width:1440px){.hero-promises{transform:translateX(-245px)}}
 @media(min-width:861px) and (max-width:1439px){.hero-promises{transform:translateX(-245px)}}
+
+/* Geniş ekran düzeltmesi: cover görüntü alanını tamamen doldurur; kartlar boşluk yerine cihazın solundaki canlı alana oturur. */
+@media(min-width:1200px){.hero-image{background-size:cover;background-position:67% center}.hero-promises{position:absolute;top:50%;right:28%;width:340px;margin-top:0;transform:translateY(-41%)}}
+@media(min-width:861px) and (max-width:1199px){.hero-promises{transform:translateX(-95px)}}

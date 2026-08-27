@@ -44,3 +44,10 @@
 - [x] Site genelindeki 11–12px yardımcı metinleri daha okunur ölçeğe taşımak.
 - [x] Güncellenen alanları masaüstü ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Geniş Ekran Hero Görsel Düzeltmesi
+
+- [x] Arka plan görselinin geniş ekranı kaplamama nedenini düzeltmek.
+- [x] Bilgi kartlarını dolu görsel alanla ilişkilendirerek orta bölgeye taşımak.
+- [x] Yeni hero kompozisyonunu geniş ekran ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

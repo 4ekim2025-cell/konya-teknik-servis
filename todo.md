@@ -108,3 +108,12 @@
 - [x] Hero bilgi kartları arasındaki aralığı artırmak.
 - [x] Güncellenen ana sayfayı masaüstü ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Logo, Açık Hero ve Hizmet Kataloğu
+
+- [x] Logo alanını 400×200px ölçüsüne taşımak.
+- [x] Koyu hero arka planını açık ve ferah bir görsel dile dönüştürmek.
+- [x] On ürünlü hizmet listesini ana sayfa ve menü keşif alanlarına aktarmak.
+- [x] Vurgulu ürünleri öncelikli olarak işaretlemek.
+- [x] Yeni görünümü masaüstü ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

@@ -117,3 +117,12 @@
 - [x] Vurgulu ürünleri öncelikli olarak işaretlemek.
 - [x] Yeni görünümü masaüstü ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Logo, Hero ve Akıllı Ön Bilgi Akışı
+
+- [x] Logo alanındaki metni kaldırıp 400×200px amblem görünümünü uygulamak.
+- [x] Hero görsel tonunu koyulaştırmak ve bilgi kartlarını sağa yaklaştırıp çoğaltmak.
+- [x] Akıllı Ön Bilgi cihazlarını güncel ürün kataloguna göre genişletmek.
+- [x] Seçili cihaz ve arızayı WhatsApp mesajına aktarmak.
+- [x] Masaüstü ve mobil görünüm ile seçim akışını doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

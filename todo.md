@@ -185,3 +185,12 @@
 - [x] Markaları ana sayfa ve hizmet keşif alanlarında vurgulamak.
 - [x] Masaüstü ve mobil görünümü doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Ön Bilgi Formu ve Marka Görünürlüğü
+
+- [x] Tüm sayfalara Ön Bilgi Formu yönlendirmesi eklemek.
+- [x] Ön Bilgi Formu kırılımlarını küçük ekranlar için düzeltmek.
+- [x] Marka adlarını ana sayfa ve hizmet sayfalarında ilgili içeriklere yerleştirmek.
+- [x] Marka sayfası yönlendirmelerini güçlü dahili bağlantılarla desteklemek.
+- [x] Yeni form akışı ve marka görünürlüğünü masaüstü/mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

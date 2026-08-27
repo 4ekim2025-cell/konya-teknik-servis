@@ -12,11 +12,15 @@ function Routes() {
   const [location] = useLocation();
   const path = location.endsWith("/") ? location : `${location}/`;
   useEffect(() => {
-    window.scrollTo(0, 0);
-    document.querySelectorAll<HTMLAnchorElement>('a[href="tel:+905555555555"]').forEach((link) => link.href = "tel:+905511858773");
+    const targetId = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : "";
+    if (targetId) {
+      window.requestAnimationFrame(() => window.requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ block: "start" })));
+    } else {
+      window.scrollTo(0, 0);
+    }
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement("link"); canonical.setAttribute("rel", "canonical"); document.head.append(canonical); }
-    canonical.setAttribute("href", window.location.href);
+    canonical.setAttribute("href", `${window.location.origin}${path}`);
     document.getElementById("konya-teknik-schema")?.remove();
     const isService = path.includes("tamiri") || path.includes("montaj") || path.includes("servisi-konya");
     const graph: Record<string, unknown>[] = [

@@ -236,3 +236,11 @@
 - [x] Site haritası ve robots yapılandırmasını gözden geçirmek.
 - [x] Masaüstü ve mobil görünümler ile üretim paketini doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Tamir ve Servis İçerik Güçlendirmesi
+
+- [x] Hizmet kartları ve ana sayfa içeriklerinde tamir/servis ifadelerini bağlamsal biçimde artırmak.
+- [x] Marka detay sayfalarında marka adıyla servis ifadesini doğal biçimde güçlendirmek.
+- [x] İlçe ve destek yönlendirmelerinde yerel tamir/servis aramalarını desteklemek.
+- [x] Kullanıcı deneyimini koruyarak içerik güncellemelerini doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

@@ -67,3 +67,11 @@
 - [x] Menü görsel hiyerarşisini, boşluklarını ve hover durumlarını iyileştirmek.
 - [x] Güncellenen navigasyonu masaüstü ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Sade Navigasyon ve 1530px Genel Yerleşim
+
+- [x] Üst menüde gereksiz görsel yoğunluğu azaltmak.
+- [x] Hizmet mega menüsüne cihaz kategorisi ikonlarını eklemek.
+- [x] Tüm ana içerik kabuklarını tutarlı maksimum 1530px genişliğe taşımak.
+- [x] Masaüstü ve mobil navigasyon ile sayfa genişliklerini doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

@@ -16,4 +16,8 @@ Telefon görünümünde ilk denetimde Ön Bilgi Formu ana ızgarasının yatay g
 
 Hash içeren Ön Bilgi Formu bağlantılarında, uygulamanın başlangıçtaki üst konuma kaydırma davranışı hedef kaydırmayı geçersiz kılabiliyordu. Uygulama yönlendirme katmanında çift kare çağrısı ile form hedefi render sonrasında görünür konuma getirilmektedir.
 
+SEO iyileştirmesinde her sayfa için özgün başlık ve açıklama, canonical URL, Open Graph/Twitter paylaşım verileri, WebSite/WebPage/BreadcrumbList ve görünür içeriği yansıtan Service/FAQ yapılandırılmış verileri kullanılmalıdır. İşletmenin doğrulanmış açık adresi paylaşılmadığından adres zorunluluğu bulunan LocalBusiness işaretlemesi eklenmeyecek; robots.txt tüm taramaya izin verir ve site haritasını bildirir.
+
+Resmi SEO referansları: Google başlık bağlantısı yönergeleri https://developers.google.com/search/docs/appearance/title-link ; site haritası yönergeleri https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview ; yerel işletme yapılandırılmış verisi https://developers.google.com/search/docs/appearance/structured-data/local-business ; desteklenen meta etiketleri https://developers.google.com/search/docs/crawling-indexing/special-tags . Bu kaynaklar özgün başlık/açıklama, iç bağlantı, geçerli sitemap ve doğrulanabilir yapılandırılmış veri ilkelerini destekler.
+
 Doğrulamada, çamaşır makinesi hizmet sayfasındaki hero form aksiyonu ana sayfadaki Ön Bilgi Formu bölümüne ulaştı. Masaüstünde form hedefi görünür konuma kaydırıldı; telefon görünümünde form, tek kolonlu alanlar ve altındaki seçim özetiyle yatay taşma olmadan görüntülendi.

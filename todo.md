@@ -226,3 +226,13 @@
 - [x] İkincil menüdeki form ve açıklama öğelerini Hizmetler’in sağına yaklaştırmak.
 - [x] Masaüstü ve mobil görünümleri doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Marka Bakımı ve SEO Yapılandırması
+
+- [x] Marka detay sayfalarına sık kullanılan yedek parçalar bölümünü eklemek.
+- [x] Marka detay sayfalarına periyodik bakım önerileri bölümünü eklemek.
+- [x] Başlık, açıklama, canonical ve sosyal paylaşım meta verilerini güçlendirmek.
+- [x] Marka/hizmet yapılandırılmış verilerini ve dahili bağlantıları genişletmek.
+- [x] Site haritası ve robots yapılandırmasını gözden geçirmek.
+- [x] Masaüstü ve mobil görünümler ile üretim paketini doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

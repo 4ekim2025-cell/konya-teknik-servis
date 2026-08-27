@@ -27,3 +27,11 @@
 - [x] Bölümü daha sade bilgi kartları ve daha anlaşılır seçim akışıyla yeniden tasarlamak.
 - [x] Yeni bileşen düzenini masaüstü ve mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## İçerik Genişliği ve Takip Görseli
+
+- [x] Ortak içerik alanlarını maksimum 1530px düzenine taşımak.
+- [x] Takip görseli ile içerik kolonunu eşit genişlik ve dengeli yükseklikte düzenlemek.
+- [x] Takip bölümünde kullanılacak özgün görseli üretmek ve bağlamak.
+- [x] Güncellenen alanları masaüstü ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

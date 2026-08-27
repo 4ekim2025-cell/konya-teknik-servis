@@ -194,3 +194,13 @@
 - [x] Marka sayfası yönlendirmelerini güçlü dahili bağlantılarla desteklemek.
 - [x] Yeni form akışı ve marka görünürlüğünü masaüstü/mobilde doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Türkçe Dil, Hero ve Marka Sunumu
+
+- [x] Ana hero mesajını yeni servis takip metniyle değiştirmek.
+- [x] Uygulamanın dil özniteliklerini ve kullanıcıya görünen metinleri Türkçe olarak sabitlemek.
+- [x] İkincil menüdeki Ön Bilgi Formu ve açıklama öğelerini Hizmetler alanına yaklaştırmak.
+- [x] Hizmet Verdiğimiz Markalar sayfasını daha güçlü bir keşif deneyimiyle yeniden tasarlamak.
+- [x] Hizmet detay sayfalarındaki marka görünürlüğünü cihazla ilgili kapsam kartlarıyla artırmak.
+- [x] Masaüstü ve mobil görünümleri doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

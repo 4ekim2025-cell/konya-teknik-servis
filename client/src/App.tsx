@@ -12,6 +12,9 @@ function Routes() {
   const [location] = useLocation();
   const path = location.endsWith("/") ? location : `${location}/`;
   useEffect(() => {
+    document.documentElement.lang = "tr";
+    document.documentElement.dir = "ltr";
+    document.querySelectorAll<HTMLAnchorElement>('a[href="tel:+905555555555"]').forEach((link) => link.href = "tel:+905511858773");
     const targetId = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : "";
     if (targetId) {
       window.requestAnimationFrame(() => window.requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ block: "start" })));

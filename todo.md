@@ -244,3 +244,9 @@
 - [x] İlçe ve destek yönlendirmelerinde yerel tamir/servis aramalarını desteklemek.
 - [x] Kullanıcı deneyimini koruyarak içerik güncellemelerini doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Tekrar Eden Bakım Rehberi Temizliği
+
+- [x] Bakım ve Parça Rehberi bölümünü tüm marka detay sayfalarından kaldırmak.
+- [x] Kaldırma sonrasında sayfa hiyerarşisi ve bağlantı akışını doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

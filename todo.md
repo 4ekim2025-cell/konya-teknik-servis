@@ -157,3 +157,14 @@
 - [x] Mobil öncelikli responsive kırılımları iyileştirmek.
 - [x] Masaüstü ve mobil düzeni doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Serbest Diğer Girişleri ve EŞLİ TEKNİK Güncellemesi
+
+- [x] Cihaz için Diğer seçildiğinde serbest açıklama alanı eklemek.
+- [x] Arıza tipi için Diğer seçildiğinde serbest açıklama alanı eklemek.
+- [x] Seçim ve serbest giriş bilgisini WhatsApp mesajına aktarmak.
+- [x] İkincil çubuk açıklamasını Hizmetler tetikleyicisine yaklaştırmak.
+- [x] Marka adını EŞLİ TEKNİK olarak güncellemek.
+- [x] Akıllı Ön Bilgi alanını Online Servis Takibi altına taşımak.
+- [x] Yeni akışı ve yerleşimi doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

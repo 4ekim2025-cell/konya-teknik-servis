@@ -91,3 +91,12 @@
 - [x] Mega menüyü yeni tetikleyici konumuyla hizalamak.
 - [x] Masaüstü ve mobil görünümü doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## İkincil Çubuk ve Son Görüntülenen Hizmet
+
+- [x] Hizmetler tetikleyicisini logonun tam altına hizalamak.
+- [x] İkincil çubuğa Servis Bölgeleri kısayolunu eklemek.
+- [x] Aktif durum ile hover geçişi ve gölge efektini tanımlamak.
+- [x] Son görüntülenen kategori tercihini kaydetmek ve mega menüde göstermek.
+- [x] Masaüstü ve mobil davranışları doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

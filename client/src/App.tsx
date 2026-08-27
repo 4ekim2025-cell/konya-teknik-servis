@@ -10,7 +10,7 @@ import ContentPage from "./pages/ContentPage";
 
 const siteName="EŞLİ TEKNİK";
 const siteDescription="Konya’da beyaz eşya ve küçük ev aletleri için WhatsApp servis talebi, şeffaf süreç ve online iş takibi.";
-const socialImage="/manus-storage/konya-teknik-hero-light-v5_5c3d807f.jpg";
+const socialImage="https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/eQkpZGxpWhAUFzwQ.webp";
 
 function setMeta(attribute:"name"|"property",key:string,content:string){let element=document.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);if(!element){element=document.createElement("meta");element.setAttribute(attribute,key);document.head.append(element)}element.setAttribute("content",content)}
 function setLink(rel:string,href:string,extra?:Record<string,string>){const selector=extra?.hreflang?`link[rel="${rel}"][hreflang="${extra.hreflang}"]`:`link[rel="${rel}"]`;let element=document.querySelector<HTMLLinkElement>(selector);if(!element){element=document.createElement("link");element.setAttribute("rel",rel);document.head.append(element)}element.setAttribute("href",href);Object.entries(extra??{}).forEach(([key,value])=>element?.setAttribute(key,value))}

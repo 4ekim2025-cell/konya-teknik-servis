@@ -284,3 +284,11 @@
 - [x] Proje özelinde adım adım Vercel dağıtım rehberini yazmak.
 - [x] Üretim paketini ve yönlendirme yapılandırmasını doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Vercel Görsel Varlıkları ve Performans
+
+- [x] Yerel ve Manus depolama görsel referanslarını envanterlemek.
+- [x] Görselleri kalıcı HTTPS bağlantılarıyla güncellemek.
+- [x] Boyut, format ve yükleme davranışı optimizasyonlarını uygulamak.
+- [x] Vercel yapılandırması ile üretim paketini doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

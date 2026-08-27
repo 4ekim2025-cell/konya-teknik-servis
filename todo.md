@@ -100,3 +100,11 @@
 - [x] Son görüntülenen kategori tercihini kaydetmek ve mega menüde göstermek.
 - [x] Masaüstü ve mobil davranışları doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## Mega Menü, Hizmetler ve Hero Kart Ritmi
+
+- [x] Mega menüyü açık, sıcak ve yüksek okunurluklu bir renk sistemine taşımak.
+- [x] Ana sayfa hizmetler bölümünün keşif deneyimini güçlendirmek.
+- [x] Hero bilgi kartları arasındaki aralığı artırmak.
+- [x] Güncellenen ana sayfayı masaüstü ve mobilde doğrulamak.
+- [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.

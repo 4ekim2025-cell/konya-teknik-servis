@@ -452,3 +452,11 @@
 - [x] Online Servis Takibi ana içerik bloğunu logo alanının sol hizasına getir
 - [x] Masaüstü ve mobil takip sayfası görünümünü doğrula
 - [x] Testleri çalıştır ve checkpoint oluştur
+
+## Hizmet Kartı ve Mega Tetikleyici Stil Düzeltmesi
+
+- [x] Hizmet kartlarındaki tüm hover yüzey renklerini tutarlı hale getir
+- [x] Hizmet kartlarının köşelerini yuvarlat
+- [x] Logo altındaki Hizmetler tetikleyicisini siyah yüzeyden kurumsal renge taşı
+- [x] Masaüstü, mobil ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

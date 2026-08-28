@@ -424,3 +424,11 @@
 - [x] `.inner-hero > div:first-child::after` arka plan rengini kaldır
 - [x] Alt sayfa görünümünü ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Mega Menü, Hero ve Takip Zemini Düzeltmesi
+
+- [x] Mega tetikleyici ve mega menüdeki koyu yeşil arka plan override’ını kaldır
+- [x] Hero arka plan rengini kaldır
+- [x] Online Servis Takibi bölümünü beyaz zemine al
+- [x] Masaüstü, mobil ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

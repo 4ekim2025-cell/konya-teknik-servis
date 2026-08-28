@@ -467,3 +467,10 @@
 - [x] Mega menüyü doğrudan tetikleyici butonunun altına hizala
 - [x] Masaüstü, mobil ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Alt Sayfa Akışı ve Mega Menü Sol Hizası
+
+- [x] Koyu “Randevu nasıl işler?” akışını açık ve kullanıcı dostu tasarıma dönüştür
+- [x] Mega menünün sol başlangıcını Hizmetler tetikleyicisiyle hizala
+- [x] Masaüstü, mobil ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

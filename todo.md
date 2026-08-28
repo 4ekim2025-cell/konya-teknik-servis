@@ -446,3 +446,9 @@
 - [x] Header ikincil çubuğunun üst çizgisini ana içerik sınırlarına hizala
 - [x] Masaüstü ve mobil header görünümünü doğrula
 - [x] Testleri çalıştır ve checkpoint oluştur
+
+## Online Takip Logo Hizası Düzeltmesi
+
+- [x] Online Servis Takibi ana içerik bloğunu logo alanının sol hizasına getir
+- [x] Masaüstü ve mobil takip sayfası görünümünü doğrula
+- [x] Testleri çalıştır ve checkpoint oluştur

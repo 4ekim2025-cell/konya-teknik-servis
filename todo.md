@@ -301,3 +301,13 @@
 - [x] Büyük istemci bağımlılıklarını ayrı üretim paketlerine bölmek.
 - [x] Üretim paket boyutlarını ve görsel yükleme deneyimini doğrulamak.
 - [x] Güncellenen sürümü kayıt altına almak ve teslim etmek.
+
+## SEO, Kırık Link ve Kalite Denetimi
+
+- [x] Proje rotaları, SEO dosyaları ve yapılandırılmış veri envanterini çıkar
+- [x] Canlı önizlemedeki tüm dahili ve harici bağlantıları kırık link açısından test et
+- [x] Google ve yapay zekâ arama görünürlüğü için teknik ve içerik eksiklerini önceliklendir
+- [x] Responsive ve erişilebilirlik geliştirme noktalarını raporla
+- [x] SEO, kırık link ve geliştirme önerileri raporunu teslim et
+- [x] Canlı önizlemedeki tüm benzersiz dahili ve harici link hedeflerinin tam envanterini çıkarıp tek tek doğrula; hash, tel, WhatsApp ve footer/header CTA varyasyonlarını da kapsa
+- [x] Erişilebilirlik için somut denetim yap: klavye erişimi, görünür focus, form label/aria bağları, renk kontrastı, 200% zoom ve reduced-motion davranışını proje bazlı bulgularla raporla

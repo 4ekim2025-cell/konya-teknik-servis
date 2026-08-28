@@ -432,3 +432,11 @@
 - [x] Online Servis Takibi bölümünü beyaz zemine al
 - [x] Masaüstü, mobil ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Online Takip Akışı ve Page CTA Kaldırma
+
+- [x] Online Servis Takibi sayfasındaki hizalama sorununu tespit et ve düzelt
+- [x] `.repair-flow` bileşenini daha anlaşılır, responsive ve kullanıcı dostu tasarıma dönüştür
+- [x] `.page-cta` alanlarını tüm sayfalardan kaldır
+- [x] Masaüstü, mobil ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

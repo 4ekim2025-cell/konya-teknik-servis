@@ -362,3 +362,12 @@
 - [x] Hero alanını yeni hiyerarşi, CTA ve kart düzeniyle yeniden tasarla
 - [x] Masaüstü, mobil, animasyon ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Akıllı Ön Bilgi Okunabilirlik Düzeltmesi
+
+- [x] Düşük kontrastlı ve küçük metinleri tespit et
+- [x] Sağ önizleme kartını daha sade ve yüksek kontrastlı düzene geçir
+- [x] Metin boyutlarını ve satır aralıklarını okunabilir seviyeye yükselt
+- [x] CTA ve form başlangıç davranışını daha görünür hale getir
+- [x] Masaüstü, mobil ve erişilebilirlik kontrollerini tamamla
+- [x] Testleri çalıştır ve checkpoint oluştur

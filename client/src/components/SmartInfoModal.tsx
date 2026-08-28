@@ -34,13 +34,18 @@ const devices: Device[] = [
 const districts = ["Karatay", "Meram", "Selçuklu"];
 
 function StepIndicator({ step }: { step: number }) {
-  return <div className="smart-stepper" aria-label={`Form adımı ${step} / 4`}>
-    {["Cihaz", "Arıza", "Detaylar", "Özet"].map((label, index) => {
-      const number = index + 1;
-      return <div className={`smart-step ${number <= step ? "is-active" : ""} ${number === step ? "is-current" : ""}`} key={label}>
-        <span>{number < step ? <Check size={13} /> : number}</span><small>{label}</small>
-      </div>;
-    })}
+  const progress = (step / 4) * 100;
+  return <div className="smart-progress-wrap" aria-label={`Form adımı ${step} / 4`}>
+    <div className="smart-progress-meta"><span>İlerleme</span><strong>{step}. adım <small>/ 4</small></strong></div>
+    <div className="smart-progress-track" role="progressbar" aria-valuemin={1} aria-valuemax={4} aria-valuenow={step} aria-valuetext={`${step}. adım / 4`}><span style={{ width: `${progress}%` }} /></div>
+    <div className="smart-stepper">
+      {["Cihaz", "Arıza", "Detaylar", "Özet"].map((label, index) => {
+        const number = index + 1;
+        return <div className={`smart-step ${number <= step ? "is-active" : ""} ${number === step ? "is-current" : ""}`} key={label}>
+          <span>{number < step ? <Check size={13} /> : number}</span><small>{label}</small>
+        </div>;
+      })}
+    </div>
   </div>;
 }
 

@@ -353,3 +353,12 @@
 - [x] İlk ekran adım kutularını daha yumuşak köşeli, katmanlı kart tasarımına dönüştür
 - [x] Masaüstü, mobil ve reduced-motion görünümünü doğrula
 - [x] Testleri çalıştır ve checkpoint oluştur
+
+## İlerleme Çubuğu ve Hero Yenilemesi
+
+- [x] Modal üst bölümündeki mevcut adım göstergesini incele
+- [x] Görsel progress bar ve aktif adım durumunu ekle
+- [x] Hero alanının mevcut kompozisyonunu ve responsive davranışını incele
+- [x] Hero alanını yeni hiyerarşi, CTA ve kart düzeniyle yeniden tasarla
+- [x] Masaüstü, mobil, animasyon ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

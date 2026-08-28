@@ -105,7 +105,7 @@ export function SmartInfoModal() {
     <div className="smart-info-preview" aria-label="Ön bilgi formu adımları">
       <div className="smart-preview-head"><span className="section-kicker">KOLAY SERVİS TALEBİ</span><span className="smart-preview-status"><i /> 3 adım</span></div>
       <div className="smart-preview-flow"><div><b>01</b><span><strong>Cihaz</strong><small>Ürün grubunu seçin</small></span></div><div><b>02</b><span><strong>Arıza</strong><small>Belirtiyi işaretleyin</small></span></div><div><b>03</b><span><strong>Detaylar</strong><small>İlçe ve model ekleyin</small></span></div></div>
-      <div className="smart-preview-footer"><span><MessageCircle size={15} /> WhatsApp mesajınız hazır</span><button type="button" className="text-link" onClick={() => setOpen(true)}>Formu başlat <ArrowRight size={16} /></button></div>
+      <div className="smart-preview-footer"><span><MessageCircle size={15} /> WhatsApp mesajınız hazır</span><button type="button" className="text-link" onClick={() => setOpen(true)}>Servis talebi oluştur <ArrowRight size={16} /></button></div>
     </div>
 
     {open && <div className="smart-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>

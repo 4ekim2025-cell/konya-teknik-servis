@@ -371,3 +371,12 @@
 - [x] CTA ve form başlangıç davranışını daha görünür hale getir
 - [x] Masaüstü, mobil ve erişilebilirlik kontrollerini tamamla
 - [x] Testleri çalıştır ve checkpoint oluştur
+
+## Kurumsal Renk Sistemi ve Hero Sadeleştirmesi
+
+- [x] Akıllı Ön Bilgi CTA metnini “Servis talebi oluştur” olarak güncelle
+- [x] Hero içindeki servis vaat kutularını tamamen kaldır
+- [x] #055564, #FCF5DB ve #A12519 renklerini merkezi tokenlara dönüştür
+- [x] Ana yüzeyleri, CTA’ları, navigasyonu ve vurguları kurumsal palete uyumla
+- [x] Masaüstü, mobil, kontrast ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

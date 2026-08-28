@@ -482,3 +482,9 @@
 - [x] Keşfet yönlendirmesini logonun altında daha büyük, vurgulu ve ortalı konumlandır
 - [x] Masaüstü, mobil, erişilebilirlik ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Mobil Keşfet Hizalama Düzeltmesi
+
+- [x] Mobil Keşfet metin, çizgi ve ok bileşenlerini logo altında merkezle
+- [x] Mobil görünümü ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

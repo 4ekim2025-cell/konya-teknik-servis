@@ -380,3 +380,13 @@
 - [x] Ana yüzeyleri, CTA’ları, navigasyonu ve vurguları kurumsal palete uyumla
 - [x] Masaüstü, mobil, kontrast ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Hero Yönlendirmesi, Zeminler ve Header Düzeni
+
+- [x] Hero alanına animasyonlu aşağı kaydırma oku ekle
+- [x] “Servis Kaydınızı Açalım” modülünü tamamen kaldır
+- [x] Akıllı Ön Bilgi ve Hizmet Verdiğimiz Markalar dışındaki ana bölümlerin zeminini beyaza al
+- [x] Header logo alanını 150×150 px olarak düzenle
+- [x] Ana menüyü masaüstünde sola hizala
+- [x] Masaüstü, mobil, animasyon ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

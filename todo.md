@@ -440,3 +440,9 @@
 - [x] `.page-cta` alanlarını tüm sayfalardan kaldır
 - [x] Masaüstü, mobil ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Header İkincil Çubuk Çizgisi Hizalaması
+
+- [x] Header ikincil çubuğunun üst çizgisini ana içerik sınırlarına hizala
+- [x] Masaüstü ve mobil header görünümünü doğrula
+- [x] Testleri çalıştır ve checkpoint oluştur

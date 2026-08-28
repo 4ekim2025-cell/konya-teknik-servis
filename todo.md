@@ -319,3 +319,13 @@
 - [x] Tüm telefon hedeflerini 0551 185 87 73 numarasıyla eşitle
 - [x] Open Graph görsel URL’si birleştirme hatasını düzelt
 - [x] P0 düzeltmelerini build, rota, metadata ve link testleriyle doğrula
+
+## Telefon, İlerleme Modalı ve Soft-404 Geliştirmeleri
+
+- [x] Tüm telefon numarası ve tel hedeflerini tek merkezi sabitten yönet
+- [x] Mobil click-to-call hedeflerini ve erişilebilir telefon CTA’larını düzenle
+- [x] Akıllı Ön Bilgi akışını cihaz, arıza, marka/model-ilçe adımlarına böl
+- [x] Akış için responsive ilerleme modalı, geri/ileri ve kapatma davranışlarını ekle
+- [x] Özel 404 sayfasını ve kontrollü route fallback davranışını yapılandır
+- [x] Prerender stratejisini ve üretim route çıktısını doğrula
+- [x] Vitest, TypeScript, build ve responsive kontrollerini tamamla

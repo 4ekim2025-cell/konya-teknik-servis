@@ -474,3 +474,11 @@
 - [x] Mega menünün sol başlangıcını Hizmetler tetikleyicisiyle hizala
 - [x] Masaüstü, mobil ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Hero Logosu ve Keşfet Yönlendirmesi
+
+- [x] Yüklenen 300 px EŞLİ TEKNİK logosunu kalıcı web varlığı olarak hazırla
+- [x] Hero metninin sağına 300 px genişliğinde logo ekle
+- [x] Keşfet yönlendirmesini logonun altında daha büyük, vurgulu ve ortalı konumlandır
+- [x] Masaüstü, mobil, erişilebilirlik ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

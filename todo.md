@@ -390,3 +390,13 @@
 - [x] Ana menüyü masaüstünde sola hizala
 - [x] Masaüstü, mobil, animasyon ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Logo, Hero Keşfet ve FAQ Zemin Düzeltmesi
+
+- [x] Yüklenen EŞLİ TEKNİK logosunu kalıcı web varlığı olarak hazırla
+- [x] Logoyu header’a 150×131 px ölçüyle yerleştir
+- [x] Mobil header yüksekliğini gerçek logo oranına göre optimize et
+- [x] Keşfet bağlantısını hero alanı içinde sabitle
+- [x] Merak Edilenler bölümüne hafif gri zemin uygula
+- [x] Masaüstü, mobil ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

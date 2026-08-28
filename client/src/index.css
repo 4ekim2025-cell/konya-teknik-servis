@@ -280,3 +280,13 @@ html,body{background:var(--brand-cream);color:var(--ink)}
 .faq-section{background:#f3f5f5}
 @media(min-width:861px){.header-row{height:131px;min-height:131px}.brand{width:150px;height:131px;flex:0 0 150px}.hero-scroll{left:auto;right:31%;bottom:34px;flex-direction:column;justify-content:center;gap:5px;min-width:66px;padding:7px}.hero-scroll i{width:1px;height:25px}.hero-scroll svg{margin-top:-4px}.mega-menu{top:169px}}
 @media(max-width:860px){.header-row{height:92px;min-height:92px;padding-top:4px;padding-bottom:4px}.brand{width:96px;height:84px;flex:0 0 96px}.brand img{width:96px;height:auto;max-height:84px}.nav-toggle{margin-left:auto}.hero-scroll{left:50%;right:auto;bottom:12px;transform:translateX(-50%);flex-direction:column;gap:3px;min-width:62px;padding:4px}.hero-scroll i{width:1px;height:18px}.hero-scroll:hover{transform:translateX(-50%)}.hero-scroll svg{margin-top:-3px}}
+
+/* Son yüzey, yönlendirme ve görsel iyileştirmeleri. */
+:root{--brand-cream:#fff;--paper:#fff;--background:#fff}
+html,body{background:#fff}
+.hero-gridline{display:none!important}
+.site-header{box-shadow:none!important}
+.desktop-nav a:hover{background:#fff!important;color:var(--brand-teal)!important;border-color:#d6e1df!important}
+.site-footer{background:#202322!important}
+.tracking-visual,.tracking-visual .media-loader,.tracking-visual img{border-radius:22px;overflow:hidden}.tracking-visual img{display:block}
+.inner-hero,.simple-hero,.detail-layout,.timeline,.brand-directory,.all-faq,.contact,.legal,.about,.page-cta{background:#fff}

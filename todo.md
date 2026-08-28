@@ -400,3 +400,15 @@
 - [x] Merak Edilenler bölümüne hafif gri zemin uygula
 - [x] Masaüstü, mobil ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Hero, Hash Yönlendirmesi ve Genel Stil Düzeltmeleri
+
+- [x] Hero üzerindeki gri kılavuz çizgilerini kaldır
+- [x] Alt sayfalardaki Ön Bilgi Formu bağlantısının ana sayfadaki hash hedefine kaymasını sağla
+- [x] Kurumsal krem tokenını beyaz yap ve header gölgesini kaldır
+- [x] Ana menü hover yüzeyini beyaz yap
+- [x] Footer zeminini soft siyah tona al
+- [x] Online Servis Takibi bölümündeki sol görsele yuvarlatılmış köşeler ekle
+- [x] Tüm alt sayfaların zeminini beyaza al
+- [x] Masaüstü, mobil, hash yönlendirmesi ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

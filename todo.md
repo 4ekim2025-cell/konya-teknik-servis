@@ -418,3 +418,9 @@
 - [x] Ana sayfa bölüm zeminlerini önceki kurumsal renk dağılımına geri al
 - [x] Masaüstü ve mobil zemin geçişlerini doğrula
 - [x] Testleri çalıştır ve checkpoint oluştur
+
+## Alt Sayfa Hero Pseudo-Element Düzeltmesi
+
+- [x] `.inner-hero > div:first-child::after` arka plan rengini kaldır
+- [x] Alt sayfa görünümünü ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

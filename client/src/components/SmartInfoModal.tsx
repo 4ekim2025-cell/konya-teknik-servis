@@ -34,8 +34,8 @@ const devices: Device[] = [
 const districts = ["Karatay", "Meram", "Selçuklu"];
 
 function StepIndicator({ step }: { step: number }) {
-  return <div className="smart-stepper" aria-label={`Form adımı ${step} / 3`}>
-    {["Cihaz", "Arıza", "Detaylar"].map((label, index) => {
+  return <div className="smart-stepper" aria-label={`Form adımı ${step} / 4`}>
+    {["Cihaz", "Arıza", "Detaylar", "Özet"].map((label, index) => {
       const number = index + 1;
       return <div className={`smart-step ${number <= step ? "is-active" : ""} ${number === step ? "is-current" : ""}`} key={label}>
         <span>{number < step ? <Check size={13} /> : number}</span><small>{label}</small>
@@ -54,6 +54,7 @@ export function SmartInfoModal() {
   const [otherDevice, setOtherDevice] = useState("");
   const [otherSymptom, setOtherSymptom] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [attempted, setAttempted] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -66,22 +67,24 @@ export function SmartInfoModal() {
 
   const effectiveDevice = device === "Diğer" && otherDevice.trim() ? otherDevice.trim() : device;
   const effectiveSymptom = symptom === "Diğer" && otherSymptom.trim() ? otherSymptom.trim() : symptom;
-  const canContinue = step === 1 ? Boolean(effectiveDevice) : step === 2 ? Boolean(effectiveSymptom) : Boolean(district);
+  const canContinue = step === 1 ? Boolean(effectiveDevice) : step === 2 ? Boolean(effectiveSymptom) : step === 3 ? Boolean(district) : true;
+  const whatsappMessage = `Merhaba, ${effectiveDevice} / ${effectiveSymptom} / ${district}${brandModel.trim() ? ` / ${brandModel.trim()}` : ""} için bilgi almak istiyorum.`;
 
   function selectDevice(nextDevice: string) {
     setDevice(nextDevice);
     setSymptom(symptoms[nextDevice][0]);
+    setAttempted(false);
     setOtherSymptom("");
     if (nextDevice !== "Diğer") setOtherDevice("");
   }
 
   function close() { setOpen(false); setStep(1); }
-  function next() { if (canContinue && step < 3) setStep(step + 1); }
+  function next() { if (!canContinue) { setAttempted(true); return; } setAttempted(false); if (step < 4) setStep(step + 1); }
   function back() { if (step > 1) setStep(step - 1); else close(); }
   function sendWhatsApp() {
     if (!district || isSending) return;
     setIsSending(true);
-    const message = `Merhaba, ${effectiveDevice} / ${effectiveSymptom} / ${district}${brandModel.trim() ? ` / ${brandModel.trim()}` : ""} için bilgi almak istiyorum.`;
+    const message = whatsappMessage;
     toast.success("Bilgileriniz hazırlandı", { description: "WhatsApp’a yönlendiriliyorsunuz." });
     window.setTimeout(() => { window.location.href = `${SITE_WHATSAPP_HREF}?text=${encodeURIComponent(message)}`; }, 620);
   }
@@ -105,12 +108,13 @@ export function SmartInfoModal() {
       <div className="smart-modal" role="dialog" aria-modal="true" aria-labelledby="smart-modal-title">
         <header className="smart-modal-header"><div><span className="section-kicker">ÖN BİLGİ FORMU</span><h3 id="smart-modal-title">Servis talebinizi hazırlayın.</h3></div><button type="button" className="smart-modal-close" onClick={close} aria-label="Formu kapat"><X size={20} /></button></header>
         <StepIndicator step={step} />
-        <div className="smart-modal-body">
-          {step === 1 && <div className="smart-modal-step"><p className="smart-modal-question">Hangi cihaz için destek istiyorsunuz?</p><div className="smart-device-grid">{devices.map(({ name, Icon }) => <button key={name} type="button" className={device === name ? "is-selected" : ""} aria-pressed={device === name} onClick={() => selectDevice(name)}><Icon size={20} /><span>{name}</span></button>)}</div>{device === "Diğer" && <label htmlFor="modal-other-device">Cihaz türünü yazın<input id="modal-other-device" value={otherDevice} onChange={(event) => setOtherDevice(event.target.value)} placeholder="Örn. Robot süpürge" /></label>}</div>}
-          {step === 2 && <div className="smart-modal-step"><p className="smart-modal-question">{effectiveDevice} hangi belirtiyi gösteriyor?</p><div className="smart-symptom-grid">{[...symptoms[device], "Diğer"].map((item, index) => <button key={`${item}-${index}`} type="button" className={symptom === item ? "is-selected" : ""} aria-pressed={symptom === item} onClick={() => setSymptom(item)}><span>{String(index + 1).padStart(2, "0")}</span>{item}</button>)}</div>{symptom === "Diğer" && <label htmlFor="modal-other-symptom">Arızayı kısaca yazın<input id="modal-other-symptom" value={otherSymptom} onChange={(event) => setOtherSymptom(event.target.value)} placeholder="Örn. Cihaz çalışırken hata veriyor" /></label>}</div>}
-          {step === 3 && <div className="smart-modal-step"><p className="smart-modal-question">Servis planlaması için son detaylar.</p><label htmlFor="modal-district">Hizmet ilçeniz<select id="modal-district" value={district} onChange={(event) => setDistrict(event.target.value)}><option value="" disabled>İlçenizi seçin</option>{districts.map((item) => <option value={item} key={item}>{item}</option>)}</select><ChevronDown className="smart-select-icon" size={17} /></label><label htmlFor="modal-brand-model">Marka ve modeliniz <small>isteğe bağlı</small><input id="modal-brand-model" value={brandModel} onChange={(event) => setBrandModel(event.target.value)} placeholder="Örn. Arçelik 7103" /></label><div className="smart-summary"><CircleCheck size={18} /><span><b>{effectiveDevice}</b><small>{effectiveSymptom} · {district || "İlçe seçilmedi"}{brandModel.trim() ? ` · ${brandModel.trim()}` : ""}</small></span></div></div>}
+        <div key={step} className="smart-modal-body smart-step-transition">
+          {step === 1 && <div className="smart-modal-step"><p className="smart-modal-question">Hangi cihaz için destek istiyorsunuz?</p><div className={`smart-device-grid ${attempted && !effectiveDevice ? "has-error" : ""}`}>{devices.map(({ name, Icon }) => <button key={name} type="button" className={device === name ? "is-selected" : ""} aria-pressed={device === name} onClick={() => selectDevice(name)}><Icon size={20} /><span>{name}</span></button>)}</div>{attempted && !effectiveDevice && <p className="smart-validation" role="alert">Devam etmek için cihazınızı seçin.</p>}{device === "Diğer" && <label htmlFor="modal-other-device">Cihaz türünü yazın<input id="modal-other-device" value={otherDevice} onChange={(event) => setOtherDevice(event.target.value)} placeholder="Örn. Robot süpürge" /></label>}</div>}
+          {step === 2 && <div className="smart-modal-step"><p className="smart-modal-question">{effectiveDevice} hangi belirtiyi gösteriyor?</p><div className={`smart-symptom-grid ${attempted && !effectiveSymptom ? "has-error" : ""}`}>{[...symptoms[device], "Diğer"].map((item, index) => <button key={`${item}-${index}`} type="button" className={symptom === item ? "is-selected" : ""} aria-pressed={symptom === item} onClick={() => setSymptom(item)}><span>{String(index + 1).padStart(2, "0")}</span>{item}</button>)}</div>{attempted && !effectiveSymptom && <p className="smart-validation" role="alert">Devam etmek için arıza tipini seçin.</p>}{symptom === "Diğer" && <label htmlFor="modal-other-symptom">Arızayı kısaca yazın<input id="modal-other-symptom" value={otherSymptom} onChange={(event) => setOtherSymptom(event.target.value)} placeholder="Örn. Cihaz çalışırken hata veriyor" /></label>}</div>}
+          {step === 3 && <div className="smart-modal-step"><p className="smart-modal-question">Servis planlaması için son detaylar.</p><label htmlFor="modal-district">Hizmet ilçeniz<select id="modal-district" aria-invalid={attempted && !district} value={district} onChange={(event) => { setDistrict(event.target.value); setAttempted(false); }}><option value="" disabled>İlçenizi seçin</option>{districts.map((item) => <option value={item} key={item}>{item}</option>)}</select><ChevronDown className="smart-select-icon" size={17} /></label><label htmlFor="modal-brand-model">Marka ve modeliniz <small>isteğe bağlı</small><input id="modal-brand-model" value={brandModel} onChange={(event) => setBrandModel(event.target.value)} placeholder="Örn. Arçelik 7103" /></label><div className="smart-summary"><CircleCheck size={18} /><span><b>{effectiveDevice}</b><small>{effectiveSymptom} · {district || "İlçe seçilmedi"}{brandModel.trim() ? ` · ${brandModel.trim()}` : ""}</small></span></div>{attempted && !district && <p className="smart-validation" role="alert">Devam etmek için hizmet ilçenizi seçin.</p>}</div>}
+          {step === 4 && <div className="smart-modal-step smart-summary-step"><p className="smart-modal-question">Bilgilerinizi kontrol edin.</p><div className="smart-final-summary"><div><small>CİHAZ</small><strong>{effectiveDevice}</strong></div><div><small>ARIZA</small><strong>{effectiveSymptom}</strong></div><div><small>MARKA / MODEL</small><strong>{brandModel.trim() || "Belirtilmedi"}</strong></div><div><small>HİZMET İLÇESİ</small><strong>{district}</strong></div></div><div className="smart-message-preview"><span><MessageCircle size={16} /> WHATSAPP MESAJI</span><p>{whatsappMessage}</p></div><p className="smart-confirm-note"><CircleCheck size={16} /> Bilgileriniz hazır. Gönderdiğinizde WhatsApp sohbeti açılacak.</p></div>}
         </div>
-        <footer className="smart-modal-footer"><button type="button" className="button button-ghost dark-ghost" onClick={back}><ArrowLeft size={16} /> {step === 1 ? "Kapat" : "Geri"}</button>{step < 3 ? <button type="button" className="button button-primary" disabled={!canContinue} onClick={next}>Devam et <ArrowRight size={16} /></button> : <button type="button" className="button button-primary" disabled={!canContinue || isSending} onClick={sendWhatsApp}><MessageCircle size={17} />{isSending ? "WhatsApp açılıyor…" : "WhatsApp’tan bilgi ver"}</button>}</footer>
+        <footer className="smart-modal-footer"><button type="button" className="button button-ghost dark-ghost" onClick={back}><ArrowLeft size={16} /> {step === 1 ? "Kapat" : "Geri"}</button>{step < 4 ? <button type="button" className="button button-primary" aria-disabled={!canContinue} onClick={next}>Devam et <ArrowRight size={16} /></button> : <button type="button" className="button button-primary" disabled={!canContinue || isSending} onClick={sendWhatsApp}><MessageCircle size={17} />{isSending ? "WhatsApp açılıyor…" : "WhatsApp’tan bilgi ver"}</button>}</footer>
       </div>
     </div>}
   </section>;

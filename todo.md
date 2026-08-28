@@ -412,3 +412,9 @@
 - [x] Tüm alt sayfaların zeminini beyaza al
 - [x] Masaüstü, mobil, hash yönlendirmesi ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Ana Sayfa Zemin Geri Dönüşü
+
+- [x] Ana sayfa bölüm zeminlerini önceki kurumsal renk dağılımına geri al
+- [x] Masaüstü ve mobil zemin geçişlerini doğrula
+- [x] Testleri çalıştır ve checkpoint oluştur

@@ -311,3 +311,11 @@
 - [x] SEO, kırık link ve geliştirme önerileri raporunu teslim et
 - [x] Canlı önizlemedeki tüm benzersiz dahili ve harici link hedeflerinin tam envanterini çıkarıp tek tek doğrula; hash, tel, WhatsApp ve footer/header CTA varyasyonlarını da kapsa
 - [x] Erişilebilirlik için somut denetim yap: klavye erişimi, görünür focus, form label/aria bağları, renk kontrastı, 200% zoom ve reduced-motion davranışını proje bazlı bulgularla raporla
+
+## P0 Teknik SEO Düzeltmeleri
+
+- [x] Kesin üretim alan adını ve sitemap/canonical/robots/OG/JSON-LD tutarlılığını doğrula (Vercel/custom domain henüz atanmadı; mevcut Manus alan adı bakım modunda)
+- [x] Grundig sayfasının hizmet verilen marka kapsamındaki durumunu netleştir ve envanteri eşitle (19 marka kapsamı dışında olduğu için kaldırıldı)
+- [x] Tüm telefon hedeflerini 0551 185 87 73 numarasıyla eşitle
+- [x] Open Graph görsel URL’si birleştirme hatasını düzelt
+- [x] P0 düzeltmelerini build, rota, metadata ve link testleriyle doğrula

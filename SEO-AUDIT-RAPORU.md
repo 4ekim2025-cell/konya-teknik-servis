@@ -5,6 +5,12 @@
 **Kapsam:** Google görünürlüğü, AI arama/citation hazırlığı, teknik SEO, yerel SEO, dahili bağlantılar, kırık linkler, üretim ve responsive kalite riskleri  
 **Hazırlayan:** Manus AI
 
+## P0 Uygulama Güncellemesi
+
+Denetim sonrasında telefon hedefi `tel:+905511858773` olarak düzeltildi; Open Graph ve Twitter görsel metadata’sı tam HTTPS görsel URL’sini doğrudan kullanacak şekilde düzeltildi; Grundig rotası ve sitemap kaydı kaldırıldı. İlk HTML zaten `lang="tr"` ve Türkçe başlıkla yayınlanıyordu.
+
+**Kesin üretim alan adı henüz atanmış değil.** Proje yapılandırmasında Vercel deployment URL’si veya custom domain kaydı bulunmuyor. Kod ve mevcut statik sitemap `https://konya-teknik-servis.manus.space` alan adını varsayıyor; bu alan adı kontrolünde ana sayfa ve sitemap 503 bakım cevabı verdi. Bu nedenle bu alan adı şu anda doğrulanmış canlı üretim adresi olarak kabul edilmemelidir. Publish/Vercel sonrası tek kesin alan adı belirlenmeli ve sitemap, robots, canonical, Open Graph URL’leri ile JSON-LD aynı alan adına güncellenmelidir.
+
 ## 1. Yönetici özeti
 
 EŞLİ TEKNİK projesi içerik kapsamı bakımından iyi bir başlangıç seviyesindedir: on hizmet kategorisi, üç Konya ilçesi, 19 marka sayfası, FAQ içeriği, takip akışı, WhatsApp dönüşüm noktaları, canonical ve JSON-LD üretimi bulunmaktadır. Canlı önizlemede ana sayfa, hizmet detayları, marka dizini ve iletişim sayfası masaüstü ve mobil kırılımlarda yüklenmiştir.

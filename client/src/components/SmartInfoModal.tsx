@@ -98,10 +98,9 @@ export function SmartInfoModal() {
       <button type="button" className="button button-primary smart-info-launch" onClick={() => setOpen(true)}><Wrench size={17} /> Ön Bilgi Formunu Aç</button>
     </div>
     <div className="smart-info-preview" aria-label="Ön bilgi formu adımları">
-      <span className="section-kicker">KOLAY SERVİS TALEBİ</span>
-      <strong>{stepLabel(1)} → {stepLabel(2)} → {stepLabel(3)}</strong>
-      <p>Formu açarak seçimlerinizi adım adım tamamlayın.</p>
-      <button type="button" className="text-link" onClick={() => setOpen(true)}>Formu başlat <ArrowRight size={16} /></button>
+      <div className="smart-preview-head"><span className="section-kicker">KOLAY SERVİS TALEBİ</span><span className="smart-preview-status"><i /> 3 adım</span></div>
+      <div className="smart-preview-flow"><div><b>01</b><span><strong>Cihaz</strong><small>Ürün grubunu seçin</small></span></div><div><b>02</b><span><strong>Arıza</strong><small>Belirtiyi işaretleyin</small></span></div><div><b>03</b><span><strong>Detaylar</strong><small>İlçe ve model ekleyin</small></span></div></div>
+      <div className="smart-preview-footer"><span><MessageCircle size={15} /> WhatsApp mesajınız hazır</span><button type="button" className="text-link" onClick={() => setOpen(true)}>Formu başlat <ArrowRight size={16} /></button></div>
     </div>
 
     {open && <div className="smart-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>

@@ -338,3 +338,10 @@
 - [x] Eksik seçimlerde görsel uyarı ve erişilebilir hata geri bildirimi göster
 - [x] Özel 404 sayfasına popüler hizmet ve marka hızlı bağlantıları ekle
 - [x] Vitest, TypeScript, build ve responsive kontrollerini tamamla
+
+## Akıllı Ön Bilgi İlk Ekran Yenilemesi
+
+- [x] Modal açılmadan görünen ilk ekranın mevcut hiyerarşi ve görsel dengesini incele
+- [x] İlk ekran kompozisyonunu daha net CTA ve form önizlemesiyle yeniden tasarla
+- [x] Masaüstü ve mobil yerleşimi doğrula
+- [x] Testleri çalıştır ve checkpoint oluştur

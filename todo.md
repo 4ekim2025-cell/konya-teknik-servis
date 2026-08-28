@@ -345,3 +345,11 @@
 - [x] İlk ekran kompozisyonunu daha net CTA ve form önizlemesiyle yeniden tasarla
 - [x] Masaüstü ve mobil yerleşimi doğrula
 - [x] Testleri çalıştır ve checkpoint oluştur
+
+## Akıllı Ön Bilgi Mikro Etkileşimleri ve Kart Estetiği
+
+- [x] CTA butonuna dikkat çekici fakat erişilebilir hover/active mikro etkileşimleri ekle
+- [x] Önizleme kartına hover, derinlik ve adım vurgusu etkileşimleri ekle
+- [x] İlk ekran adım kutularını daha yumuşak köşeli, katmanlı kart tasarımına dönüştür
+- [x] Masaüstü, mobil ve reduced-motion görünümünü doğrula
+- [x] Testleri çalıştır ve checkpoint oluştur

@@ -16,3 +16,7 @@ Kullanıcı geri bildirimine göre dikey simge–metin hiyerarşisi kaldırıld�
 ## Sayfa Merkezi Hizalaması
 
 1280 px ve üzeri geniş ekranlarda ana navigasyon header satırının gerçek yatay merkezine alındı. Orta ekran aralığında menü metinleri tek satırda korunarak logo ve sağ iletişim araçlarıyla dengeli boşluk oluşturuldu.
+
+## Kullanılabilir Header Alanı Hizalaması
+
+Ana menü artık sayfanın mutlak merkezine değil; logo alanının sağ sınırı ile telefon/WhatsApp araçlarının sol sınırı arasındaki kullanılabilir header alanının merkezine yerleşiyor. Bu düzen 1536×720 ve 1280×720 masaüstü kontrollerinde menünün işaretlenen alanda dengeli kaldığını gösterdi.

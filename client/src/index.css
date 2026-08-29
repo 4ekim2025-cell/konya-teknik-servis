@@ -545,11 +545,10 @@ html,body{background:#fff}
   .desktop-brands-trigger.open{border-color:rgba(5,85,100,.26)!important;background:#fff!important;color:var(--brand-teal)!important;box-shadow:0 5px 12px rgba(5,85,100,.10)!important}
 }
 
-/* Header dengesi: geniş ekranlarda ana navigasyon sayfa merkezine oturur. */
+/* Header dengesi: ana navigasyon logo ve iletişim araçları arasındaki kullanılabilir alana oturur. */
 @media(min-width:1240px){
-  .header-row{position:relative}
-  .desktop-nav{position:absolute;left:50%;justify-content:center;margin-left:0;transform:translateX(-50%)}
-  .desktop-tools{margin-left:auto}
+  .desktop-nav{position:static;justify-content:center;margin-left:auto;margin-right:auto;transform:none}
+  .desktop-tools{margin-left:0}
 }
 @media(min-width:1240px) and (max-width:1360px){
   .desktop-nav{gap:1px}

@@ -688,3 +688,11 @@
 - [x] Ana menüyü sıkışıklık hissi vermeyecek şekilde header boyunca konumlandır
 - [x] Masaüstü, mobil ve proje kontrollerini doğrula
 - [x] Checkpoint oluştur
+
+## Ana Menü Kullanılabilir Header Alanı Hizalaması
+
+- [x] Logo ve iletişim araçları arasındaki navigasyon alanını referans al
+- [x] Ana menüyü bu kullanılabilir alanın merkezine yerleştir
+- [x] Geniş masaüstü, orta masaüstü ve mobil görünümleri doğrula
+- [x] Vitest, TypeScript ve production build kontrollerini tamamla
+- [x] Checkpoint oluştur

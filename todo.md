@@ -582,3 +582,10 @@
 - [x] Hizmetler ve Hızlı servis talebi butonlarının border-radius değerini sıfırla
 - [x] Masaüstü görünümü ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Markalar Sayfası Hiyerarşi Yenilemesi
+
+- [x] Markalar sayfasını diğer alt sayfaların içerik genişliği ve hero hiyerarşisiyle eşitle
+- [x] Marka giriş alanını ve 19 marka kart dizinini daha yoğun ve dengeli düzenle
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

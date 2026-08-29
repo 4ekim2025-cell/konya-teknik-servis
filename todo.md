@@ -603,3 +603,10 @@
 - [x] Soru-cevap giriş alanını ve accordion dizinini daha yoğun ve dengeli düzenle
 - [x] Masaüstü, mobil ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## İletişim Sayfası Hiyerarşi Yenilemesi
+
+- [x] İletişim sayfasını diğer alt sayfaların içerik genişliği ve hero hiyerarşisiyle eşitle
+- [x] İletişim giriş alanını ve bilgi kartlarını daha yoğun ve dengeli düzenle
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

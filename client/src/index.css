@@ -384,6 +384,35 @@ html,body{background:#fff}
 .faq-page .all-faq .trackbox h3{font-size:28px}
 @media(max-width:860px){.faq-page .simple-hero{min-height:392px!important}.faq-page .simple-hero>div{width:calc(100% - 40px);padding:38px 0 76px}.faq-page .simple-hero .breadcrumb{margin-bottom:20px}.faq-page .simple-hero h1{font-size:clamp(42px,11vw,55px)}.faq-page .simple-hero p{font-size:14px;line-height:1.68}.faq-page .all-faq{grid-template-columns:1fr;gap:20px;margin:-30px auto 0;padding:0 20px 72px!important}.faq-page .all-faq>div{border-radius:16px}.faq-page .all-faq summary{grid-template-columns:32px minmax(0,1fr) auto;min-height:68px;padding:18px 16px;font-size:14px}.faq-page .all-faq details p{margin:0 18px 20px 64px;font-size:13px;line-height:1.65}.faq-page .all-faq .trackbox{border-radius:16px;padding:23px}.faq-page .simple-hero:before{right:-105px;bottom:-115px;width:300px;height:300px}.faq-page .simple-hero:after{right:-190px;top:-135px;width:360px;height:360px}}
 
+/* İletişim: kurumsal hero ve hero sınırına dengeli yerleşen iletişim paneli. */
+.contact-page .simple-hero{min-height:398px!important;isolation:isolate;background:linear-gradient(116deg,#055564 0%,#064d5a 55%,#097080 100%)!important}
+.contact-page .simple-hero:before{content:"";position:absolute;z-index:-1;right:clamp(20px,9vw,165px);bottom:-145px;width:440px;height:440px;border:1px solid rgba(252,245,219,.22);border-radius:50%;box-shadow:0 0 0 48px rgba(252,245,219,.055),0 0 0 96px rgba(252,245,219,.025)}
+.contact-page .simple-hero:after{top:-185px;right:-130px;width:525px;height:525px;border-color:rgba(252,245,219,.13);box-shadow:0 0 0 62px rgba(252,245,219,.035),0 0 0 124px rgba(252,245,219,.018)}
+.contact-page .simple-hero>div{width:min(100% - 60px,1530px);padding:54px 0 90px}
+.contact-page .simple-hero .breadcrumb{margin-bottom:26px;color:rgba(252,245,219,.72)}
+.contact-page .simple-hero .breadcrumb a{color:rgba(252,245,219,.9)}
+.contact-page .simple-hero .hero-eyebrow{border-color:rgba(252,245,219,.42);background:rgba(252,245,219,.08);color:#fcf5db}
+.contact-page .simple-hero .hero-eyebrow i{background:#d74b42}
+.contact-page .simple-hero h1{max-width:680px;margin:18px 0 15px;color:#fff;font-size:clamp(48px,5.2vw,76px);letter-spacing:-.067em}
+.contact-page .simple-hero h1 em{color:#fcf5db}
+.contact-page .simple-hero p{max-width:650px;color:rgba(252,245,219,.9);font-size:16px;line-height:1.72}
+.contact-page .contact{position:relative;z-index:2;grid-template-columns:minmax(0,.92fr) minmax(360px,1.08fr);gap:56px;max-width:1530px;margin:-48px auto 0;padding:44px max(30px,calc((100vw - 1530px)/2)) 110px!important;background:transparent!important}
+.contact-page .contact>div:first-child{padding:12px 12px 12px 0}
+.contact-page .contact h2{margin:15px 0 14px;font-size:clamp(40px,4.1vw,62px);line-height:.98;letter-spacing:-.065em;color:#055564}
+.contact-page .contact h2 em{color:#a12519}
+.contact-page .contact p{max-width:530px;color:#5f655f;font-size:16px;line-height:1.72}
+.contact-page .contact .button-primary{margin-top:22px;background:#25d366;color:#fff;box-shadow:0 12px 24px rgba(37,211,102,.22)}
+.contact-page .contact-cards{border:1px solid #e5ded4;border-radius:20px;background:#fff;box-shadow:0 18px 46px rgba(5,85,100,.10);overflow:hidden}
+.contact-page .contact-cards>*{min-height:104px;gap:18px;padding:24px 26px;border-color:#e9e2d9}
+.contact-page .contact-cards>* >svg:first-child{width:24px;height:24px;color:#a12519}
+.contact-page .contact-cards a{transition:background .18s var(--ease),transform .18s var(--ease)}
+.contact-page .contact-cards a:hover{background:#fcf5db;transform:translateX(3px)}
+.contact-page .contact-cards small{color:#a12519;font-size:11px}
+.contact-page .contact-cards b{margin:4px 0;color:#055564;font-size:19px}
+.contact-page .contact-cards em{color:#68706a;font-size:13px}
+.contact-page .contact-cards a>svg:last-child{color:#a12519}
+@media(max-width:860px){.contact-page .simple-hero{min-height:392px!important}.contact-page .simple-hero>div{width:calc(100% - 40px);padding:38px 0 76px}.contact-page .simple-hero .breadcrumb{margin-bottom:20px}.contact-page .simple-hero h1{font-size:clamp(42px,11vw,55px)}.contact-page .simple-hero p{font-size:14px;line-height:1.68}.contact-page .contact{grid-template-columns:1fr;gap:24px;margin:-30px auto 0;padding:28px 20px 72px!important}.contact-page .contact>div:first-child{padding:0}.contact-page .contact h2{font-size:clamp(38px,10.5vw,50px)}.contact-page .contact p{font-size:14px;line-height:1.68}.contact-page .contact .button-primary{width:100%;justify-content:center}.contact-page .contact-cards{border-radius:16px}.contact-page .contact-cards>*{min-height:92px;gap:14px;padding:19px 18px}.contact-page .contact-cards b{font-size:16px}.contact-page .contact-cards small,.contact-page .contact-cards em{font-size:11px}.contact-page .simple-hero:before{right:-105px;bottom:-115px;width:300px;height:300px}.contact-page .simple-hero:after{right:-190px;top:-135px;width:360px;height:360px}}
+
 /* Hero kurumsal imzası: 300 px logo ve hemen altında ortalı Keşfet yönlendirmesi. */
 .hero-brand-lockup{position:relative;z-index:2;display:flex;flex:0 0 300px;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin-left:clamp(28px,7vw,130px);margin-top:18px}.hero-brand-logo{width:300px;height:auto;filter:drop-shadow(0 13px 18px rgba(8,50,49,.16))}.hero-brand-lockup .hero-scroll{position:static;left:auto;right:auto;bottom:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:160px;min-height:74px;margin:0;padding:9px 16px;border:1px solid rgba(5,85,100,.24);border-radius:16px;background:rgba(255,255,255,.78);color:var(--brand-teal);font:900 14px Manrope,sans-serif;letter-spacing:.17em;line-height:1;text-transform:uppercase;box-shadow:0 10px 23px rgba(5,85,100,.12);transition:transform .18s var(--ease),background .18s var(--ease),box-shadow .18s var(--ease)}.hero-brand-lockup .hero-scroll i{width:2px;height:25px;background:var(--brand-burgundy)}.hero-brand-lockup .hero-scroll svg{width:24px;height:24px;margin:0;color:var(--brand-burgundy)}.hero-brand-lockup .hero-scroll:hover{transform:translateY(-3px);background:#fff;box-shadow:0 14px 26px rgba(5,85,100,.18)}
 @media(max-width:860px){.hero{min-height:850px}.hero-inner{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-bottom:38px}.hero-brand-lockup{align-self:center;flex-basis:auto;margin:22px 0 0}.hero-brand-logo{width:160px}.hero-brand-lockup .hero-scroll{position:static;left:auto;right:auto;bottom:auto;min-width:144px;min-height:65px;font-size:13px;transform:none}.hero-brand-lockup .hero-scroll:hover{transform:translateY(-2px)}.hero-brand-lockup .hero-scroll i{height:20px}}

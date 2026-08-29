@@ -505,3 +505,11 @@
 - [x] İkonlara reduced-motion uyumlu dikkat çekici mikro animasyonlar ekle
 - [x] Mobil görünümü, bağlantıları ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Mobil İki CTA ve Animasyon Kaldırma Düzeltmesi
+
+- [x] Mobil sabit çubukta yalnızca Hemen Ara ve Hızlı Servis Talebi butonlarını doğrula
+- [x] Hızlı Servis Talebi butonunda WhatsApp yeşili ve simgesini koru
+- [x] Mobil işlem çubuğu ikon animasyonlarını tamamen kaldır
+- [x] Mobil görünümü ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

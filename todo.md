@@ -528,3 +528,11 @@
 - [x] CTA’yı WhatsApp yeşili ve simgesiyle tasarla
 - [x] Masaüstü, mobil ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Ön Bilgi Modalı Cihaz Grid Düzeni
+
+- [x] İlk adım cihaz seçim butonlarını kompaktlaştır
+- [x] Masaüstünde cihazları her satırda üç adet göster
+- [x] Mobilde okunur cihaz seçimi düzenini koru
+- [x] Masaüstü, mobil ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

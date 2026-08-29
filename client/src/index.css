@@ -473,3 +473,7 @@ html,body{background:#fff}
 .hero{background:transparent}.hero-image{background-image:linear-gradient(90deg,rgba(252,245,219,.985) 0%,rgba(252,245,219,.91) 36%,rgba(252,245,219,.5) 65%,rgba(252,245,219,.1) 100%),url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/eQkpZGxpWhAUFzwQ.webp")!important}
 .tracking-section{background:#fff}.proof-section{background:#fcf5db}.services-section,.brand-showcase{background:#fffdf4}.smart-info-section{background:linear-gradient(135deg,#fcf5db 0%,#f2ead0 100%)}.faq-section{background:#f3f5f5}
 @media(max-width:860px){.hero-image{background-image:linear-gradient(180deg,rgba(252,245,219,.96) 0%,rgba(252,245,219,.86) 48%,rgba(252,245,219,.28) 100%),url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/vVReRRYcbpnUjRsd.webp")!important}}
+
+/* Ana sayfa hero: sıcak krem katman yerine beyaza yakın, nötr bir yüzey. */
+.hero-image{background-image:linear-gradient(90deg,rgba(255,253,248,.988) 0%,rgba(255,253,248,.93) 36%,rgba(255,253,248,.55) 65%,rgba(255,253,248,.12) 100%),url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/eQkpZGxpWhAUFzwQ.webp")!important}
+@media(max-width:860px){.hero-image{background-image:linear-gradient(180deg,rgba(255,253,248,.975) 0%,rgba(255,253,248,.90) 48%,rgba(255,253,248,.32) 100%),url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/vVReRRYcbpnUjRsd.webp")!important}}

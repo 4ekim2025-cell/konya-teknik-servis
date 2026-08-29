@@ -610,3 +610,9 @@
 - [x] İletişim giriş alanını ve bilgi kartlarını daha yoğun ve dengeli düzenle
 - [x] Masaüstü, mobil ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Ana Sayfa Hero Açık Zemin Güncellemesi
+
+- [x] Hero arka plan yüzeyini beyaza yakın bir tona al
+- [x] Metin ve görsel kontrastını masaüstü ve mobilde doğrula
+- [x] Testleri çalıştır ve checkpoint oluştur

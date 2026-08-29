@@ -549,3 +549,10 @@
 - [x] Dördüncü adımda bulunan WhatsApp mesaj önizleme kutusunu kaldır
 - [x] Özet bilgileri ve WhatsApp gönderim eylemini doğrula
 - [x] Testleri çalıştır ve checkpoint oluştur
+
+## Mobil Hızlı Talep Modal Bağlantısı
+
+- [x] Mobil Hızlı servis talebi oluştur CTA’sını doğrudan Servis talebinizi hazırlayın modalına bağla
+- [x] Modal açılışının odak ve erişilebilirlik davranışını doğrula
+- [x] Mobil görünümü ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

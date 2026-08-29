@@ -70,6 +70,18 @@ export function SmartInfoModal() {
     return () => { document.body.style.overflow = previous; document.removeEventListener("keydown", onKeyDown); };
   }, [open]);
 
+  useEffect(() => {
+    const openFromQuickRequest = () => { setStep(1); setAttempted(false); setOpen(true); };
+    window.addEventListener("esli:open-smart-info", openFromQuickRequest);
+    try {
+      if (window.sessionStorage.getItem("esli-open-smart-info") === "1") {
+        window.sessionStorage.removeItem("esli-open-smart-info");
+        openFromQuickRequest();
+      }
+    } catch {}
+    return () => window.removeEventListener("esli:open-smart-info", openFromQuickRequest);
+  }, []);
+
   const effectiveDevice = device === "Diğer" && otherDevice.trim() ? otherDevice.trim() : device;
   const effectiveSymptom = symptom === "Diğer" && otherSymptom.trim() ? otherSymptom.trim() : symptom;
   const canContinue = step === 1 ? Boolean(effectiveDevice) : step === 2 ? Boolean(effectiveSymptom) : step === 3 ? Boolean(district) : true;

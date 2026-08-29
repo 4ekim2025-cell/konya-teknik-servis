@@ -616,3 +616,10 @@
 - [x] Hero arka plan yüzeyini beyaza yakın bir tona al
 - [x] Metin ve görsel kontrastını masaüstü ve mobilde doğrula
 - [x] Testleri çalıştır ve checkpoint oluştur
+
+## Hero Hizmet Bölgeleri Bilgisi
+
+- [x] Hero alanına Selçuklu, Meram ve Karatay hizmet bölgelerini ekle
+- [x] Her bölge adı için tasarımla uyumlu konum simgesi kullan
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

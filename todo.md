@@ -645,3 +645,10 @@
 - [x] Hizmetler mega menüsünü ortak görsel dile uyumla
 - [x] Masaüstü, mobil ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Hizmetler Mega Menü Cihaz Paneli Boşluk Düzeltmesi
+
+- [x] Mavi cihaz kategorileri panelinin çevresindeki mega menü iç boşluklarını kaldır
+- [x] Mavi paneli sol, üst ve alt çerçeveye bitişik hizala
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

@@ -508,7 +508,7 @@ html,body{background:#fff}
 
 /* Hizmetler mega menüsü: Markalar menüsüyle ortak yüzey, kart ve geçiş dili. */
 @media(min-width:861px){
-  .mega-menu{border:1px solid #e4ddd4;border-top:3px solid var(--brand-burgundy);border-radius:0 18px 18px 18px;background:#fff;box-shadow:0 22px 48px rgba(28,45,45,.18);overflow:hidden;transform-origin:top left;animation:brands-mega-in .18s var(--ease) both}
+  .mega-menu{gap:0!important;padding:0!important;border:1px solid #e4ddd4;border-top:3px solid var(--brand-burgundy);border-radius:0 18px 18px 18px;background:#fff;box-shadow:0 22px 48px rgba(28,45,45,.18);overflow:hidden;transform-origin:top left;animation:brands-mega-in .18s var(--ease) both}
   .mega-services{padding:25px 21px;background:linear-gradient(145deg,#055564,#08707a);color:#fff}
   .mega-services>b{display:flex;align-items:center;gap:8px;color:#fcf5db!important;font:900 12px/1.28 Manrope,sans-serif;letter-spacing:.04em;text-transform:uppercase}
   .mega-services>b svg{color:#fcf5db!important}

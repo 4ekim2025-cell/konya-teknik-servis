@@ -589,3 +589,10 @@
 - [x] Marka giriş alanını ve 19 marka kart dizinini daha yoğun ve dengeli düzenle
 - [x] Masaüstü, mobil ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Markalar Sayfası Sayaç ve Giriş Hizası Düzeltmesi
+
+- [x] “19 marka detay sayfası” ifadesini kaldır
+- [x] Marka Servis Dizini giriş yüzeyini hero alanından taşmadan hizala
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

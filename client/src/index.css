@@ -534,6 +534,17 @@ html,body{background:#fff}
 /* Mobil menü sadeleştirme: hizmet kategorileri yalnızca masaüstü mega menüsünde gösterilir. */
 @media(max-width:860px){.mobile-services-toggle,.mobile-service-accordion{display:none!important}}
 
+/* Ana menü: boşluk hissini azaltan, abartısız ortak gezinme yüzeyi. */
+@media(min-width:861px){
+  .desktop-nav{display:flex;align-items:center;gap:2px;margin-left:24px;padding:5px;border:1px solid #e2e7e5;border-radius:14px;background:#fbfcfa;box-shadow:0 5px 14px rgba(5,85,100,.045)}
+  .desktop-nav a,.desktop-brands-trigger{height:42px;padding:0 11px;border-radius:9px;color:#3e5855}
+  .desktop-nav a{border-color:transparent!important}
+  .desktop-nav a:hover,.desktop-brands-trigger:hover{border-color:transparent!important;background:#fff!important;color:var(--brand-teal)!important;box-shadow:none!important}
+  .desktop-nav a.active,.desktop-brands-trigger.active{border-color:var(--brand-teal)!important;background:var(--brand-teal)!important;color:#fff!important;box-shadow:0 5px 12px rgba(5,85,100,.16)!important}
+  .desktop-nav a.active svg,.desktop-brands-trigger.active svg{color:#fcf5db!important}
+  .desktop-brands-trigger.open{border-color:rgba(5,85,100,.26)!important;background:#fff!important;color:var(--brand-teal)!important;box-shadow:0 5px 12px rgba(5,85,100,.10)!important}
+}
+
 /* Hero hizmet bölgeleri: marka kilidinin üstünde tek bakışta okunur bölge şeridi. */
 .hero-regions{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 16px;width:100%}
 .hero-regions span{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid rgba(5,85,100,.22);border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 9px 20px rgba(5,85,100,.10);color:var(--brand-teal);font:900 13px/1 Manrope,sans-serif;letter-spacing:.01em;white-space:nowrap}

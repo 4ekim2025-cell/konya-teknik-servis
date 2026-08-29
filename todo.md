@@ -659,3 +659,10 @@
 - [x] Mobil cihaz kategorileri accordion alanını kaldır
 - [x] Mobil navigasyon ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Ana Menü Sade Hiyerarşi İyileştirmesi
+ 
+- [x] Ana menüdeki boşluk, aktif durum ve yüzey farklarını incele
+- [x] Sade boşluk ritmi, aktif vurgusu ve hafif ayraçlar uygula
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

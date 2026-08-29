@@ -652,3 +652,10 @@
 - [x] Mavi paneli sol, üst ve alt çerçeveye bitişik hizala
 - [x] Masaüstü, mobil ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Mobil Hizmetler Menüsü Kaldırma
+
+- [x] Mobil navigasyondaki Hizmetler tetikleyicisini kaldır
+- [x] Mobil cihaz kategorileri accordion alanını kaldır
+- [x] Mobil navigasyon ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

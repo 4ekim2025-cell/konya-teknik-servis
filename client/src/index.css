@@ -531,6 +531,9 @@ html,body{background:#fff}
 }
 @media(prefers-reduced-motion:reduce){.mega-menu{animation:none}.mega-service-card,.mega-column>a{transition:none}}
 
+/* Mobil menü sadeleştirme: hizmet kategorileri yalnızca masaüstü mega menüsünde gösterilir. */
+@media(max-width:860px){.mobile-services-toggle,.mobile-service-accordion{display:none!important}}
+
 /* Hero hizmet bölgeleri: marka kilidinin üstünde tek bakışta okunur bölge şeridi. */
 .hero-regions{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 16px;width:100%}
 .hero-regions span{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid rgba(5,85,100,.22);border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 9px 20px rgba(5,85,100,.10);color:var(--brand-teal);font:900 13px/1 Manrope,sans-serif;letter-spacing:.01em;white-space:nowrap}

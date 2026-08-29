@@ -666,3 +666,11 @@
 - [x] Sade boşluk ritmi, aktif vurgusu ve hafif ayraçlar uygula
 - [x] Masaüstü, mobil ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Ana Menü Dikey Simge ve Metin Hiyerarşisi
+
+- [x] Masaüstü menü öğelerinin simge ve metin yapısını incele
+- [x] Simgeleri üstte, menü metinlerini altta konumlandır ve header yüksekliğiyle oranla
+- [x] Mega menü tetikleyicileri ile mobil navigasyon davranışını doğrula
+- [x] Vitest, TypeScript ve production build kontrollerini tamamla
+- [x] Checkpoint oluştur

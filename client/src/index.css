@@ -536,8 +536,13 @@ html,body{background:#fff}
 
 /* Ana menü: boşluk hissini azaltan, abartısız ortak gezinme yüzeyi. */
 @media(min-width:861px){
-  .desktop-nav{display:flex;align-items:center;gap:2px;margin-left:24px;padding:5px;border:1px solid #e2e7e5;border-radius:14px;background:#fbfcfa;box-shadow:0 5px 14px rgba(5,85,100,.045)}
-  .desktop-nav a,.desktop-brands-trigger{height:42px;padding:0 11px;border-radius:9px;color:#3e5855}
+  .desktop-nav{display:flex;align-items:center;gap:2px;min-height:90px;margin-left:24px;padding:6px;border:1px solid #e2e7e5;border-radius:14px;background:#fbfcfa;box-shadow:0 5px 14px rgba(5,85,100,.045)}
+  .desktop-nav a,.desktop-brands-trigger{height:76px;padding:7px 11px 8px;border-radius:9px;color:#3e5855}
+  .desktop-nav a{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;line-height:1.1}
+  .desktop-nav a>svg{width:19px;height:19px}
+  .desktop-brands-trigger{position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;line-height:1.1}
+  .desktop-brands-trigger>svg:first-child{width:19px;height:19px}
+  .desktop-brands-trigger>svg:last-child{position:absolute;right:5px;bottom:13px;width:12px;height:12px}
   .desktop-nav a{border-color:transparent!important}
   .desktop-nav a:hover,.desktop-brands-trigger:hover{border-color:transparent!important;background:#fff!important;color:var(--brand-teal)!important;box-shadow:none!important}
   .desktop-nav a.active,.desktop-brands-trigger.active{border-color:var(--brand-teal)!important;background:var(--brand-teal)!important;color:#fff!important;box-shadow:0 5px 12px rgba(5,85,100,.16)!important}

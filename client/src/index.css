@@ -324,6 +324,24 @@ html,body{background:#fff}
 .whatsapp-mark>svg:last-child{position:absolute;right:2px;bottom:2px;transform:rotate(-10deg);stroke-width:3}
 .hero-actions .hero-call{border-color:#055564;background:rgba(255,255,255,.9);color:#055564;box-shadow:0 10px 20px rgba(5,85,100,.09)}
 .hero-actions .hero-call:hover{border-color:#055564;background:#055564;color:#fff;box-shadow:0 13px 25px rgba(5,85,100,.2)}
+
+/* Mobil işlem çubuğu: iki net eylem, güçlü renk ayrımı ve simge odaklı geri bildirim. */
+@media(max-width:860px){
+  body{padding-bottom:64px}
+  .mobile-action-bar{grid-template-columns:.84fr 1.66fr;height:64px;background:#fff;box-shadow:0 -7px 20px rgba(24,42,43,.13)}
+  .mobile-action-bar a{min-width:0;padding:0 10px;font-size:11px;line-height:1.1;text-align:center}
+  .mobile-action-bar .mobile-call-action{background:var(--brand-burgundy);color:#fff}
+  .mobile-action-bar .mobile-preform-action{background:#25d366;color:#fff;white-space:normal}
+  .mobile-whatsapp-mark{position:relative;display:grid;flex:0 0 20px;place-items:center;width:20px;height:20px}
+  .mobile-whatsapp-mark>svg:first-child{stroke-width:2.25}
+  .mobile-whatsapp-mark>svg:last-child{position:absolute;right:2px;bottom:2px;transform:rotate(-10deg);stroke-width:3}
+}
+@media(prefers-reduced-motion:no-preference){
+  .mobile-action-bar .mobile-call-action>svg{animation:mobile-action-ring 2.8s ease-in-out infinite}
+  .mobile-action-bar .mobile-whatsapp-mark{animation:mobile-action-pulse 2.35s ease-in-out .45s infinite}
+}
+@keyframes mobile-action-ring{0%,100%{transform:rotate(0) scale(1)}12%{transform:rotate(-11deg) scale(1.05)}24%{transform:rotate(9deg) scale(1.05)}36%{transform:rotate(0) scale(1)}}
+@keyframes mobile-action-pulse{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.1)}}
 @media(prefers-reduced-motion:reduce){.hero-brand-lockup .hero-scroll,.hero-brand-lockup .hero-scroll:hover{transform:none;transition:none}}
 
 /* Ana sayfa, son beyaz yüzey düzenlemesinden önceki bölümsel arka plan ritmine döndürüldü. */

@@ -495,3 +495,13 @@
 - [x] Hero ikincil CTA’sını tel bağlantılı “Hemen ara” butonuna dönüştür
 - [x] Masaüstü, mobil, telefon bağlantısı ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Mobil Sabit İşlem Çubuğu Yenilemesi
+
+- [x] Mobil sabit çubuğu Hemen Ara ve Hızlı Servis Talebi Oluştur olmak üzere iki CTA’ya sadeleştir
+- [x] Hemen Ara CTA’sını kurumsal kırmızı zemine ve tel bağlantısına bağla
+- [x] Hızlı Servis Talebi Oluştur CTA’sını WhatsApp yeşili ve uygun simgeyle tasarla
+- [x] Ayrı WhatsApp CTA’sını kaldır
+- [x] İkonlara reduced-motion uyumlu dikkat çekici mikro animasyonlar ekle
+- [x] Mobil görünümü, bağlantıları ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

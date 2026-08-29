@@ -562,3 +562,10 @@
 - [x] Marka/Model ve Hizmet İlçesi kartlarını mobil Özet adımında yan yana göster
 - [x] Mobil modal düzenini ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## İkincil Navigasyon Hızlı Talep Bağlantısı
+
+- [x] Ön Bilgi Formu bağlantısının metnini Hızlı servis talebi olarak güncelle
+- [x] Bağlantının arka planını WhatsApp yeşiline al
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

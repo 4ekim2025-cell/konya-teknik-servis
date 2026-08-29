@@ -596,3 +596,10 @@
 - [x] Marka Servis Dizini giriş yüzeyini hero alanından taşmadan hizala
 - [x] Masaüstü, mobil ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## SSS Sayfası Hiyerarşi Yenilemesi
+
+- [x] SSS sayfasını diğer alt sayfaların içerik genişliği ve hero hiyerarşisiyle eşitle
+- [x] Soru-cevap giriş alanını ve accordion dizinini daha yoğun ve dengeli düzenle
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

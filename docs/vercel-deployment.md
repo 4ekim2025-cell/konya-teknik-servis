@@ -4,21 +4,22 @@ Bu rehber, **EŞLİ TEKNİK — Konya Teknik Servis** projesini GitHub üzerinde
 
 ## 1. Yayına hazırlık
 
-Dağıtımdan önce yerel ortamda aşağıdaki iki komutu çalıştırın. Her ikisi de başarıyla tamamlanmalıdır.
+Dağıtımdan önce yerel ortamda aşağıdaki üç komutu çalıştırın. Her biri başarıyla tamamlanmalıdır.
 
 ```bash
-pnpm check
+pnpm test
+pnpm run check
 pnpm build
 ```
 
 | Varlık | Kontrol |
 |---|---|
-| `vercel.json` | Vite üretim komutu, `dist/public` çıktı dizini ve SPA yönlendirme kuralını içerir. |
+| `vercel.json` | Vite üretim komutu, `dist/public` çıktı dizini, SPA yönlendirmesi, statik varlık önbelleği ve temel güvenlik başlıklarını içerir. |
 | `pnpm-lock.yaml` | Bağımlılıkların sabit sürümlerle kurulmasını sağlar. |
 | `client/public/robots.txt` | Tarama yönergelerini ve site haritasını içerir. |
 | `client/public/sitemap.xml` | Hizmet ve marka URL’lerini listeler. |
 
-> **Önemli:** Projede geçen `/manus-storage/...` görsel bağlantıları, Manus geliştirme ortamına bağlıdır. Vercel yayını öncesinde bu görselleri kalıcı, herkese açık bir görsel depolama alanına taşıyın ve kodda yeni HTTPS URL’lerini kullanın. Aksi halde Vercel üzerinde görseller yüklenmeyebilir.
+> **Durum:** Aktif logo ve görsel referansları kalıcı HTTPS CDN adreslerine dönüştürülmüştür. Vercel dağıtımında göreli `/manus-storage/...` görsel bağlantısı beklenmez.
 
 ## 2. GitHub deposunu güncelleme
 
@@ -50,7 +51,7 @@ Yapılandırma ekranında aşağıdaki değerleri kontrol edin. `vercel.json` bu
 
 ## 4. Ortam değişkenleri ve analitik
 
-Bu sürüm statik bir site olarak çalışır; WhatsApp bağlantısı ve form yönlendirmesi için Vercel ortam değişkeni gerekmez. Ancak analitik komut dosyasını kullanmak isterseniz Vercel panelindeki **Project Settings → Environment Variables** bölümüne uygun `VITE_` önekli değerleri ekleyin. Vite, tarayıcıda kullanılacak ortam değişkenleri için bu öneki gerektirir. [1]
+Bu sürüm statik bir site olarak çalışır; WhatsApp bağlantısı, form yönlendirmesi ve mevcut analitik yüklemesi için Vercel ortam değişkeni gerekmez. Gelecekte Vite ile tarayıcıya aktarılacak bir değişken eklenirse, yalnızca açık olmasında sakınca olmayan değişkenler `VITE_` önekiyle tanımlanmalıdır. [1]
 
 Manus’a özgü geliştirme değişkenlerini veya gizli anahtarları Vercel’e kopyalamayın. Bir API, form işleme veya gerçek servis takip verisi eklendiğinde; gizli anahtarları yalnızca Vercel ortam değişkenlerinde tutun ve bunları istemci koduna `VITE_` önekiyle açmayın.
 
@@ -71,18 +72,18 @@ Bu test, SPA yönlendirme kuralının çalıştığını doğrular. Vercel rewri
 
 ## 6. Özel alan adı ve üretime geçiş
 
-Önizleme bağlantısı doğrulandıktan sonra **Project Settings → Domains** bölümünden alan adınızı ekleyin. Vercel paneli, alan adı sağlayıcınızda uygulanması gereken DNS kayıtlarını gösterir. DNS doğrulaması tamamlandıktan sonra alan adını **Production** dağıtımına bağlayın.
+Önizleme bağlantısı doğrulandıktan sonra **Project Settings → Domains** bölümünden alan adınızı ekleyin. Vercel paneli, alan adı sağlayıcınızda uygulanması gereken DNS kayıtlarını gösterir. DNS doğrulaması tamamlandıktan sonra alan adını **Production** dağıtımına bağlayın. Ardından `client/public/robots.txt` ve `client/public/sitemap.xml` dosyalarındaki eski alan adını, yeni üretim alan adıyla birlikte tek bir güncellemede değiştirin.
 
 Üretim sonrası şu akışı kullanın: özellik dalı oluşturun, Pull Request açın, Vercel önizleme URL’sinde form/WhatsApp/doğrudan rota testlerini yapın ve ardından `main` dalına birleştirin. Pull Request başına ayrı önizleme dağıtımı Vercel’in Git tabanlı çalışma modelinde otomatik olarak sağlanır. [2]
 
 ## Yayın öncesi son kontrol
 
-- [ ] `/manus-storage/...` görselleri kalıcı HTTPS URL’leriyle değiştirildi.
+- [x] Aktif görseller kalıcı HTTPS CDN URL’leriyle güncellendi.
 - [ ] Vercel build kaydı `pnpm build` için başarılı.
 - [ ] Ana sayfa, Ön Bilgi Formu ve WhatsApp bağlantısı test edildi.
 - [ ] Hizmet, marka ve online takip derin bağlantıları doğrudan açıldı.
-- [ ] `robots.txt` içindeki site haritası alan adıyla uyumlu hale getirildi.
-- [ ] Özel alan adı kullanılacaksa canonical URL ve Open Graph URL’leri üretim alan adıyla tekrar kontrol edildi.
+- [ ] Vercel üretim alan adı belirlendikten sonra `robots.txt` ve `sitemap.xml` güncellendi.
+- [ ] Özel alan adı bağlandıktan sonra canonical ve Open Graph URL'leri üretim alanında kontrol edildi.
 
 ## Kaynaklar
 

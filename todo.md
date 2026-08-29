@@ -718,3 +718,11 @@
 - [x] Aktif sayfa durumunu ve responsive davranışı doğrula
 - [x] Vitest, TypeScript ve production build kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Vercel Üretim Hazırlığı
+
+- [x] Vercel yapılandırmasını, build komutlarını ve SPA yönlendirmelerini denetle
+- [x] Statik varlık URL'lerini ve üretim ortamı gereksinimlerini envanterle
+- [x] Gerekli Vercel uyumluluk düzeltmelerini ve dağıtım rehberini uygula
+- [x] Rota davranışlarını, Vitest, TypeScript ve production build'i doğrula
+- [x] Checkpoint oluştur

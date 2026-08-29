@@ -52,7 +52,7 @@ client/
 server/            # Şablon uyumluluğu için hafif sunucu girişi
 ```
 
-> Görsel dosyaları proje içine taşımayın. Mevcut `/manus-storage/...` görsel bağlantılarını koruyun; bunlar yayın ortamındaki varlık yönetimi için kullanılır.
+> Görsel dosyalarını proje içine taşımayın. Vercel ve diğer harici dağıtımlarda tüm aktif görseller için kalıcı HTTPS CDN URL'leri kullanın; göreli `/manus-storage/...` bağlantılarını üretim koduna eklemeyin.
 
 ## Git ve GitHub akışı
 

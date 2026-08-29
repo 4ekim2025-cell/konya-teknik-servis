@@ -556,3 +556,9 @@
 - [x] Modal açılışının odak ve erişilebilirlik davranışını doğrula
 - [x] Mobil görünümü ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Mobil Özet Kartları Yan Yana Düzeni
+
+- [x] Marka/Model ve Hizmet İlçesi kartlarını mobil Özet adımında yan yana göster
+- [x] Mobil modal düzenini ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

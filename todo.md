@@ -638,3 +638,10 @@
 - [x] Etiketleri logo üstünde daha büyük konum simgeleriyle yatay yerleştir
 - [x] Masaüstü, mobil ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Hizmetler Mega Menü Stil Eşitlemesi
+
+- [x] Markalar mega menüsünün yüzey, kart, gölge ve geçiş özelliklerini Hizmetler mega menüsüyle karşılaştır
+- [x] Hizmetler mega menüsünü ortak görsel dile uyumla
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

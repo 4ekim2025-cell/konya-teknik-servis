@@ -506,6 +506,31 @@ html,body{background:#fff}
 @media(max-width:1120px) and (min-width:861px){.desktop-brands-trigger{padding:0 8px;font-size:13px}.desktop-brands-trigger svg{width:15px;height:15px}.brands-mega-menu{grid-template-columns:185px minmax(460px,1fr);width:min(710px,calc(100vw - 44px))}.brands-mega-grid a{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.brands-mega-menu{animation:none}.desktop-brands-trigger,.brands-mega-grid a,.brands-mega-intro a span,.brands-mega-grid a>i{transition:none}}
 
+/* Hizmetler mega menüsü: Markalar menüsüyle ortak yüzey, kart ve geçiş dili. */
+@media(min-width:861px){
+  .mega-menu{border:1px solid #e4ddd4;border-top:3px solid var(--brand-burgundy);border-radius:0 18px 18px 18px;background:#fff;box-shadow:0 22px 48px rgba(28,45,45,.18);overflow:hidden;transform-origin:top left;animation:brands-mega-in .18s var(--ease) both}
+  .mega-services{padding:25px 21px;background:linear-gradient(145deg,#055564,#08707a);color:#fff}
+  .mega-services>b{display:flex;align-items:center;gap:8px;color:#fcf5db!important;font:900 12px/1.28 Manrope,sans-serif;letter-spacing:.04em;text-transform:uppercase}
+  .mega-services>b svg{color:#fcf5db!important}
+  .mega-services-grid{gap:8px;margin-top:16px}
+  .mega-service-card{min-height:62px;padding:9px 10px;border:0;border-radius:10px;background:rgba(255,255,255,.94)!important;color:#055564!important;box-shadow:none;transition:background .16s var(--ease),color .16s var(--ease),transform .16s var(--ease),box-shadow .16s var(--ease)}
+  .mega-service-card>span{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:rgba(5,85,100,.09);color:#a12519}
+  .mega-service-card small{color:#53635f}
+  .mega-service-card:hover{background:#fcf5db!important;color:#a12519!important;transform:translateX(2px);box-shadow:0 6px 14px rgba(5,85,100,.10)}
+  .mega-service-card:hover small{color:#735d50}
+  .mega-column{padding:25px 21px;background:#fffdf8;border-left:1px solid #e5ddd4}
+  .mega-column>b,.mega-menu .issue-heading,.mega-menu .recent-heading{display:flex;align-items:center;gap:8px;color:#055564!important;font:900 12px/1.28 Manrope,sans-serif;letter-spacing:.04em;text-transform:uppercase}
+  .mega-column>b svg,.mega-menu .issue-heading svg,.mega-menu .recent-heading svg{color:#a12519!important}
+  .mega-column>a{border-radius:9px;color:#055564;transition:background .16s var(--ease),color .16s var(--ease),transform .16s var(--ease)}
+  .mega-column>a:hover{background:#fcf5db!important;color:#a12519!important;transform:translateX(2px)}
+  .mega-quick-links{background:#fff}
+  .mega-menu .issue-heading{padding-top:16px;border-top:1px solid #e5ddd4}
+  .mega-menu .recent-service{display:flex;align-items:center;gap:8px;padding:8px 9px}
+  .mega-menu .issue-link{display:flex;align-items:center;justify-content:space-between;padding:8px 9px}
+  .mega-menu .issue-link span{color:#a12519}
+}
+@media(prefers-reduced-motion:reduce){.mega-menu{animation:none}.mega-service-card,.mega-column>a{transition:none}}
+
 /* Hero hizmet bölgeleri: marka kilidinin üstünde tek bakışta okunur bölge şeridi. */
 .hero-regions{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 16px;width:100%}
 .hero-regions span{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid rgba(5,85,100,.22);border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 9px 20px rgba(5,85,100,.10);color:var(--brand-teal);font:900 13px/1 Manrope,sans-serif;letter-spacing:.01em;white-space:nowrap}

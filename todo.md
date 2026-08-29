@@ -543,3 +543,9 @@
 - [x] Mobil cihaz kartlarının kompakt ve okunur ölçülerini koru
 - [x] Mobil görünümü ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Ön Bilgi Özet Mesaj Kutusu Sadeleştirmesi
+
+- [x] Dördüncü adımda bulunan WhatsApp mesaj önizleme kutusunu kaldır
+- [x] Özet bilgileri ve WhatsApp gönderim eylemini doğrula
+- [x] Testleri çalıştır ve checkpoint oluştur

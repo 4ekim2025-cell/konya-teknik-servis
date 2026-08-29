@@ -576,3 +576,9 @@
 - [x] Boşluk hissini azaltıp takip giriş ve akış yüzeylerini dengeli düzenle
 - [x] Masaüstü, mobil ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## İkincil Navigasyon Düz Köşe Düzenlemesi
+
+- [x] Hizmetler ve Hızlı servis talebi butonlarının border-radius değerini sıfırla
+- [x] Masaüstü görünümü ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

@@ -315,6 +315,7 @@ html,body{background:#fff}
 /* İkincil hızlı talep bağlantısı: WhatsApp görsel dili. */
 .header-subrow .preform-shortcut{display:inline-flex;align-items:center;gap:7px;background:#25d366!important;border-color:#25d366!important;color:#fff!important;box-shadow:0 5px 12px rgba(37,211,102,.2)}
 .header-subrow .preform-shortcut:hover{background:#1ebe57!important;border-color:#1ebe57!important;color:#fff!important;box-shadow:0 7px 16px rgba(37,211,102,.3)}
+.header-subrow .services-nav,.header-subrow .preform-shortcut{border-radius:0!important}
 
 /* Online takip: diğer alt sayfaların görsel hero hiyerarşisine uyarlanmış yoğun giriş alanı. */
 .tracking-page-hero{position:relative;isolation:isolate;min-height:410px;overflow:hidden;background:#173f40;color:#fff}

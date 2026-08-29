@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, Check, ChevronDown, CircleCheck, Droplets, Fan, Flame, Gauge, MapPin, MessageCircle, Refrigerator, Sparkles, WashingMachine, Wrench, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ChevronDown, CircleCheck, Droplets, Fan, Flame, Gauge, MapPin, MessageCircle, Phone, Refrigerator, Sparkles, WashingMachine, Wrench, X } from "lucide-react";
 import { SITE_WHATSAPP_HREF } from "@/siteConfig";
 
 type Device = { name: string; Icon: typeof WashingMachine };
@@ -100,7 +100,7 @@ export function SmartInfoModal() {
       <h2 id="diagnostic-title">Üç kısa adımda<br /><em>bize ulaşın.</em></h2>
       <p>Cihazınızı seçin, arızayı belirtin ve ilçe bilginizi ekleyin. Talebiniz WhatsApp mesajına hazır biçimde aktarılsın.</p>
       <div className="diagnostic-meta"><span><i>01</i>Cihazı seçin</span><span><i>02</i>Arızayı seçin</span><span><i>03</i>Detay ekleyin</span></div>
-      <button type="button" className="button button-primary smart-info-launch" onClick={() => setOpen(true)}><Wrench size={17} /> Ön Bilgi Formunu Aç</button>
+      <button type="button" className="button button-primary smart-info-launch smart-info-whatsapp" onClick={() => setOpen(true)} aria-label="WhatsApp üzerinden hızlı servis talebi oluştur"><span className="smart-whatsapp-mark" aria-hidden="true"><MessageCircle size={20} /><Phone size={9} /></span> WhatsApp üzerinden hızlı servis talebi oluştur</button>
     </div>
     <div className="smart-info-preview" aria-label="Ön bilgi formu adımları">
       <div className="smart-preview-head"><span className="section-kicker">KOLAY SERVİS TALEBİ</span><span className="smart-preview-status"><i /> 3 adım</span></div>

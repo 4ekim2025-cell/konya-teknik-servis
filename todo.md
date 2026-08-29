@@ -521,3 +521,10 @@
 - [x] Hızlı servis talebi oluştur CTA’sını WhatsApp yeşili zeminde görünür hale getir
 - [x] Mobil görünümü, bağlantıları ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Akıllı Ön Bilgi WhatsApp CTA Güncellemesi
+
+- [x] Ön Bilgi Formunu Aç CTA metnini WhatsApp üzerinden hızlı servis talebi oluştur olarak güncelle
+- [x] CTA’yı WhatsApp yeşili ve simgesiyle tasarla
+- [x] Masaüstü, mobil ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

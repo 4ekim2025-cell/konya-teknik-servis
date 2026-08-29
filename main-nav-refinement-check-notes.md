@@ -8,3 +8,7 @@
 ## Dikey Simge ve Metin Yerleşimi
 
 Masaüstü ana menüsünde her ana simge metnin üstüne alındı. Menü yüzeyi 90 px minimum yüksekliğe, her öğe de 76 px yüksekliğe ayarlanarak 131 px header satırıyla daha dengeli oran kuruldu. Mobil header bu masaüstü kuralından etkilenmedi; Hizmetler akordiyonu gizli kalmaya devam ediyor.
+
+## Yatay Yerleşime Geri Dönüş
+
+Kullanıcı geri bildirimine göre dikey simge–metin hiyerarşisi kaldırıldı. Ana menü, 42 px öğe yüksekliğine sahip önceki yatay ve kompakt yapıya döndürüldü. 1280×720 masaüstü ile 390×844 mobil görünümler beklendiği gibi çalışıyor.

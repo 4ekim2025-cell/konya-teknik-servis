@@ -674,3 +674,10 @@
 - [x] Mega menü tetikleyicileri ile mobil navigasyon davranışını doğrula
 - [x] Vitest, TypeScript ve production build kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Ana Menü Dikey Yerleşim Geri Alma
+
+- [x] Dikey simge–metin yerleşimini kaldırıp yatay menü düzenini geri yükle
+- [x] Önceki kompakt menü yüksekliği ve boşluk ritmini geri uygula
+- [x] Masaüstü, mobil ve proje kontrollerini doğrula
+- [x] Checkpoint oluştur

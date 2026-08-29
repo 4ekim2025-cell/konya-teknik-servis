@@ -536,3 +536,10 @@
 - [x] Mobilde okunur cihaz seçimi düzenini koru
 - [x] Masaüstü, mobil ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Mobil Ön Bilgi Cihaz Grid Düzeni
+
+- [x] İlk cihaz seçim adımını mobilde her satırda iki cihaz gösterecek şekilde ayarla
+- [x] Mobil cihaz kartlarının kompakt ve okunur ölçülerini koru
+- [x] Mobil görünümü ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

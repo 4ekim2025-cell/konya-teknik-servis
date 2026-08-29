@@ -340,6 +340,12 @@ html,body{background:#fff}
   .smart-device-grid button svg{width:17px;height:17px}
 }
 
+@media(max-width:599px){
+  .smart-device-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .smart-device-grid button{min-height:50px;padding:8px 9px;gap:7px;font-size:11px;line-height:1.18}
+  .smart-device-grid button svg{width:17px;height:17px}
+}
+
 /* Mobil işlem çubuğu: iki net eylem, güçlü renk ayrımı ve simge odaklı geri bildirim. */
 @media(max-width:860px){
   body{padding-bottom:64px}

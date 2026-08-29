@@ -513,3 +513,11 @@
 - [x] Mobil işlem çubuğu ikon animasyonlarını tamamen kaldır
 - [x] Mobil görünümü ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Mobil Sabit Çubuk Kesin İki CTA Düzeltmesi
+
+- [x] Mobil sabit çubukta kalan üçüncü/boş alanı tamamen kaldır
+- [x] Çubuğu iki eşit CTA sütununa kilitle
+- [x] Hızlı servis talebi oluştur CTA’sını WhatsApp yeşili zeminde görünür hale getir
+- [x] Mobil görünümü, bağlantıları ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

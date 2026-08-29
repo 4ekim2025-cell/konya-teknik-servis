@@ -631,3 +631,10 @@
 - [x] Her marka kartını ilgili marka servis sayfasına yönlendir
 - [x] Masaüstü, mobil, dış tıklama ve üretim kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Hero Logo Üstü Hizmet Bölgeleri Şeridi
+
+- [x] Selçuklu, Meram ve Karatay etiketlerini hero güven satırından çıkar
+- [x] Etiketleri logo üstünde daha büyük konum simgeleriyle yatay yerleştir
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

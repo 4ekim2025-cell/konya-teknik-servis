@@ -505,3 +505,9 @@ html,body{background:#fff}
 @keyframes brands-mega-in{from{opacity:0;transform:translateY(-6px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:1120px) and (min-width:861px){.desktop-brands-trigger{padding:0 8px;font-size:13px}.desktop-brands-trigger svg{width:15px;height:15px}.brands-mega-menu{grid-template-columns:185px minmax(460px,1fr);width:min(710px,calc(100vw - 44px))}.brands-mega-grid a{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.brands-mega-menu{animation:none}.desktop-brands-trigger,.brands-mega-grid a,.brands-mega-intro a span,.brands-mega-grid a>i{transition:none}}
+
+/* Hero hizmet bölgeleri: marka kilidinin üstünde tek bakışta okunur bölge şeridi. */
+.hero-regions{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 16px;width:100%}
+.hero-regions span{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid rgba(5,85,100,.22);border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 9px 20px rgba(5,85,100,.10);color:var(--brand-teal);font:900 13px/1 Manrope,sans-serif;letter-spacing:.01em;white-space:nowrap}
+.hero-regions svg{flex:0 0 auto;color:var(--brand-burgundy);stroke-width:2.2}
+@media(max-width:860px){.hero-regions{gap:6px;margin-bottom:12px}.hero-regions span{gap:5px;padding:8px 8px;border-radius:11px;font-size:11px}.hero-regions svg{width:15px;height:15px}}

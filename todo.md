@@ -710,3 +710,11 @@
 - [x] Bağlantı font boyutunu hiyerarşiye uygun biçimde küçült
 - [x] Mega menü görünümü ile proje kontrollerini doğrula
 - [x] Checkpoint oluştur
+
+## Ana Menü Markalar Açık Durumu Hover Eşitlemesi
+
+- [x] Markalar tetikleyicisinin açık durumundaki yüzey stilini incele
+- [x] Ana menü bağlantılarının hover durumunu aynı yüzey, renk ve gölge diline geçir
+- [x] Aktif sayfa durumunu ve responsive davranışı doğrula
+- [x] Vitest, TypeScript ve production build kontrollerini tamamla
+- [x] Checkpoint oluştur

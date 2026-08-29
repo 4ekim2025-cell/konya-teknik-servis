@@ -24,3 +24,7 @@ Ana menü artık sayfanın mutlak merkezine değil; logo alanının sağ sınır
 ## Ana Menü Boşluk ve Büyük Harf Biçimi
 
 Geniş masaüstü görünümünde ana menü öğeleri 55 px aralık, 20 px dikey ve 10 px yatay iç boşlukla gösterildi. Bağlantılar ile Markalar tetikleyicisi 12 px büyük harf tipografisine geçirildi. 1240–1360 px aralığında tek satır kullanımını korumak için boşluk ve dikey boşluk duyarlı biçimde azaltılıyor.
+
+## Markalar Açık Durumu Hover Eşitlemesi
+
+Ana menü bağlantılarının hover durumu, Markalar tetikleyicisinin açık halindeki beyaz yüzey, teal metin, ince teal çerçeve ve hafif gölgeyle eşitlendi. Aktif sayfa vurgusu bu geçici hover görünümünden ayrı tutuldu; mobil header etkilenmedi.

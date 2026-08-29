@@ -540,7 +540,7 @@ html,body{background:#fff}
   .desktop-nav a,.desktop-brands-trigger{height:42px;padding:0 11px;border-radius:9px;color:#3e5855}
   .desktop-nav a{border-color:transparent!important;font-size:12px;text-transform:uppercase;white-space:nowrap}
   .desktop-brands-trigger{color:#514a43;font:800 12px Manrope,sans-serif;white-space:nowrap;cursor:pointer;text-transform:uppercase}
-  .desktop-nav a:hover,.desktop-brands-trigger:hover{border-color:transparent!important;background:#fff!important;color:var(--brand-teal)!important;box-shadow:none!important}
+  .desktop-nav a:hover,.desktop-brands-trigger:hover{border-color:rgba(5,85,100,.26)!important;background:#fff!important;color:var(--brand-teal)!important;box-shadow:0 5px 12px rgba(5,85,100,.10)!important}
   .desktop-nav a.active,.desktop-brands-trigger.active{border-color:var(--brand-teal)!important;background:var(--brand-teal)!important;color:#fff!important;box-shadow:0 5px 12px rgba(5,85,100,.16)!important}
   .desktop-nav a.active svg,.desktop-brands-trigger.active svg{color:#fcf5db!important}
   .desktop-brands-trigger.open{border-color:rgba(5,85,100,.26)!important;background:#fff!important;color:var(--brand-teal)!important;box-shadow:0 5px 12px rgba(5,85,100,.10)!important}

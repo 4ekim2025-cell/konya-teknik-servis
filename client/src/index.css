@@ -477,3 +477,31 @@ html,body{background:#fff}
 /* Ana sayfa hero: sıcak krem katman yerine beyaza yakın, nötr bir yüzey. */
 .hero-image{background-image:linear-gradient(90deg,rgba(255,253,248,.988) 0%,rgba(255,253,248,.93) 36%,rgba(255,253,248,.55) 65%,rgba(255,253,248,.12) 100%),url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/eQkpZGxpWhAUFzwQ.webp")!important}
 @media(max-width:860px){.hero-image{background-image:linear-gradient(180deg,rgba(255,253,248,.975) 0%,rgba(255,253,248,.90) 48%,rgba(255,253,248,.32) 100%),url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/vVReRRYcbpnUjRsd.webp")!important}}
+
+/* Ana menü Markalar: açık yüzeyli, ilgili marka rehberlerine doğrudan erişen mega menü. */
+.brands-menu-wrap{position:relative;display:flex;align-items:stretch}
+.desktop-brands-trigger{display:inline-flex;align-items:center;gap:7px;height:48px;padding:0 12px;border:1px solid transparent;border-radius:10px;background:transparent;color:#514a43;font:800 14px Manrope,sans-serif;white-space:nowrap;cursor:pointer;transition:background .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease),box-shadow .18s var(--ease),transform .16s var(--ease)}
+.desktop-brands-trigger:hover{border-color:#d6e1df;background:#fff;color:var(--brand-teal);box-shadow:0 7px 14px rgba(71,41,22,.09)}
+.desktop-brands-trigger:active{transform:scale(.97)}
+.desktop-brands-trigger:focus-visible{outline:3px solid rgba(5,85,100,.22);outline-offset:2px}
+.desktop-brands-trigger.active{background:var(--brand-teal);border-color:var(--brand-teal);color:#fff;box-shadow:0 7px 14px rgba(5,85,100,.18)}
+.desktop-brands-trigger.active svg{color:#fcf5db}
+.desktop-brands-trigger.open{background:#fff;border-color:rgba(5,85,100,.3);color:var(--brand-teal);box-shadow:0 8px 18px rgba(5,85,100,.12)}
+.desktop-brands-trigger.open svg{color:var(--brand-burgundy)}
+.desktop-brands-trigger.open svg:last-child{transform:rotate(180deg)}
+.brands-mega-menu{position:absolute;z-index:90;top:calc(100% + 10px);left:0;display:grid;grid-template-columns:205px minmax(500px,1fr);width:min(785px,calc(100vw - 56px));border:1px solid #e4ddd4;border-top:3px solid var(--brand-burgundy);border-radius:0 18px 18px 18px;background:#fff;box-shadow:0 22px 48px rgba(28,45,45,.18);overflow:hidden;transform-origin:top left;animation:brands-mega-in .18s var(--ease) both}
+.brands-mega-intro{display:flex;flex-direction:column;align-items:flex-start;padding:25px 21px;background:linear-gradient(145deg,#055564,#08707a);color:#fff}
+.brands-mega-intro b{display:flex;align-items:center;gap:8px;color:#fcf5db;font:900 12px/1.28 Manrope,sans-serif;letter-spacing:.04em;text-transform:uppercase}
+.brands-mega-intro p{margin:13px 0 auto;color:rgba(255,255,255,.82);font-size:13px;line-height:1.55}
+.brands-mega-intro a{display:inline-flex;align-items:center;gap:7px;margin-top:22px;color:#fff;font:900 12px Manrope,sans-serif;text-decoration:none}
+.brands-mega-intro a span{color:#f9c9b0;font-size:17px;transition:transform .16s var(--ease)}
+.brands-mega-intro a:hover span{transform:translateX(3px)}
+.brands-mega-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:12px;background:#fffdf8}
+.brands-mega-grid a{display:grid;grid-template-columns:29px minmax(0,1fr) auto;align-items:center;gap:7px;min-height:46px;padding:8px 10px;border-radius:10px;color:#055564;font:800 13px Manrope,sans-serif;text-decoration:none;transition:background .16s var(--ease),color .16s var(--ease),transform .16s var(--ease)}
+.brands-mega-grid a:hover{background:#fcf5db;color:#a12519;transform:translateX(2px)}
+.brands-mega-grid a>span{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:rgba(5,85,100,.09);color:#a12519;font:900 11px Manrope,sans-serif}
+.brands-mega-grid a>i{color:#a12519;font-size:15px;font-style:normal;opacity:0;transform:translateX(-3px);transition:opacity .16s var(--ease),transform .16s var(--ease)}
+.brands-mega-grid a:hover>i{opacity:1;transform:translateX(0)}
+@keyframes brands-mega-in{from{opacity:0;transform:translateY(-6px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:1120px) and (min-width:861px){.desktop-brands-trigger{padding:0 8px;font-size:13px}.desktop-brands-trigger svg{width:15px;height:15px}.brands-mega-menu{grid-template-columns:185px minmax(460px,1fr);width:min(710px,calc(100vw - 44px))}.brands-mega-grid a{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.brands-mega-menu{animation:none}.desktop-brands-trigger,.brands-mega-grid a,.brands-mega-intro a span,.brands-mega-grid a>i{transition:none}}

@@ -488,3 +488,10 @@
 - [x] Mobil Keşfet metin, çizgi ve ok bileşenlerini logo altında merkezle
 - [x] Mobil görünümü ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Hero WhatsApp ve Hemen Ara CTA’ları
+
+- [x] Hero WhatsApp CTA’sını WhatsApp yeşili yüzey ve uygun simgeyle güncelle
+- [x] Hero ikincil CTA’sını tel bağlantılı “Hemen ara” butonuna dönüştür
+- [x] Masaüstü, mobil, telefon bağlantısı ve üretim kontrollerini tamamla
+- [x] Checkpoint oluştur

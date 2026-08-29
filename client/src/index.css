@@ -536,9 +536,10 @@ html,body{background:#fff}
 
 /* Ana menü: boşluk hissini azaltan, abartısız ortak gezinme yüzeyi. */
 @media(min-width:861px){
-  .desktop-nav{display:flex;align-items:center;gap:2px;margin-left:24px;padding:5px;border:1px solid #e2e7e5;border-radius:14px;background:#fbfcfa;box-shadow:0 5px 14px rgba(5,85,100,.045)}
+  .desktop-nav{display:flex;align-items:center;gap:55px;margin-left:24px;padding:20px 10px;border:1px solid #e2e7e5;border-radius:14px;background:#fbfcfa;box-shadow:0 5px 14px rgba(5,85,100,.045)}
   .desktop-nav a,.desktop-brands-trigger{height:42px;padding:0 11px;border-radius:9px;color:#3e5855}
-  .desktop-nav a{border-color:transparent!important}
+  .desktop-nav a{border-color:transparent!important;font-size:12px;text-transform:uppercase;white-space:nowrap}
+  .desktop-brands-trigger{color:#514a43;font:800 12px Manrope,sans-serif;white-space:nowrap;cursor:pointer;text-transform:uppercase}
   .desktop-nav a:hover,.desktop-brands-trigger:hover{border-color:transparent!important;background:#fff!important;color:var(--brand-teal)!important;box-shadow:none!important}
   .desktop-nav a.active,.desktop-brands-trigger.active{border-color:var(--brand-teal)!important;background:var(--brand-teal)!important;color:#fff!important;box-shadow:0 5px 12px rgba(5,85,100,.16)!important}
   .desktop-nav a.active svg,.desktop-brands-trigger.active svg{color:#fcf5db!important}
@@ -551,7 +552,7 @@ html,body{background:#fff}
   .desktop-tools{margin-left:0}
 }
 @media(min-width:1240px) and (max-width:1360px){
-  .desktop-nav{gap:1px}
+  .desktop-nav{gap:clamp(5px,1.5vw,26px);padding:15px 8px}
   .desktop-nav a,.desktop-brands-trigger{padding:0 6px;font-size:12px;white-space:nowrap}
   .desktop-brands-trigger{gap:5px}
 }

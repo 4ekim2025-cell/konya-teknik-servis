@@ -696,3 +696,10 @@
 - [x] Geniş masaüstü, orta masaüstü ve mobil görünümleri doğrula
 - [x] Vitest, TypeScript ve production build kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Ana Menü Boşluk ve Büyük Harf Biçimi
+
+- [x] Masaüstü menüsünde 55 px öğe aralığını ve 20 px dikey padding değerini uygula
+- [x] Menü bağlantıları ile Marka tetikleyicisini 12 px büyük harf biçimine geçir
+- [x] Masaüstü ve mobil görünümü ile proje kontrollerini doğrula
+- [x] Checkpoint oluştur

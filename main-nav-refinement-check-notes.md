@@ -20,3 +20,7 @@ Kullanıcı geri bildirimine göre dikey simge–metin hiyerarşisi kaldırıld�
 ## Kullanılabilir Header Alanı Hizalaması
 
 Ana menü artık sayfanın mutlak merkezine değil; logo alanının sağ sınırı ile telefon/WhatsApp araçlarının sol sınırı arasındaki kullanılabilir header alanının merkezine yerleşiyor. Bu düzen 1536×720 ve 1280×720 masaüstü kontrollerinde menünün işaretlenen alanda dengeli kaldığını gösterdi.
+
+## Ana Menü Boşluk ve Büyük Harf Biçimi
+
+Geniş masaüstü görünümünde ana menü öğeleri 55 px aralık, 20 px dikey ve 10 px yatay iç boşlukla gösterildi. Bağlantılar ile Markalar tetikleyicisi 12 px büyük harf tipografisine geçirildi. 1240–1360 px aralığında tek satır kullanımını korumak için boşluk ve dikey boşluk duyarlı biçimde azaltılıyor.

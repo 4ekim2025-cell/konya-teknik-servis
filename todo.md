@@ -681,3 +681,10 @@
 - [x] Önceki kompakt menü yüksekliği ve boşluk ritmini geri uygula
 - [x] Masaüstü, mobil ve proje kontrollerini doğrula
 - [x] Checkpoint oluştur
+
+## Ana Menü Sayfa İçi Hizalama İyileştirmesi
+
+- [x] Header içindeki logo, ana menü ve iletişim araçlarının yatay dengesini incele
+- [x] Ana menüyü sıkışıklık hissi vermeyecek şekilde header boyunca konumlandır
+- [x] Masaüstü, mobil ve proje kontrollerini doğrula
+- [x] Checkpoint oluştur

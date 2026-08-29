@@ -545,6 +545,18 @@ html,body{background:#fff}
   .desktop-brands-trigger.open{border-color:rgba(5,85,100,.26)!important;background:#fff!important;color:var(--brand-teal)!important;box-shadow:0 5px 12px rgba(5,85,100,.10)!important}
 }
 
+/* Header dengesi: geniş ekranlarda ana navigasyon sayfa merkezine oturur. */
+@media(min-width:1240px){
+  .header-row{position:relative}
+  .desktop-nav{position:absolute;left:50%;justify-content:center;margin-left:0;transform:translateX(-50%)}
+  .desktop-tools{margin-left:auto}
+}
+@media(min-width:1240px) and (max-width:1360px){
+  .desktop-nav{gap:1px}
+  .desktop-nav a,.desktop-brands-trigger{padding:0 6px;font-size:12px;white-space:nowrap}
+  .desktop-brands-trigger{gap:5px}
+}
+
 /* Hero hizmet bölgeleri: marka kilidinin üstünde tek bakışta okunur bölge şeridi. */
 .hero-regions{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 16px;width:100%}
 .hero-regions span{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid rgba(5,85,100,.22);border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 9px 20px rgba(5,85,100,.10);color:var(--brand-teal);font:900 13px/1 Manrope,sans-serif;letter-spacing:.01em;white-space:nowrap}

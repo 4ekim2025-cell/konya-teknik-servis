@@ -12,3 +12,7 @@ Masaüstü ana menüsünde her ana simge metnin üstüne alındı. Menü yüzeyi
 ## Yatay Yerleşime Geri Dönüş
 
 Kullanıcı geri bildirimine göre dikey simge–metin hiyerarşisi kaldırıldı. Ana menü, 42 px öğe yüksekliğine sahip önceki yatay ve kompakt yapıya döndürüldü. 1280×720 masaüstü ile 390×844 mobil görünümler beklendiği gibi çalışıyor.
+
+## Sayfa Merkezi Hizalaması
+
+1280 px ve üzeri geniş ekranlarda ana navigasyon header satırının gerçek yatay merkezine alındı. Orta ekran aralığında menü metinleri tek satırda korunarak logo ve sağ iletişim araçlarıyla dengeli boşluk oluşturuldu.

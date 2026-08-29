@@ -569,3 +569,10 @@
 - [x] Bağlantının arka planını WhatsApp yeşiline al
 - [x] Masaüstü, mobil ve üretim derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Online Servis Takibi Sayfa Hiyerarşisi Yenilemesi
+
+- [x] Takip sayfasını diğer alt sayfaların içerik genişliği ve hero hiyerarşisiyle eşitle
+- [x] Boşluk hissini azaltıp takip giriş ve akış yüzeylerini dengeli düzenle
+- [x] Masaüstü, mobil ve üretim derlemesini doğrula
+- [x] Checkpoint oluştur

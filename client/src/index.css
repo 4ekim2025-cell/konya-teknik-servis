@@ -316,6 +316,23 @@ html,body{background:#fff}
 .header-subrow .preform-shortcut{display:inline-flex;align-items:center;gap:7px;background:#25d366!important;border-color:#25d366!important;color:#fff!important;box-shadow:0 5px 12px rgba(37,211,102,.2)}
 .header-subrow .preform-shortcut:hover{background:#1ebe57!important;border-color:#1ebe57!important;color:#fff!important;box-shadow:0 7px 16px rgba(37,211,102,.3)}
 
+/* Online takip: diğer alt sayfaların görsel hero hiyerarşisine uyarlanmış yoğun giriş alanı. */
+.tracking-page-hero{position:relative;isolation:isolate;min-height:410px;overflow:hidden;background:#173f40;color:#fff}
+.tracking-page-hero-image{position:absolute;z-index:-2;inset:0;background-size:cover;background-position:center;filter:saturate(.78) contrast(.9)}
+.tracking-page-hero:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,rgba(5,85,100,.97) 0%,rgba(5,85,100,.9) 44%,rgba(5,85,100,.38) 73%,rgba(5,85,100,.06) 100%)}
+.tracking-page-hero-content{width:min(1530px,100%);min-height:410px;margin:0 auto;padding:50px max(28px,calc((100vw - 1530px)/2));display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.tracking-page-hero .breadcrumb{margin-bottom:25px;color:rgba(255,255,255,.68)}
+.tracking-page-hero .breadcrumb a{color:rgba(255,255,255,.88)}
+.tracking-page-hero .hero-eyebrow{color:#fff7dc;border-color:rgba(255,247,220,.45);background:rgba(255,255,255,.09)}
+.tracking-page-hero h1{max-width:800px;margin:16px 0 15px;color:#fff;font-size:clamp(40px,4.4vw,65px);line-height:.98;letter-spacing:-.065em}
+.tracking-page-hero h1 em{color:#f9c9b0;font-style:normal}
+.tracking-page-hero p{max-width:640px;margin:0;color:rgba(255,255,255,.88);font-size:16px;line-height:1.7}
+.tracking-hero-points{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.tracking-hero-points span{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(0,0,0,.1);color:#fff;font:800 12px Manrope,sans-serif}
+.tracking-hero-points svg{color:#7ef0ae}
+.tracking-timeline{padding-top:66px!important}
+@media(max-width:860px){.tracking-page-hero{min-height:430px}.tracking-page-hero:after{background:linear-gradient(180deg,rgba(5,85,100,.94),rgba(5,85,100,.7))}.tracking-page-hero-content{min-height:430px;padding:42px 20px 50px}.tracking-page-hero .breadcrumb{margin-bottom:18px}.tracking-page-hero h1{font-size:clamp(38px,10.5vw,53px)}.tracking-page-hero p{font-size:14px;line-height:1.65}.tracking-hero-points{gap:8px;margin-top:20px}.tracking-hero-points span{padding:8px 10px;font-size:11px}.tracking-timeline{padding-top:52px!important}}
+
 /* Hero kurumsal imzası: 300 px logo ve hemen altında ortalı Keşfet yönlendirmesi. */
 .hero-brand-lockup{position:relative;z-index:2;display:flex;flex:0 0 300px;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin-left:clamp(28px,7vw,130px);margin-top:18px}.hero-brand-logo{width:300px;height:auto;filter:drop-shadow(0 13px 18px rgba(8,50,49,.16))}.hero-brand-lockup .hero-scroll{position:static;left:auto;right:auto;bottom:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:160px;min-height:74px;margin:0;padding:9px 16px;border:1px solid rgba(5,85,100,.24);border-radius:16px;background:rgba(255,255,255,.78);color:var(--brand-teal);font:900 14px Manrope,sans-serif;letter-spacing:.17em;line-height:1;text-transform:uppercase;box-shadow:0 10px 23px rgba(5,85,100,.12);transition:transform .18s var(--ease),background .18s var(--ease),box-shadow .18s var(--ease)}.hero-brand-lockup .hero-scroll i{width:2px;height:25px;background:var(--brand-burgundy)}.hero-brand-lockup .hero-scroll svg{width:24px;height:24px;margin:0;color:var(--brand-burgundy)}.hero-brand-lockup .hero-scroll:hover{transform:translateY(-3px);background:#fff;box-shadow:0 14px 26px rgba(5,85,100,.18)}
 @media(max-width:860px){.hero{min-height:850px}.hero-inner{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-bottom:38px}.hero-brand-lockup{align-self:center;flex-basis:auto;margin:22px 0 0}.hero-brand-logo{width:160px}.hero-brand-lockup .hero-scroll{position:static;left:auto;right:auto;bottom:auto;min-width:144px;min-height:65px;font-size:13px;transform:none}.hero-brand-lockup .hero-scroll:hover{transform:translateY(-2px)}.hero-brand-lockup .hero-scroll i{height:20px}}

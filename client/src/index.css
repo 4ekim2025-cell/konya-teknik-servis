@@ -493,7 +493,7 @@ html,body{background:#fff}
 .brands-mega-intro{display:flex;flex-direction:column;align-items:flex-start;padding:25px 21px;background:linear-gradient(145deg,#055564,#08707a);color:#fff}
 .brands-mega-intro b{display:flex;align-items:center;gap:8px;color:#fcf5db;font:900 12px/1.28 Manrope,sans-serif;letter-spacing:.04em;text-transform:uppercase}
 .brands-mega-intro p{margin:13px 0 auto;color:rgba(255,255,255,.82);font-size:13px;line-height:1.55}
-.brands-mega-intro a{display:inline-flex;align-items:center;gap:7px;margin-top:22px;color:#fff;font:900 12px Manrope,sans-serif;text-decoration:none}
+.brands-mega-intro a{display:inline-flex;align-items:center;gap:7px;margin-top:22px;color:#fff;font:900 11px Manrope,sans-serif;text-decoration:none}
 .brands-mega-intro a span{color:#f9c9b0;font-size:17px;transition:transform .16s var(--ease)}
 .brands-mega-intro a:hover span{transform:translateX(3px)}
 .brands-mega-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:12px;background:#fffdf8}

@@ -703,3 +703,10 @@
 - [x] Menü bağlantıları ile Marka tetikleyicisini 12 px büyük harf biçimine geçir
 - [x] Masaüstü ve mobil görünümü ile proje kontrollerini doğrula
 - [x] Checkpoint oluştur
+
+## Markalar Mega Menü Bağlantı Tipografisi
+
+- [x] “Tüm markaları görüntüle” bağlantısının mevcut font kuralını incele
+- [x] Bağlantı font boyutunu hiyerarşiye uygun biçimde küçült
+- [x] Mega menü görünümü ile proje kontrollerini doğrula
+- [x] Checkpoint oluştur

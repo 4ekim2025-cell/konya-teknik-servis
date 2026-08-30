@@ -762,3 +762,10 @@
 - [x] Yüklenen SVG’yi ortak varlık olarak ekle ve WhatsApp eylemlerine uygula
 - [x] Masaüstü, mobil ve üretim paketi simge tutarlılığını doğrula
 - [x] Checkpoint oluştur
+
+## Google ve Yapay Zekâ Arama Görünürlüğü Denetimi
+
+- [x] Teknik SEO, yapılandırılmış veri ve taranabilirlik varlıklarını incele
+- [x] Yerel SEO, Google Business Profile ve içerik otoritesi açıklarını değerlendir
+- [x] Yapay zekâ destekli arama görünürlüğü için içerik/varlık önerilerini önceliklendir
+- [x] Bulguları uygulanabilir yol haritası olarak paylaş

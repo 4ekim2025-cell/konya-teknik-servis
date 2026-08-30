@@ -741,3 +741,10 @@
 - [x] WhatsApp paylaşım açıklamasını verilen hizmet metniyle eşleştir
 - [x] Meta etiketlerini ve üretim paketini doğrula
 - [x] Checkpoint oluştur
+
+## Mobil Sabit Eylem Çubuğu Tipografisi
+
+- [x] Mobil çağrı ve hızlı servis talebi butonlarının mevcut font ölçülerini incele
+- [x] Buton metinlerini okunurluğu artıracak biçimde büyüt ve satır yüksekliğini dengele
+- [x] Mobil görünüm ile proje kontrollerini doğrula
+- [x] Checkpoint oluştur

@@ -755,3 +755,10 @@
 - [x] Büyük metin için mobil eylem çubuğu ölçülerini taşmasız şekilde dengele
 - [x] Mobil görünümü ve proje kontrollerini doğrula
 - [x] Checkpoint oluştur
+
+## Site Geneli Özgün WhatsApp Simgesi
+
+- [x] Mevcut WhatsApp simgesi kullanım noktalarını envanterle
+- [x] Yüklenen SVG’yi ortak varlık olarak ekle ve WhatsApp eylemlerine uygula
+- [x] Masaüstü, mobil ve üretim paketi simge tutarlılığını doğrula
+- [x] Checkpoint oluştur

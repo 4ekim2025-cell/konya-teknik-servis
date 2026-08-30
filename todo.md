@@ -748,3 +748,10 @@
 - [x] Buton metinlerini okunurluğu artıracak biçimde büyüt ve satır yüksekliğini dengele
 - [x] Mobil görünüm ile proje kontrollerini doğrula
 - [x] Checkpoint oluştur
+
+## Mobil Eylem Çubuğu 23 px Tipografi
+
+- [x] Çağrı ve hızlı servis talebi etiketleri için 23 px font değerini uygula
+- [x] Büyük metin için mobil eylem çubuğu ölçülerini taşmasız şekilde dengele
+- [x] Mobil görünümü ve proje kontrollerini doğrula
+- [x] Checkpoint oluştur

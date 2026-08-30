@@ -568,8 +568,8 @@ html,body{background:#fff}
 
 /* Mobil sabit eylemler: tek ve iki satırlı etiketlerde daha rahat okunurluk. */
 @media(max-width:860px){
-  body{padding-bottom:70px}
-  .mobile-action-bar{height:70px}
-  .mobile-action-bar a,.mobile-action-bar button{gap:8px;padding:0 8px;font-size:clamp(12px,3vw,13px);line-height:1.2}
-  .mobile-action-bar svg{width:20px;height:20px}
+  body{padding-bottom:112px}
+  .mobile-action-bar{height:112px}
+  .mobile-action-bar a,.mobile-action-bar .mobile-preform-action{gap:6px;padding:8px;font-size:23px;line-height:1.12;letter-spacing:-.02em}
+  .mobile-action-bar svg{width:18px;height:18px}
 }

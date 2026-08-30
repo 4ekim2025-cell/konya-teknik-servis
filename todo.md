@@ -733,3 +733,11 @@
 - [x] HTML başlığına favicon, Apple Touch Icon ve tema bildirimi ekle
 - [x] Favicon dosyalarını ve üretim paketini doğrula
 - [x] Checkpoint oluştur
+
+## Site Başlığı ve WhatsApp Paylaşım Açıklaması
+
+- [x] Mevcut tarayıcı başlığı ve sosyal paylaşım meta etiketlerini incele
+- [x] Site başlığını “Konya Beyaz Eşya Teknik Servisi” olarak güncelle
+- [x] WhatsApp paylaşım açıklamasını verilen hizmet metniyle eşleştir
+- [x] Meta etiketlerini ve üretim paketini doğrula
+- [x] Checkpoint oluştur

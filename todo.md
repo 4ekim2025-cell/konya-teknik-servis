@@ -812,3 +812,10 @@
 - [x] Hedef konteynerlerin aktif margin değerini 0 px olarak uygula
 - [x] Masaüstü, geniş viewport ve mobil davranışı doğrula
 - [x] Checkpoint oluştur
+
+## Telefon Numarasını Hero Alanına Taşıma
+
+- [x] Header telefon alanı ile hero ilçe etiketlerinin yerleşimini incele
+- [x] Telefon numarasını headerdan kaldırıp hero etiketlerinin üstüne taşı
+- [x] Masaüstü ve mobil hero görünümünü doğrula
+- [x] Checkpoint oluştur

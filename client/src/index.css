@@ -596,9 +596,10 @@ html,body{background:#fff}
 
 /* Hero hizmet bölgeleri: marka kilidinin üstünde tek bakışta okunur bölge şeridi. */
 .hero-regions{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 16px;width:100%}
+.hero-phone{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:36px;padding:8px 14px;border:1px solid rgba(5,85,100,.2);border-radius:999px;background:rgba(255,255,255,.84);color:var(--brand-burgundy);font:900 13px/1 Manrope,sans-serif;letter-spacing:.02em;text-decoration:none;box-shadow:0 8px 18px rgba(5,85,100,.1);transition:transform .18s var(--ease),background .18s var(--ease),box-shadow .18s var(--ease)}.hero-phone:hover{background:#fff;transform:translateY(-2px);box-shadow:0 12px 22px rgba(5,85,100,.16)}.hero-phone svg{color:var(--brand-teal);stroke-width:2.35}
 .hero-regions span{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid rgba(5,85,100,.22);border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 9px 20px rgba(5,85,100,.10);color:var(--brand-teal);font:900 13px/1 Manrope,sans-serif;letter-spacing:.01em;white-space:nowrap}
 .hero-regions svg{flex:0 0 auto;color:var(--brand-burgundy);stroke-width:2.2}
-@media(max-width:860px){.hero-regions{gap:6px;margin-bottom:12px}.hero-regions span{gap:5px;padding:8px 8px;border-radius:11px;font-size:11px}.hero-regions svg{width:15px;height:15px}}
+@media(max-width:860px){.hero-phone{min-height:34px;padding:8px 12px;font-size:12px}.hero-regions{gap:6px;margin-bottom:12px}.hero-regions span{gap:5px;padding:8px 8px;border-radius:11px;font-size:11px}.hero-regions svg{width:15px;height:15px}}
 
 /* Vercel varlık temizliği sırasında korunmuş mobil yerleşim değerleri. */
 @media(max-width:860px){.services-heading p{margin-top:20px}.inner-content{width:calc(100% - 50px)}}

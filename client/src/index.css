@@ -613,10 +613,10 @@ html,body{background:#fff}
 
 /* Tarayıcı zoom out sırasında oluşan çok geniş CSS viewportlarda ana rayı sabit tut. */
 @media(min-width:2600px){
-  .header-row{width:min(1530px,calc(100% - 60px));max-width:none;margin-right:auto;margin-left:auto;padding-right:0!important;padding-left:0!important}
-  .header-subrow{width:min(1530px,calc(100% - 60px));max-width:none;margin-right:auto;margin-left:auto;padding-right:0!important;padding-left:0!important}
+  .header-row{width:min(1530px,calc(100% - 60px));max-width:none;margin:0;padding-right:0!important;padding-left:0!important}
+  .header-subrow{width:min(1530px,calc(100% - 60px));max-width:none;margin:0;padding-right:0!important;padding-left:0!important}
   .header-subrow:before{right:0;left:0}
-  .hero-inner{width:min(1530px,calc(100% - 60px));max-width:none;margin-right:auto;margin-left:auto;padding-right:clamp(30px,2vw,100px);padding-left:clamp(30px,2vw,100px)}
+  .hero-inner{width:min(1530px,calc(100% - 60px));max-width:none;margin:0;padding-right:clamp(30px,2vw,100px);padding-left:clamp(30px,2vw,100px)}
 }
 /* Kullanıcının sağladığı özgün WhatsApp markası, tüm WhatsApp eylemlerinde ortak kullanılır. */
 :root{--esli-whatsapp-logo:url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/IqShanjjQzLpQbpX.svg")}

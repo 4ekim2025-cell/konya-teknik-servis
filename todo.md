@@ -798,3 +798,10 @@
 - [x] Normal masaüstü, zoom out karşılığı geniş viewport ve mobil görünümü doğrula
 - [x] Vitest, TypeScript ve production build kontrollerini tamamla
 - [x] Checkpoint oluştur
+
+## Header ve Hero Margin Sıfırlama
+
+- [x] Header satırı, alt navigasyon ve hero iç konteynerinin margin kurallarını incele
+- [x] Hedef konteynerlerin margin değerlerini 0 px olarak uygula
+- [x] Masaüstü, geniş viewport ve mobil görünümü doğrula
+- [x] Checkpoint oluştur

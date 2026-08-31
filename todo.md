@@ -854,3 +854,10 @@
 - [x] `margin-left: auto !important` değerini kaldır
 - [x] Hero görünümü ve stil derlemesini doğrula
 - [x] Checkpoint oluştur
+
+## Hero Sağ Alan Dikey İlçe ve Logo Düzeni
+
+- [x] Hero sağ alanı, ilçe etiketleri ve logo yerleşimini incele
+- [x] İlçeleri dikey gruba alıp logoyu yanına yerleştir
+- [x] Masaüstü, geniş ekran ve mobil hero görünümünü doğrula
+- [x] Checkpoint oluştur

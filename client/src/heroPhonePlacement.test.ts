@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 const projectRoot = resolve(import.meta.dirname, "../..");
 const siteChrome = readFileSync(resolve(projectRoot, "client/src/components/SiteChrome.tsx"), "utf8");
 const home = readFileSync(resolve(projectRoot, "client/src/pages/Home.tsx"), "utf8");
+const styles = readFileSync(resolve(projectRoot, "client/src/index.css"), "utf8");
 
 describe("header ve hero iletişim yerleşimi", () => {
   it("header araçlarını kaldırır, logoyu iki masaüstü menü grubu arasına yerleştirir", () => {
@@ -21,5 +22,13 @@ describe("header ve hero iletişim yerleşimi", () => {
     expect(home).toContain('className="hero-phone"');
     expect(home).toContain("SITE_PHONE_DISPLAY");
     expect(home.indexOf('className="hero-phone"')).toBeLessThan(home.indexOf('className="hero-regions"'));
+  });
+
+  it("masaüstünde ilçeleri dikey grupta, logoyu bu grubun yanında konumlandırır", () => {
+    expect(home).toContain('className="hero-region-stack"');
+    expect(home).toContain('className="hero-logo-stack"');
+    expect(home.indexOf('className="hero-region-stack"')).toBeLessThan(home.indexOf('className="hero-logo-stack"'));
+    expect(styles).toContain(".hero-regions{flex-direction:column;align-items:stretch;gap:8px;margin:0}");
+    expect(styles).toContain(".hero-logo-stack{display:flex;flex-direction:column;align-items:center;gap:12px}");
   });
 });

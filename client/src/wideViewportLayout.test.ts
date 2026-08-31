@@ -25,7 +25,8 @@ describe("geniş viewport yerleşimi", () => {
     expect(styles).toContain(".hero-inner{width:min(1530px,calc(100% - 56px));max-width:none;margin-right:auto!important}");
     expect(styles).not.toContain(".hero-inner{width:min(1530px,calc(100% - 56px));max-width:none;margin-left:auto!important;margin-right:auto!important}");
     expect(styles).toContain(".hero-inner{max-width:1530px;min-height:clamp(620px,calc(100vh - 138px),760px);padding:clamp(60px,0vw,100px) max(30px,calc((100vw - 1530px)/2)) 75px;align-items:center;");
-    expect(styles).toContain(".hero-brand-lockup{margin-left:0!important}");
+    expect(styles).toContain(".hero-brand-lockup{display:flex;flex:0 0 auto;flex-direction:row;");
+    expect(styles).toContain("margin-left:0!important;margin-top:0}");
     expect(styles).toContain(".site-header .brand{border-right:0!important}");
   });
 });

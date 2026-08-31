@@ -646,7 +646,7 @@ html,body{background:#fff}
 @media(min-width:861px){
   .header-row,.header-subrow{width:min(1530px,calc(100% - 56px));max-width:none;margin-left:auto!important;margin-right:auto!important;padding-left:0!important;padding-right:0!important}
   .header-subrow:before{left:0;right:0}
-  .hero-inner{width:min(1530px,calc(100% - 56px));max-width:none;margin-right:auto!important}
+  .hero-inner{width:min(1530px,calc(100% - 56px));max-width:none;margin-left:auto!important;margin-right:auto!important}
 }
 
 /* A seçeneği: logo merkezde, iki yanda geniş eşit navigasyon rayları ve kısa yol tarifleri. */

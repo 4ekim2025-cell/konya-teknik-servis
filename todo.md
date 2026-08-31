@@ -882,3 +882,10 @@
 - [x] Hero yüksekliğini azalt, telefon/ilçe etiketlerini büyüt ve logo/Keşfet alanını sağa hizala
 - [x] Masaüstü, geniş ekran ve mobil hero görünümünü doğrula
 - [x] Checkpoint oluştur
+
+## Hero Gerçek Merkez Rayı Düzeltmesi
+
+- [x] Hero konteyneri ile hedef 1530 px merkez rayı arasındaki farkı incele
+- [x] Hero konteynerini merkezle, logo ve Keşfet grubunu sağ içerik sınırına hizala
+- [x] Masaüstü, geniş ekran ve mobil hero hizalamasını doğrula
+- [x] Checkpoint oluştur

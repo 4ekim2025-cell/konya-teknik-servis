@@ -704,6 +704,14 @@ html,body{background:#fff}
   .hero-brand-lockup{position:absolute;right:0;top:50%;width:auto;transform:translateY(-50%)}
   .hero-region-stack{position:absolute;right:calc(100% + clamp(28px,4vw,76px));top:50%;width:182px;transform:translateY(-50%)}
 }
+@media(min-width:1440px){
+  .hero-region-stack{left:59%;right:auto;width:220px;transform:translate(-50%,-50%)}
+  .hero-region-stack .hero-phone{min-height:54px;padding:13px 19px;font-size:20px}
+  .hero-region-stack .hero-phone svg{width:22px;height:22px}
+  .hero-regions{gap:11px}
+  .hero-regions span{padding:16px 19px;font-size:20px}
+  .hero-regions svg{width:23px;height:23px}
+}
 @media(min-width:861px) and (max-width:1120px){
   .hero-brand-lockup{width:min(442px,43%);gap:14px}
   .hero-region-stack{min-width:144px;gap:10px}
@@ -741,4 +749,12 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
   .inner-content,.simple-hero>div,.timeline,.detail-layout,.brands,.contact,.blog,.all-faq,.about,.legal{padding-right:var(--site-gutter)!important;padding-left:var(--site-gutter)!important}
   .tracking-standard-layout{padding-right:var(--site-gutter)!important;padding-left:var(--site-gutter)!important}
   .tracking-section,.services-section,.diagnostic-section,.proof-section,.area-section,.faq-section,.final-cta,.site-footer{padding-right:var(--site-gutter)!important;padding-left:var(--site-gutter)!important}
+}
+
+/* Hero iletişim grubu: sağdaki logo ile soldaki içerik arasındaki gerçek orta boşluğa bağlanır. */
+@media(min-width:1121px) and (max-width:1439px){
+  .hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 171px);right:auto}
+}
+@media(min-width:1440px){
+  .hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 190px);right:auto}
 }

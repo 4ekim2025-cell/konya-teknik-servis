@@ -896,3 +896,10 @@
 - [x] Header, hero ve içerik bloklarını akışkan/kontrollü genişlik sistemine geçir
 - [x] Masaüstü, geniş ekran ve mobil görünümü doğrula
 - [x] Checkpoint oluştur
+
+## Hero Orta İletişim Grubu ve 20 px Tipografi
+
+- [x] Hero sol metin, iletişim grubu ve logo arasındaki boşluğu incele
+- [x] Telefon ile ilçe grubunu orta alana taşı ve yazı boyutlarını 20 px yap
+- [x] Masaüstü, geniş ekran ve mobil hero görünümünü doğrula
+- [x] Checkpoint oluştur

@@ -783,3 +783,10 @@
 - [x] KVKK sayfasının giriş yüzeyi, içerik hiyerarşisi ve okunurluğunu düzenle
 - [x] Masaüstü, mobil ve proje kontrollerini doğrula
 - [x] Checkpoint oluştur
+
+## Garanti ve Koşullar Sayfasını Kaldırma
+
+- [x] Garanti ve Koşullar rota, iç bağlantı ve sitemap kullanım noktalarını envanterle
+- [x] Sayfa rotasını, site içi bağlantıları ve sitemap kaydını kaldır
+- [x] Kaldırılan URL davranışını ve proje kontrollerini doğrula
+- [x] Checkpoint oluştur

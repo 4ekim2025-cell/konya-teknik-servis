@@ -868,3 +868,10 @@
 - [x] Online takip sayfasını KVKK tasarım standardına uyarlayıp SSS menü bağlantılarını kaldır
 - [x] Ana sayfa, online takip ve mobil menü görünümünü doğrula
 - [x] Checkpoint oluştur
+
+## Online Takip KVKK Ölçü Eşitlemesi
+
+- [x] KVKK ile online takip hero yüksekliği, içerik genişliği ve kart bindirme ölçülerini karşılaştır
+- [x] Online takip hero ve kart yerleşimini KVKK ölçülerine eşitle
+- [x] Masaüstü ve mobilde iki sayfanın görsel hiyerarşisini doğrula
+- [x] Checkpoint oluştur

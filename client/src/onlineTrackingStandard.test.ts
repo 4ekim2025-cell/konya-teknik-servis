@@ -19,4 +19,10 @@ describe("online takip alt sayfa standardı", () => {
     expect(styles).toContain(".tracking-standard-stages article{display:grid;grid-template-columns:44px minmax(0,1fr);");
     expect(styles).toContain(".tracking-standard-layout{grid-template-columns:1fr;gap:18px;width:100%;margin:-30px auto 0;");
   });
+
+  it("KVKK ile aynı hero yüksekliği, içerik rayı ve kart bindirme oranını kullanır", () => {
+    expect(styles).toContain(".tracking-page .simple-hero{min-height:398px!important;isolation:isolate;");
+    expect(styles).toContain(".tracking-page .simple-hero>div{width:min(100% - 60px,1530px);padding:54px 0 90px}");
+    expect(styles).toContain(".tracking-standard-layout{position:relative;z-index:2;grid-template-columns:minmax(0,.92fr) minmax(300px,.42fr);align-items:start;gap:34px;width:100%;max-width:1530px;margin:-48px auto 0;");
+  });
 });

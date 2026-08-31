@@ -805,3 +805,10 @@
 - [x] Hedef konteynerlerin margin değerlerini 0 px olarak uygula
 - [x] Masaüstü, geniş viewport ve mobil görünümü doğrula
 - [x] Checkpoint oluştur
+
+## Aktif Header ve Hero Margin Sıfırlama
+
+- [x] Header satırı, alt navigasyon ve hero iç konteynerinin aktif margin tanımlarını incele
+- [x] Hedef konteynerlerin aktif margin değerini 0 px olarak uygula
+- [x] Masaüstü, geniş viewport ve mobil davranışı doğrula
+- [x] Checkpoint oluştur

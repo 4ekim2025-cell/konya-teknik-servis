@@ -729,3 +729,16 @@ html,body{background:#fff}
 a[href^="https://wa.me/"]:has(>svg:first-child)>svg:first-child,.smart-preview-footer>span>svg,.diagnostic-cta>svg:first-child,.tracking-steps article:nth-child(2) .round-icon>svg,.proof-list article:nth-child(3)>b>svg,.smart-modal-footer .button-primary:has(>svg.lucide-message-circle)>svg.lucide-message-circle{display:none}
 a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>span::before,.diagnostic-cta::before,.smart-modal-footer .button-primary:has(>svg.lucide-message-circle)::before{content:"";display:inline-block;flex:0 0 auto;width:1.15em;height:1.15em;background:var(--esli-whatsapp-logo) center/contain no-repeat}
 .tracking-steps article:nth-child(2) .round-icon,.proof-list article:nth-child(3)>b{background-image:var(--esli-whatsapp-logo);background-position:center;background-repeat:no-repeat;background-size:62%}
+
+/* Akışkan genişlik: katı 1530 px rayı yerine ekranla büyüyen, yalnızca güvenli iç boşluk bırakan sayfa düzeni. */
+@media(min-width:861px){
+  :root{--site-gutter:clamp(32px,7vw,148px)}
+  .header-row,.header-subrow{width:100%!important;max-width:none!important;margin:0!important;padding-right:var(--site-gutter)!important;padding-left:var(--site-gutter)!important}
+  .header-subrow:before{right:var(--site-gutter)!important;left:var(--site-gutter)!important}
+  .hero-inner{width:100%!important;max-width:none!important;margin:0!important;padding-right:var(--site-gutter)!important;padding-left:var(--site-gutter)!important}
+  .hero-brand-lockup{right:var(--site-gutter)!important}
+  .inner-content,.simple-hero>div,.timeline,.detail-layout,.brands,.contact,.blog,.all-faq,.about,.legal,.tracking-standard-layout{width:100%!important;max-width:none!important}
+  .inner-content,.simple-hero>div,.timeline,.detail-layout,.brands,.contact,.blog,.all-faq,.about,.legal{padding-right:var(--site-gutter)!important;padding-left:var(--site-gutter)!important}
+  .tracking-standard-layout{padding-right:var(--site-gutter)!important;padding-left:var(--site-gutter)!important}
+  .tracking-section,.services-section,.diagnostic-section,.proof-section,.area-section,.faq-section,.final-cta,.site-footer{padding-right:var(--site-gutter)!important;padding-left:var(--site-gutter)!important}
+}

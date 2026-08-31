@@ -889,3 +889,10 @@
 - [x] Hero konteynerini merkezle, logo ve Keşfet grubunu sağ içerik sınırına hizala
 - [x] Masaüstü, geniş ekran ve mobil hero hizalamasını doğrula
 - [x] Checkpoint oluştur
+
+## Akışkan Site Genişliği Düzenlemesi
+
+- [x] 1530 px sabit genişlik, hesaplanmış padding ve konum kurallarını envanterle
+- [x] Header, hero ve içerik bloklarını akışkan/kontrollü genişlik sistemine geçir
+- [x] Masaüstü, geniş ekran ve mobil görünümü doğrula
+- [x] Checkpoint oluştur

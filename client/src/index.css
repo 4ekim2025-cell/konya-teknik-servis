@@ -635,6 +635,13 @@ html,body{background:#fff}
   .header-row>.desktop-nav a,.header-row>.desktop-nav .desktop-brands-trigger{padding:0 6px;font-size:11px}
   .header-row>.desktop-nav svg{width:15px;height:15px}
 }
+
+/* Site geneli: header ve hero, alt sayfa içeriklerinde kullanılan aynı 1530 px merkez rayına bağlıdır. */
+@media(min-width:861px){
+  .header-row,.header-subrow{width:min(1530px,calc(100% - 56px));max-width:none;margin-left:auto!important;margin-right:auto!important;padding-left:0!important;padding-right:0!important}
+  .header-subrow:before{left:0;right:0}
+  .hero-inner{width:min(1530px,calc(100% - 56px));max-width:none;margin-left:auto!important;margin-right:auto!important}
+}
 /* Kullanıcının sağladığı özgün WhatsApp markası, tüm WhatsApp eylemlerinde ortak kullanılır. */
 :root{--esli-whatsapp-logo:url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/IqShanjjQzLpQbpX.svg")}
 .whatsapp-mark,.smart-whatsapp-mark,.mobile-whatsapp-mark{background:var(--esli-whatsapp-logo) center/contain no-repeat}

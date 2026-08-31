@@ -826,3 +826,10 @@
 - [x] Logoyu merkezde, ana menü öğelerini iki yanında dengeli yerleştir
 - [x] Masaüstü, tablet ve mobil header görünümünü doğrula
 - [x] Checkpoint oluştur
+
+## Site Geneli Ortak Merkez Rayı Hizalaması
+
+- [x] Header, hero ve alt sayfa içeriklerindeki farklı merkezleme kurallarını envanterle
+- [x] Tüm sayfalarda aynı 1530 px merkez rayını kullanan hizalama katmanını uygula
+- [x] Ana sayfa, alt sayfa, geniş ekran ve mobil görünümü doğrula
+- [x] Checkpoint oluştur

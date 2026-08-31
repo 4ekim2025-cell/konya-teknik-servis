@@ -790,3 +790,11 @@
 - [x] Sayfa rotasını, site içi bağlantıları ve sitemap kaydını kaldır
 - [x] Kaldırılan URL davranışını ve proje kontrollerini doğrula
 - [x] Checkpoint oluştur
+
+## Geniş Pencere ve Tarayıcı Ölçeği Responsive Düzenlemesi
+
+- [x] Zoom out karşılığı aşırı geniş viewportta ana menü ve hero kayma nedenini incele
+- [x] Ana menü, hero ve ana içerik bloklarını merkezde tutan geniş viewport dengeleme katmanını uygula
+- [x] Normal masaüstü, zoom out karşılığı geniş viewport ve mobil görünümü doğrula
+- [x] Vitest, TypeScript ve production build kontrollerini tamamla
+- [x] Checkpoint oluştur

@@ -620,6 +620,21 @@ html,body{background:#fff}
   .header-subrow:before{right:0;left:0}
   .hero-inner{width:min(1530px,calc(100% - 60px));max-width:none;margin:0;padding-right:clamp(30px,2vw,100px);padding-left:clamp(30px,2vw,100px)}
 }
+
+/* Deneme: logo merkezde, ana menü iki yanda dengeli bir kurumsal başlık rayına oturur. */
+@media(min-width:861px){
+  .header-row{display:grid!important;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);align-items:center;justify-items:stretch}
+  .header-row>.brand{grid-column:2;grid-row:1;justify-self:center}
+  .header-row>.desktop-nav{margin:0!important;width:max-content;max-width:100%;gap:clamp(12px,2.25vw,38px);padding:14px 10px}
+  .desktop-nav-left{grid-column:1;grid-row:1;justify-self:end}
+  .desktop-nav-right{grid-column:3;grid-row:1;justify-self:start}
+  .desktop-nav-right a{justify-content:center}
+}
+@media(min-width:861px) and (max-width:1180px){
+  .header-row>.desktop-nav{gap:clamp(4px,.9vw,10px);padding:12px 7px}
+  .header-row>.desktop-nav a,.header-row>.desktop-nav .desktop-brands-trigger{padding:0 6px;font-size:11px}
+  .header-row>.desktop-nav svg{width:15px;height:15px}
+}
 /* Kullanıcının sağladığı özgün WhatsApp markası, tüm WhatsApp eylemlerinde ortak kullanılır. */
 :root{--esli-whatsapp-logo:url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/IqShanjjQzLpQbpX.svg")}
 .whatsapp-mark,.smart-whatsapp-mark,.mobile-whatsapp-mark{background:var(--esli-whatsapp-logo) center/contain no-repeat}

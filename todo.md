@@ -819,3 +819,10 @@
 - [x] Telefon numarasını headerdan kaldırıp hero etiketlerinin üstüne taşı
 - [x] Masaüstü ve mobil hero görünümünü doğrula
 - [x] Checkpoint oluştur
+
+## Merkez Logo ve İki Yana Dağıtılmış Ana Menü Denemesi
+
+- [x] Header WhatsApp butonunu kaldır ve mevcut navigasyon yapısını incele
+- [x] Logoyu merkezde, ana menü öğelerini iki yanında dengeli yerleştir
+- [x] Masaüstü, tablet ve mobil header görünümünü doğrula
+- [x] Checkpoint oluştur

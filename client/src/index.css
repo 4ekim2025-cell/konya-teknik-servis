@@ -655,7 +655,7 @@ html,body{background:#fff}
   .header-row>.desktop-nav{width:100%!important;max-width:none;align-items:stretch;gap:0;padding:8px 9px}
   .header-row>.desktop-nav a,.header-row>.desktop-nav .desktop-brands-trigger{display:flex;flex:1 1 0;align-items:center;justify-content:center;gap:8px;min-width:0;height:60px;padding:8px 10px}
   .desktop-nav-label{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;text-align:left}
-  .desktop-nav-label>span{display:block;overflow:hidden;max-width:100%;font:800 12px/1 Manrope,sans-serif;letter-spacing:.01em;text-overflow:ellipsis;white-space:nowrap}
+  .desktop-nav-label>span{display:block;overflow:hidden;max-width:100%;font:800 15px/1 Manrope,sans-serif;letter-spacing:.01em;text-overflow:ellipsis;white-space:nowrap}
   .desktop-nav-label small{display:block;overflow:hidden;max-width:100%;color:#7b8d8a;font:700 9px/1.15 Manrope,sans-serif;letter-spacing:.01em;text-overflow:ellipsis;white-space:nowrap}
   .desktop-nav a.active .desktop-nav-label small,.desktop-brands-trigger.active .desktop-nav-label small{color:rgba(252,245,219,.82)}
   .desktop-nav a:hover .desktop-nav-label small,.desktop-brands-trigger:hover .desktop-nav-label small,.desktop-brands-trigger.open .desktop-nav-label small{color:#47706d}

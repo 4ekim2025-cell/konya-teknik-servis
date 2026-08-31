@@ -861,3 +861,10 @@
 - [x] İlçeleri dikey gruba alıp logoyu yanına yerleştir
 - [x] Masaüstü, geniş ekran ve mobil hero görünümünü doğrula
 - [x] Checkpoint oluştur
+
+## Online Takip Standardizasyonu ve SSS Menü Kaldırma
+
+- [x] Online takip ile KVKK sayfasının alt sayfa düzenlerini karşılaştır
+- [x] Online takip sayfasını KVKK tasarım standardına uyarlayıp SSS menü bağlantılarını kaldır
+- [x] Ana sayfa, online takip ve mobil menü görünümünü doğrula
+- [x] Checkpoint oluştur

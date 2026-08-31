@@ -23,7 +23,6 @@ const services = [
 const navItems = [
   { label: "Hizmetlerimiz", hint: "Cihaz ve tamir", href: "/#hizmetler", Icon: Wrench },
   { label: "Online Takip", hint: "Anlık iş durumu", href: "/online-servis-takibi/", Icon: LayoutGrid },
-  { label: "Sık Sorulanlar", hint: "Hızlı yanıtlar", href: "/sss/", Icon: Info },
   { label: "İletişim", hint: "Bize ulaşın", href: "/iletisim/", Icon: MapPin },
 ];
 

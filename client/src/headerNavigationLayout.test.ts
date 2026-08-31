@@ -18,4 +18,9 @@ describe("geniş header navigasyon rayları", () => {
     expect(styles).toContain(".header-row>.desktop-nav{width:100%!important;max-width:none;align-items:stretch;gap:0;padding:8px 9px}");
     expect(styles).toContain(".header-row>.desktop-nav a,.header-row>.desktop-nav .desktop-brands-trigger{display:flex;flex:1 1 0");
   });
+
+  it("SSS sayfasını korurken SSS bağlantısını ana menü öğelerinden çıkarır", () => {
+    expect(header).not.toContain('hint: "Hızlı yanıtlar"');
+    expect(header).toContain('href="/sss/"');
+  });
 });

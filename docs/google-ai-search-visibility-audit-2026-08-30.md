@@ -5,7 +5,7 @@
 
 ## Kısa sonuç
 
-> Site; Türkçe dil bildirimi, mobil tasarım, hizmet/marka/ilçe odaklı URL’ler, iç bağlantılar, özgün 404 sayfası, sayfa bazlı başlık/açıklama üretimi ve `ProfessionalService`/`Service`/`BreadcrumbList` şeması yönünden iyi bir başlangıç seviyesindedir. Buna karşılık, **sitemap ve robots dosyalarının hâlâ eski `konya-teknik-servis.manus.space` alan adını göstermesi**, yeni Vercel alan adına geçişte en yüksek öncelikli teknik eksiktir.
+> Site; Türkçe dil bildirimi, mobil tasarım, hizmet/marka/ilçe odaklı URL’ler, iç bağlantılar, özgün 404 sayfası, sayfa bazlı başlık/açıklama üretimi ve `ProfessionalService`/`Service`/`BreadcrumbList` şeması yönünden iyi bir başlangıç seviyesindedir. Denetim sırasında saptanan eski Manus alan adı sorunu, sitemap ve robots dosyalarının **`https://esliteknik.com`** ile eşitlenmesiyle giderilmiştir. Bir sonraki teknik öncelik, önemli sayfalardaki meta ve yapılandırılmış veriyi önceden render edilmiş HTML’de sunmaktır.
 
 Google, sitemap’te yer alan mutlak URL’leri tam olarak belirtilen haliyle taramaya çalışır; kanonik URL, sitemap ve yönlendirmelerin aynı tercih edilen alan adını işaret etmesi gerekir.[1] [2]
 
@@ -14,7 +14,7 @@ Google, sitemap’te yer alan mutlak URL’leri tam olarak belirtilen haliyle ta
 | Alan | Mevcut uygulama | Değerlendirme |
 |---|---|---|
 | Tarama izni | `robots.txt` tüm botlara izin veriyor | Olumlu |
-| Sitemap | 42 temel URL listeleniyor; ancak eski Manus alan adını kullanıyor | **P0 düzeltme** |
+| Sitemap | 42 temel URL `https://esliteknik.com` alan adıyla listeleniyor | Güncellendi |
 | URL yapısı | Cihaz, marka ve ilçe sayfaları ayrı, anlamlı URL’lerde | Olumlu |
 | Meta veriler | Ana sayfada temel açıklama, Open Graph ve Twitter alanları mevcut | Olumlu |
 | Kanonik URL | Uygulama çalıştıktan sonra tarayıcıda dinamik üretiliyor | P1: kaynak HTML / prerender ile güçlendirilmesi önerilir |
@@ -25,9 +25,9 @@ Google, sitemap’te yer alan mutlak URL’leri tam olarak belirtilen haliyle ta
 
 ## Öncelik 0 — Yayınlanmadan / yeniden indeksleme istenmeden önce
 
-### 1. Tek bir kesin alan adı belirleyin ve tüm SEO sinyallerini buna taşıyın
+### 1. Tek bir kesin alan adı kullanın ve tüm SEO sinyallerini eşit tutun
 
-Vercel’de kullandığınız nihai alan adını (örneğin `https://www.ornekalanadiniz.com`) belirledikten sonra aşağıdaki konumlarda **yalnızca bu HTTPS alan adı** kullanılmalıdır:
+Nihai alan adı **`https://esliteknik.com`** olarak belirlendi ve statik SEO dosyaları bu alan adıyla güncellendi. Aşağıdaki konumlarda yalnızca bu HTTPS alan adı kullanılmaya devam etmelidir:
 
 | Konum | Yapılacak işlem |
 |---|---|
@@ -37,11 +37,11 @@ Vercel’de kullandığınız nihai alan adını (örneğin `https://www.ornekal
 | Vercel Domains | `www` / kök alan adı tercihini tekleştirmek, diğer varyantı 301 ile yönlendirmek |
 | Google Search Console | Alan adı mülkünü doğrulamak ve yeni sitemap’i göndermek |
 
-Sitemap, kanonik URL tercihi için zayıf; `rel="canonical"` ise güçlü bir sinyaldir. Sinyaller çelişirse Google farklı bir URL’yi seçebilir.[2] Bu nedenle yeni alan adı paylaşılmadan bu dosyaları tahmine dayalı güncellemek doğru değildir.
+Sitemap, kanonik URL tercihi için zayıf; `rel="canonical"` ise güçlü bir sinyaldir. Sinyaller çelişirse Google farklı bir URL’yi seçebilir.[2] Bu nedenle Vercel’de `www.esliteknik.com` kullanılıyorsa, bu varyantın kök alan adına 301 ile yönlendiği de doğrulanmalıdır.
 
 ### 2. Google Search Console’u kurun ve indeksleme durumunu ölçün
 
-Alan adı mülkünü doğruladıktan sonra `https://alanadiniz.com/sitemap.xml` adresini Search Console’a ekleyin. Ardından ana sayfa, en önemli 10 cihaz sayfası, `tum-markalar`, `iletisim` ve üç ilçe sayfasını URL Denetimi ile kontrol edin. Yeni yayın veya alan adı taşınması sonrası tarama birkaç gün ile birkaç hafta sürebilir; tekrar tekrar istek göndermek süreci hızlandırmaz.[3]
+Alan adı mülkünü doğruladıktan sonra `https://esliteknik.com/sitemap.xml` adresini Search Console’a ekleyin. Ardından ana sayfa, en önemli 10 cihaz sayfası, `tum-markalar`, `iletisim` ve üç ilçe sayfasını URL Denetimi ile kontrol edin. Yeni yayın veya alan adı taşınması sonrası tarama birkaç gün ile birkaç hafta sürebilir; tekrar tekrar istek göndermek süreci hızlandırmaz.[3]
 
 ### 3. Google İşletme Profili ile site verilerini birebir eşleştirin
 

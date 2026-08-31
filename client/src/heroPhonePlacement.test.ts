@@ -37,7 +37,7 @@ describe("header ve hero iletişim yerleşimi", () => {
     expect(styles).toContain(".hero-brand-lockup{width:min(520px,45%);margin-left:auto!important;justify-content:flex-end!important}");
     expect(styles).toContain(".hero-region-stack .hero-phone{min-height:44px;padding:10px 17px;font-size:15px}");
     expect(styles).toContain(".hero-regions span{padding:13px 17px;font-size:15px}");
-    expect(styles).toContain(".hero-logo-stack{flex:0 0 300px;align-items:flex-end}");
+    expect(styles).toContain(".hero-logo-stack{flex:0 0 300px;align-items:center}");
   });
 
   it("geniş ekranlarda logo/Keşfet grubunu sağ içerik sınırına sabitler", () => {
@@ -50,5 +50,10 @@ describe("header ve hero iletişim yerleşimi", () => {
     expect(styles).toContain(".hero-region-stack .hero-phone{min-height:54px;padding:13px 19px;font-size:20px}");
     expect(styles).toContain(".hero-regions span{padding:16px 19px;font-size:20px}");
     expect(styles).toContain(".hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 190px);right:auto}");
+  });
+
+  it("Keşfet eylemini logo alanının hemen altında ortalar", () => {
+    expect(styles).toContain(".hero-logo-stack{flex:0 0 300px;align-items:center}");
+    expect(styles).toContain(".hero-logo-stack .hero-scroll{align-self:center}");
   });
 });

@@ -903,3 +903,10 @@
 - [x] Telefon ile ilçe grubunu orta alana taşı ve yazı boyutlarını 20 px yap
 - [x] Masaüstü, geniş ekran ve mobil hero görünümünü doğrula
 - [x] Checkpoint oluştur
+
+## Hero Keşfet Eylemi Logo Altı Hizalaması
+
+- [x] Keşfet eyleminin mevcut hero konumlandırmasını incele
+- [x] Keşfet eylemini logo alanının hemen altına ortala
+- [x] Masaüstü ve mobil hero görünümünü doğrula
+- [x] Checkpoint oluştur

@@ -697,8 +697,8 @@ html,body{background:#fff}
   .hero-regions{gap:10px}
   .hero-regions span{padding:13px 17px;font-size:15px}
   .hero-regions svg{width:19px;height:19px}
-  .hero-logo-stack{flex:0 0 300px;align-items:flex-end}
-  .hero-logo-stack .hero-scroll{align-self:flex-end}
+  .hero-logo-stack{flex:0 0 300px;align-items:center}
+  .hero-logo-stack .hero-scroll{align-self:center}
 }
 @media(min-width:1121px){
   .hero-brand-lockup{position:absolute;right:0;top:50%;width:auto;transform:translateY(-50%)}

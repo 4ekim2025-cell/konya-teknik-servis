@@ -21,4 +21,10 @@ describe("geniş viewport yerleşimi", () => {
     expect(styles).toContain(".header-subrow{width:min(1530px,calc(100% - 60px));max-width:none;margin:0;");
     expect(styles).toContain(".hero-inner{width:min(1530px,calc(100% - 60px));max-width:none;margin:0;");
   });
+
+  it("hero iç rayında verilen ölçüleri ve sıfırlanmış logo hizasını korur", () => {
+    expect(styles).toContain(".hero-inner{max-width:1530px;min-height:clamp(620px,calc(100vh - 138px),760px);padding:clamp(60px,0vw,100px) max(30px,calc((100vw - 1530px)/2)) 75px;align-items:center;");
+    expect(styles).toContain(".hero-brand-lockup{margin-left:0!important}");
+    expect(styles).toContain(".site-header .brand{border-right:0!important}");
+  });
 });

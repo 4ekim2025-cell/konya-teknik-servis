@@ -840,3 +840,10 @@
 - [x] İki geniş menü rayını, kısa yardımcı açıklamaları ve KVKK bağlantısını uygula
 - [x] Masaüstü, tablet ve mobil header görünümünü doğrula
 - [x] Checkpoint oluştur
+
+## Hero Hizalama ve Logo Ayırıcı Çizgisi
+
+- [x] Hero iç yerleşimi, sağa kayma ve merkez logo çizgisi kurallarını incele
+- [x] Verilen hero ölçülerini uygulayıp içeriği merkezle ve gri çizgiyi kaldır
+- [x] Masaüstü, geniş viewport ve mobil hero görünümünü doğrula
+- [x] Checkpoint oluştur

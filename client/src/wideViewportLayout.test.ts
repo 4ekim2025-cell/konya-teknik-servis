@@ -12,4 +12,9 @@ describe("geniş viewport yerleşimi", () => {
     expect(styles).toContain(".header-subrow{width:min(1530px,calc(100% - 60px));max-width:none;margin:0;");
     expect(styles).toContain(".hero-inner{width:min(1530px,calc(100% - 60px));max-width:none;margin:0;");
   });
+
+  it("kullanıcının devre dışı bıraktığı eski genişlik ve yatay boşluk kuralını yorum satırında tutar", () => {
+    expect(styles).toContain("/* .header-row,.header-subrow,.hero-inner{max-width:1530px}");
+    expect(styles).toContain("/* .tracking-section,.services-section,.diagnostic-section");
+  });
 });

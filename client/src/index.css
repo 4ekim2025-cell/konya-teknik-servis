@@ -59,8 +59,8 @@
 @media(max-width:430px){.diagnostic-intro h2{font-size:34px}.diagnostic-panel-head{padding:18px}.diagnostic-panel-head>span{display:none}.diagnostic-panel .symptom-list{padding:20px}.symptom-grid{grid-template-columns:1fr}.diagnostic-panel .symptom-detail{padding:23px 20px}.diagnostic-panel .symptom-detail h3{font-size:25px}}
 
 /* 1530px içerik ritmi: geniş ekranlarda daha ferah, mobilde aynı iç kenar boşlukları korunur. */
-.header-row,.header-subrow,.hero-inner{max-width:1530px}.mega-menu{left:max(30px,calc((100% - 1530px)/2 + 30px))}.hero-scroll{left:max(30px,calc((100vw - 1530px)/2 + 66px))}
-.tracking-section,.services-section,.diagnostic-section,.proof-section,.area-section,.faq-section,.final-cta,.site-footer{padding-left:max(30px,calc((100vw - 1530px)/2));padding-right:max(30px,calc((100vw - 1530px)/2))}.detail-layout,.brands,.contact,.blog,.all-faq,.about{max-width:1530px}.inner-content,.simple-hero>div{max-width:1530px}
+/* .header-row,.header-subrow,.hero-inner{max-width:1530px}.mega-menu{left:max(30px,calc((100% - 1530px)/2 + 30px))}.hero-scroll{left:max(30px,calc((100vw - 1530px)/2 + 66px))} */
+/* .tracking-section,.services-section,.diagnostic-section,.proof-section,.area-section,.faq-section,.final-cta,.site-footer{padding-left:max(30px,calc((100vw - 1530px)/2));padding-right:max(30px,calc((100vw - 1530px)/2))}.detail-layout,.brands,.contact,.blog,.all-faq,.about{max-width:1530px}.inner-content,.simple-hero>div{max-width:1530px} */
 
 /* Takip bölümü: iki eşit kolon aynı satır yüksekliğini paylaşır; görsel yeni özgün takip sahnesidir. */
 .tracking-section{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:clamp(48px,6vw,104px)}.tracking-visual{height:auto;min-height:540px;background:url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/ZGKdDxSkBuQRGHzG.webp") center/cover}.tracking-visual img{display:none}.tracking-content{display:flex;flex-direction:column;justify-content:center;padding:44px 0}.tracking-content h2{max-width:620px}.tracking-content>p{max-width:610px}.tracking-steps{max-width:630px}

@@ -805,3 +805,10 @@
 - [x] Hedef konteynerlerin margin değerlerini 0 px olarak uygula
 - [x] Masaüstü, geniş viewport ve mobil görünümü doğrula
 - [x] Checkpoint oluştur
+
+## Maksimum Genişlik Kuralını Yorumlama
+
+- [x] Belirtilen genişlik ve yatay padding CSS kuralının güncel konumunu incele
+- [x] CSS kuralını tamamen yorum satırına al
+- [x] Stil derlemesini ve temel görünümü doğrula
+- [x] Checkpoint oluştur

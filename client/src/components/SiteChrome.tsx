@@ -21,10 +21,10 @@ const services = [
 ];
 
 const navItems = [
-  { label: "Hizmetlerimiz", href: "/#hizmetler", Icon: Wrench },
-  { label: "Online Takip", href: "/online-servis-takibi/", Icon: LayoutGrid },
-  { label: "Sık Sorulanlar", href: "/sss/", Icon: Info },
-  { label: "İletişim", href: "/iletisim/", Icon: MapPin },
+  { label: "Hizmetlerimiz", hint: "Cihaz ve tamir", href: "/#hizmetler", Icon: Wrench },
+  { label: "Online Takip", hint: "Anlık iş durumu", href: "/online-servis-takibi/", Icon: LayoutGrid },
+  { label: "Sık Sorulanlar", hint: "Hızlı yanıtlar", href: "/sss/", Icon: Info },
+  { label: "İletişim", hint: "Bize ulaşın", href: "/iletisim/", Icon: MapPin },
 ];
 
 const commonIssues = [
@@ -111,14 +111,14 @@ export function Header() {
     <div className="header-row">
       <nav className="desktop-nav desktop-nav-left" aria-label="Ana menü başlangıcı">
         <a href="/" className={active("/") ? "active" : ""} aria-current={active("/") ? "page" : undefined}>
-          <House size={17} /><span>Ana Sayfa</span>
+          <House size={17} /><span className="desktop-nav-label"><span>Ana Sayfa</span><small>Başlangıç</small></span>
         </a>
-        {navItems.slice(0, 1).map(({ label, href, Icon }) => <a href={href} className={active(href) ? "active" : ""} aria-current={active(href) ? "page" : undefined} key={label}>
-          <Icon size={17} /><span>{label}</span>
+        {navItems.slice(0, 1).map(({ label, hint, href, Icon }) => <a href={href} className={active(href) ? "active" : ""} aria-current={active(href) ? "page" : undefined} key={label}>
+          <Icon size={17} /><span className="desktop-nav-label"><span>{label}</span><small>{hint}</small></span>
         </a>)}
         <div className="brands-menu-wrap" ref={brandsMenuRef}>
           <button type="button" className={`desktop-brands-trigger ${brandsMegaOpen ? "open" : ""} ${brandsActive ? "active" : ""}`} onClick={() => { setMegaOpen(false); setBrandsMegaOpen(!brandsMegaOpen); }} aria-expanded={brandsMegaOpen} aria-haspopup="menu">
-            <Tags size={17} /><span>Markalar</span><ChevronDown size={13} />
+            <Tags size={17} /><span className="desktop-nav-label"><span>Markalar</span><small>19 servis rehberi</small></span><ChevronDown size={13} />
           </button>
           {brandsMegaOpen && <div className="brands-mega-menu" role="menu" aria-label="Hizmet verdiğimiz markalar">
             <div className="brands-mega-intro"><b><Tags size={17} />Hizmet verdiğimiz markalar</b><p>Markanıza özel servis, arıza ve tamir rehberini seçin.</p><a href="/tum-markalar/" onClick={() => setBrandsMegaOpen(false)}>Tüm markaları görüntüle <span>→</span></a></div>
@@ -130,9 +130,10 @@ export function Header() {
       <a className="brand" href="/" aria-label="EŞLİ TEKNİK ana sayfa" />
 
       <nav className="desktop-nav desktop-nav-right" aria-label="Ana menü devamı">
-        {navItems.slice(1).map(({ label, href, Icon }) => <a href={href} className={active(href) ? "active" : ""} aria-current={active(href) ? "page" : undefined} key={label}>
-          <Icon size={17} /><span>{label}</span>
+        {navItems.slice(1).map(({ label, hint, href, Icon }) => <a href={href} className={active(href) ? "active" : ""} aria-current={active(href) ? "page" : undefined} key={label}>
+          <Icon size={17} /><span className="desktop-nav-label"><span>{label}</span><small>{hint}</small></span>
         </a>)}
+        <a href="/kvkk/" className={active("/kvkk/") ? "active" : ""} aria-current={active("/kvkk/") ? "page" : undefined}><Info size={17} /><span className="desktop-nav-label"><span>KVKK</span><small>Gizlilik ve haklar</small></span></a>
       </nav>
 
       <button className="nav-toggle" onClick={() => setMobileOpen(!mobileOpen)} aria-expanded={mobileOpen} aria-label="Menüyü aç veya kapat">{mobileOpen ? <X /> : <Menu />}</button>
@@ -159,6 +160,7 @@ export function Header() {
       {mobileServicesOpen && <div className="mobile-service-accordion">{services.map(({ name, href, Icon, note }) => <a href={href} onClick={() => follow(href, true)} key={href}><Icon size={16} /><span>{name}<small>{note}</small></span><span>→</span></a>)}</div>}
       {navItems.map(({ label, href, Icon }) => <a href={href} onClick={closeMobile} className={active(href) ? "active" : ""} aria-current={active(href) ? "page" : undefined} key={label}><Icon size={17} /><span>{label}</span></a>)}
       <a className="mobile-nav-item" href="/tum-markalar/" onClick={closeMobile}><Tags size={17} /><span>Markalar</span></a>
+      <a className="mobile-nav-item" href="/kvkk/" onClick={closeMobile}><Info size={17} /><span>KVKK</span></a>
       <a className="mobile-contact" target="_blank" rel="noreferrer" href={whatsappLink}><MessageCircle size={17} />WhatsApp’tan Yazın</a>
     </nav>}
   </header>;

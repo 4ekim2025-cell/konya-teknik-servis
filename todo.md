@@ -833,3 +833,10 @@
 - [x] Tüm sayfalarda aynı 1530 px merkez rayını kullanan hizalama katmanını uygula
 - [x] Ana sayfa, alt sayfa, geniş ekran ve mobil görünümü doğrula
 - [x] Checkpoint oluştur
+
+## A Seçeneği Geniş Navigasyon Rayları
+
+- [x] Merkez logo çevresindeki mevcut navigasyon grupları ve KVKK rota kullanımını incele
+- [x] İki geniş menü rayını, kısa yardımcı açıklamaları ve KVKK bağlantısını uygula
+- [x] Masaüstü, tablet ve mobil header görünümünü doğrula
+- [x] Checkpoint oluştur

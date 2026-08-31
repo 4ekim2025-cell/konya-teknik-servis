@@ -642,6 +642,25 @@ html,body{background:#fff}
   .header-subrow:before{left:0;right:0}
   .hero-inner{width:min(1530px,calc(100% - 56px));max-width:none;margin-left:auto!important;margin-right:auto!important}
 }
+
+/* A seçeneği: logo merkezde, iki yanda geniş eşit navigasyon rayları ve kısa yol tarifleri. */
+@media(min-width:861px){
+  .header-row{height:150px!important;min-height:150px!important}
+  .header-row>.desktop-nav{width:100%!important;max-width:none;align-items:stretch;gap:0;padding:8px 9px}
+  .header-row>.desktop-nav a,.header-row>.desktop-nav .desktop-brands-trigger{display:flex;flex:1 1 0;align-items:center;justify-content:center;gap:8px;min-width:0;height:60px;padding:8px 10px}
+  .desktop-nav-label{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;text-align:left}
+  .desktop-nav-label>span{display:block;overflow:hidden;max-width:100%;font:800 12px/1 Manrope,sans-serif;letter-spacing:.01em;text-overflow:ellipsis;white-space:nowrap}
+  .desktop-nav-label small{display:block;overflow:hidden;max-width:100%;color:#7b8d8a;font:700 9px/1.15 Manrope,sans-serif;letter-spacing:.01em;text-overflow:ellipsis;white-space:nowrap}
+  .desktop-nav a.active .desktop-nav-label small,.desktop-brands-trigger.active .desktop-nav-label small{color:rgba(252,245,219,.82)}
+  .desktop-nav a:hover .desktop-nav-label small,.desktop-brands-trigger:hover .desktop-nav-label small,.desktop-brands-trigger.open .desktop-nav-label small{color:#47706d}
+}
+@media(min-width:861px) and (max-width:1280px){
+  .header-row{height:131px!important;min-height:131px!important}
+  .header-row>.desktop-nav{padding:8px 7px}
+  .header-row>.desktop-nav a,.header-row>.desktop-nav .desktop-brands-trigger{height:48px;gap:5px;padding:6px 5px}
+  .desktop-nav-label small{display:none}
+  .desktop-nav-label>span{font-size:11px}
+}
 /* Kullanıcının sağladığı özgün WhatsApp markası, tüm WhatsApp eylemlerinde ortak kullanılır. */
 :root{--esli-whatsapp-logo:url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/IqShanjjQzLpQbpX.svg")}
 .whatsapp-mark,.smart-whatsapp-mark,.mobile-whatsapp-mark{background:var(--esli-whatsapp-logo) center/contain no-repeat}

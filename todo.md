@@ -776,3 +776,10 @@
 - [x] Robots, sitemap ve kanonik URL temelini nihai alan adıyla güncelle
 - [x] SEO dosyaları ve üretim paketini doğrula
 - [x] Checkpoint oluştur
+
+## KVKK Alt Sayfa Standardizasyonu
+
+- [x] Mevcut KVKK sayfası ile alt sayfa giriş ve içerik standartlarını karşılaştır
+- [x] KVKK sayfasının giriş yüzeyi, içerik hiyerarşisi ve okunurluğunu düzenle
+- [x] Masaüstü, mobil ve proje kontrollerini doğrula
+- [x] Checkpoint oluştur

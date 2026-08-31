@@ -6,9 +6,8 @@ const projectRoot = resolve(import.meta.dirname, "..", "..");
 const styles = readFileSync(resolve(projectRoot, "client", "src", "index.css"), "utf8");
 
 describe("geniş viewport yerleşimi", () => {
-  it("header, alt navigasyon ve hero için ortak 1530 px merkez rayını kullanır", () => {
+  it("header ve alt navigasyon için ortak 1530 px merkez rayını kullanır", () => {
     expect(styles).toContain(".header-row,.header-subrow{width:min(1530px,calc(100% - 56px));max-width:none;margin-left:auto!important;margin-right:auto!important");
-    expect(styles).toContain(".hero-inner{width:min(1530px,calc(100% - 56px));max-width:none;margin-left:auto!important;margin-right:auto!important}");
   });
 
   it("header ve hero iç konteynerlerinde tüm ekranlarda 0 px aktif margin uygular", () => {
@@ -23,6 +22,8 @@ describe("geniş viewport yerleşimi", () => {
   });
 
   it("hero iç rayında verilen ölçüleri ve sıfırlanmış logo hizasını korur", () => {
+    expect(styles).toContain(".hero-inner{width:min(1530px,calc(100% - 56px));max-width:none;margin-right:auto!important}");
+    expect(styles).not.toContain(".hero-inner{width:min(1530px,calc(100% - 56px));max-width:none;margin-left:auto!important;margin-right:auto!important}");
     expect(styles).toContain(".hero-inner{max-width:1530px;min-height:clamp(620px,calc(100vh - 138px),760px);padding:clamp(60px,0vw,100px) max(30px,calc((100vw - 1530px)/2)) 75px;align-items:center;");
     expect(styles).toContain(".hero-brand-lockup{margin-left:0!important}");
     expect(styles).toContain(".site-header .brand{border-right:0!important}");

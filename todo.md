@@ -847,3 +847,10 @@
 - [x] Verilen hero ölçülerini uygulayıp içeriği merkezle ve gri çizgiyi kaldır
 - [x] Masaüstü, geniş viewport ve mobil hero görünümünü doğrula
 - [x] Checkpoint oluştur
+
+## Hero Margin-Left Değerini Kaldırma
+
+- [x] Masaüstü hero için etkin margin-left tanımını incele
+- [x] `margin-left: auto !important` değerini kaldır
+- [x] Hero görünümü ve stil derlemesini doğrula
+- [x] Checkpoint oluştur

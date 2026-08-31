@@ -120,7 +120,7 @@ export function Header() {
             <Tags size={17} /><span className="desktop-nav-label"><span>Markalar</span><small>19 servis rehberi</small></span><ChevronDown size={13} />
           </button>
           {brandsMegaOpen && <div className="brands-mega-menu" role="menu" aria-label="Hizmet verdiğimiz markalar">
-            <div className="brands-mega-intro"><b><Tags size={17} />Hizmet verdiğimiz markalar</b><p>Markanıza özel servis, arıza ve tamir rehberini seçin.</p><a href="/tum-markalar/" onClick={() => setBrandsMegaOpen(false)}>Tüm markaları görüntüle <span>→</span></a></div>
+            <div className="brands-mega-intro"><b><Tags size={17} />Hizmet verdiğimiz markalar</b><p>Markanıza özel servis, arıza ve tamir rehberini seçin.</p></div>
             <div className="brands-mega-grid">{brands.map(({ name, href }) => <a href={href} key={href} onClick={() => setBrandsMegaOpen(false)}><span>{name.slice(0, 1)}</span><strong>{name}</strong><i>→</i></a>)}</div>
           </div>}
         </div>

@@ -875,3 +875,10 @@
 - [x] Online takip hero ve kart yerleşimini KVKK ölçülerine eşitle
 - [x] Masaüstü ve mobilde iki sayfanın görsel hiyerarşisini doğrula
 - [x] Checkpoint oluştur
+
+## Hero Yüksekliği ve Sağ Kompozisyon Dağılımı
+
+- [x] Hero yüksekliği ile sağ kompozisyonun mevcut ölçülerini incele
+- [x] Hero yüksekliğini azalt, telefon/ilçe etiketlerini büyüt ve logo/Keşfet alanını sağa hizala
+- [x] Masaüstü, geniş ekran ve mobil hero görünümünü doğrula
+- [x] Checkpoint oluştur

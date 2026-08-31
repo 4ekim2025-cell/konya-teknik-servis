@@ -685,6 +685,43 @@ html,body{background:#fff}
   .hero-regions{flex-direction:row;align-items:center}
   .hero-logo-stack{display:flex;flex-direction:column;align-items:center;gap:12px}
 }
+
+/* Hero sağ alanı: daha kısa ilk ekran, büyük hizmet bölgesi etiketleri ve sağ sınıra hizalı logo. */
+@media(min-width:861px){
+  .hero,.hero-inner{min-height:clamp(570px,calc(100vh - 190px),660px)!important}
+  .hero-inner{padding-top:48px!important;padding-bottom:56px!important}
+  .hero-brand-lockup{width:min(520px,45%);margin-left:auto!important;justify-content:flex-end!important}
+  .hero-region-stack{min-width:182px;gap:13px}
+  .hero-region-stack .hero-phone{min-height:44px;padding:10px 17px;font-size:15px}
+  .hero-region-stack .hero-phone svg{width:18px;height:18px}
+  .hero-regions{gap:10px}
+  .hero-regions span{padding:13px 17px;font-size:15px}
+  .hero-regions svg{width:19px;height:19px}
+  .hero-logo-stack{flex:0 0 300px;align-items:flex-end}
+  .hero-logo-stack .hero-scroll{align-self:flex-end}
+}
+@media(min-width:1121px){
+  .hero-brand-lockup{position:absolute;right:0;top:50%;width:auto;transform:translateY(-50%)}
+  .hero-region-stack{position:absolute;right:calc(100% + clamp(28px,4vw,76px));top:50%;width:182px;transform:translateY(-50%)}
+}
+@media(min-width:861px) and (max-width:1120px){
+  .hero-brand-lockup{width:min(442px,43%);gap:14px}
+  .hero-region-stack{min-width:144px;gap:10px}
+  .hero-region-stack .hero-phone{min-height:38px;padding:8px 11px;font-size:12px}
+  .hero-region-stack .hero-phone svg{width:15px;height:15px}
+  .hero-regions{gap:7px}
+  .hero-regions span{padding:10px 11px;font-size:12px}
+  .hero-regions svg{width:15px;height:15px}
+  .hero-logo-stack{flex-basis:240px}
+  .hero-brand-logo{width:240px}
+  .hero-logo-stack .hero-scroll{min-width:136px;min-height:64px;font-size:12px}
+}
+@media(max-width:860px){
+  .hero{min-height:790px}
+  .hero-inner{padding-top:50px;padding-bottom:28px;gap:20px}
+  .hero-phone{font-size:13px}
+  .hero-regions span{font-size:12px}
+}
 /* Kullanıcının sağladığı özgün WhatsApp markası, tüm WhatsApp eylemlerinde ortak kullanılır. */
 :root{--esli-whatsapp-logo:url("https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/IqShanjjQzLpQbpX.svg")}
 .whatsapp-mark,.smart-whatsapp-mark,.mobile-whatsapp-mark{background:var(--esli-whatsapp-logo) center/contain no-repeat}

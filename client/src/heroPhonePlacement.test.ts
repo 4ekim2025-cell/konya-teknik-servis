@@ -31,4 +31,17 @@ describe("header ve hero iletişim yerleşimi", () => {
     expect(styles).toContain(".hero-regions{flex-direction:column;align-items:stretch;gap:8px;margin:0}");
     expect(styles).toContain(".hero-logo-stack{display:flex;flex-direction:column;align-items:center;gap:12px}");
   });
+
+  it("kısaltılmış hero içinde büyük iletişim etiketleri ve sağa hizalı logo kullanır", () => {
+    expect(styles).toContain(".hero,.hero-inner{min-height:clamp(570px,calc(100vh - 190px),660px)!important}");
+    expect(styles).toContain(".hero-brand-lockup{width:min(520px,45%);margin-left:auto!important;justify-content:flex-end!important}");
+    expect(styles).toContain(".hero-region-stack .hero-phone{min-height:44px;padding:10px 17px;font-size:15px}");
+    expect(styles).toContain(".hero-regions span{padding:13px 17px;font-size:15px}");
+    expect(styles).toContain(".hero-logo-stack{flex:0 0 300px;align-items:flex-end}");
+  });
+
+  it("geniş ekranlarda logo/Keşfet grubunu sağ içerik sınırına sabitler", () => {
+    expect(styles).toContain(".hero-brand-lockup{position:absolute;right:0;top:50%;width:auto;transform:translateY(-50%)}");
+    expect(styles).toContain(".hero-region-stack{position:absolute;right:calc(100% + clamp(28px,4vw,76px));top:50%;width:182px;transform:translateY(-50%)}");
+  });
 });

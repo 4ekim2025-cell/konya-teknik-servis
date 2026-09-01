@@ -910,3 +910,10 @@
 - [x] Keşfet eylemini logo alanının hemen altına ortala
 - [x] Masaüstü ve mobil hero görünümünü doğrula
 - [x] Checkpoint oluştur
+
+## Markalar Mega Menü Sütun Hizalaması
+
+- [x] Marka mega menüsü sütun ve kart hizalama kurallarını incele
+- [x] Marka sütunlarını kolon başlangıçlarına sola yasla ve kart iç boşluklarını eşitle
+- [x] Masaüstü ve tablet mega menü görünümünü doğrula
+- [x] Checkpoint oluştur

@@ -23,4 +23,9 @@ describe("geniş header navigasyon rayları", () => {
     expect(header).not.toContain('hint: "Hızlı yanıtlar"');
     expect(header).toContain('href="/sss/"');
   });
+
+  it("marka mega menüsü kartlarını her kolonun sol başlangıcına yaslar", () => {
+    expect(styles).toContain(".brands-mega-grid{padding:12px 0}");
+    expect(styles).toContain(".brands-mega-grid a{padding:8px 0 8px 0;justify-content:flex-start}");
+  });
 });

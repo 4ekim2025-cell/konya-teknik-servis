@@ -32,3 +32,11 @@ describe("geniş header navigasyon rayları", () => {
     expect(styles).toContain(".header-row>.desktop-nav .brands-mega-column a>strong{min-width:0;justify-self:start;text-align:left}");
   });
 });
+
+
+describe("ana sayfa bölüm bağlantıları", () => {
+  it("alt sayfalardan hizmetler bölümüne doğrudan yönlendirir", () => {
+    expect(header).toContain('label: "Hizmetlerimiz"');
+    expect(header).toContain('href: "/#hizmetler"');
+  });
+});

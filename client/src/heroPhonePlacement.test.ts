@@ -49,7 +49,8 @@ describe("header ve hero iletişim yerleşimi", () => {
     expect(styles).toContain(".hero-region-stack{left:59%;right:auto;width:220px;transform:translate(-50%,-50%)}");
     expect(styles).toContain(".hero-region-stack .hero-phone{min-height:54px;padding:13px 19px;font-size:20px}");
     expect(styles).toContain(".hero-regions span{padding:16px 19px;font-size:20px}");
-    expect(styles).toContain(".hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 298px);right:auto}");
+    expect(styles).toContain(".hero-inner{display:grid;grid-template-columns:minmax(0,655px) minmax(182px,220px) minmax(240px,300px);justify-content:space-between;align-items:center}");
+    expect(styles).toContain(".hero-region-stack{position:static;grid-column:2;grid-row:1;width:220px;min-width:0;justify-self:center;align-self:center;transform:none!important}");
   });
 
   it("Keşfet eylemini logo alanının hemen altında ortalar", () => {

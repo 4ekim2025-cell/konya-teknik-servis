@@ -751,12 +751,15 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
   .tracking-section,.services-section,.diagnostic-section,.proof-section,.area-section,.faq-section,.final-cta,.site-footer{padding-right:var(--site-gutter)!important;padding-left:var(--site-gutter)!important}
 }
 
-/* Hero iletişim grubu: sağdaki logo ile soldaki içerik arasındaki gerçek orta boşluğa bağlanır. */
+/* Hero iletişim grubu: geniş masaüstünde orta kolon doğrudan metin ve logo arasına yerleşir. */
 @media(min-width:1121px) and (max-width:1439px){
   .hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 279px);right:auto}
 }
 @media(min-width:1440px){
-  .hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 298px);right:auto}
+  .hero-inner{display:grid;grid-template-columns:minmax(0,655px) minmax(182px,220px) minmax(240px,300px);justify-content:space-between;align-items:center}
+  .hero-brand-lockup{display:contents;position:static;width:auto;transform:none}
+  .hero-region-stack{position:static;grid-column:2;grid-row:1;width:220px;min-width:0;justify-self:center;align-self:center;transform:none!important}
+  .hero-logo-stack{grid-column:3;grid-row:1;width:300px;flex:0 0 auto;justify-self:end;align-self:center}
 }
 
 /* Markalar mega menüsü: her sütundaki marka kartı kendi sol başlangıç eksenine yaslanır. */

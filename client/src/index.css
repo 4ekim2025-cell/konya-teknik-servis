@@ -762,5 +762,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 /* Markalar mega menüsü: her sütundaki marka kartı kendi sol başlangıç eksenine yaslanır. */
 @media(min-width:861px){
   .brands-mega-grid{padding:12px 0}
-  .brands-mega-grid a{padding:8px 0 8px 0;justify-content:flex-start}
+  .brands-mega-grid{align-items:start;column-gap:0}
+  .brands-mega-column{display:grid;align-content:start;justify-items:stretch;min-width:0}
+  .brands-mega-column a{width:100%;padding:8px 0;justify-content:flex-start}
 }

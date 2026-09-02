@@ -46,6 +46,12 @@ const brands = [
   { name: "Vestel", href: "/vestel-servisi-konya/" },
 ];
 
+const brandColumns = [
+  brands.filter((_, index) => index % 3 === 0),
+  brands.filter((_, index) => index % 3 === 1),
+  brands.filter((_, index) => index % 3 === 2),
+];
+
 const RECENT_SERVICE_KEY = "esli-teknik-last-service";
 
 export function Header() {
@@ -121,7 +127,7 @@ export function Header() {
           </button>
           {brandsMegaOpen && <div className="brands-mega-menu" role="menu" aria-label="Hizmet verdiğimiz markalar">
             <div className="brands-mega-intro"><b><Tags size={17} />Hizmet verdiğimiz markalar</b><p>Markanıza özel servis, arıza ve tamir rehberini seçin.</p></div>
-            <div className="brands-mega-grid">{brands.map(({ name, href }) => <a href={href} key={href} onClick={() => setBrandsMegaOpen(false)}><span>{name.slice(0, 1)}</span><strong>{name}</strong><i>→</i></a>)}</div>
+            <div className="brands-mega-grid">{brandColumns.map((column, index) => <div className="brands-mega-column" key={`brand-column-${index}`}>{column.map(({ name, href }) => <a href={href} key={href} onClick={() => setBrandsMegaOpen(false)}><span>{name.slice(0, 1)}</span><strong>{name}</strong><i>→</i></a>)}</div>)}</div>
           </div>}
         </div>
       </nav>

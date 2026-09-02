@@ -25,7 +25,9 @@ describe("geniş header navigasyon rayları", () => {
   });
 
   it("marka mega menüsü kartlarını her kolonun sol başlangıcına yaslar", () => {
+    expect(header).toContain("const brandColumns = [");
+    expect(header).toContain('className="brands-mega-column"');
     expect(styles).toContain(".brands-mega-grid{padding:12px 0}");
-    expect(styles).toContain(".brands-mega-grid a{padding:8px 0 8px 0;justify-content:flex-start}");
+    expect(styles).toContain(".brands-mega-column a{width:100%;padding:8px 0;justify-content:flex-start}");
   });
 });

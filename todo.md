@@ -920,7 +920,7 @@
 
 ## Markalar Mega Menü Görünür Sol Hizalama Düzeltmesi
 
-- [ ] Marka gridinde sol hizalamayı engelleyen genişlik ve yerleşim kurallarını incele
-- [ ] Her marka sütununun içerik akışını kolon başlangıcına zorla sola yasla
-- [ ] Açık mega menüyü masaüstü ve tablet görünümünde doğrula
-- [ ] Checkpoint oluştur
+- [x] Marka gridinde sol hizalamayı engelleyen genişlik ve yerleşim kurallarını incele
+- [x] Her marka sütununun içerik akışını kolon başlangıcına zorla sola yasla
+- [x] Açık mega menüyü masaüstü ve tablet görünümünde doğrula
+- [x] Checkpoint oluştur

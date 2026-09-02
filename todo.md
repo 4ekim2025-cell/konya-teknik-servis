@@ -917,3 +917,10 @@
 - [x] Marka sütunlarını kolon başlangıçlarına sola yasla ve kart iç boşluklarını eşitle
 - [x] Masaüstü ve tablet mega menü görünümünü doğrula
 - [x] Checkpoint oluştur
+
+## Markalar Mega Menü Görünür Sol Hizalama Düzeltmesi
+
+- [ ] Marka gridinde sol hizalamayı engelleyen genişlik ve yerleşim kurallarını incele
+- [ ] Her marka sütununun içerik akışını kolon başlangıcına zorla sola yasla
+- [ ] Açık mega menüyü masaüstü ve tablet görünümünde doğrula
+- [ ] Checkpoint oluştur

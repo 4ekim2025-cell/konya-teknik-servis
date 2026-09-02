@@ -788,3 +788,8 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 /* Mobil cihaz sayfaları: ana içerik ve sağ sütun kesin olarak tek akışta ilerler. */
 @media(max-width:860px){.detail-layout{display:flex;flex-direction:column;gap:36px;width:100%;max-width:none;padding:58px 18px 92px;overflow:visible}.detail-layout>article,.detail-layout>.details-side{width:100%;max-width:100%;min-width:0}.detail-layout>article{overflow:visible}.details-side{display:flex!important;flex-direction:column!important;position:static!important;grid-template-columns:none!important;align-self:stretch!important;width:100%!important;min-width:0!important;gap:11px}.details-side>*{width:100%;max-width:100%;min-width:0;box-sizing:border-box}.details-side .trackbox,.details-side .side-form-link,.details-side .side-card{position:relative;inset:auto;transform:none}.details-side .trackbox p,.details-side .side-card p{overflow-wrap:anywhere}.details-side .side-form-link strong{overflow-wrap:anywhere}}
 @media(max-width:380px){.detail-layout{gap:29px;padding-right:14px;padding-left:14px}.details-side{gap:9px}.trackbox h3{font-size:24px}.side-form-link strong{font-size:18px}}
+
+/* Footer yasal ve iletişim sütunu */
+.footer-policy-links span{display:block;color:rgba(255,255,255,.68);font-size:12px;line-height:1.45;cursor:default}.footer-policy-links span+span{margin-top:11px}
+@media(min-width:1101px){.site-footer .footer-links{grid-template-columns:repeat(5,minmax(0,1fr));gap:24px}}
+@media(max-width:1100px){.footer-policy-links{grid-column:span 1}}

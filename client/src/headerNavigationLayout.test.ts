@@ -28,7 +28,7 @@ describe("geniş header navigasyon rayları", () => {
     expect(header).toContain("const brandColumns = [");
     expect(header).toContain('className="brands-mega-column"');
     expect(styles).toContain(".brands-mega-grid{padding:12px 0}");
-    expect(styles).toContain(".header-row>.desktop-nav .brands-mega-column a{display:grid;flex:0 0 auto;width:100%;padding:8px 0;justify-content:stretch;justify-items:stretch;text-align:left}");
+    expect(styles).toContain(".header-row>.desktop-nav .brands-mega-column a{display:grid;flex:0 0 auto;width:80%;padding:8px 10px;justify-content:stretch;justify-items:stretch;text-align:left}");
     expect(styles).toContain(".header-row>.desktop-nav .brands-mega-column a>strong{min-width:0;justify-self:start;text-align:left}");
   });
 });

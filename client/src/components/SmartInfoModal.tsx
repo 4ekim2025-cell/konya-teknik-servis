@@ -113,6 +113,7 @@ export function SmartInfoModal() {
       <p>Cihazınızı seçin, arızayı belirtin ve ilçe bilginizi ekleyin. Talebiniz WhatsApp mesajına hazır biçimde aktarılsın.</p>
       <div className="diagnostic-meta"><span><i>01</i>Cihazı seçin</span><span><i>02</i>Arızayı seçin</span><span><i>03</i>Detay ekleyin</span></div>
       <button type="button" className="button button-primary smart-info-launch smart-info-whatsapp" onClick={() => setOpen(true)} aria-label="WhatsApp üzerinden hızlı servis talebi oluştur"><span className="smart-whatsapp-mark" aria-hidden="true"><MessageCircle size={20} /><Phone size={9} /></span> WhatsApp üzerinden hızlı servis talebi oluştur</button>
+      <p className="diagnostic-privacy-note smart-info-privacy-note">WhatsApp üzerinden servis talebi oluşturmanız halinde paylaşacağınız kişisel bilgileriniz, servis talebinizin alınması, sizinle iletişim kurulması ve teknik servis hizmetinin sunulması amacıyla Eşli Teknik tarafından işlenecektir. Detaylı bilgi için KVKK Aydınlatma Metnimizi inceleyebilirsiniz.</p>
     </div>
     <div className="smart-info-preview" aria-label="Ön bilgi formu adımları">
       <div className="smart-preview-head"><span className="section-kicker">KOLAY SERVİS TALEBİ</span><span className="smart-preview-status"><i /> 3 adım</span></div>

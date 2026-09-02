@@ -793,3 +793,14 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .footer-policy-links span{display:block;color:rgba(255,255,255,.68);font-size:12px;line-height:1.45;cursor:default}.footer-policy-links span+span{margin-top:11px}
 @media(min-width:1101px){.site-footer .footer-links{grid-template-columns:repeat(5,minmax(0,1fr));gap:24px}}
 @media(max-width:1100px){.footer-policy-links{grid-column:span 1}}
+
+/* AKILLI ÖN BİLGİ KVKK bilgilendirme notu */
+.diagnostic-privacy-note{width:100%;margin:18px 0 0;padding:12px 13px;border:1px solid #ddd5ca;background:rgba(255,255,255,.58);color:#756c63!important;font-size:10px!important;line-height:1.55!important;font-weight:500!important}.diagnostic-privacy-note::before{content:"KVKK BİLGİLENDİRMESİ";display:block;margin-bottom:5px;color:#9b410e;font-size:9px;font-weight:900;letter-spacing:.08em}.diagnostic-privacy-note:not(:empty){box-sizing:border-box}
+@media(max-width:860px){.diagnostic-privacy-note{margin-top:15px;padding:11px 12px;font-size:10px!important}.diagnostic-privacy-note::before{font-size:8px}}
+
+/* AKILLI ÖN BİLGİ içindeki KVKK bilgilendirmesi */
+.smart-info-privacy-note{max-width:430px;margin:22px 0 0;border-color:rgba(248,215,197,.28);background:rgba(255,255,255,.07);color:#cbd8d5!important}.smart-info-privacy-note::before{color:#f3a272}.smart-info-privacy-note:not(:empty){box-sizing:border-box}
+@media(max-width:860px){.smart-info-privacy-note{max-width:none;margin-top:18px;background:rgba(255,255,255,.08)}}
+
+/* Açık AKILLI ÖN BİLGİ zemininde KVKK notu için kontrast düzeltmesi */
+.smart-info-privacy-note{border-color:#ddc9b8;background:rgba(255,255,255,.48);color:#756c63!important}.smart-info-privacy-note::before{color:#9b410e}

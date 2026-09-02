@@ -753,10 +753,10 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Hero iletişim grubu: sağdaki logo ile soldaki içerik arasındaki gerçek orta boşluğa bağlanır. */
 @media(min-width:1121px) and (max-width:1439px){
-  .hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 171px);right:auto}
+  .hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 279px);right:auto}
 }
 @media(min-width:1440px){
-  .hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 190px);right:auto}
+  .hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 298px);right:auto}
 }
 
 /* Markalar mega menüsü: her sütundaki marka kartı kendi sol başlangıç eksenine yaslanır. */

@@ -45,11 +45,11 @@ describe("header ve hero iletişim yerleşimi", () => {
     expect(styles).toContain(".hero-region-stack{position:absolute;right:calc(100% + clamp(28px,4vw,76px));top:50%;width:182px;transform:translateY(-50%)}");
   });
 
-  it("geniş masaüstünde iletişim grubunu iki hero kolonu arasına alır ve 20 px kullanır", () => {
+  it("geniş masaüstünde iletişim grubunu iki hero kolonu arasındaki gerçek merkeze alır", () => {
     expect(styles).toContain(".hero-region-stack{left:59%;right:auto;width:220px;transform:translate(-50%,-50%)}");
     expect(styles).toContain(".hero-region-stack .hero-phone{min-height:54px;padding:13px 19px;font-size:20px}");
     expect(styles).toContain(".hero-regions span{padding:16px 19px;font-size:20px}");
-    expect(styles).toContain(".hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 190px);right:auto}");
+    expect(styles).toContain(".hero-brand-lockup .hero-region-stack{left:calc(-41vw + var(--site-gutter) + 298px);right:auto}");
   });
 
   it("Keşfet eylemini logo alanının hemen altında ortalar", () => {

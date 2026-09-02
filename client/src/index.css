@@ -804,3 +804,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Açık AKILLI ÖN BİLGİ zemininde KVKK notu için kontrast düzeltmesi */
 .smart-info-privacy-note{border-color:#ddc9b8;background:rgba(255,255,255,.48);color:#756c63!important}.smart-info-privacy-note::before{color:#9b410e}
+
+/* KVKK dokümanı: okunabilir listeler ve veri sorumlusu bilgisi */
+.kvkk-page .legal-sections ul{display:grid;gap:8px;margin:14px 0 0;padding:0;list-style:none}.kvkk-page .legal-sections li{position:relative;padding-left:17px;color:#5f655f;font-size:15px;line-height:1.65}.kvkk-page .legal-sections li:before{content:"";position:absolute;top:.7em;left:0;width:6px;height:6px;border-radius:50%;background:#a12519}.legal-contact-strip{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}.legal-contact-strip span{padding:10px 12px;border:1px solid #e5ded4;border-radius:10px;background:#fcf5db;color:#055564;font:800 12px/1.3 Manrope,sans-serif}.kvkk-page .legal-sections section>div>p+ul{margin-top:13px}.kvkk-page .legal-sections ul+p{margin-top:15px!important}
+@media(max-width:860px){.kvkk-page .legal-sections ul{gap:7px;margin-top:12px}.kvkk-page .legal-sections li{font-size:14px;line-height:1.62}.legal-contact-strip{display:grid;gap:7px;margin-top:13px}.legal-contact-strip span{font-size:11px}.kvkk-page .legal-sections ul+p{margin-top:13px!important}}

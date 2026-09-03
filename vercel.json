@@ -23,7 +23,7 @@
   ],
   "routes": [
     { "handle": "filesystem" },
-    { "src": "^/(online-servis-takibi|gizlilik-politikasi|tum-markalar|sss|iletisim|kvkk|karatay|meram|selcuklu|camasir-makinesi-tamiri-konya|bulasik-makinesi-tamiri-konya|kurutma-makinesi-tamiri-konya|firin-tamiri-konya|ocak-tamiri-konya|buzdolabi-tamiri-konya|elektrikli-supurge-tamiri-konya|davlumbaz-tamiri-konya|derin-dondurucu-tamiri-konya|su-sebili-tamiri-konya|altus-servisi-konya|arcelik-servisi-konya|arnica-servisi-konya|beko-servisi-konya|bosch-servisi-konya|electrolux-servisi-konya|franke-servisi-konya|hoover-servisi-konya|kumtel-servisi-konya|philips-servisi-konya|profilo-servisi-konya|rowenta-servisi-konya|samsung-servisi-konya|siemens-servisi-konya|silverline-servisi-konya|senocak-servisi-konya|teka-servisi-konya|ugur-sogutma-servisi-konya|vestel-servisi-konya)/?$", "dest": "/index.html" },
+    { "src": "^/(online-servis-takibi|gizlilik-politikasi|cerez-politikasi|tum-markalar|sss|iletisim|kvkk|karatay|meram|selcuklu|camasir-makinesi-tamiri-konya|bulasik-makinesi-tamiri-konya|kurutma-makinesi-tamiri-konya|firin-tamiri-konya|ocak-tamiri-konya|buzdolabi-tamiri-konya|elektrikli-supurge-tamiri-konya|davlumbaz-tamiri-konya|derin-dondurucu-tamiri-konya|su-sebili-tamiri-konya|altus-servisi-konya|arcelik-servisi-konya|arnica-servisi-konya|beko-servisi-konya|bosch-servisi-konya|electrolux-servisi-konya|franke-servisi-konya|hoover-servisi-konya|kumtel-servisi-konya|philips-servisi-konya|profilo-servisi-konya|rowenta-servisi-konya|samsung-servisi-konya|siemens-servisi-konya|silverline-servisi-konya|senocak-servisi-konya|teka-servisi-konya|ugur-sogutma-servisi-konya|vestel-servisi-konya)/?$", "dest": "/index.html" },
     { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ]
 }

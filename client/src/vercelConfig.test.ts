@@ -37,11 +37,9 @@ describe("Vercel statik SPA yapılandırması", () => {
     expect(config.trailingSlash).toBe(true);
   });
 
-  it("statik dosyaları korur, bilinen SPA rotalarını ve özel 404 yanıtını tanımlar", () => {
+  it("prerender edilmiş statik dosyaları korur ve özel 404 yanıtını tanımlar", () => {
     expect(config.routes[0]).toEqual({ handle: "filesystem" });
-    expect(config.routes.some(route => route.dest === "/index.html")).toBe(true);
-    const spaRoute = config.routes.find(route => route.dest === "/index.html");
-    expect(spaRoute?.src).toContain("gizlilik-politikasi");
+    expect(config.routes.some(route => route.dest === "/index.html")).toBe(false);
     expect(config.routes).toContainEqual({ src: "/(.*)", status: 404, dest: "/404.html" });
   });
 

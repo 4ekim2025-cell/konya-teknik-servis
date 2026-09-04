@@ -51,21 +51,73 @@ const extra: Record<string, [string, string]> = {
   "/cerez-politikasi/": ["Çerez Politikası | Eşli Teknik", "Eşli Teknik web sitesinde kullanılan çerezler ve tercihlerin yönetimi hakkında bilgiler."],
 };
 
-const routes: Record<string, [string, string]> = { ...extra, ...services, ...Object.fromEntries(Object.entries(districts).map(([route, title]) => [route, [title, `${title.replace(" | Eşli Teknik Konya", "")} bölgesinde beyaz eşya tamiri ve teknik servis için Eşli Teknik’e ulaşın.`]])) };
+const routes: Record<string, [string, string]> = {
+  ...extra,
+  ...services,
+  ...Object.fromEntries(Object.entries(districts).map(([route, title]) => [route, [title, `${title.replace(" | Eşli Teknik Konya", "")} bölgesinde beyaz eşya tamiri ve teknik servis için Eşli Teknik’e ulaşın.`]])),
+};
 
 function esc(value: string) {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 }
 
-function schema(title: string, description: string, url: string) {
-  return JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": [
-      { "@type": "ProfessionalService", "@id": `${siteUrl}/#business`, name: siteName, url: siteUrl, telephone: "+905511858773", description: defaultDescription, areaServed: ["Karatay, Konya", "Meram, Konya", "Selçuklu, Konya"] },
-      { "@type": "WebPage", "@id": `${url}#webpage`, url, name: title, description, inLanguage: "tr-TR", isPartOf: { "@id": `${siteUrl}/#website` } },
-      { "@type": "WebSite", "@id": `${siteUrl}/#website`, url: siteUrl, name: siteName, inLanguage: "tr-TR" },
-    ],
-  }).replaceAll("</", "<\\/");
+function jsonLd(title: string, description: string, url: string, route: string) {
+  const graph: Record<string, unknown>[] = [
+    { "@type": "ProfessionalService", "@id": `${siteUrl}/#business`, name: siteName, url: siteUrl, telephone: "+905511858773", description: defaultDescription, image: `${siteUrl}/favicon.png`, priceRange: "₺", areaServed: ["Karatay, Konya", "Meram, Konya", "Selçuklu, Konya"] },
+    { "@type": "WebSite", "@id": `${siteUrl}/#website`, url: siteUrl, name: siteName, inLanguage: "tr-TR" },
+    { "@type": "WebPage", "@id": `${url}#webpage`, url, name: title, description, inLanguage: "tr-TR", isPartOf: { "@id": `${siteUrl}/#website` }, about: { "@id": `${siteUrl}/#business` } },
+    { "@type": "BreadcrumbList", "@id": `${url}#breadcrumb`, itemListElement: route === "/" ? [{ "@type": "ListItem", position: 1, name: "Ana Sayfa", item: siteUrl }] : [{ "@type": "ListItem", position: 1, name: "Ana Sayfa", item: siteUrl }, { "@type": "ListItem", position: 2, name: title.replace(" | Eşli Teknik", ""), item: url }] },
+  ];
+
+  const brand = brands.find(([slug]) => route === `/${slug}-servisi-konya/`);
+  if (brand) {
+    const [, brandName] = brand;
+    graph.push({ "@type": "Brand", "@id": `${url}#brand`, name: brandName, url });
+    graph.push({ "@type": "Service", "@id": `${url}#service`, name: title, description, serviceType: `${brandName} cihaz teknik servisi`, areaServed: ["Karatay", "Meram", "Selçuklu"], provider: { "@id": `${siteUrl}/#business` } });
+  } else if (services[route]) {
+    graph.push({ "@type": "Service", "@id": `${url}#service`, name: title, description, serviceType: title.replace("Konya ", "").replace(" | Eşli Teknik", ""), areaServed: ["Karatay", "Meram", "Selçuklu"], provider: { "@id": `${siteUrl}/#business` } });
+  }
+
+  if (route === "/sss/") {
+    graph.push({
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      mainEntity: [
+        { "@type": "Question", name: "Eşli Teknik hangi bölgelerde hizmet veriyor?", acceptedAnswer: { "@type": "Answer", text: "Eşli Teknik Konya’da Karatay, Meram ve Selçuklu ilçelerinde beyaz eşya ve küçük ev aletleri için teknik servis desteği sunar." } },
+        { "@type": "Question", name: "Servis kaydımı nasıl takip ederim?", acceptedAnswer: { "@type": "Answer", text: "Servis kaydı oluşturulduktan sonra size iletilen takip bağlantısı üzerinden servis sürecini online görüntüleyebilirsiniz." } },
+        { "@type": "Question", name: "Eşli Teknik ile nasıl iletişime geçebilirim?", acceptedAnswer: { "@type": "Answer", text: "WhatsApp veya telefon üzerinden Eşli Teknik’e ulaşarak servis talebinizi iletebilirsiniz." } },
+      ],
+    });
+  }
+
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replaceAll("</", "<\\/");
+}
+
+function staticContent(title: string, description: string, route: string) {
+  const brand = brands.find(([slug]) => route === `/${slug}-servisi-konya/`);
+  const service = services[route];
+  const heading = route === "/" ? "Konya Beyaz Eşya Teknik Servisi" : title.replace(" | Eşli Teknik", "");
+  let sections = `<h2>Konya’da Teknik Servis Desteği</h2><p>EŞLİ TEKNİK, Konya’da Karatay, Meram ve Selçuklu ilçelerinde beyaz eşya ve küçük ev aletleri için teknik servis desteği sunar. Servis talebinizi WhatsApp veya telefon üzerinden iletebilir, servis sürecini online takip edebilirsiniz.</p>`;
+
+  if (service && !brand) {
+    sections = `<h2>${esc(heading)} Hizmeti</h2><p>${esc(description)}</p><h2>Servis Süreci</h2><p>Arıza bilgilerinizi paylaşın; servis planlaması, inceleme ve işlem süreci hakkında bilgilendirme alın. Uygun olduğunda size iletilen takip bağlantısından servis kaydınızı görüntüleyebilirsiniz.</p>`;
+  } else if (brand) {
+    const [, brandName] = brand;
+    sections = `<h2>${esc(brandName)} Servisi Konya</h2><p>EŞLİ TEKNİK, Konya’da ${esc(brandName)} marka cihazlar için teknik servis desteği sunar. Arıza bilgilerinizi WhatsApp üzerinden ileterek servis planlaması hakkında bilgi alabilirsiniz.</p><h2>${esc(brandName)} Cihazlarda Servis</h2><p>Çamaşır makinesi, bulaşık makinesi, buzdolabı, fırın ve diğer uygun cihaz gruplarında arıza tespiti ve teknik servis desteği için Eşli Teknik’e ulaşabilirsiniz.</p>`;
+  } else if (route === "/tum-markalar/") {
+    sections = `<h2>Konya’da Servis Verilen Markalar</h2><p>Eşli Teknik; ${brands.map(([, name]) => esc(name)).join(", ")} ve listede yer alan diğer marka ve model cihazlar için teknik servis desteği sunar.</p><h2>Servis Talebi</h2><p>Cihaz markası, modeli ve arıza bilgisini WhatsApp üzerinden paylaşarak servis süreci hakkında bilgi alabilirsiniz.</p>`;
+  } else if (districts[route]) {
+    const district = title.split(" Beyaz Eşya")[0];
+    sections = `<h2>${esc(district)} Beyaz Eşya Servisi</h2><p>Eşli Teknik, ${esc(district)} ve Konya genelinde beyaz eşya ve küçük ev aletleri için teknik servis desteği sunar.</p><h2>Hizmet Bölgeleri</h2><p>Karatay, Meram ve Selçuklu ilçelerinde servis planlaması için Eşli Teknik ile iletişime geçebilirsiniz.</p>`;
+  } else if (route === "/online-servis-takibi/") {
+    sections = `<h2>Servis Kaydı Nasıl Takip Edilir?</h2><p>Servis kaydı açıldıktan sonra size iletilen özel takip bağlantısını kullanarak servis sürecinizin durumunu online görüntüleyebilirsiniz.</p><h2>Takip Bağlantınız Yoksa</h2><p>WhatsApp üzerinden Eşli Teknik ile iletişime geçerek servis kaydınızın kontrol edilmesini isteyebilirsiniz.</p>`;
+  } else if (route === "/iletisim/") {
+    sections = `<h2>Eşli Teknik İletişim</h2><p>Konya beyaz eşya teknik servis talebiniz için WhatsApp veya telefon üzerinden Eşli Teknik’e ulaşabilirsiniz.</p><h2>Hizmet Bölgesi</h2><p>Karatay, Meram ve Selçuklu başta olmak üzere Konya’da servis planlaması yapılmaktadır.</p>`;
+  } else if (route === "/sss/") {
+    sections = `<h2>Sık Sorulan Sorular</h2><h3>Hangi bölgelerde hizmet veriyorsunuz?</h3><p>Karatay, Meram ve Selçuklu ilçelerinde beyaz eşya ve küçük ev aletleri için teknik servis desteği sunulmaktadır.</p><h3>Servis kaydımı nasıl takip ederim?</h3><p>Size iletilen özel takip bağlantısı üzerinden servis sürecini online görüntüleyebilirsiniz.</p><h3>Nasıl iletişime geçebilirim?</h3><p>WhatsApp veya telefon üzerinden Eşli Teknik’e ulaşabilirsiniz.</p>`;
+  }
+
+  return `<main id="seo-prerender" lang="tr"><h1>${esc(heading)}</h1><p>${esc(description)}</p>${sections}</main>`;
 }
 
 if (!fs.existsSync(indexPath)) throw new Error(`Build output not found: ${indexPath}`);
@@ -81,13 +133,12 @@ for (const [route, [title, description]] of Object.entries(routes)) {
   html = html.replace(/<meta name="twitter:title" content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${esc(title)}" />`);
   html = html.replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${esc(description)}" />`);
   html = html.replace(/<link rel="canonical" href="[^"]*"\s*\/>/, `<link rel="canonical" href="${url}" />`);
+  html = html.replace(/<meta property="og:image" content="[^"]*"\s*\/>/, `<meta property="og:image" content="${siteUrl}/esli-teknik-konya-hero-background.webp" />`);
+  html = html.replace(/<meta name="twitter:image" content="[^"]*"\s*\/>/, `<meta name="twitter:image" content="${siteUrl}/esli-teknik-konya-hero-background.webp" />`);
   html = html.replace(/<meta property="og:url" content="[^"]*"\s*\/>/, `<meta property="og:url" content="${url}" />`);
-  html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">${schema(title, description, url)}</script>`);
-
-  const isHome = route === "/";
-  const heading = isHome ? "Konya Beyaz Eşya Teknik Servisi" : title.replace(" | Eşli Teknik", "");
-  const fallback = `<main id="seo-prerender" lang="tr"><h1>${esc(heading)}</h1><p>${esc(description)}</p><p>EŞLİ TEKNİK, Konya’da Karatay, Meram ve Selçuklu ilçelerinde beyaz eşya ve küçük ev aletleri için teknik servis desteği sunar.</p><p>Servis talebi ve bilgi için WhatsApp veya telefon üzerinden ulaşabilirsiniz. Servis kaydı oluşturulduğunda online takip bağlantısı ile işlem durumunu görüntüleyebilirsiniz.</p></main>`;
-  html = html.replace('<div id="root"></div>', `<div id="root">${fallback}</div>`);
+  if (!html.includes('property="og:url"')) html = html.replace("</head>", `<meta property="og:url" content="${url}" />\n  </head>`);
+  html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">${jsonLd(title, description, url, route)}</script>`);
+  html = html.replace('<div id="root"></div>', `<div id="root">${staticContent(title, description, route)}</div>`);
 
   const targetDir = route === "/" ? outputDir : path.join(outputDir, route.replace(/^\//, "").replace(/\/$/, ""));
   fs.mkdirSync(targetDir, { recursive: true });

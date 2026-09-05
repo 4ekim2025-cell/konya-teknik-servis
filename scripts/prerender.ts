@@ -29,6 +29,14 @@ const serviceFaqs: Record<string, [string, string][]> = {
   "/ocak-tamiri-konya/": [["Ocak ateşlemiyorsa ne kontrol edilir?", "Gaz vanası, elektrik bağlantısı ve düğme konumu gözlemlenebilir; ateşleme sistemini sökmeyin."], ["Sarı alev neden olur?", "Hava-gaz karışımı, enjektör veya yanma sistemiyle ilgili sorun olabilir; cihazı kullanmayı bırakın."], ["Ocak camı çatladıysa kullanılabilir mi?", "Hayır. Cam çatlağı güvenlik riski oluşturabilir; cihazı kullanmadan servis isteyin."]],
   "/kurutma-makinesi-tamiri-konya/": [["Kurutma makinesi ısıtmıyorsa ne yapılır?", "Filtre, hazne ve program seçimi kılavuza göre kontrol edilebilir; rezistans veya termik gruba müdahale etmeyin."], ["Kurutma makinesi neden uzun sürer?", "Aşırı yük, tıkalı filtre, hava akışı, nem sensörü veya ısıtma sistemi etkili olabilir."], ["Parça değişimi nasıl belirlenir?", "Model ve arıza tespitinden sonra parça, işlem kapsamı ve süre açıklanır; onayınız alınmadan değişim yapılmaz."]],
 };
+const relatedServiceLinks: Record<string, [string, string][]> = {
+  "/camasir-makinesi-tamiri-konya/": [["Kurutma Makinesi Tamiri", "/kurutma-makinesi-tamiri-konya/"], ["Bulaşık Makinesi Tamiri", "/bulasik-makinesi-tamiri-konya/"], ["Buzdolabı Tamiri", "/buzdolabi-tamiri-konya/"]],
+  "/bulasik-makinesi-tamiri-konya/": [["Çamaşır Makinesi Tamiri", "/camasir-makinesi-tamiri-konya/"], ["Buzdolabı Tamiri", "/buzdolabi-tamiri-konya/"], ["Fırın Tamiri", "/firin-tamiri-konya/"]],
+  "/kurutma-makinesi-tamiri-konya/": [["Çamaşır Makinesi Tamiri", "/camasir-makinesi-tamiri-konya/"], ["Buzdolabı Tamiri", "/buzdolabi-tamiri-konya/"], ["Elektrikli Süpürge Tamiri", "/elektrikli-supurge-tamiri-konya/"]],
+  "/buzdolabi-tamiri-konya/": [["Derin Dondurucu Tamiri", "/derin-dondurucu-tamiri-konya/"], ["Su Sebili Tamiri", "/su-sebili-tamiri-konya/"], ["Bulaşık Makinesi Tamiri", "/bulasik-makinesi-tamiri-konya/"]],
+  "/firin-tamiri-konya/": [["Ocak Tamiri", "/ocak-tamiri-konya/"], ["Davlumbaz Tamiri", "/davlumbaz-tamiri-konya/"], ["Bulaşık Makinesi Tamiri", "/bulasik-makinesi-tamiri-konya/"]],
+  "/ocak-tamiri-konya/": [["Fırın Tamiri", "/firin-tamiri-konya/"], ["Davlumbaz Tamiri", "/davlumbaz-tamiri-konya/"], ["Buzdolabı Tamiri", "/buzdolabi-tamiri-konya/"]],
+};
 
 const districts: Record<string, string> = {
   "/karatay/": "Karatay Beyaz Eşya Servisi | Eşli Teknik Konya",
@@ -135,6 +143,8 @@ function staticContent(title: string, description: string, route: string) {
     sections = `<h2>Sık Sorulan Sorular</h2><h3>Hangi bölgelerde hizmet veriyorsunuz?</h3><p>Karatay, Meram ve Selçuklu ilçelerinde beyaz eşya ve küçük ev aletleri için teknik servis desteği sunulmaktadır.</p><h3>Servis kaydımı nasıl takip ederim?</h3><p>Size iletilen özel takip bağlantısı üzerinden servis sürecini online görüntüleyebilirsiniz.</p><h3>Nasıl iletişime geçebilirim?</h3><p>WhatsApp veya telefon üzerinden Eşli Teknik’e ulaşabilirsiniz.</p>`;
   }
 
+  if (relatedServiceLinks[route]) sections += `<nav aria-label="İlgili hizmet rehberleri"><h2>İlgili hizmetler</h2><p>${relatedServiceLinks[route].map(([name, href]) => `<a href="${href}">${esc(name)}</a>`).join(" · ")}</p></nav>`;
+  if (districts[route]) sections += `<nav aria-label="İlçedeki hizmet rehberleri"><h2>${esc(title.split(" Beyaz Eşya")[0])} için hizmetler</h2><p><a href="/camasir-makinesi-tamiri-konya/">Çamaşır Makinesi Tamiri</a> · <a href="/buzdolabi-tamiri-konya/">Buzdolabı Tamiri</a> · <a href="/bulasik-makinesi-tamiri-konya/">Bulaşık Makinesi Tamiri</a></p></nav>`;
   return `<main id="seo-prerender" lang="tr"><h1>${esc(heading)}</h1><p>${esc(description)}</p>${sections}</main>`;
 }
 

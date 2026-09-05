@@ -39,7 +39,7 @@ const brands = [
   { name: "Bosch", href: "/bosch-servisi-konya/" }, { name: "Electrolux", href: "/electrolux-servisi-konya/" },
   { name: "Franke", href: "/franke-servisi-konya/" }, { name: "Hoover", href: "/hoover-servisi-konya/" },
   { name: "Kumtel", href: "/kumtel-servisi-konya/" }, { name: "Philips", href: "/philips-servisi-konya/" },
-  { name: "Profilo", href: "/profilo-servisi-konya/" }, { name: "Rowenta", href: "/rowenta-servisi-konya/" },
+  { name: "Profilo", href: "/profilo-servisi-konya/" }, { name: "Regal", href: "/regal-servisi-konya/" }, { name: "Rowenta", href: "/rowenta-servisi-konya/" },
   { name: "Samsung", href: "/samsung-servisi-konya/" }, { name: "Siemens", href: "/siemens-servisi-konya/" },
   { name: "Silverline", href: "/silverline-servisi-konya/" }, { name: "Şenocak", href: "/senocak-servisi-konya/" },
   { name: "Teka", href: "/teka-servisi-konya/" }, { name: "Uğur Soğutma", href: "/ugur-sogutma-servisi-konya/" },
@@ -123,7 +123,7 @@ export function Header() {
         </a>)}
         <div className="brands-menu-wrap" ref={brandsMenuRef}>
           <button type="button" className={`desktop-brands-trigger ${brandsMegaOpen ? "open" : ""} ${brandsActive ? "active" : ""}`} onClick={() => { setMegaOpen(false); setBrandsMegaOpen(!brandsMegaOpen); }} aria-expanded={brandsMegaOpen} aria-haspopup="menu">
-            <Tags size={17} /><span className="desktop-nav-label"><span>Markalar</span><small>19 servis rehberi</small></span><ChevronDown size={13} />
+            <Tags size={17} /><span className="desktop-nav-label"><span>Markalar</span><small>20 servis rehberi</small></span><ChevronDown size={13} />
           </button>
           {brandsMegaOpen && <div className="brands-mega-menu" role="menu" aria-label="Hizmet verdiğimiz markalar">
             <div className="brands-mega-intro"><b><Tags size={17} />Hizmet verdiğimiz markalar</b><p>Markanıza özel servis, arıza ve tamir rehberini seçin.</p></div>

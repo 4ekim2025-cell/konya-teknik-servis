@@ -21,6 +21,15 @@ const services: Record<string, [string, string]> = {
   "/su-sebili-tamiri-konya/": ["Konya Su Sebili Tamiri | Eşli Teknik", "Konya’da su sebili tamiri için Eşli Teknik’e WhatsApp’tan ulaşın. Arıza bilgisi, servis planı ve online iş takibiyle destek alın."],
 };
 
+const serviceFaqs: Record<string, [string, string][]> = {
+  "/camasir-makinesi-tamiri-konya/": [["Çamaşır makinesi su almıyorsa ne kontrol edilir?", "Su vanası, giriş hortumu ve görünür filtre tıkanıklığı güvenli biçimde kontrol edilebilir; sorun sürerse servis isteyin."], ["Çamaşır makinesi neden sıkma yapmaz?", "Dengesiz yük, tahliye problemi, kapak kilidi veya motor grubu etkilenmiş olabilir."], ["Parça değişimi öncesi bilgi verilir mi?", "İnceleme sonrası işlem ve parça ihtiyacı açıklanır; onayınız alınmadan değişim yapılmaz."]],
+  "/bulasik-makinesi-tamiri-konya/": [["Bulaşık makinesinin içinde su kalıyorsa ne yapılır?", "Filtre ve tahliye hortumu kılavuza uygun kontrol edilebilir; su kalmaya devam ederse pompa için servis isteyin."], ["Bulaşık makinesi neden temiz yıkamaz?", "Filtre, püskürtme kolları, su sıcaklığı, deterjan veya rezistans etkili olabilir."], ["Aynı gün planlama yapılır mı?", "Ekip uygunluğuna ve günlük plana göre aynı gün hedeflenebilir; net zaman talep sırasında paylaşılır."]],
+  "/buzdolabi-tamiri-konya/": [["Buzdolabı soğutmuyorsa ne kontrol edilir?", "Kapı, conta, sıcaklık ayarı ve hava dolaşımı gözlemlenebilir; soğutma sistemini açmadan servis desteği alın."], ["Buzlanma arıza mıdır?", "Conta, hava kanalı, sensör veya defrost sistemi etkilenmiş olabilir; buzu kesici aletle kazımayın."], ["Buzdolabı tamiri ne kadar sürer?", "Basit conta veya ayar işlemleri hızlı tamamlanabilir; parça ve soğutma sistemi işlemleri modele göre değişir."]],
+  "/firin-tamiri-konya/": [["Fırın ısıtmıyorsa ne kontrol edilir?", "Enerji, saat/program ve sıcaklık seçimi kontrol edilebilir; rezistans veya termostatı sökmeyin."], ["Fırın aynı gün tamamlanır mı?", "Basit ayar veya uygun parça işlemleri aynı ziyarette olabilir; özel parça gereken durumlarda süre değişir."], ["Gaz kokusunda ne yapılmalı?", "Gaz vanasını kapatın, ortamı havalandırın ve düğmelere dokunmadan yetkili destek alın."]],
+  "/ocak-tamiri-konya/": [["Ocak ateşlemiyorsa ne kontrol edilir?", "Gaz vanası, elektrik bağlantısı ve düğme konumu gözlemlenebilir; ateşleme sistemini sökmeyin."], ["Sarı alev neden olur?", "Hava-gaz karışımı, enjektör veya yanma sistemiyle ilgili sorun olabilir; cihazı kullanmayı bırakın."], ["Ocak camı çatladıysa kullanılabilir mi?", "Hayır. Cam çatlağı güvenlik riski oluşturabilir; cihazı kullanmadan servis isteyin."]],
+  "/kurutma-makinesi-tamiri-konya/": [["Kurutma makinesi ısıtmıyorsa ne yapılır?", "Filtre, hazne ve program seçimi kılavuza göre kontrol edilebilir; rezistans veya termik gruba müdahale etmeyin."], ["Kurutma makinesi neden uzun sürer?", "Aşırı yük, tıkalı filtre, hava akışı, nem sensörü veya ısıtma sistemi etkili olabilir."], ["Parça değişimi nasıl belirlenir?", "Model ve arıza tespitinden sonra parça, işlem kapsamı ve süre açıklanır; onayınız alınmadan değişim yapılmaz."]],
+};
+
 const districts: Record<string, string> = {
   "/karatay/": "Karatay Beyaz Eşya Servisi | Eşli Teknik Konya",
   "/meram/": "Meram Beyaz Eşya Servisi | Eşli Teknik Konya",
@@ -89,6 +98,9 @@ function jsonLd(title: string, description: string, url: string, route: string) 
       ],
     });
   }
+  if (serviceFaqs[route]) {
+    graph.push({ "@type": "FAQPage", "@id": `${url}#faq`, mainEntity: serviceFaqs[route].map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) });
+  }
 
   return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replaceAll("</", "<\\/");
 }
@@ -103,7 +115,10 @@ function staticContent(title: string, description: string, route: string) {
   }
 
   if (service && !brand) {
-    sections = `<h2>${esc(heading)} Hizmeti</h2><p>${esc(description)}</p><h2>Servis Süreci</h2><p>Arıza bilgilerinizi paylaşın; servis planlaması, inceleme ve işlem süreci hakkında bilgilendirme alın. Uygun olduğunda size iletilen takip bağlantısından servis kaydınızı görüntüleyebilirsiniz.</p>`;
+    const guide = serviceFaqs[route] ?? [[`${heading} için nasıl servis kaydı açabilirim?`, "Cihazın marka-modelini, arıza belirtisini ve bulunduğunuz ilçeyi WhatsApp üzerinden paylaşmanız ilk yönlendirme için yeterlidir."]];
+    const deviceName = heading.replace("Konya ", "").replace(" Tamiri", "");
+    const safety = deviceName === "Ocak" || deviceName === "Fırın" ? "Gaz kokusu, elektrik kaçağı, yanık kokusu veya cam hasarı varsa cihazı kullanmayın; gaz ve elektrik aksamını sökmeyin." : "Fişi çekmeden cihazın gövdesini veya elektrik aksamını açmayın; kaçak, yanık kokusu veya sigorta attırma varsa cihazı çalıştırmayın.";
+    sections = `<h2>${esc(heading)} Hizmeti</h2><p>${esc(description)} ${esc(deviceName)} arızalarında model, belirti, hata kodu ve bulunduğunuz ilçe bilgisi servis ön değerlendirmesini kolaylaştırır.</p><h2>Yaygın belirtiler ve ilk kontroller</h2><p>${esc(deviceName)} cihazlarda performans kaybı, alışılmadık ses, ısıtma/soğutma sorunu veya programın yarıda kalması farklı parça ve bağlantı gruplarının incelenmesini gerektirebilir. Kullanım kılavuzundaki güvenli filtre, hazne, hortum veya ayar kontrollerini uygulayabilirsiniz. ${esc(safety)}</p><h2>Servis süresi ve fiyatlandırma</h2><p>Basit temizlik, ayar veya bağlantı işlemleri aynı ziyarette tamamlanabilir. Pompa, rezistans, motor, sensör, kart veya soğutma grubu gibi parçalarda süre model ve parça teminine göre değişir. Fiyat; arıza tespiti, işçilik ve gerekiyorsa parça ihtiyacı açıklanarak onayınıza sunulur.</p><h2>Ne zaman servis çağırmalı?</h2><p>Aynı arızanın tekrarlaması, cihazın sigorta attırması, su veya gaz kaçağı, yanık kokusu ve güvenli çalışmama belirtileri bekletilmemelidir. Karatay, Meram ve Selçuklu için WhatsApp’tan servis talebi iletebilir, kayıt açıldığında işlem aşamalarını online takip edebilirsiniz.</p><h2>Sık sorulan sorular</h2>${guide.map(([question, answer]) => `<h3>${esc(question)}</h3><p>${esc(answer)}</p>`).join("")}`;
   } else if (brand) {
     const [, brandName] = brand;
     sections = `<h2>${esc(brandName)} Servisi Konya</h2><p>EŞLİ TEKNİK, Konya’da ${esc(brandName)} marka cihazlar için teknik servis desteği sunar. Arıza bilgilerinizi WhatsApp üzerinden ileterek servis planlaması hakkında bilgi alabilirsiniz.</p><h2>${esc(brandName)} Cihazlarda Servis</h2><p>Çamaşır makinesi, bulaşık makinesi, buzdolabı, fırın ve diğer uygun cihaz gruplarında arıza tespiti ve teknik servis desteği için Eşli Teknik’e ulaşabilirsiniz.</p>`;

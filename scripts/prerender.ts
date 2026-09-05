@@ -51,6 +51,12 @@ const brands = [
   ["senocak", "Şenocak"], ["teka", "Teka"], ["ugur-sogutma", "Uğur Soğutma"], ["vestel", "Vestel"],
 ] as const;
 
+const brandDeviceLinks: Record<string, [string,string][]> = {
+  Vestel: [["Vestel Çamaşır Makinesi Servisi", "/camasir-makinesi-tamiri-konya/"], ["Vestel Bulaşık Makinesi Servisi", "/bulasik-makinesi-tamiri-konya/"], ["Vestel Buzdolabı Servisi", "/buzdolabi-tamiri-konya/"], ["Vestel Kurutma Makinesi Servisi", "/kurutma-makinesi-tamiri-konya/"]],
+  Regal: [["Regal Çamaşır Makinesi Servisi", "/camasir-makinesi-tamiri-konya/"], ["Regal Bulaşık Makinesi Servisi", "/bulasik-makinesi-tamiri-konya/"], ["Regal Buzdolabı Servisi", "/buzdolabi-tamiri-konya/"], ["Regal Kurutma Makinesi Servisi", "/kurutma-makinesi-tamiri-konya/"]],
+  Altus: [["Altus Çamaşır Makinesi Servisi", "/camasir-makinesi-tamiri-konya/"], ["Altus Bulaşık Makinesi Servisi", "/bulasik-makinesi-tamiri-konya/"], ["Altus Buzdolabı Servisi", "/buzdolabi-tamiri-konya/"]],
+};
+
 for (const [slug, name] of brands) {
   const title = `${name} Servisi Konya | Eşli Teknik`;
   services[`/${slug}-servisi-konya/`] = [title, `Konya’da ${name} servisi için Eşli Teknik’e WhatsApp’tan ulaşın. Beyaz eşya ve küçük ev aletleri için servis planlaması ve online iş takibi.`];
@@ -129,7 +135,7 @@ function staticContent(title: string, description: string, route: string) {
     sections = `<h2>${esc(heading)} Hizmeti</h2><p>${esc(description)} ${esc(deviceName)} arızalarında model, belirti, hata kodu ve bulunduğunuz ilçe bilgisi servis ön değerlendirmesini kolaylaştırır.</p><h2>Yaygın belirtiler ve ilk kontroller</h2><p>${esc(deviceName)} cihazlarda performans kaybı, alışılmadık ses, ısıtma/soğutma sorunu veya programın yarıda kalması farklı parça ve bağlantı gruplarının incelenmesini gerektirebilir. Kullanım kılavuzundaki güvenli filtre, hazne, hortum veya ayar kontrollerini uygulayabilirsiniz. ${esc(safety)}</p><h2>Servis süresi ve fiyatlandırma</h2><p>Basit temizlik, ayar veya bağlantı işlemleri aynı ziyarette tamamlanabilir. Pompa, rezistans, motor, sensör, kart veya soğutma grubu gibi parçalarda süre model ve parça teminine göre değişir. Fiyat; arıza tespiti, işçilik ve gerekiyorsa parça ihtiyacı açıklanarak onayınıza sunulur.</p><h2>Ne zaman servis çağırmalı?</h2><p>Aynı arızanın tekrarlaması, cihazın sigorta attırması, su veya gaz kaçağı, yanık kokusu ve güvenli çalışmama belirtileri bekletilmemelidir. Karatay, Meram ve Selçuklu için WhatsApp’tan servis talebi iletebilir, kayıt açıldığında işlem aşamalarını online takip edebilirsiniz.</p><h2>Sık sorulan sorular</h2>${guide.map(([question, answer]) => `<h3>${esc(question)}</h3><p>${esc(answer)}</p>`).join("")}`;
   } else if (brand) {
     const [, brandName] = brand;
-    sections = `<h2>${esc(brandName)} Servisi Konya</h2><p>EŞLİ TEKNİK, Konya’da ${esc(brandName)} marka cihazlar için teknik servis desteği sunar. Arıza bilgilerinizi WhatsApp üzerinden ileterek servis planlaması hakkında bilgi alabilirsiniz.</p><h2>${esc(brandName)} Cihazlarda Servis</h2><p>Çamaşır makinesi, bulaşık makinesi, buzdolabı, fırın ve diğer uygun cihaz gruplarında arıza tespiti ve teknik servis desteği için Eşli Teknik’e ulaşabilirsiniz.</p>`;
+    const deviceLinks = brandDeviceLinks[brandName] ?? []; sections = `<h2>${esc(brandName)} Servisi Konya</h2><p>EŞLİ TEKNİK, ${esc(brandName)} marka cihazlarda doğru yönlendirme için önce cihaz türü, model ve belirti bilgisini netleştirir. Aynı belirti farklı cihazlarda farklı nedenlerden kaynaklanabileceği için aşağıdaki cihaz rehberlerinden uygun olanı seçin.</p><nav aria-label="Marka cihaz rehberleri"><h2>${esc(brandName)} Cihaz Rehberleri</h2><p>${deviceLinks.map(([label, href]) => `<a href="${href}">${esc(label)}</a>`).join(" · ")}</p></nav><p>Cihaz türü netleşmeden parça veya teknik müdahale önerilmez. Yanık kokusu, su/gaz kaçağı veya sigorta attırma varsa cihazı kullanmayın ve servis desteği alın.</p>`;
   } else if (route === "/tum-markalar/") {
     sections = `<h2>Konya’da Servis Verilen Markalar</h2><p>Eşli Teknik; ${brands.map(([, name]) => esc(name)).join(", ")} ve listede yer alan diğer marka ve model cihazlar için teknik servis desteği sunar.</p><h2>Servis Talebi</h2><p>Cihaz markası, modeli ve arıza bilgisini WhatsApp üzerinden paylaşarak servis süreci hakkında bilgi alabilirsiniz.</p>`;
   } else if (districts[route]) {

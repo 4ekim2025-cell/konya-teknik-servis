@@ -10,7 +10,7 @@ const ContentPage=lazy(()=>import("./pages/ContentPage"));
 
 const siteName="EŞLİ TEKNİK";
 const siteDescription="Konya’da Meram, Selçuklu ve Karatay ilçelerinde tüm marka ve model beyaz eşyalar ile küçük ev aletleri için Eşli Teknik servis desteği sunar. WhatsApp’tan ulaşın, servis sürecini online takip edin.";
-const socialImage="https://files.manuscdn.com/user_upload_by_module/session_file/310519663224697605/eQkpZGxpWhAUFzwQ.webp";
+const socialImage="/assets/eQkpZGxpWhAUFzwQ.webp";
 const brandNamesByPath:Record<string,string>={"/altus-servisi-konya/":"Altus","/arcelik-servisi-konya/":"Arçelik","/arnica-servisi-konya/":"Arnica","/beko-servisi-konya/":"Beko","/bosch-servisi-konya/":"Bosch","/electrolux-servisi-konya/":"Electrolux","/franke-servisi-konya/":"Franke","/hoover-servisi-konya/":"Hoover","/kumtel-servisi-konya/":"Kumtel","/philips-servisi-konya/":"Philips","/profilo-servisi-konya/":"Profilo","/rowenta-servisi-konya/":"Rowenta","/samsung-servisi-konya/":"Samsung","/siemens-servisi-konya/":"Siemens","/silverline-servisi-konya/":"Silverline","/senocak-servisi-konya/":"Şenocak","/teka-servisi-konya/":"Teka","/ugur-sogutma-servisi-konya/":"Uğur Soğutma","/vestel-servisi-konya/":"Vestel"};
 
 function setMeta(attribute:"name"|"property",key:string,content:string){let element=document.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);if(!element){element=document.createElement("meta");element.setAttribute(attribute,key);document.head.append(element)}element.setAttribute("content",content)}

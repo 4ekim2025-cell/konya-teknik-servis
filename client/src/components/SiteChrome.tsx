@@ -118,9 +118,9 @@ export function Header() {
         <a href="/" className={active("/") ? "active" : ""} aria-current={active("/") ? "page" : undefined}>
           <House size={17} /><span className="desktop-nav-label"><span>Ana Sayfa</span><small>Başlangıç</small></span>
         </a>
-        {navItems.slice(0, 1).map(({ label, hint, href, Icon }) => <a href={href} className={active(href) ? "active" : ""} aria-current={active(href) ? "page" : undefined} key={label}>
-          <Icon size={17} /><span className="desktop-nav-label"><span>{label}</span><small>{hint}</small></span>
-        </a>)}
+        <a href="/hakkimizda/" className={active("/hakkimizda/") ? "active" : ""} aria-current={active("/hakkimizda/") ? "page" : undefined}>
+          <Info size={17} /><span className="desktop-nav-label"><span>Hakkımızda</span><small>Bizi tanıyın</small></span>
+        </a>
         <div className="brands-menu-wrap" ref={brandsMenuRef}>
           <button type="button" className={`desktop-brands-trigger ${brandsMegaOpen ? "open" : ""} ${brandsActive ? "active" : ""}`} onClick={() => { setMegaOpen(false); setBrandsMegaOpen(!brandsMegaOpen); }} aria-expanded={brandsMegaOpen} aria-haspopup="menu">
             <Tags size={17} /><span className="desktop-nav-label"><span>Markalar</span><small>20 servis rehberi</small></span><ChevronDown size={13} />
@@ -135,10 +135,12 @@ export function Header() {
       <a className="brand" href="/" aria-label="EŞLİ TEKNİK ana sayfa" />
 
       <nav className="desktop-nav desktop-nav-right" aria-label="Ana menü devamı">
+        <a href="/#hizmetler" className={servicesActive ? "active" : ""} aria-current={servicesActive ? "page" : undefined}>
+          <Wrench size={17} /><span className="desktop-nav-label"><span>Hizmetlerimiz</span><small>Cihaz ve tamir</small></span>
+        </a>
         {navItems.slice(1).map(({ label, hint, href, Icon }) => <a href={href} className={active(href) ? "active" : ""} aria-current={active(href) ? "page" : undefined} key={label}>
           <Icon size={17} /><span className="desktop-nav-label"><span>{label}</span><small>{hint}</small></span>
         </a>)}
-        <a href="/kvkk/" className={active("/kvkk/") ? "active" : ""} aria-current={active("/kvkk/") ? "page" : undefined}><Info size={17} /><span className="desktop-nav-label"><span>KVKK</span><small>Gizlilik ve haklar</small></span></a>
       </nav>
 
       <button className="nav-toggle" onClick={() => setMobileOpen(!mobileOpen)} aria-expanded={mobileOpen} aria-label="Menüyü aç veya kapat">{mobileOpen ? <X /> : <Menu />}</button>
@@ -156,15 +158,16 @@ export function Header() {
       <a className="preform-shortcut" href="/#on-bilgi-formu" aria-label="WhatsApp üzerinden hızlı servis talebi oluştur"><MessageCircle size={14} /><span>Hızlı servis talebi</span></a>
       <p><span className="live-dot" />Konya’da online takipli teknik servis</p>
       <a href="/online-servis-takibi/">Takip nasıl çalışır? →</a>
+      <a href="/kvkk/">KVKK</a>
     </div>
 
     {mobileOpen && <nav className="mobile-nav" aria-label="Mobil menü">
       <a href="/" className={active("/") ? "active" : ""} onClick={closeMobile}><House size={17} /><span>Ana Sayfa</span></a>
-      <a className="mobile-preform-link" href="/#on-bilgi-formu" onClick={closeMobile}><Wrench size={17} /><span>Ön Bilgi Formu</span><ChevronDown size={15} /></a>
-      <button type="button" className={`mobile-services-toggle ${mobileServicesOpen ? "open" : ""} ${servicesActive ? "active" : ""}`} onClick={() => setMobileServicesOpen(!mobileServicesOpen)} aria-expanded={mobileServicesOpen}><Wrench size={17} /><span>Hizmetler</span><ChevronDown size={16} /></button>
-      {mobileServicesOpen && <div className="mobile-service-accordion">{services.map(({ name, href, Icon, note }) => <a href={href} onClick={() => follow(href, true)} key={href}><Icon size={16} /><span>{name}<small>{note}</small></span><span>→</span></a>)}</div>}
-      {navItems.map(({ label, href, Icon }) => <a href={href} onClick={closeMobile} className={active(href) ? "active" : ""} aria-current={active(href) ? "page" : undefined} key={label}><Icon size={17} /><span>{label}</span></a>)}
+      <a className="mobile-nav-item" href="/hakkimizda/" onClick={closeMobile}><Info size={17} /><span>Hakkımızda</span></a>
       <a className="mobile-nav-item" href="/tum-markalar/" onClick={closeMobile}><Tags size={17} /><span>Markalar</span></a>
+      <button type="button" className={`mobile-services-toggle ${mobileServicesOpen ? "open" : ""} ${servicesActive ? "active" : ""}`} onClick={() => setMobileServicesOpen(!mobileServicesOpen)} aria-expanded={mobileServicesOpen}><Wrench size={17} /><span>Hizmetlerimiz</span><ChevronDown size={16} /></button>
+      {mobileServicesOpen && <div className="mobile-service-accordion">{services.map(({ name, href, Icon, note }) => <a href={href} onClick={() => follow(href, true)} key={href}><Icon size={16} /><span>{name}<small>{note}</small></span><span>→</span></a>)}</div>}
+      {navItems.slice(1).map(({ label, href, Icon }) => <a href={href} onClick={closeMobile} className={active(href) ? "active" : ""} aria-current={active(href) ? "page" : undefined} key={label}><Icon size={17} /><span>{label}</span></a>)}
       <a className="mobile-nav-item" href="/kvkk/" onClick={closeMobile}><Info size={17} /><span>KVKK</span></a>
       <a className="mobile-contact" target="_blank" rel="noreferrer" href={whatsappLink}><MessageCircle size={17} />WhatsApp’tan Yazın</a>
     </nav>}

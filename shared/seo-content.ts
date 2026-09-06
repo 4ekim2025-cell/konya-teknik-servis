@@ -10,3 +10,50 @@ export const districtFaqs: Record<string, [string, string][]> = {
   Meram: [["Meram’da servis için mahalle bilgisi gerekli mi?", "Evet. Mahalle ve açık adres bilgisi, servis uygunluğunun kontrol edilmesi için gereklidir."], ["Meram’da servis süresi nasıl belirlenir?", "Cihazın arızası, gerekli işlem ve ekip uygunluğu değerlendirildikten sonra uygun zaman bilgisi paylaşılır."]],
   Selçuklu: [["Selçuklu’da servis kaydı nasıl açılır?", "WhatsApp’tan cihaz türünü, marka-model bilgisini, arıza belirtisini ve Selçuklu’daki açık adresinizi göndererek kayıt başlatabilirsiniz."], ["Selçuklu’da servis kaydını takip edebilir miyim?", "Evet. Kayıt açıldığında gönderilen özel takip bağlantısı üzerinden işlem durumunu görüntüleyebilirsiniz."]]
 };
+
+
+/** Detailed service FAQs used by both visible React content and prerendered SEO HTML. */
+export const serviceFaqs: Record<string, [string, string][]> = {
+  "Çamaşır Makinesi": [
+    ["Çamaşır makinesi su almıyorsa ne kontrol edilir?", "Su vanasının açık, giriş hortumunun kıvrılmamış ve filtrede belirgin tıkanıklık olmadığını güvenli biçimde kontrol edebilirsiniz. Sorun sürerse servis kaydı oluşturun."],
+    ["Çamaşır makinesi neden sıkma yapmaz?", "Dengesiz yük, tahliye problemi, kapak kilidi veya motor grubu etkilenmiş olabilir. Cihazı zorlamadan arıza belirtisini paylaşın."],
+    ["Çamaşır makinesi servisinde parça değişimi öncesi bilgi verilir mi?", "İnceleme sonrası gerekli işlem ve parça ihtiyacı açıklanır; onayınız alınmadan parça değişimi yapılmaz."],
+    ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
+    ["Aynı gün servis mümkün mü?", "Konya içindeki günlük planlama ve ekibin uygunluğuna göre aynı gün servis hedeflenir. Net bilgi talebinizde paylaşılır."]
+  ],
+  "Bulaşık Makinesi": [
+    ["Bulaşık makinesinin içinde su kalıyorsa ne yapılır?", "Cihazı zorlamadan filtreyi, tahliye hortumunu ve görünür tıkanıklıkları kılavuza uygun biçimde kontrol edin. Su kalmaya devam ederse pompa ve tahliye hattı için servis isteyin."],
+    ["Bulaşık makinesi neden temiz yıkamaz?", "Filtre, püskürtme kolları, su sıcaklığı, deterjan kullanımı veya rezistans etkili olabilir. Belirtinin programın hangi aşamasında ortaya çıktığını paylaşın."],
+    ["Bulaşık makinesi servisinde aynı gün planlama yapılır mı?", "Konya içindeki günlük planlama ve ekip uygunluğuna göre aynı gün hedeflenebilir; net zaman servis talebi sırasında paylaşılır."],
+    ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
+    ["Aynı gün servis mümkün mü?", "Konya içindeki günlük planlama ve ekibin uygunluğuna göre aynı gün servis hedeflenir. Net bilgi talebinizde paylaşılır."]
+  ],
+  "Buzdolabı": [
+    ["Buzdolabı soğutmuyorsa fişi çekilmeli mi?", "Yanık kokusu, elektrik kaçağı veya sigorta attırma varsa cihazı kullanmayın. Diğer durumlarda sıcaklık, kapı ve hava dolaşımı gözlemlerini paylaşarak servis yönlendirmesi alın."],
+    ["Buzdolabındaki buzlanma arıza mıdır?", "Tek başına her buzlanma aynı anlama gelmez; conta, hava kanalı, sensör veya defrost sistemi incelenebilir. Buzu kesici aletle kazımayın."],
+    ["Buzdolabı tamiri ne kadar sürer?", "Ayar, conta veya basit bağlantı işlemleri aynı ziyarette tamamlanabilir; parça ve soğutma sistemi işlemlerinde süre model ve parçaya göre değişir."],
+    ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
+    ["Aynı gün servis mümkün mü?", "Konya içindeki günlük planlama ve ekibin uygunluğuna göre aynı gün servis hedeflenir. Net bilgi talebinizde paylaşılır."]
+  ],
+  "Fırın": [
+    ["Fırın ısıtmıyorsa kullanıcı neyi kontrol edebilir?", "Enerji bağlantısı, saat/program ayarı ve sıcaklık seçimi kontrol edilebilir. Rezistans veya termostatı sökmeyin; sorun sürerse servis isteyin."],
+    ["Fırın tamiri aynı gün tamamlanır mı?", "Basit bağlantı, ayar veya uygun parça işlemleri aynı ziyarette tamamlanabilir. Kart veya özel parça gereken durumlarda süre değişebilir."],
+    ["Gazlı fırında gaz kokusu varsa ne yapılmalı?", "Gaz vanasını kapatın, ortamı havalandırın ve elektrik düğmelerine dokunmadan yetkili destek alın. Cihazı kullanmaya devam etmeyin."],
+    ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
+    ["Aynı gün servis mümkün mü?", "Konya içindeki günlük planlama ve ekibin uygunluğuna göre aynı gün servis hedeflenir. Net bilgi talebinizde paylaşılır."]
+  ],
+  "Ocak": [
+    ["Ocak ateşlemiyorsa ne kontrol edilir?", "Gaz vanası, elektrik bağlantısı ve düğme konumu gözlemlenebilir; ateşleme sistemini sökmeyin. Gaz kokusu varsa cihazı kullanmadan destek alın."],
+    ["Ocakta sarı alev neden olur?", "Hava-gaz karışımı, enjektör veya yanma sistemiyle ilgili bir sorun olabilir. Ocağı kullanmayı bırakıp güvenli biçimde servis isteyin."],
+    ["Ocak camı çatladıysa kullanılabilir mi?", "Hayır. Cam çatlağı güvenlik riski oluşturabilir; cihazı kullanmayın ve model bilgisiyle servis yönlendirmesi alın."],
+    ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
+    ["Aynı gün servis mümkün mü?", "Konya içindeki günlük planlama ve ekibin uygunluğuna göre aynı gün servis hedeflenir. Net bilgi talebinizde paylaşılır."]
+  ],
+  "Kurutma Makinesi": [
+    ["Kurutma makinesi ısıtmıyorsa ne yapılır?", "Filtre, su haznesi ve program seçimini kılavuza göre kontrol edin. Rezistans veya termik gruba müdahale etmeyin; sorun devam ederse servis isteyin."],
+    ["Kurutma makinesi neden uzun sürer?", "Aşırı yük, filtre, hava akışı, nem sensörü veya ısıtma sistemi etkili olabilir. Çamaşır miktarı ve program bilgisini paylaşın."],
+    ["Kurutma makinesi servisinde parça değişimi nasıl belirlenir?", "Model ve arıza tespitinden sonra gerekli parça, işlem kapsamı ve süre açıklanır; onayınız alınmadan parça değişimi yapılmaz."],
+    ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
+    ["Aynı gün servis mümkün mü?", "Konya içindeki günlük planlama ve ekibin uygunluğuna göre aynı gün servis hedeflenir. Net bilgi talebinizde paylaşılır."]
+  ]
+};

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { districtNeighborhoods, districtFaqs } from "../shared/seo-content";
+import { districtNeighborhoods, districtFaqs, serviceFaqs } from "../shared/seo-content";
 
 const root = process.cwd();
 const outputDir = path.join(root, "dist", "public");
@@ -22,14 +22,6 @@ const services: Record<string, [string, string]> = {
   "/su-sebili-tamiri-konya/": ["Konya Su Sebili Tamiri | Eşli Teknik", "Konya’da su sebili tamiri için Eşli Teknik’e WhatsApp’tan ulaşın. Arıza bilgisi, servis planı ve online iş takibiyle destek alın."],
 };
 
-const serviceFaqs: Record<string, [string, string][]> = {
-  "/camasir-makinesi-tamiri-konya/": [["Çamaşır makinesi su almıyorsa ne kontrol edilir?", "Su vanası, giriş hortumu ve görünür filtre tıkanıklığı güvenli biçimde kontrol edilebilir; sorun sürerse servis isteyin."], ["Çamaşır makinesi neden sıkma yapmaz?", "Dengesiz yük, tahliye problemi, kapak kilidi veya motor grubu etkilenmiş olabilir."], ["Parça değişimi öncesi bilgi verilir mi?", "İnceleme sonrası işlem ve parça ihtiyacı açıklanır; onayınız alınmadan değişim yapılmaz."]],
-  "/bulasik-makinesi-tamiri-konya/": [["Bulaşık makinesinin içinde su kalıyorsa ne yapılır?", "Filtre ve tahliye hortumu kılavuza uygun kontrol edilebilir; su kalmaya devam ederse pompa için servis isteyin."], ["Bulaşık makinesi neden temiz yıkamaz?", "Filtre, püskürtme kolları, su sıcaklığı, deterjan veya rezistans etkili olabilir."], ["Aynı gün planlama yapılır mı?", "Ekip uygunluğuna ve günlük plana göre aynı gün hedeflenebilir; net zaman talep sırasında paylaşılır."]],
-  "/buzdolabi-tamiri-konya/": [["Buzdolabı soğutmuyorsa ne kontrol edilir?", "Kapı, conta, sıcaklık ayarı ve hava dolaşımı gözlemlenebilir; soğutma sistemini açmadan servis desteği alın."], ["Buzlanma arıza mıdır?", "Conta, hava kanalı, sensör veya defrost sistemi etkilenmiş olabilir; buzu kesici aletle kazımayın."], ["Buzdolabı tamiri ne kadar sürer?", "Basit conta veya ayar işlemleri hızlı tamamlanabilir; parça ve soğutma sistemi işlemleri modele göre değişir."]],
-  "/firin-tamiri-konya/": [["Fırın ısıtmıyorsa ne kontrol edilir?", "Enerji, saat/program ve sıcaklık seçimi kontrol edilebilir; rezistans veya termostatı sökmeyin."], ["Fırın aynı gün tamamlanır mı?", "Basit ayar veya uygun parça işlemleri aynı ziyarette olabilir; özel parça gereken durumlarda süre değişir."], ["Gaz kokusunda ne yapılmalı?", "Gaz vanasını kapatın, ortamı havalandırın ve düğmelere dokunmadan yetkili destek alın."]],
-  "/ocak-tamiri-konya/": [["Ocak ateşlemiyorsa ne kontrol edilir?", "Gaz vanası, elektrik bağlantısı ve düğme konumu gözlemlenebilir; ateşleme sistemini sökmeyin."], ["Sarı alev neden olur?", "Hava-gaz karışımı, enjektör veya yanma sistemiyle ilgili sorun olabilir; cihazı kullanmayı bırakın."], ["Ocak camı çatladıysa kullanılabilir mi?", "Hayır. Cam çatlağı güvenlik riski oluşturabilir; cihazı kullanmadan servis isteyin."]],
-  "/kurutma-makinesi-tamiri-konya/": [["Kurutma makinesi ısıtmıyorsa ne yapılır?", "Filtre, hazne ve program seçimi kılavuza göre kontrol edilebilir; rezistans veya termik gruba müdahale etmeyin."], ["Kurutma makinesi neden uzun sürer?", "Aşırı yük, tıkalı filtre, hava akışı, nem sensörü veya ısıtma sistemi etkili olabilir."], ["Parça değişimi nasıl belirlenir?", "Model ve arıza tespitinden sonra parça, işlem kapsamı ve süre açıklanır; onayınız alınmadan değişim yapılmaz."]],
-};
 const relatedServiceLinks: Record<string, [string, string][]> = {
   "/camasir-makinesi-tamiri-konya/": [["Kurutma Makinesi Tamiri", "/kurutma-makinesi-tamiri-konya/"], ["Bulaşık Makinesi Tamiri", "/bulasik-makinesi-tamiri-konya/"], ["Buzdolabı Tamiri", "/buzdolabi-tamiri-konya/"]],
   "/bulasik-makinesi-tamiri-konya/": [["Çamaşır Makinesi Tamiri", "/camasir-makinesi-tamiri-konya/"], ["Buzdolabı Tamiri", "/buzdolabi-tamiri-konya/"], ["Fırın Tamiri", "/firin-tamiri-konya/"]],
@@ -119,8 +111,9 @@ function jsonLd(title: string, description: string, url: string, route: string) 
       ],
     });
   }
-  if (serviceFaqs[route]) {
-    graph.push({ "@type": "FAQPage", "@id": `${url}#faq`, mainEntity: serviceFaqs[route].map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) });
+  const routeServiceFaqs = Object.entries(serviceFaqs).find(([deviceName]) => title.includes(deviceName))?.[1];
+  if (routeServiceFaqs) {
+    graph.push({ "@type": "FAQPage", "@id": `${url}#faq`, mainEntity: routeServiceFaqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) });
   }
 
   return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replaceAll("</", "<\\/");
@@ -147,7 +140,7 @@ function staticContent(title: string, description: string, route: string) {
   }
 
   if (service && !brand) {
-    const guide = serviceFaqs[route] ?? [[`${heading} için nasıl servis kaydı açabilirim?`, "Cihazın marka-modelini, arıza belirtisini ve bulunduğunuz ilçeyi WhatsApp üzerinden paylaşmanız ilk yönlendirme için yeterlidir."]];
+    const guide = Object.entries(serviceFaqs).find(([deviceName]) => heading.includes(deviceName))?.[1] ?? [[`${heading} için nasıl servis kaydı açabilirim?`, "Cihazın marka-modelini, arıza belirtisini ve bulunduğunuz ilçeyi WhatsApp üzerinden paylaşmanız ilk yönlendirme için yeterlidir."]];
     const deviceName = heading.replace("Konya ", "").replace(" Tamiri", "");
     const safety = deviceName === "Ocak" || deviceName === "Fırın" ? "Gaz kokusu, elektrik kaçağı, yanık kokusu veya cam hasarı varsa cihazı kullanmayın; gaz ve elektrik aksamını sökmeyin." : "Fişi çekmeden cihazın gövdesini veya elektrik aksamını açmayın; kaçak, yanık kokusu veya sigorta attırma varsa cihazı çalıştırmayın.";
     const device = deviceStaticContent[deviceName];

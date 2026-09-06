@@ -5,3 +5,5 @@ Bu klasör, geliştirme sırasında yapılan görsel ve responsive kontrol kayı
 Kalıcı proje kararları için kök dizindeki `README.md` ve `docs/` altındaki konu belgeleri esas alınmalıdır. Yeni kontrol notları kök dizine değil, bu klasöre eklenmelidir.
 
 Dosya adlarındaki `check-notes` ifadesi, bunların tamamlanmış bir geliştirme adımına ait doğrulama notu olduğunu belirtir.
+
+`todo-archive.md`, kök dizindeki tamamlanmış ve artık aktif görev takibi için kullanılmayan eski görev listesinin arşividir.

@@ -900,3 +900,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Gerçek AKILLI ÖN BİLGİ bölümü: açık zeminde görünür transparan dekoratif watermark. */
 .smart-info-section .smart-info-watermark{position:absolute;z-index:0;right:-92px;top:-112px;width:430px;height:430px;color:var(--brand-teal);opacity:.13;pointer-events:none}.smart-info-section .diagnostic-intro,.smart-info-section .smart-info-preview{position:relative;z-index:2}@media(max-width:860px){.smart-info-section .smart-info-watermark{right:-100px;top:-86px;width:300px;height:300px;opacity:.1}}
+
+/* Şeffaf servis yaklaşımı: güven ve açıklığı temsil eden transparan kalkan simgesi. */
+.proof-section{position:relative;overflow:hidden}.proof-watermark{position:absolute;z-index:0;right:-92px;top:-112px;width:430px;height:430px;color:var(--brand-teal);opacity:.095;pointer-events:none}.proof-image,.proof-copy{position:relative;z-index:1}@media(max-width:860px){.proof-watermark{right:-100px;top:-86px;width:300px;height:300px;opacity:.075}}

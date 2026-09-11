@@ -106,6 +106,19 @@ function jsonLd(title: string, description: string, url: string, route: string) 
     graph.push({ "@type": "Service", "@id": `${url}#service`, name: title, description, serviceType: title.replace("Konya ", "").replace(" | Eşli Teknik", ""), areaServed: ["Karatay", "Meram", "Selçuklu"], provider: { "@id": `${siteUrl}/#business` } });
   }
 
+  const guideRoutes = [
+    ["/blog/bulasik-makinesi-suyu-bosaltmiyor/", "Bulaşık Makinesi Suyu Boşaltmıyor"],
+    ["/blog/buzdolabi-sogutmuyor-konya/", "Buzdolabı Soğutmuyor"],
+    ["/blog/camasir-makinesi-su-almiyor-konya/", "Çamaşır Makinesi Su Almıyor"],
+    ["/blog/firin-isitmiyor-konya/", "Fırın Isıtmıyor"],
+    ["/blog/kurutma-makinesi-kurutmuyor/", "Kurutma Makinesi Kurutmuyor"],
+  ];
+  if (route === "/blog/") {
+    graph.push({ "@type": "CollectionPage", "@id": `${url}#collection`, name: title, description, mainEntity: { "@type": "ItemList", itemListElement: guideRoutes.map(([guideRoute, guideTitle], index) => ({ "@type": "ListItem", position: index + 1, name: guideTitle, url: `${siteUrl}${guideRoute}` })) } });
+  } else if (guideRoutes.some(([guideRoute]) => guideRoute === route)) {
+    graph.push({ "@type": "Article", "@id": `${url}#article`, headline: title.replace(" | Eşli Teknik", ""), description, image: `${siteUrl}/esli-teknik-konya-hero-background.webp`, datePublished: "2026-09-11", dateModified: "2026-09-11", inLanguage: "tr-TR", author: { "@type": "Organization", name: "EŞLİ TEKNİK", url: siteUrl }, publisher: { "@type": "Organization", name: "EŞLİ TEKNİK", url: siteUrl, logo: { "@type": "ImageObject", url: `${siteUrl}/favicon.png` } }, mainEntityOfPage: { "@id": `${url}#webpage` }, articleSection: "Arıza Rehberleri" });
+  }
+
   if (route === "/sss/") {
     graph.push({
       "@type": "FAQPage",
@@ -193,6 +206,7 @@ for (const [route, [title, description]] of Object.entries(routes)) {
   html = html.replace(/<meta property="og:image" content="[^"]*"\s*\/>/, `<meta property="og:image" content="${siteUrl}/esli-teknik-konya-hero-background.webp" />`);
   html = html.replace(/<meta name="twitter:image" content="[^"]*"\s*\/>/, `<meta name="twitter:image" content="${siteUrl}/esli-teknik-konya-hero-background.webp" />`);
   html = html.replace(/<meta property="og:url" content="[^"]*"\s*\/>/, `<meta property="og:url" content="${url}" />`);
+  if (route.startsWith("/blog/")) html = html.replace('<meta property="og:type" content="website" />', '<meta property="og:type" content="article" />');
   if (!html.includes('property="og:url"')) html = html.replace("</head>", `<meta property="og:url" content="${url}" />\n  </head>`);
   html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">${jsonLd(title, description, url, route)}</script>`);
   html = html.replace('<div id="root"></div>', `<div id="root">${staticContent(title, description, route)}</div>`);

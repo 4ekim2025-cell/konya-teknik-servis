@@ -64,6 +64,12 @@ for (const [slug, name] of brands) {
 const extra: Record<string, [string, string]> = {
   "/": ["EŞLİ TEKNİK | Konya Beyaz Eşya Teknik Servisi", defaultDescription],
   "/online-servis-takibi/": ["Online Servis Takibi | Eşli Teknik Konya", "Eşli Teknik servis kaydınızın durumunu online takip edin. Size iletilen takip bağlantısı üzerinden servis sürecini görüntüleyebilirsiniz."],
+  "/blog/": ["Bilgi Merkezi | Eşli Teknik Konya", "Konya beyaz eşya arıza rehberleri ve güvenli servis öncesi kontroller."],
+  "/blog/bulasik-makinesi-suyu-bosaltmiyor/": ["Bulaşık Makinesi Suyu Boşaltmıyor | Eşli Teknik", "Bulaşık makinesi suyu boşaltmıyorsa güvenli kontrolleri ve Konya servis rehberini inceleyin."],
+  "/blog/buzdolabi-sogutmuyor-konya/": ["Buzdolabı Soğutmuyor | Eşli Teknik", "Buzdolabı soğutmuyorsa güvenli kontrolleri ve Konya teknik servis rehberini inceleyin."],
+  "/blog/camasir-makinesi-su-almiyor-konya/": ["Çamaşır Makinesi Su Almıyor | Eşli Teknik", "Çamaşır makinesi su almıyorsa güvenli kontrolleri ve Konya servis rehberini inceleyin."],
+  "/blog/firin-isitmiyor-konya/": ["Fırın Isıtmıyor | Eşli Teknik", "Fırın ısıtmıyorsa güvenli kontrolleri ve Konya servis rehberini inceleyin."],
+  "/blog/kurutma-makinesi-kurutmuyor/": ["Kurutma Makinesi Kurutmuyor | Eşli Teknik", "Kurutma makinesi kurutmuyorsa güvenli kontrolleri ve Konya servis rehberini inceleyin."],
   "/tum-markalar/": ["Konya Beyaz Eşya Servis Markaları | Eşli Teknik", "Eşli Teknik, Konya’da birçok beyaz eşya ve küçük ev aleti markası için teknik servis desteği sunar."],
   "/sss/": ["Sık Sorulan Sorular | Eşli Teknik Konya", "Eşli Teknik beyaz eşya servisi hakkında sık sorulan sorular, servis süreci, iletişim ve online takip bilgileri."],
   "/iletisim/": ["İletişim | Eşli Teknik Konya", "Eşli Teknik Konya beyaz eşya teknik servisine WhatsApp veya telefon üzerinden ulaşın."],

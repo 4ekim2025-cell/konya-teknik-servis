@@ -894,3 +894,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Akıllı ön bilgi: diğer ana bölümlerle uyumlu transparan teknik teşhis işareti. */
 .diagnostic-section{position:relative;overflow:hidden}.diagnostic-watermark{position:absolute;z-index:0;right:-92px;top:-112px;width:430px;height:430px;color:var(--brand-cream);opacity:.085;pointer-events:none}.diagnostic-intro,.diagnostic-panel{position:relative;z-index:1}@media(max-width:860px){.diagnostic-watermark{right:-100px;top:-86px;width:300px;height:300px;opacity:.07}}
+
+/* Diagnostic watermark görünürlük düzeltmesi: dekoratif halka üzerinde, içeriklerin altında. */
+.diagnostic-section .diagnostic-watermark{z-index:1!important;color:#fcf5db!important;opacity:.22!important}.diagnostic-section .diagnostic-intro,.diagnostic-section .diagnostic-panel{z-index:2}

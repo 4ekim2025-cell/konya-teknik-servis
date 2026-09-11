@@ -106,7 +106,7 @@ export function SmartInfoModal() {
     window.setTimeout(() => { window.location.href = `${SITE_WHATSAPP_HREF}?text=${encodeURIComponent(message)}`; }, 620);
   }
 
-  return <section className="diagnostic-section smart-info-section" aria-labelledby="diagnostic-title">
+  return <section className="diagnostic-section smart-info-section" aria-labelledby="diagnostic-title"><Gauge className="smart-info-watermark" aria-hidden="true" strokeWidth={1.1} />
     <div className="diagnostic-intro">
       <span className="section-kicker">AKILLI ÖN BİLGİ</span>
       <h2 id="diagnostic-title">Üç kısa adımda<br /><em>bize ulaşın.</em></h2>

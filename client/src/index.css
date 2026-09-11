@@ -897,3 +897,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Diagnostic watermark görünürlük düzeltmesi: dekoratif halka üzerinde, içeriklerin altında. */
 .diagnostic-section .diagnostic-watermark{z-index:1!important;color:#fcf5db!important;opacity:.22!important}.diagnostic-section .diagnostic-intro,.diagnostic-section .diagnostic-panel{z-index:2}
+
+/* Gerçek AKILLI ÖN BİLGİ bölümü: açık zeminde görünür transparan dekoratif watermark. */
+.smart-info-section .smart-info-watermark{position:absolute;z-index:0;right:-92px;top:-112px;width:430px;height:430px;color:var(--brand-teal);opacity:.13;pointer-events:none}.smart-info-section .diagnostic-intro,.smart-info-section .smart-info-preview{position:relative;z-index:2}@media(max-width:860px){.smart-info-section .smart-info-watermark{right:-100px;top:-86px;width:300px;height:300px;opacity:.1}}

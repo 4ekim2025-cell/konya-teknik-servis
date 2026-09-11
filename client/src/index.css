@@ -909,3 +909,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* AKILLI ÖN BİLGİ: temiz ve nötr arka plan. */
 .smart-info-section{background:#fdfdfd!important}
+
+/* MERAK EDİLENLER: AKILLI ÖN BİLGİ alanıyla uyumlu nötr arka plan. */
+.faq-section{background:#fdfdfd!important}

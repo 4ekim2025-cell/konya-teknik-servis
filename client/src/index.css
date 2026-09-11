@@ -915,3 +915,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* ŞEFFAF SERVİS YAKLAŞIMI: açık ve nötr arka plan. */
 .proof-section{background:#fdfdfd!important}
+
+/* ŞEFFAF SERVİS YAKLAŞIMI: sıcak, açık servis yüzeyi. */
+.proof-section{background:#fffcf4!important}

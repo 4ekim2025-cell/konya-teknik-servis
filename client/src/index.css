@@ -924,3 +924,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* ŞEFFAF SERVİS YAKLAŞIMI: bölüm ayrım çizgisi. */
 .proof-section{border-bottom:1px solid #e1d7c8}
+
+/* Online servis takibi: canlı ilerleme ve durum akışını temsil eden transparan simge. */
+.tracking-section{position:relative;overflow:hidden}.tracking-watermark{position:absolute;z-index:0;right:-92px;top:-112px;width:430px;height:430px;color:var(--brand-teal);opacity:.09;pointer-events:none}.tracking-visual,.tracking-content{position:relative;z-index:1}@media(max-width:860px){.tracking-watermark{right:-100px;top:-86px;width:300px;height:300px;opacity:.07}}

@@ -921,3 +921,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* AKILLI ÖN BİLGİ: bölüm ayrım çizgisi. */
 .smart-info-section{border-bottom:1px solid #e1d7c8}
+
+/* ŞEFFAF SERVİS YAKLAŞIMI: bölüm ayrım çizgisi. */
+.proof-section{border-bottom:1px solid #e1d7c8}

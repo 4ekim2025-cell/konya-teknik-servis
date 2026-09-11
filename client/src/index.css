@@ -918,3 +918,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* ŞEFFAF SERVİS YAKLAŞIMI: sıcak, açık servis yüzeyi. */
 .proof-section{background:#fffcf4!important}
+
+/* AKILLI ÖN BİLGİ: bölüm ayrım çizgisi. */
+.smart-info-section{border-bottom:1px solid #e1d7c8}

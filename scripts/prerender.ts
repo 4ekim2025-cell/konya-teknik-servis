@@ -206,7 +206,7 @@ for (const [route, [title, description]] of Object.entries(routes)) {
   html = html.replace(/<meta property="og:image" content="[^"]*"\s*\/>/, `<meta property="og:image" content="${siteUrl}/esli-teknik-konya-hero-background.webp" />`);
   html = html.replace(/<meta name="twitter:image" content="[^"]*"\s*\/>/, `<meta name="twitter:image" content="${siteUrl}/esli-teknik-konya-hero-background.webp" />`);
   html = html.replace(/<meta property="og:url" content="[^"]*"\s*\/>/, `<meta property="og:url" content="${url}" />`);
-  if (route.startsWith("/blog/")) html = html.replace('<meta property="og:type" content="website" />', '<meta property="og:type" content="article" />');
+  if (route.startsWith("/blog/") && route !== "/blog/") html = html.replace('<meta property="og:type" content="website" />', '<meta property="og:type" content="article" />');
   if (!html.includes('property="og:url"')) html = html.replace("</head>", `<meta property="og:url" content="${url}" />\n  </head>`);
   html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">${jsonLd(title, description, url, route)}</script>`);
   html = html.replace('<div id="root"></div>', `<div id="root">${staticContent(title, description, route)}</div>`);

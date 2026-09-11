@@ -912,3 +912,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* MERAK EDİLENLER: AKILLI ÖN BİLGİ alanıyla uyumlu nötr arka plan. */
 .faq-section{background:#fdfdfd!important}
+
+/* ŞEFFAF SERVİS YAKLAŞIMI: açık ve nötr arka plan. */
+.proof-section{background:#fdfdfd!important}

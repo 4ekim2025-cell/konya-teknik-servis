@@ -891,3 +891,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Hizmetlerimiz: hizmet rehberindeki transparan dekoratif ikon diliyle uyumlu arka plan işareti. */
 .services-section{position:relative;overflow:hidden}.services-watermark{position:absolute;z-index:0;right:-92px;top:-112px;width:430px;height:430px;color:var(--brand-teal);opacity:.075;pointer-events:none}.services-heading,.service-grid{position:relative;z-index:1}@media(max-width:860px){.services-watermark{right:-100px;top:-86px;width:300px;height:300px;opacity:.065}}
+
+/* Akıllı ön bilgi: diğer ana bölümlerle uyumlu transparan teknik teşhis işareti. */
+.diagnostic-section{position:relative;overflow:hidden}.diagnostic-watermark{position:absolute;z-index:0;right:-92px;top:-112px;width:430px;height:430px;color:var(--brand-cream);opacity:.085;pointer-events:none}.diagnostic-intro,.diagnostic-panel{position:relative;z-index:1}@media(max-width:860px){.diagnostic-watermark{right:-100px;top:-86px;width:300px;height:300px;opacity:.07}}

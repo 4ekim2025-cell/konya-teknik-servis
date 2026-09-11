@@ -882,3 +882,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Harita, iletişim kolonunun tamamını kullanır; başlık alanı kaldırılmıştır. */
 .contact-page .contact-map-wrap{padding:0}.contact-map{height:560px}@media(max-width:860px){.contact-map{height:440px}}
+
+/* Garanti bölümü tipografisi, online servis takibi dokümanıyla eşleştirildi. */
+.guarantee-intro h2{font-size:clamp(34px,3.7vw,56px);font-weight:900;line-height:.98;letter-spacing:-.065em}.guarantee-intro>p{font-size:16px;line-height:1.72}.guarantee-panel-head strong{font-size:17px;font-weight:800;line-height:1.25;letter-spacing:-.03em}.guarantee-list h3{font-size:20px;font-weight:800;line-height:1.2;letter-spacing:-.035em}.guarantee-list p{font-size:14px;line-height:1.68}.guarantee-note p{font-size:14px;line-height:1.68}@media(max-width:860px){.guarantee-intro h2{font-size:clamp(34px,9.8vw,47px)}.guarantee-intro>p{font-size:14px;line-height:1.68}.guarantee-list h3{font-size:17px}.guarantee-list p,.guarantee-note p{font-size:14px;line-height:1.68}.guarantee-panel-head strong{font-size:16px}}

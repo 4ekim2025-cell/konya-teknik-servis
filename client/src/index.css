@@ -933,3 +933,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* İletişim hero: sağ üst dekoratif halkalar yerine konum/harita simgesi. */
 .contact-hero:before{display:none}.contact-hero:after{top:-182px;right:-126px;width:520px;height:520px;border:1px solid rgba(252,245,219,.12);border-radius:50%;box-shadow:0 0 0 62px rgba(252,245,219,.035),0 0 0 124px rgba(252,245,219,.018)}.contact-hero-watermark{position:absolute;z-index:0;right:clamp(32px,10vw,180px);top:-88px;width:350px;height:350px;color:#fcf5db;opacity:.2;pointer-events:none}.contact-hero>div{position:relative;z-index:1}@media(max-width:860px){.contact-hero:after{top:-135px;right:-190px;width:360px;height:360px}.contact-hero-watermark{right:26px;top:-64px;width:245px;height:245px;opacity:.16}}
+
+/* Hakkımızda hero: görsel yığını yerine kurumsal kimliği temsil eden kalkan simgesi. */
+.about-hero:before,.about-hero:after{display:none}.about-hero-watermark{position:absolute;z-index:0;right:clamp(32px,10vw,180px);top:-88px;width:350px;height:350px;color:#fcf5db;opacity:.2;pointer-events:none}.about-hero>div{position:relative;z-index:1}@media(max-width:860px){.about-hero-watermark{right:26px;top:-64px;width:245px;height:245px;opacity:.16}}

@@ -958,7 +958,3 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 /* ARIZA REHBERLERİ: nötr yüzey ve kart sınırları içinde konu ikonları. */
 .home-repair-guides{background:#fdfdfd!important}.home-repair-guide-card{position:relative;overflow:hidden}.home-repair-guide-card>div,.home-repair-guide-card>svg:last-child{position:relative;z-index:1}.home-repair-guide-card>.home-repair-guide-watermark{position:absolute;z-index:0;right:-24px;bottom:-27px;width:142px;height:142px;color:var(--brand-teal);opacity:.09;pointer-events:none}.home-repair-guide-card:hover>.home-repair-guide-watermark{opacity:.14;color:var(--brand-burgundy)}.home-repair-guide-card>svg:last-child{grid-row:3;justify-self:end}
 @media(max-width:860px){.home-repair-guide-card>.home-repair-guide-watermark{right:-18px;bottom:-23px;width:112px;height:112px}.home-repair-guide-card>svg:last-child{grid-column:3;grid-row:1}}
-
-/* ARIZA REHBERLERİ hizalama düzeltmesi: hizmetler ve takip bölümleriyle aynı merkez ekseni. */
-.home-repair-guides{padding-left:0;padding-right:0}.home-repair-guides-head,.home-repair-guides-grid,.home-repair-guides-link{width:min(calc(100% - 60px),1280px);margin-left:auto;margin-right:auto}.home-repair-guides-grid{margin-top:40px}.home-repair-guides-link{display:flex;width:min(calc(100% - 60px),1280px);margin-top:26px}
-@media(max-width:860px){.home-repair-guides{padding-left:0;padding-right:0}.home-repair-guides-head,.home-repair-guides-grid,.home-repair-guides-link{width:calc(100% - 40px)}.home-repair-guides-grid{margin-top:28px}}

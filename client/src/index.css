@@ -903,3 +903,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Şeffaf servis yaklaşımı: güven ve açıklığı temsil eden transparan kalkan simgesi. */
 .proof-section{position:relative;overflow:hidden}.proof-watermark{position:absolute;z-index:0;right:-92px;top:-112px;width:430px;height:430px;color:var(--brand-teal);opacity:.095;pointer-events:none}.proof-image,.proof-copy{position:relative;z-index:1}@media(max-width:860px){.proof-watermark{right:-100px;top:-86px;width:300px;height:300px;opacity:.075}}
+
+/* Merak edilenler: soru-cevap temasını taşıyan transparan yardım simgesi. */
+.faq-section{position:relative;overflow:hidden}.faq-watermark{position:absolute;z-index:0;right:-92px;top:-112px;width:430px;height:430px;color:var(--brand-teal);opacity:.09;pointer-events:none}.faq-heading,.faq-list{position:relative;z-index:1}@media(max-width:860px){.faq-watermark{right:-100px;top:-86px;width:300px;height:300px;opacity:.07}}

@@ -961,3 +961,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Mobil arıza rehberleri: uzun başlık ve açıklamaların kart içinde güvenli kırılması. */
 @media(max-width:860px){.home-repair-guide-card{width:100%;min-width:0;box-sizing:border-box;align-items:center}.home-repair-guide-card>div{min-width:0;overflow-wrap:anywhere}.home-repair-guide-card h3{max-width:100%;overflow-wrap:anywhere;word-break:normal;line-height:1.22}.home-repair-guide-card p{max-width:100%;overflow-wrap:anywhere;line-height:1.55}.home-repair-guide-card>svg:last-child{width:18px;height:18px;flex:0 0 18px}}
+
+/* Mobil kart grid düzeltmesi: kaldırılan numara için ayrılmış boş kolonu kaldır. */
+@media(max-width:860px){.home-repair-guide-card,.home-repair-guide-card:last-child{grid-template-columns:minmax(0,1fr) 18px;grid-template-rows:auto;column-gap:14px}.home-repair-guide-card>div{grid-column:1;grid-row:1}.home-repair-guide-card>svg:last-child{grid-column:2;grid-row:1;align-self:center}.home-repair-guide-card h3{margin-top:6px;font-size:16px;line-height:1.2}.home-repair-guide-card p{margin-top:6px}}

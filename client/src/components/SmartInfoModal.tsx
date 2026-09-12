@@ -49,7 +49,7 @@ function StepIndicator({ step }: { step: number }) {
   </div>;
 }
 
-export function SmartInfoModal() {
+export function SmartInfoModal({ standalone = false }: { standalone?: boolean } = {}) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [device, setDevice] = useState("Çamaşır Makinesi");
@@ -106,7 +106,7 @@ export function SmartInfoModal() {
     window.setTimeout(() => { window.location.href = `${SITE_WHATSAPP_HREF}?text=${encodeURIComponent(message)}`; }, 620);
   }
 
-  return <section className="diagnostic-section smart-info-section" aria-labelledby="diagnostic-title"><Gauge className="smart-info-watermark" aria-hidden="true" strokeWidth={1.1} />
+  return <>{!standalone && <section className="diagnostic-section smart-info-section" aria-labelledby="diagnostic-title"><Gauge className="smart-info-watermark" aria-hidden="true" strokeWidth={1.1} />
     <div className="diagnostic-intro">
       <span className="section-kicker">AKILLI ÖN BİLGİ</span>
       <h2 id="diagnostic-title">Üç kısa adımda<br /><em>bize ulaşın.</em></h2>
@@ -119,7 +119,7 @@ export function SmartInfoModal() {
       <div className="smart-preview-head"><span className="section-kicker">KOLAY SERVİS TALEBİ</span><span className="smart-preview-status"><i /> 3 adım</span></div>
       <div className="smart-preview-flow"><div><b>01</b><span><strong>Cihaz</strong><small>Ürün grubunu seçin</small></span></div><div><b>02</b><span><strong>Arıza</strong><small>Belirtiyi işaretleyin</small></span></div><div><b>03</b><span><strong>Detaylar</strong><small>İlçe ve model ekleyin</small></span></div></div>
       <div className="smart-preview-footer"><span><MessageCircle size={15} /> WhatsApp mesajınız hazır</span><button type="button" className="text-link" onClick={() => setOpen(true)}>Servis talebi oluştur <ArrowRight size={16} /></button></div>
-    </div>
+    </div></section>}
 
     {open && <div className="smart-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>
       <div className="smart-modal" role="dialog" aria-modal="true" aria-labelledby="smart-modal-title">
@@ -134,7 +134,7 @@ export function SmartInfoModal() {
         <footer className="smart-modal-footer"><button type="button" className="button button-ghost dark-ghost" onClick={back}><ArrowLeft size={16} /> {step === 1 ? "Kapat" : "Geri"}</button>{step < 4 ? <button type="button" className="button button-primary" aria-disabled={!canContinue} onClick={next}>Devam et <ArrowRight size={16} /></button> : <button type="button" className="button button-primary" disabled={!canContinue || isSending} onClick={sendWhatsApp}><MessageCircle size={17} />{isSending ? "WhatsApp açılıyor…" : "WhatsApp’tan bilgi ver"}</button>}</footer>
       </div>
     </div>}
-  </section>;
+  </>;
 }
 
 function stepLabel(step: number) { return ["Cihaz", "Arıza", "Detaylar"][step - 1]; }

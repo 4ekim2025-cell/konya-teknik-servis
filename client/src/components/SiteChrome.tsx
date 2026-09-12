@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { ChevronDown, Clock3, Droplets, Fan, Flame, Gauge, House, Info, LayoutGrid, MapPin, Menu, MessageCircle, Mail, Phone, Refrigerator, Sparkles, Tags, WashingMachine, Wrench, X } from "lucide-react";
 import { useLocation } from "wouter";
 import { SITE_PHONE_DISPLAY, SITE_PHONE_HREF, SITE_WHATSAPP_LINK } from "@/siteConfig";
+import { SmartInfoModal } from "@/components/SmartInfoModal";
 
 export const contactPhone = SITE_PHONE_DISPLAY;
 export const contactPhoneHref = SITE_PHONE_HREF;
@@ -200,5 +201,5 @@ export function FloatingActions() {
 }
 
 export function SiteChrome({ children }: { children: ReactNode }) {
-  return <><Header /><main>{children}</main><Footer /><FloatingActions /></>;
+  return <><Header /><main>{children}</main><SmartInfoModal standalone /><Footer /><FloatingActions /></>;
 }

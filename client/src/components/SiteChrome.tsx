@@ -157,7 +157,7 @@ export function Header() {
             <div className="mega-column mega-quick-links"><b><MessageCircle size={16} />Hızlı erişim</b><a href="/online-servis-takibi/">Online Servis Takibi</a><a href="/tum-markalar/">Hizmet Verilen Markalar</a><a href="/sss/">Sık Sorulan Sorular</a>{rememberedService && <><b className="recent-heading"><Clock3 size={15} />Son görüntülenen</b><a className="recent-service" href={rememberedService.href} onClick={() => follow(rememberedService.href)}><rememberedService.Icon size={16} /><span>{rememberedService.name}</span><i>→</i></a></>}<b className="issue-heading"><Wrench size={15} />Sık görülen arızalar</b>{commonIssues.map(({ name, href }) => <a href={href} onClick={() => setMegaOpen(false)} className="issue-link" key={name}>{name}<span>→</span></a>)}</div>
           </div>}
         </div>
-        <a className="preform-shortcut" href="/#on-bilgi-formu" aria-label="WhatsApp üzerinden hızlı servis talebi oluştur"><MessageCircle size={14} /><span>Hızlı servis talebi</span></a>
+        <button type="button" className="preform-shortcut" onClick={() => window.dispatchEvent(new Event("esli:open-smart-info"))} aria-label="Ön bilgi formunu aç"><MessageCircle size={14} /><span>Hızlı servis talebi</span></button>
       </div>
       <div className="subrow-meta">
         <p><span className="live-dot" />Konya’da online takipli teknik servis</p>

@@ -971,3 +971,23 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Blog bağlantısı: KVKK yanında düz metin görünümü. */
 .header-blog-link{display:inline!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;color:inherit!important;font:inherit!important;text-decoration:none!important;transform:none!important}.header-blog-link:hover{background:none!important;color:var(--brand-burgundy)!important;text-decoration:underline!important;transform:none!important}
+
+/* Header alt satırı: servis eylemini ve güven sinyallerini ayrı ritimlerde düzenler. */
+.header-subrow{height:48px;max-width:1440px;padding:0 30px;gap:24px;justify-content:space-between;background:#fff;border-top:1px solid #ece8e2}
+.subrow-primary,.subrow-meta{display:flex;align-items:center;min-width:0;gap:10px}
+.subrow-primary{flex:0 0 auto}
+.subrow-meta{justify-content:flex-end;gap:18px}
+.subrow-meta p{white-space:nowrap}
+.subrow-meta>a{display:inline-flex;align-items:center;gap:5px;margin-left:0!important;padding:6px 0;color:#716b64;font-size:10px;font-weight:800;white-space:nowrap;transition:color .18s var(--ease)}
+.subrow-meta>a:hover{color:var(--red)}
+.subrow-meta .subrow-legal{padding-left:18px;border-left:1px solid #e4dfd8;color:#9a542a;font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.subrow-meta .subrow-legal:hover{color:var(--red)}
+.header-subrow .services-nav{height:32px;display:inline-flex;align-items:center;gap:7px;padding:0 13px;border:1px solid #242220;border-radius:7px;background:#242220;color:#fff;font:900 10px Manrope,sans-serif;letter-spacing:.02em;transition:background .18s var(--ease),color .18s var(--ease),transform .18s var(--ease)}
+.header-subrow .services-nav:hover,.header-subrow .services-nav.open,.header-subrow .services-nav.active{background:var(--red);border-color:var(--red);transform:translateY(-1px)}
+.header-subrow .preform-shortcut{height:32px;padding:0 12px;border-radius:7px!important;box-shadow:none!important;font-size:10px!important;white-space:nowrap}
+.header-subrow .preform-shortcut:hover{transform:translateY(-1px)}
+.header-subrow .subrow-services{position:relative!important}
+@media(min-width:861px){.header-subrow .mega-menu{top:calc(100% + 9px)!important;left:0!important;min-width:760px;max-width:min(900px,calc(100vw - 60px));transform:none!important}}
+@media(max-width:860px){.header-subrow{height:auto;min-height:0;display:flex;align-items:stretch;flex-direction:column;gap:10px;padding:11px 25px 12px}.subrow-primary{width:100%;justify-content:space-between;gap:10px}.subrow-primary .subrow-services{flex:1 1 auto}.subrow-primary .services-nav{width:100%;justify-content:center}.subrow-primary .preform-shortcut{flex:0 0 auto}.subrow-meta{width:100%;justify-content:space-between;gap:10px;padding-top:9px;border-top:1px solid #eee9e3}.subrow-meta p{overflow:hidden;text-overflow:ellipsis;font-size:10px}.subrow-meta>a{font-size:10px}.subrow-meta .subrow-legal{padding-left:10px}.header-subrow .mega-menu{position:absolute!important;top:calc(100% + 8px)!important;left:0!important;right:0!important;min-width:0!important;max-width:none!important;transform:none!important}}
+@media(max-width:480px){.header-subrow{padding:10px 16px 11px;gap:9px}.subrow-primary{gap:7px}.header-subrow .services-nav{padding:0 9px;font-size:9px}.header-subrow .preform-shortcut{padding:0 9px;font-size:9px!important}.subrow-meta{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px}.subrow-meta p{grid-column:1 / -1;justify-content:center}.subrow-meta>a{justify-content:center}}
+

@@ -148,19 +148,24 @@ export function Header() {
     </div>
 
     <div className="header-subrow">
-      <div className="services-menu-wrap subrow-services" ref={servicesMenuRef}>
-        <button type="button" className={`services-nav ${megaOpen ? "open" : ""} ${servicesActive ? "active" : ""}`} onClick={() => { setBrandsMegaOpen(false); setMegaOpen(!megaOpen); }} aria-expanded={megaOpen} aria-haspopup="menu"><Wrench size={15} /><span>Hizmetler</span><ChevronDown size={13} /></button>
-        {megaOpen && <div className="mega-menu" role="menu">
-          <div className="mega-services"><b><Wrench size={16} />Cihaz kategorileri</b><div className="mega-services-grid">{services.map(({ name, href, Icon, note }) => <a href={href} onClick={() => follow(href)} className="mega-service-card" key={href}><span><Icon size={21} /></span><strong>{name}</strong><small>{note}</small></a>)}</div></div>
-          <div className="mega-column"><b><MapPin size={16} />Hizmet bölgeleri</b><a href="/karatay/">Karatay</a><a href="/meram/">Meram</a><a href="/selcuklu/">Selçuklu</a></div>
-          <div className="mega-column mega-quick-links"><b><MessageCircle size={16} />Hızlı erişim</b><a href="/online-servis-takibi/">Online Servis Takibi</a><a href="/tum-markalar/">Hizmet Verilen Markalar</a><a href="/sss/">Sık Sorulan Sorular</a>{rememberedService && <><b className="recent-heading"><Clock3 size={15} />Son görüntülenen</b><a className="recent-service" href={rememberedService.href} onClick={() => follow(rememberedService.href)}><rememberedService.Icon size={16} /><span>{rememberedService.name}</span><i>→</i></a></>}<b className="issue-heading"><Wrench size={15} />Sık görülen arızalar</b>{commonIssues.map(({ name, href }) => <a href={href} onClick={() => setMegaOpen(false)} className="issue-link" key={name}>{name}<span>→</span></a>)}</div>
-        </div>}
+      <div className="subrow-primary">
+        <div className="services-menu-wrap subrow-services" ref={servicesMenuRef}>
+          <button type="button" className={`services-nav ${megaOpen ? "open" : ""} ${servicesActive ? "active" : ""}`} onClick={() => { setBrandsMegaOpen(false); setMegaOpen(!megaOpen); }} aria-expanded={megaOpen} aria-haspopup="menu"><Wrench size={15} /><span>Hizmetler</span><ChevronDown size={13} /></button>
+          {megaOpen && <div className="mega-menu" role="menu">
+            <div className="mega-services"><b><Wrench size={16} />Cihaz kategorileri</b><div className="mega-services-grid">{services.map(({ name, href, Icon, note }) => <a href={href} onClick={() => follow(href)} className="mega-service-card" key={href}><span><Icon size={21} /></span><strong>{name}</strong><small>{note}</small></a>)}</div></div>
+            <div className="mega-column"><b><MapPin size={16} />Hizmet bölgeleri</b><a href="/karatay/">Karatay</a><a href="/meram/">Meram</a><a href="/selcuklu/">Selçuklu</a></div>
+            <div className="mega-column mega-quick-links"><b><MessageCircle size={16} />Hızlı erişim</b><a href="/online-servis-takibi/">Online Servis Takibi</a><a href="/tum-markalar/">Hizmet Verilen Markalar</a><a href="/sss/">Sık Sorulan Sorular</a>{rememberedService && <><b className="recent-heading"><Clock3 size={15} />Son görüntülenen</b><a className="recent-service" href={rememberedService.href} onClick={() => follow(rememberedService.href)}><rememberedService.Icon size={16} /><span>{rememberedService.name}</span><i>→</i></a></>}<b className="issue-heading"><Wrench size={15} />Sık görülen arızalar</b>{commonIssues.map(({ name, href }) => <a href={href} onClick={() => setMegaOpen(false)} className="issue-link" key={name}>{name}<span>→</span></a>)}</div>
+          </div>}
+        </div>
+        <a className="preform-shortcut" href="/#on-bilgi-formu" aria-label="WhatsApp üzerinden hızlı servis talebi oluştur"><MessageCircle size={14} /><span>Hızlı servis talebi</span></a>
       </div>
-      <a className="preform-shortcut" href="/#on-bilgi-formu" aria-label="WhatsApp üzerinden hızlı servis talebi oluştur"><MessageCircle size={14} /><span>Hızlı servis talebi</span></a>
-      <p><span className="live-dot" />Konya’da online takipli teknik servis</p>
-      <a href="/online-servis-takibi/">Takip nasıl çalışır? →</a>
-      <a href="/kvkk/">KVKK</a>
-      <a href="/blog/" className="header-blog-link">Blog</a>
+      <div className="subrow-meta">
+        <p><span className="live-dot" />Konya’da online takipli teknik servis</p>
+        <a href="/online-servis-takibi/">Takip nasıl çalışır? <span aria-hidden="true">→</span></a>
+        <a className="subrow-legal" href="/kvkk/">KVKK</a>
+      </div>
+        <a className="header-blog-link" href="/blog/">Blog</a>
+
     </div>
 
     {mobileOpen && <nav className="mobile-nav" aria-label="Mobil menü">

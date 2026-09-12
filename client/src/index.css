@@ -991,3 +991,45 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 @media(max-width:860px){.header-subrow{height:auto;min-height:0;display:flex;align-items:stretch;flex-direction:column;gap:10px;padding:11px 25px 12px}.subrow-primary{width:100%;justify-content:space-between;gap:10px}.subrow-primary .subrow-services{flex:1 1 auto}.subrow-primary .services-nav{width:100%;justify-content:center}.subrow-primary .preform-shortcut{flex:0 0 auto}.subrow-meta{width:100%;justify-content:space-between;gap:10px;padding-top:9px;border-top:1px solid #eee9e3}.subrow-meta p{overflow:hidden;text-overflow:ellipsis;font-size:10px}.subrow-meta>a{font-size:10px}.subrow-meta .subrow-legal{padding-left:10px}.header-subrow .mega-menu{position:absolute!important;top:calc(100% + 8px)!important;left:0!important;right:0!important;min-width:0!important;max-width:none!important;transform:none!important}}
 @media(max-width:480px){.header-subrow{padding:10px 16px 11px;gap:9px}.subrow-primary{gap:7px}.header-subrow .services-nav{padding:0 9px;font-size:9px}.header-subrow .preform-shortcut{padding:0 9px;font-size:9px!important}.subrow-meta{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px}.subrow-meta p{grid-column:1 / -1;justify-content:center}.subrow-meta>a{justify-content:center}}
 
+
+
+/* Header alt satırı v2: eylem, canlı durum ve yardımcı bağlantılar için üç net bölge. */
+.header-subrow{height:52px;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:30px;padding:0 30px;background:#f8f6f2;border-top:1px solid #e4ded5;border-bottom:1px solid #e4ded5}
+.subrow-primary{display:flex;align-items:center;gap:9px;min-width:0}
+.header-subrow .services-nav{height:34px;padding:0 14px;border:0;border-radius:5px;background:#242220;color:#fff;font:900 10px Manrope,sans-serif;letter-spacing:.03em;box-shadow:4px 4px 0 rgba(200,90,24,.22);transition:background .18s var(--ease),transform .18s var(--ease),box-shadow .18s var(--ease)}
+.header-subrow .services-nav:hover,.header-subrow .services-nav.open,.header-subrow .services-nav.active{background:var(--red);transform:translateY(-1px);box-shadow:4px 5px 0 rgba(36,34,32,.16)}
+.header-subrow .preform-shortcut{height:34px;padding:0 13px;border:1px solid #e5b99d!important;border-radius:5px!important;background:#fff!important;color:#9a451b!important;box-shadow:none!important;font-size:10px!important;white-space:nowrap;transition:background .18s var(--ease),color .18s var(--ease),transform .18s var(--ease)}
+.header-subrow .preform-shortcut:hover{background:#fff0e5!important;color:#7c310f!important;transform:translateY(-1px)}
+.subrow-meta{display:flex;align-items:center;justify-content:space-between;gap:20px;min-width:0}
+.subrow-meta>p{display:flex;align-items:center;gap:9px;margin:0;color:#6b655e;font-size:10px;font-weight:800;letter-spacing:.01em;white-space:nowrap}
+.subrow-meta .live-dot{height:6px;width:6px;background:#2d9d68;box-shadow:0 0 0 4px rgba(45,157,104,.12)}
+.subrow-links{display:flex;align-items:center;gap:0;flex:0 0 auto;border:1px solid #ddd5ca;border-radius:5px;background:#fff;overflow:hidden}
+.subrow-links>a{display:inline-flex;align-items:center;gap:5px;height:29px;padding:0 11px;color:#746d65;font-size:10px;font-weight:900;white-space:nowrap;transition:background .18s var(--ease),color .18s var(--ease)}
+.subrow-links>a+a{border-left:1px solid #e5dfd7}
+.subrow-links>a:hover{background:#fff0e5;color:var(--red)}
+.subrow-links .header-blog-link{display:inline-flex!important;padding:0 13px!important;border:0!important;border-left:1px solid #e5dfd7!important;border-radius:0!important;background:transparent!important;color:#9a451b!important;font:900 10px Manrope,sans-serif!important;text-decoration:none!important;transform:none!important}
+.subrow-links .header-blog-link:hover{background:#fff0e5!important;color:var(--red)!important;text-decoration:none!important}
+.subrow-links .subrow-legal{padding-left:13px;border-left:1px solid #e5dfd7;color:#8a8178;font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.subrow-links .subrow-legal:hover{color:var(--red)}
+.header-subrow .subrow-services{position:relative!important}
+@media(min-width:861px){.header-subrow .mega-menu{top:calc(100% + 9px)!important;left:0!important;min-width:760px;max-width:min(900px,calc(100vw - 60px));transform:none!important}}
+@media(max-width:860px){
+  .header-subrow{height:auto;display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:11px 25px 12px}
+  .subrow-primary{width:100%;justify-content:stretch}
+  .subrow-primary .subrow-services{flex:1 1 auto}
+  .subrow-primary .services-nav{width:100%;justify-content:center}
+  .subrow-primary .preform-shortcut{flex:0 0 auto}
+  .subrow-meta{width:100%;display:flex;flex-direction:column;align-items:stretch;gap:9px;padding-top:10px;border-top:1px solid #e5dfd7}
+  .subrow-meta>p{justify-content:center}
+  .subrow-links{width:100%;justify-content:stretch}
+  .subrow-links>a{flex:1 1 0;justify-content:center}
+  .header-subrow .mega-menu{position:absolute!important;top:calc(100% + 8px)!important;left:0!important;right:0!important;min-width:0!important;max-width:none!important;transform:none!important}
+}
+@media(max-width:480px){
+  .header-subrow{padding:10px 16px 11px}
+  .header-subrow .services-nav,.header-subrow .preform-shortcut{font-size:9px!important}
+  .header-subrow .services-nav{padding:0 9px}
+  .header-subrow .preform-shortcut{padding:0 9px}
+  .subrow-links>a{padding:0 7px;font-size:9px}
+  .subrow-links .header-blog-link{padding:0 8px!important}
+}

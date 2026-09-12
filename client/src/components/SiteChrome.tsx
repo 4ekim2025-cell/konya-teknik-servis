@@ -161,10 +161,12 @@ export function Header() {
       </div>
       <div className="subrow-meta">
         <p><span className="live-dot" />Konya’da online takipli teknik servis</p>
-        <a href="/online-servis-takibi/">Takip nasıl çalışır? <span aria-hidden="true">→</span></a>
-        <a className="subrow-legal" href="/kvkk/">KVKK</a>
+        <nav className="subrow-links" aria-label="Yardımcı bağlantılar">
+          <a href="/online-servis-takibi/">Takip nasıl çalışır? <span aria-hidden="true">→</span></a>
+          <a className="header-blog-link" href="/blog/">Blog</a>
+          <a className="subrow-legal" href="/kvkk/">KVKK</a>
+        </nav>
       </div>
-        <a className="header-blog-link" href="/blog/">Blog</a>
 
     </div>
 

@@ -9,7 +9,7 @@ const robots = readFileSync(resolve(projectRoot, "client", "public", "robots.txt
 const sitemap = readFileSync(resolve(projectRoot, "client", "public", "sitemap.xml"), "utf8");
 const expectedTitle = "EŞLİ TEKNİK | Konya Beyaz Eşya Teknik Servisi";
 const expectedDescription =
-  "Konya’da Meram, Selçuklu ve Karatay ilçelerinde tüm marka ve model beyaz eşyalar ile küçük ev aletleri için Eşli Teknik servis desteği sunar. WhatsApp’tan ulaşın, servis sürecini online takip edin.";
+  "Konya’da beyaz eşya ve küçük ev aletleri teknik servisi. Aynı gün servis, orijinal parça ve online servis takibi için Eşli Teknik’e ulaşın.";
 const productionOrigin = "https://esliteknik.com";
 
 describe("ana sayfa başlığı ve sosyal paylaşım metadatası", () => {

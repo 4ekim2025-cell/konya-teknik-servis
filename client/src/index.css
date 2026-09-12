@@ -996,8 +996,8 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 /* Header alt satırı v2: eylem, canlı durum ve yardımcı bağlantılar için üç net bölge. */
 .header-subrow{height:52px;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:30px;padding:0 30px;background:#f8f6f2;border-top:1px solid #e4ded5;border-bottom:1px solid #e4ded5}
 .subrow-primary{display:flex;align-items:center;gap:9px;min-width:0}
-.header-subrow .services-nav{height:34px;padding:0 14px;border:0;border-radius:5px;background:#242220;color:#fff;font:900 10px Manrope,sans-serif;letter-spacing:.03em;box-shadow:4px 4px 0 rgba(200,90,24,.22);transition:background .18s var(--ease),transform .18s var(--ease),box-shadow .18s var(--ease)}
-.header-subrow .services-nav:hover,.header-subrow .services-nav.open,.header-subrow .services-nav.active{background:var(--red);transform:translateY(-1px);box-shadow:4px 5px 0 rgba(36,34,32,.16)}
+.header-subrow .services-nav{height:34px;padding:0 14px;border:0;border-radius:5px;background:#242220;color:#fff;font:900 10px Manrope,sans-serif;letter-spacing:.03em;box-shadow:none;transition:background .18s var(--ease),transform .18s var(--ease)}
+.header-subrow .services-nav:hover,.header-subrow .services-nav.open,.header-subrow .services-nav.active{background:var(--red);transform:translateY(-1px);box-shadow:none}
 .header-subrow .preform-shortcut{height:34px;padding:0 13px;border:1px solid #e5b99d!important;border-radius:5px!important;background:#fff!important;color:#9a451b!important;box-shadow:none!important;font-size:10px!important;white-space:nowrap;transition:background .18s var(--ease),color .18s var(--ease),transform .18s var(--ease)}
 .header-subrow .preform-shortcut:hover{background:#fff0e5!important;color:#7c310f!important;transform:translateY(-1px)}
 .subrow-meta{display:flex;align-items:center;justify-content:space-between;gap:20px;min-width:0}

@@ -964,3 +964,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 
 /* Mobil kart grid düzeltmesi: kaldırılan numara için ayrılmış boş kolonu kaldır. */
 @media(max-width:860px){.home-repair-guide-card,.home-repair-guide-card:last-child{grid-template-columns:minmax(0,1fr) 18px;grid-template-rows:auto;column-gap:14px}.home-repair-guide-card>div{grid-column:1;grid-row:1}.home-repair-guide-card>svg:last-child{grid-column:2;grid-row:1;align-self:center}.home-repair-guide-card h3{margin-top:6px;font-size:16px;line-height:1.2}.home-repair-guide-card p{margin-top:6px}}
+
+/* Header alt satırı: Bilgi Merkezi hızlı bağlantısı. */
+.header-blog-link{display:inline-flex;align-items:center;justify-content:center;padding:6px 11px;border:1px solid #d8b59f;border-radius:7px;background:#fff7f0;color:var(--brand-burgundy)!important;font:800 11px Manrope,sans-serif;text-decoration:none;transition:background .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease),transform .18s var(--ease)}.header-blog-link:hover{background:var(--brand-burgundy);border-color:var(--brand-burgundy);color:#fff!important;transform:translateY(-1px)}
+@media(max-width:860px){.header-blog-link{display:none}}

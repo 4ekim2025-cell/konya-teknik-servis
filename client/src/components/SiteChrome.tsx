@@ -160,6 +160,7 @@ export function Header() {
       <p><span className="live-dot" />Konya’da online takipli teknik servis</p>
       <a href="/online-servis-takibi/">Takip nasıl çalışır? →</a>
       <a href="/kvkk/">KVKK</a>
+      <a href="/blog/" className="header-blog-link">Bilgi Merkezi</a>
     </div>
 
     {mobileOpen && <nav className="mobile-nav" aria-label="Mobil menü">

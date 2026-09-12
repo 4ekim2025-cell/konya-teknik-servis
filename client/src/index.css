@@ -968,3 +968,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 /* Header alt satırı: Bilgi Merkezi hızlı bağlantısı. */
 .header-blog-link{display:inline-flex;align-items:center;justify-content:center;padding:6px 11px;border:1px solid #d8b59f;border-radius:7px;background:#fff7f0;color:var(--brand-burgundy)!important;font:800 11px Manrope,sans-serif;text-decoration:none;transition:background .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease),transform .18s var(--ease)}.header-blog-link:hover{background:var(--brand-burgundy);border-color:var(--brand-burgundy);color:#fff!important;transform:translateY(-1px)}
 @media(max-width:860px){.header-blog-link{display:none}}
+
+/* Blog bağlantısı: KVKK yanında düz metin görünümü. */
+.header-blog-link{display:inline!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;color:inherit!important;font:inherit!important;text-decoration:none!important;transform:none!important}.header-blog-link:hover{background:none!important;color:var(--brand-burgundy)!important;text-decoration:underline!important;transform:none!important}

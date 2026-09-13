@@ -1033,3 +1033,16 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
   .subrow-links>a{padding:0 7px;font-size:9px}
   .subrow-links .header-blog-link{padding:0 8px!important}
 }
+
+
+/* Instagram akışı: herkese açık profil embed'i; Instagram'daki yeni paylaşımlar sayfa açılışında yenilenir. */
+.instagram-feed-section{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(420px,540px);gap:48px;align-items:start;padding:86px max(30px,calc((100vw - 1280px)/2));background:#fffaf4;border-top:1px solid #e1d7c8}
+.instagram-feed-head{position:sticky;top:30px;display:grid;align-content:start;gap:18px;padding-top:8px}
+.instagram-feed-head h2{margin:12px 0 0;color:var(--brand-teal);font-size:clamp(36px,4vw,58px);letter-spacing:-.06em;line-height:.98}
+.instagram-feed-head h2 em{color:var(--brand-burgundy)}
+.instagram-feed-head p{max-width:430px;margin:0;color:#685f56;font-size:15px;line-height:1.75}
+.instagram-feed-profile{display:inline-flex;align-items:center;gap:7px;width:max-content;color:var(--brand-burgundy);font:900 12px Manrope,sans-serif;text-decoration:none}
+.instagram-feed-profile:hover{color:var(--brand-teal)}
+.instagram-feed-embed{min-width:0;display:flex;justify-content:center;overflow:hidden}
+.instagram-feed-embed .instagram-media{margin:0!important;min-width:280px!important;max-width:540px!important;width:100%!important}
+@media(max-width:860px){.instagram-feed-section{display:block;padding:65px 20px}.instagram-feed-head{position:static;display:block}.instagram-feed-head p{margin-top:20px;font-size:14px}.instagram-feed-profile{margin-top:18px}.instagram-feed-embed{margin-top:30px}}

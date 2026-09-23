@@ -47,7 +47,7 @@ function InstagramFeed() {
     const controller = new AbortController();
     fetch("/api/instagram-feed", { signal: controller.signal })
       .then(response => response.ok ? response.json() : { data: [] })
-      .then(payload => { if (!controller.signal.aborted) setPosts(Array.isArray(payload.data) ? payload.data.slice(0, 9) : []); })
+      .then(payload => { if (!controller.signal.aborted) setPosts(Array.isArray(payload.data) ? payload.data.slice(0, 12) : []); })
       .catch(() => { if (!controller.signal.aborted) setPosts([]); });
     return () => controller.abort();
   }, []);

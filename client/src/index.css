@@ -1116,3 +1116,61 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
   .hero, .hero-inner { min-height: 0; }
   .hero-inner { padding-top: 32px; padding-bottom: 44px; }
 }
+
+/* Ana sayfa ritmi: bütün ana bölümler aynı içerik kenarına oturur. */
+@media (min-width: 861px) {
+  .home-repair-guides,
+  .guarantee-section {
+    padding-right: var(--site-gutter) !important;
+    padding-left: var(--site-gutter) !important;
+  }
+
+  .guarantee-wrap {
+    width: 100%;
+    max-width: none;
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .tracking-section,
+  .home-repair-guides,
+  .guarantee-section,
+  .services-section,
+  .service-guide,
+  .smart-info-section,
+  .proof-section,
+  .faq-section {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+}
+
+@media (max-width: 860px) {
+  .header-row,
+  .hero-inner,
+  .tracking-section,
+  .home-repair-guides,
+  .guarantee-section,
+  .services-section,
+  .instagram-feed-section,
+  .service-guide,
+  .smart-info-section,
+  .proof-section,
+  .faq-section,
+  .site-footer {
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+  }
+
+  .tracking-section,
+  .home-repair-guides,
+  .guarantee-section,
+  .services-section,
+  .service-guide,
+  .smart-info-section,
+  .proof-section,
+  .faq-section {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+}

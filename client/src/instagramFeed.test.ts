@@ -22,6 +22,8 @@ describe("Instagram feed", () => {
     expect(result.body.data).toHaveLength(6);
     expect(result.body.data[0].image_url).toBe(video.thumbnail_url);
     const [url, options] = upstream.mock.calls[0];
+    expect(url.origin).toBe("https://graph.instagram.com");
+    expect(url.pathname).toBe("/v24.0/1234/media");
     expect(url.toString()).not.toContain(env.INSTAGRAM_ACCESS_TOKEN);
     expect(options.headers.Authorization).toBe("Bearer test-token");
   });

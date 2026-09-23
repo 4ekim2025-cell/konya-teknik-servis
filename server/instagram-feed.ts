@@ -29,7 +29,9 @@ export async function getInstagramFeed(
   }
 
   try {
-    const url = new URL(`https://graph.facebook.com/v24.0/${encodeURIComponent(userId)}/media`);
+    // Tokens created with "Instagram API with Instagram Login" are scoped to
+    // the Instagram Graph host, not the Facebook Login Graph host.
+    const url = new URL(`https://graph.instagram.com/v24.0/${encodeURIComponent(userId)}/media`);
     url.searchParams.set("fields", "id,media_type,media_url,thumbnail_url,permalink,timestamp");
     url.searchParams.set("limit", "6");
     const response = await fetchMedia(url, {

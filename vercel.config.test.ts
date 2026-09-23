@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -21,7 +21,7 @@ type VercelConfig = {
   outputDirectory: string;
   trailingSlash: boolean;
   headers: HeaderRule[];
-  routes: RouteRule[];
+  routes?: RouteRule[];
 };
 
 const config = JSON.parse(
@@ -37,10 +37,10 @@ describe("Vercel static SPA configuration", () => {
     expect(config.trailingSlash).toBe(true);
   });
 
-  it("preserves static files, serves known SPA URLs, and keeps an explicit 404 response", () => {
-    expect(config.routes[0]).toEqual({ handle: "filesystem" });
-    expect(config.routes.some(route => route.dest === "/index.html")).toBe(true);
-    expect(config.routes).toContainEqual({ src: "/(.*)", status: 404, dest: "/404.html" });
+  it("lets Vercel resolve prerendered pages, API functions and the custom 404", () => {
+    expect(config.routes).toBeUndefined();
+    expect(existsSync(resolve(process.cwd(), "api/instagram-feed.ts"))).toBe(true);
+    expect(existsSync(resolve(process.cwd(), "client/public/404.html"))).toBe(true);
   });
 
   it("defines immutable asset caching and baseline response headers", () => {

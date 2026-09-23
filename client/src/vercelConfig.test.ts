@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -21,7 +21,7 @@ type VercelConfig = {
   outputDirectory: string;
   trailingSlash: boolean;
   headers: HeaderRule[];
-  routes: RouteRule[];
+  routes?: RouteRule[];
 };
 
 const config = JSON.parse(
@@ -37,10 +37,10 @@ describe("Vercel statik SPA yapılandırması", () => {
     expect(config.trailingSlash).toBe(true);
   });
 
-  it("prerender edilmiş statik dosyaları korur ve özel 404 yanıtını tanımlar", () => {
-    expect(config.routes[0]).toEqual({ handle: "filesystem" });
-    expect(config.routes.some(route => route.dest === "/index.html")).toBe(false);
-    expect(config.routes).toContainEqual({ src: "/(.*)", status: 404, dest: "/404.html" });
+  it("statik sayfalar, API ve özel 404 için Vercel dosya yönlendirmesini kullanır", () => {
+    expect(config.routes).toBeUndefined();
+    expect(existsSync(resolve(import.meta.dirname, "../../api/instagram-feed.ts"))).toBe(true);
+    expect(existsSync(resolve(import.meta.dirname, "../public/404.html"))).toBe(true);
   });
 
   it("değişmez asset önbelleği ve temel güvenlik başlıklarını içerir", () => {

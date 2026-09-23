@@ -14,7 +14,7 @@ describe("geniş header navigasyon rayları", () => {
 
   it("menü öğelerinde kısa yardımcı açıklamalar ve eşit esnek raylar kullanır", () => {
     expect(header).toContain('hint: "Cihaz ve tamir"');
-    expect(header).toContain("<small>19 servis rehberi</small>");
+    expect(header).toContain("<small>20 servis rehberi</small>");
     expect(styles).toContain(".header-row>.desktop-nav{width:100%!important;max-width:none;align-items:stretch;gap:0;padding:8px 9px}");
     expect(styles).toContain(".header-row>.desktop-nav a,.header-row>.desktop-nav .desktop-brands-trigger{display:flex;flex:1 1 0");
   });

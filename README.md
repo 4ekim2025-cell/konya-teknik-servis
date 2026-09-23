@@ -39,6 +39,10 @@ Uygulama varsayılan olarak Vite tarafından sağlanan yerel adreste çalışır
 | `pnpm preview` | Üretim paketini yerelde önizler. |
 | `pnpm format` | Kod biçimlendirmesini uygular. |
 
+## Instagram akışı
+
+Ana sayfadaki Instagram gönderileri `/api/instagram-feed` üzerinden alınır. Yerel geliştirmede `.env.example` dosyasını `.env.local` olarak kopyalayıp `INSTAGRAM_ACCESS_TOKEN` ve `INSTAGRAM_USER_ID` değerlerini ekleyin. Üretimde aynı değişkenleri Vercel proje ayarlarında tanımlayın. Gerçek erişim anahtarlarını Git’e eklemeyin ve `VITE_` öneki kullanmayın.
+
 ## Klasör yapısı
 
 ```text

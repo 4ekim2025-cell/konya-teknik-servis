@@ -201,5 +201,5 @@ export function FloatingActions() {
 }
 
 export function SiteChrome({ children }: { children: ReactNode }) {
-  return <><Header /><main>{children}</main><SmartInfoModal standalone /><Footer /><FloatingActions /></>;
+  return <><Header /><main>{children}</main><SmartInfoModal /><Footer /><FloatingActions /></>;
 }

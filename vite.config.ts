@@ -3,7 +3,8 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
-import { defineConfig, type Plugin, type ViteDevServer } from "vite";
+import { defineConfig, loadEnv, type Plugin, type ViteDevServer } from "vite";
+import { instagramFeedHandler } from "./server/instagram-feed";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
 // =============================================================================
@@ -204,6 +205,17 @@ function vitePluginStorageProxy(): Plugin {
 }
 
 const plugins = [
+  {
+    name: "instagram-feed-api",
+    configureServer(server: ViteDevServer) {
+      const env = { ...loadEnv(server.config.mode, PROJECT_ROOT, ""), ...process.env };
+      server.middlewares.use((req, res, next) => {
+        const pathname = req.url?.split("?")[0];
+        if (pathname !== "/api/instagram-feed" && pathname !== "/api/instagram-feed/") return next();
+        void instagramFeedHandler(req, res, env);
+      });
+    },
+  },
   react(),
   tailwindcss(),
   jsxLocPlugin(),

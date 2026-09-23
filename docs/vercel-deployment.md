@@ -1,6 +1,6 @@
 # Vercel Dağıtım Rehberi
 
-Bu rehber, **EŞLİ TEKNİK — Konya Teknik Servis** projesini GitHub üzerinden Vercel’e dağıtmak için hazırlanmıştır. Proje React, TypeScript ve Vite tabanlı bir tek sayfa uygulamasıdır. `vercel.json` içindeki yönlendirme kuralı, cihaz ve marka detay URL’lerinin doğrudan açıldığında Vercel tarafından `index.html` dosyasına yönlendirilmesini sağlar; böylece istemci tarafındaki Wouter yönlendirmesi ilgili sayfayı oluşturur. [1]
+Bu rehber, **EŞLİ TEKNİK — Konya Teknik Servis** projesini GitHub üzerinden Vercel’e dağıtmak için hazırlanmıştır. Proje React, TypeScript ve Vite tabanlıdır. Üretim derlemesi cihaz, marka ve içerik rotalarını ayrı `index.html` dosyaları olarak hazırlar; Vercel bu dosyaları doğrudan sunar. `/api/instagram-feed` ise Vercel Function olarak çalışır. [1]
 
 ## 1. Yayına hazırlık
 
@@ -14,7 +14,7 @@ pnpm build
 
 | Varlık | Kontrol |
 |---|---|
-| `vercel.json` | Vite üretim komutu, `dist/public` çıktı dizini, SPA yönlendirmesi, statik varlık önbelleği ve temel güvenlik başlıklarını içerir. |
+| `vercel.json` | Vite üretim komutu, `dist/public` çıktı dizini, statik varlık önbelleği ve temel güvenlik başlıklarını içerir. |
 | `pnpm-lock.yaml` | Bağımlılıkların sabit sürümlerle kurulmasını sağlar. |
 | `client/public/robots.txt` | Tarama yönergelerini ve site haritasını içerir. |
 | `client/public/sitemap.xml` | Hizmet ve marka URL’lerini listeler. |
@@ -49,9 +49,18 @@ Yapılandırma ekranında aşağıdaki değerleri kontrol edin. `vercel.json` bu
 | Build Command | `pnpm build` |
 | Output Directory | `dist/public` |
 
-## 4. Ortam değişkenleri ve analitik
+## 4. Instagram ortam değişkenleri ve analitik
 
-Bu sürüm statik bir site olarak çalışır; WhatsApp bağlantısı, form yönlendirmesi ve mevcut analitik yüklemesi için Vercel ortam değişkeni gerekmez. Gelecekte Vite ile tarayıcıya aktarılacak bir değişken eklenirse, yalnızca açık olmasında sakınca olmayan değişkenler `VITE_` önekiyle tanımlanmalıdır. [1]
+Instagram gönderilerinin ana sayfada görünmesi için Vercel projesinin **Settings → Environment Variables** bölümüne aşağıdaki iki sunucu değişkenini ekleyin. Değişkenleri en az `Production` ortamında tanımlayın; önizleme dağıtımlarında kontrol etmek istiyorsanız `Preview` ortamını da seçin.
+
+| Değişken | Açıklama |
+|---|---|
+| `INSTAGRAM_ACCESS_TOKEN` | Instagram Graph API erişim anahtarı |
+| `INSTAGRAM_USER_ID` | Gönderileri okunacak Instagram profesyonel hesap kimliği |
+
+Bu değerler tarayıcıya gönderilmez ve `VITE_` öneki kullanılmaz. Projedeki `.env.example` yalnızca gereken değişken adlarını gösterir; gerçek anahtarlar Git’e eklenmemelidir. Değişkenleri ekledikten veya yeniledikten sonra yeni bir dağıtım oluşturun. API doğru yapılandırılmadığında ana sayfa çalışmaya devam eder ve Instagram bölümü gizlenir.
+
+WhatsApp bağlantısı ve form yönlendirmesi için ayrıca ortam değişkeni gerekmez. Vite ile tarayıcıya aktarılacak gelecekteki değişkenlerde yalnızca açık olmasında sakınca olmayan değerler `VITE_` önekiyle tanımlanmalıdır. [1]
 
 Manus’a özgü geliştirme değişkenlerini veya gizli anahtarları Vercel’e kopyalamayın. Bir API, form işleme veya gerçek servis takip verisi eklendiğinde; gizli anahtarları yalnızca Vercel ortam değişkenlerinde tutun ve bunları istemci koduna `VITE_` önekiyle açmayın.
 
@@ -68,7 +77,13 @@ Manus’a özgü geliştirme değişkenlerini veya gizli anahtarları Vercel’e
 /tum-markalar/
 ```
 
-Bu test, SPA yönlendirme kuralının çalıştığını doğrular. Vercel rewrites, ziyaretçinin gördüğü URL’yi değiştirmeden isteği `index.html` dosyasına yönlendirir. [3]
+Bu test, prerender edilmiş sayfaların doğrudan sunulduğunu doğrular. Ayrıca aşağıdaki uç noktayı açın:
+
+```text
+/api/instagram-feed
+```
+
+Doğru yapılandırmada JSON içindeki `data` alanı en fazla altı gönderi içerir. `instagram_not_configured` yanıtı görülürse iki Instagram ortam değişkenini ve yeni dağıtımın bu değişkenleri içerdiğini kontrol edin.
 
 ## 6. Özel alan adı ve üretime geçiş
 

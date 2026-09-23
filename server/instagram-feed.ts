@@ -33,7 +33,7 @@ export async function getInstagramFeed(
     // the Instagram Graph host, not the Facebook Login Graph host.
     const url = new URL(`https://graph.instagram.com/v24.0/${encodeURIComponent(userId)}/media`);
     url.searchParams.set("fields", "id,media_type,media_url,thumbnail_url,permalink,timestamp");
-    url.searchParams.set("limit", "6");
+    url.searchParams.set("limit", "9");
     const response = await fetchMedia(url, {
       headers: { Authorization: `Bearer ${token}` },
       signal: AbortSignal.timeout(8000),
@@ -41,7 +41,7 @@ export async function getInstagramFeed(
     if (!response.ok) throw new Error("Instagram upstream failed");
     const payload = await response.json();
     if (!Array.isArray(payload?.data)) throw new Error("Invalid Instagram response");
-    const data: InstagramPost[] = payload.data.slice(0, 6).flatMap((post: Record<string, unknown> | null) => {
+    const data: InstagramPost[] = payload.data.slice(0, 9).flatMap((post: Record<string, unknown> | null) => {
       if (!post || typeof post.id !== "string" || typeof post.media_type !== "string") return [];
       const image = post.media_type === "VIDEO" ? post.thumbnail_url : post.media_url;
       if (!httpsUrl(image) || !httpsUrl(post.permalink)) return [];

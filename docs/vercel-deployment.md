@@ -83,7 +83,7 @@ Bu test, prerender edilmiş sayfaların doğrudan sunulduğunu doğrular. Ayrıc
 /api/instagram-feed
 ```
 
-Doğru yapılandırmada JSON içindeki `data` alanı en fazla altı gönderi içerir. `instagram_not_configured` yanıtı görülürse iki Instagram ortam değişkenini ve yeni dağıtımın bu değişkenleri içerdiğini kontrol edin.
+Doğru yapılandırmada JSON içindeki `data` alanı en fazla dokuz gönderi içerir. `instagram_not_configured` yanıtı görülürse iki Instagram ortam değişkenini ve yeni dağıtımın bu değişkenleri içerdiğini kontrol edin.
 
 ## 6. Özel alan adı ve üretime geçiş
 

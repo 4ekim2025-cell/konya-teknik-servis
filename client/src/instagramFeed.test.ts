@@ -14,16 +14,17 @@ describe("Instagram feed", () => {
     expect(upstream).not.toHaveBeenCalled();
   });
 
-  it("returns six posts and uses a video thumbnail instead of an MP4", async () => {
+  it("returns nine posts and uses a video thumbnail instead of an MP4", async () => {
     const video = { ...photo("video"), media_type: "VIDEO", media_url: "https://example.com/video.mp4", thumbnail_url: "https://example.com/cover.jpg" };
-    const upstream = vi.fn().mockResolvedValue(Response.json({ data: [video, ...Array.from({ length: 7 }, (_, i) => photo(String(i)))] }));
+    const upstream = vi.fn().mockResolvedValue(Response.json({ data: [video, ...Array.from({ length: 10 }, (_, i) => photo(String(i)))] }));
     const result = await getInstagramFeed(env, upstream);
     expect(result.status).toBe(200);
-    expect(result.body.data).toHaveLength(6);
+    expect(result.body.data).toHaveLength(9);
     expect(result.body.data[0].image_url).toBe(video.thumbnail_url);
     const [url, options] = upstream.mock.calls[0];
     expect(url.origin).toBe("https://graph.instagram.com");
     expect(url.pathname).toBe("/v24.0/1234/media");
+    expect(url.searchParams.get("limit")).toBe("9");
     expect(url.toString()).not.toContain(env.INSTAGRAM_ACCESS_TOKEN);
     expect(options.headers.Authorization).toBe("Bearer test-token");
   });

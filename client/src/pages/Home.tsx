@@ -1,7 +1,7 @@
 /** TASARIM NOTU — Koyu Teknik Servis Komuta Merkezi: asimetrik siyah hero, kırmızı aksiyon zinciri, belirgin takip akışı. */
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Activity, ArrowRight, Check, ChevronDown, CircleCheck, CircleHelp, Clock3, Droplets, Fan, Flame, Gauge, MapPin, MessageCircle, Phone, Refrigerator, ShieldCheck, Sparkles, TimerReset, WashingMachine, Wrench } from "lucide-react";
+import { Activity, ArrowRight, Check, ChevronDown, CircleCheck, CircleHelp, Clock3, Droplets, Fan, Flame, Gauge, Instagram, MapPin, MessageCircle, Phone, Refrigerator, ShieldCheck, Sparkles, TimerReset, WashingMachine, Wrench } from "lucide-react";
 import { SiteChrome, whatsappLink } from "@/components/SiteChrome";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SmartInfoSection } from "@/components/SmartInfoModal";
@@ -42,6 +42,7 @@ function GuaranteeSection(){return <section className="guarantee-section" id="me
 
 function InstagramFeed() {
   const [posts, setPosts] = useState<Array<{ id: string; image_url: string; permalink: string }>>([]);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   useEffect(() => {
     const controller = new AbortController();
     fetch("/api/instagram-feed", { signal: controller.signal })
@@ -51,7 +52,32 @@ function InstagramFeed() {
     return () => controller.abort();
   }, []);
   if (!posts.length) return null;
-  return <section className="instagram-feed-section" aria-label="Instagram gönderileri"><div className="instagram-feed-grid">{posts.map((post, index) => <a className="instagram-post-card" href={post.permalink} target="_blank" rel="noreferrer" key={post.id}><img src={post.image_url} alt={`Eşli Teknik Instagram gönderisi ${index + 1}`} width={600} height={600} loading="lazy" /></a>)}</div></section>;
+  const selectedPost = posts.find(post => post.id === selectedPostId) ?? posts[0];
+  return <section className="instagram-feed-section" aria-labelledby="instagram-feed-title">
+    <div className="instagram-feed-intro">
+      <span className="instagram-feed-logo" aria-hidden="true"><Instagram size={30}/></span>
+      <div className="instagram-feed-copy">
+        <span className="section-kicker">INSTAGRAM'DAN</span>
+        <h2 id="instagram-feed-title">Son paylaşımlarımızı<br/><em>yakından inceleyin.</em></h2>
+        <p>Servis ipuçları, arıza rehberleri ve Eşli Teknik’ten güncel paylaşımlar. Küçük görsellerden birini seçerek gönderiyi büyük alanda inceleyebilirsiniz.</p>
+      </div>
+      <a className="instagram-feed-profile" href="https://www.instagram.com/esad.esli.teknik/" target="_blank" rel="noreferrer" aria-label="Eşli Teknik Instagram profilini aç">
+        <Instagram size={18}/><span><small>Instagram'da takip edin</small>@esad.esli.teknik</span><ArrowRight size={17}/>
+      </a>
+    </div>
+    <div className="instagram-feed-showcase">
+      <div className="instagram-feed-thumbnails" role="group" aria-label="Instagram gönderisi seçin">
+        {posts.map((post, index) => <button type="button" className={`instagram-post-thumb ${post.id === selectedPost.id ? "is-active" : ""}`} onClick={() => setSelectedPostId(post.id)} aria-pressed={post.id === selectedPost.id} aria-label={`${index + 1}. Instagram gönderisini büyük göster`} key={post.id}>
+          <img src={post.image_url} alt="" width={300} height={300} loading="lazy" />
+          <span>{String(index + 1).padStart(2, "0")}</span>
+        </button>)}
+      </div>
+      <a className="instagram-featured-post" href={selectedPost.permalink} target="_blank" rel="noreferrer" aria-label="Seçili gönderiyi Instagram'da aç">
+        <img src={selectedPost.image_url} alt="Seçili Eşli Teknik Instagram gönderisi" width={800} height={800} />
+        <span><Instagram size={17}/>Gönderiyi Instagram'da görüntüle<ArrowRight size={16}/></span>
+      </a>
+    </div>
+  </section>;
 }
 
 export default function Home(){useEffect(()=>{const targetId=window.location.hash==="#on-bilgi-formu"?"on-bilgi-formu":window.location.hash==="#hizmetler"?"hizmetler":null;if(!targetId)return;const scrollToTarget=()=>document.getElementById(targetId)?.scrollIntoView({block:"start",behavior:"auto"});const firstFrame=window.requestAnimationFrame(()=>window.requestAnimationFrame(scrollToTarget));const retry=window.setTimeout(scrollToTarget,220);return()=>{window.cancelAnimationFrame(firstFrame);window.clearTimeout(retry)}},[]);return <SiteChrome>

@@ -1035,50 +1035,32 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 }
 
 
-/* Instagram akışı: herkese açık profil embed'i; Instagram'daki yeni paylaşımlar sayfa açılışında yenilenir. */
-.instagram-feed-section{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(420px,540px);gap:48px;align-items:start;padding:86px max(30px,calc((100vw - 1280px)/2));background:#fffaf4;border-top:1px solid #e1d7c8}
-.instagram-feed-head{position:sticky;top:30px;display:grid;align-content:start;gap:18px;padding-top:8px}
-.instagram-feed-head h2{margin:12px 0 0;color:var(--brand-teal);font-size:clamp(36px,4vw,58px);letter-spacing:-.06em;line-height:.98}
-.instagram-feed-head h2 em{color:var(--brand-burgundy)}
-.instagram-feed-head p{max-width:430px;margin:0;color:#685f56;font-size:15px;line-height:1.75}
-.instagram-feed-profile{display:inline-flex;align-items:center;gap:7px;width:max-content;color:var(--brand-burgundy);font:900 12px Manrope,sans-serif;text-decoration:none}
-.instagram-feed-profile:hover{color:var(--brand-teal)}
-.instagram-feed-embed{min-width:0;display:flex;justify-content:center;overflow:hidden}
-.instagram-feed-embed .instagram-media{margin:0!important;min-width:280px!important;max-width:540px!important;width:100%!important}
-@media(max-width:860px){.instagram-feed-section{display:block;padding:65px 20px}.instagram-feed-head{position:static;display:block}.instagram-feed-head p{margin-top:20px;font-size:14px}.instagram-feed-profile{margin-top:18px}.instagram-feed-embed{margin-top:30px}}
-
-
-/* Instagram alanı v2: gönderiler merkeze alınır, açıklama kolonu kaldırılır. */
-.instagram-feed-section{display:block;padding:78px max(30px,calc((100vw - 1280px)/2));background:#fffaf4;border-top:1px solid #e1d7c8}
-.instagram-feed-header{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;text-align:center;margin:0 auto 34px}
-.instagram-feed-header .section-kicker{flex-basis:100%;width:max-content;margin:0 auto}
-.instagram-feed-header h2{margin:0;color:var(--brand-teal);font-size:clamp(34px,4vw,54px);letter-spacing:-.06em;line-height:.98}
-.instagram-feed-header h2 em{color:var(--brand-burgundy)}
-.instagram-feed-profile{display:inline-flex;align-items:center;gap:7px;color:var(--brand-burgundy);font:900 12px Manrope,sans-serif;text-decoration:none}
-.instagram-feed-profile:hover{color:var(--brand-teal)}
-.instagram-feed-embed{width:100%;display:flex;justify-content:center;overflow:hidden}
-.instagram-feed-embed .instagram-media{margin:0 auto!important;min-width:280px!important;max-width:960px!important;width:100%!important}
-@media(max-width:860px){.instagram-feed-section{padding:62px 20px}.instagram-feed-header{display:block;margin-bottom:26px}.instagram-feed-header h2{margin-top:12px}.instagram-feed-profile{margin-top:16px}}
-
-
-/* Instagram alanı v3: son iki gönderiyi dengeli iki kart olarak sunar. */
-.instagram-feed-section{padding:72px max(30px,calc((100vw - 1280px)/2));background:#fffaf4}
-.instagram-feed-header{display:flex;align-items:end;justify-content:space-between;gap:24px;text-align:left;margin:0 auto 30px;max-width:1120px}
-.instagram-feed-header .section-kicker{display:block;width:max-content;margin:0}
-.instagram-feed-header h2{margin:12px 0 0;font-size:clamp(32px,3.5vw,50px);line-height:.98}
-.instagram-feed-header .instagram-feed-profile{margin-bottom:3px}
-.instagram-feed-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;max-width:1120px;margin:0 auto;align-items:start}
-.instagram-feed-grid .instagram-media{width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;overflow:hidden}
-@media(max-width:860px){.instagram-feed-section{padding:58px 20px}.instagram-feed-header{display:block;margin-bottom:24px}.instagram-feed-header .instagram-feed-profile{margin-top:15px}.instagram-feed-grid{grid-template-columns:1fr;gap:16px}.instagram-feed-grid .instagram-media{max-width:540px!important;margin:0 auto!important}}
-
-
-/* Instagram son 6 gönderi akışı: yalnızca görsel kartlar. */
-.instagram-feed-section{padding:56px max(30px,calc((100vw - 1280px)/2));background:#fffaf4;border-top:1px solid #e1d7c8}
-.instagram-feed-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:1180px;margin:0 auto}
-.instagram-post-card{display:block;aspect-ratio:1/1;overflow:hidden;border-radius:14px;background:#f2eee8;box-shadow:0 8px 24px rgba(73,48,31,.08);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
-.instagram-post-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(73,48,31,.14)}
-.instagram-post-card img{display:block;width:100%;height:100%;object-fit:cover}
-@media(max-width:860px){.instagram-feed-section{padding:40px 20px}.instagram-feed-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.instagram-post-card{border-radius:10px}}
+/* Etkileşimli Instagram vitrini: küçük seçimler solda, seçili gönderi sağda. */
+.instagram-feed-section{padding:72px max(30px,calc((100vw - 1280px)/2));background:#fffaf4;border-top:1px solid #e1d7c8}
+.instagram-feed-intro{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:20px;align-items:center;max-width:1180px;margin:0 auto 32px}
+.instagram-feed-logo{display:grid;width:62px;height:62px;place-items:center;border-radius:19px;color:#fff;background:linear-gradient(135deg,#6c3bc5 0%,#c52f7c 48%,#f59b31 100%);box-shadow:0 12px 28px rgba(150,44,111,.22)}
+.instagram-feed-copy .section-kicker{display:block;width:max-content;margin:0 0 11px}
+.instagram-feed-copy h2{margin:0;color:var(--brand-teal);font-size:clamp(32px,3.6vw,50px);letter-spacing:-.055em;line-height:.98}
+.instagram-feed-copy h2 em{color:var(--brand-burgundy)}
+.instagram-feed-copy p{max-width:650px;margin:15px 0 0;color:#685f56;font-size:14px;line-height:1.7}
+.instagram-feed-profile{display:flex;align-items:center;gap:10px;min-width:220px;padding:13px 15px;border:1px solid #e0d3c4;border-radius:14px;color:var(--brand-teal);background:#fff;text-decoration:none;box-shadow:0 8px 24px rgba(73,48,31,.07);transition:transform .2s var(--ease),border-color .2s var(--ease),box-shadow .2s var(--ease)}
+.instagram-feed-profile span{display:grid;gap:2px;font:800 13px Manrope,sans-serif}
+.instagram-feed-profile small{color:#8b7765;font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.instagram-feed-profile>svg:last-child{margin-left:auto;color:var(--brand-burgundy)}
+.instagram-feed-profile:hover{transform:translateY(-2px);border-color:#c9b7a3;box-shadow:0 12px 28px rgba(73,48,31,.11)}
+.instagram-feed-showcase{display:grid;grid-template-columns:minmax(320px,.8fr) minmax(440px,1.2fr);gap:24px;align-items:stretch;max-width:1180px;margin:0 auto}
+.instagram-feed-thumbnails{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.instagram-post-thumb{position:relative;min-width:0;aspect-ratio:1/1;padding:7px;overflow:hidden;border:1px solid #dfd4c6;border-radius:13px;background:#fff;cursor:pointer;box-shadow:0 7px 18px rgba(73,48,31,.06);transition:transform .2s var(--ease),border-color .2s var(--ease),box-shadow .2s var(--ease)}
+.instagram-post-thumb img{display:block;width:100%;height:100%;object-fit:contain;border-radius:8px;background:#f7f3ed}
+.instagram-post-thumb>span{position:absolute;right:12px;bottom:12px;display:grid;width:27px;height:27px;place-items:center;border-radius:50%;color:#fff;background:rgba(5,92,102,.9);font:800 10px Manrope,sans-serif;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+.instagram-post-thumb:hover{transform:translateY(-2px);border-color:#ae9680;box-shadow:0 11px 24px rgba(73,48,31,.11)}
+.instagram-post-thumb.is-active{border-color:var(--brand-teal);box-shadow:0 0 0 2px var(--brand-teal),0 13px 28px rgba(5,92,102,.16)}
+.instagram-post-thumb:focus-visible,.instagram-feed-profile:focus-visible,.instagram-featured-post:focus-visible{outline:3px solid #f2a142;outline-offset:3px}
+.instagram-featured-post{position:relative;display:grid;min-width:0;aspect-ratio:1/1;place-items:center;overflow:hidden;border:1px solid #ded1c2;border-radius:19px;background:#fff;box-shadow:0 18px 42px rgba(73,48,31,.13)}
+.instagram-featured-post>img{display:block;width:100%;height:100%;object-fit:contain;background:#f7f3ed}
+.instagram-featured-post>span{position:absolute;right:18px;bottom:18px;display:flex;align-items:center;gap:8px;padding:11px 14px;border-radius:999px;color:#fff;background:rgba(5,69,77,.92);font:800 11px Manrope,sans-serif;box-shadow:0 8px 22px rgba(0,0,0,.2);backdrop-filter:blur(8px)}
+@media(max-width:960px){.instagram-feed-intro{grid-template-columns:auto minmax(0,1fr)}.instagram-feed-profile{grid-column:2;width:max-content}.instagram-feed-showcase{grid-template-columns:minmax(260px,.78fr) minmax(360px,1.22fr)}}
+@media(max-width:700px){.instagram-feed-section{padding:50px 20px}.instagram-feed-intro{display:grid;grid-template-columns:52px minmax(0,1fr);gap:14px;margin-bottom:24px}.instagram-feed-logo{width:52px;height:52px;border-radius:16px}.instagram-feed-copy h2{font-size:clamp(29px,9vw,40px)}.instagram-feed-copy p{grid-column:1/-1;font-size:13px}.instagram-feed-profile{grid-column:1/-1;width:100%;min-width:0}.instagram-feed-showcase{grid-template-columns:1fr;gap:16px}.instagram-feed-thumbnails{gap:9px}.instagram-post-thumb{padding:5px;border-radius:10px}.instagram-post-thumb>span{right:9px;bottom:9px;width:24px;height:24px}.instagram-featured-post{border-radius:14px}.instagram-featured-post>span{right:12px;bottom:12px;font-size:10px}}
 
 /* Keep hero content in separate layout columns at every desktop width. */
 @media (min-width: 861px) {

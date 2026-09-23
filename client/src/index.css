@@ -1170,7 +1170,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
   .smart-info-section,
   .proof-section,
   .faq-section {
-    padding-top: 64px;
-    padding-bottom: 64px;
+    padding-top: 64px !important;
+    padding-bottom: 64px !important;
   }
 }

@@ -13,6 +13,22 @@ const expectedDescription =
 const productionOrigin = "https://esliteknik.com";
 
 describe("ana sayfa başlığı ve sosyal paylaşım metadatası", () => {
+  it("paylaşım görseli olarak logoyu hem statik hem dinamik sayfalarda kullanır", () => {
+    const logo = "https://esliteknik.com/favicon.png?v=share-logo-1";
+    const prerender = readFileSync(resolve(projectRoot, "scripts/prerender.ts"), "utf8");
+    expect(html).toContain('<meta property="og:image" content="' + logo + '" />');
+    expect(html).toContain('<meta name="twitter:image" content="' + logo + '" />');
+    expect(html).toContain('<meta property="og:image:width" content="512" />');
+    expect(html).toContain('<meta property="og:image:height" content="512" />');
+    expect(app).toContain('const socialImage="' + logo + '"');
+    const imageLines = prerender.split("\n").filter(line => line.includes("og:image") || line.includes("twitter:image"));
+    expect(imageLines).toHaveLength(2);
+    imageLines.forEach(line => expect(line).toContain("/favicon.png?v=share-logo-1"));
+    const png = readFileSync(resolve(projectRoot, "client/public/favicon.png"));
+    expect(png.readUInt32BE(16)).toBe(512);
+    expect(png.readUInt32BE(20)).toBe(512);
+  });
+
   it("tarayıcı başlığı ile statik paylaşım başlığını eşit tutar", () => {
     expect(html).toContain(`<title>${expectedTitle}</title>`);
     expect(html).toContain(`<meta property="og:title" content="${expectedTitle}" />`);

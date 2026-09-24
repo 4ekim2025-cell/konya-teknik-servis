@@ -1035,6 +1035,15 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 }
 
 
+/* Haritasız iletişim paneli. */
+.contact-page .contact{padding-right:var(--site-gutter)!important;padding-left:var(--site-gutter)!important}
+.contact-page .contact>.contact-support-panel:first-child{align-self:start;min-width:0;padding:32px;border:1px solid #e1d7c8;border-radius:18px;background:#fffaf3}
+.contact-page .contact-support-panel h2{font-size:clamp(32px,3.2vw,46px);color:var(--brand-teal);overflow-wrap:break-word}
+.contact-support-panel h2 em{color:var(--brand-burgundy)}
+.contact-support-panel>p{font-size:15px;line-height:1.75;color:#6e685f;margin-bottom:24px}
+.contact-support-panel>.button{border-radius:10px;max-width:100%;height:auto;min-height:50px;white-space:normal}
+@media(max-width:860px){.contact-page .contact{padding-right:20px!important;padding-left:20px!important}.contact-page .contact>.contact-support-panel:first-child{padding:24px 18px}.contact-page .contact-support-panel h2{font-size:clamp(28px,8vw,36px)}}
+
 /* Etkileşimli Instagram vitrini: küçük seçimler solda, seçili gönderi sağda. */
 .instagram-feed-section{padding:72px var(--site-gutter,20px);background:#fffaf4;border-top:1px solid #e1d7c8}
 .instagram-feed-intro{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:20px;align-items:center;margin:0 0 32px}

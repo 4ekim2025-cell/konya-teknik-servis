@@ -35,10 +35,13 @@ Eşli Teknik bağımsız bir teknik servis işletmesidir; resmî yetkili servis 
 - [Bosch Servisi](https://esliteknik.com/bosch-servisi-konya/)
 - [Electrolux Servisi](https://esliteknik.com/electrolux-servisi-konya/)
 - [Franke Servisi](https://esliteknik.com/franke-servisi-konya/)
+- [Grundig Servisi](https://esliteknik.com/grundig-servisi-konya/)
 - [Hoover Servisi](https://esliteknik.com/hoover-servisi-konya/)
 - [Philips Servisi](https://esliteknik.com/philips-servisi-konya/)
+- [Regal Servisi](https://esliteknik.com/regal-servisi-konya/)
 - [Samsung Servisi](https://esliteknik.com/samsung-servisi-konya/)
 - [Siemens Servisi](https://esliteknik.com/siemens-servisi-konya/)
+- [Sinbo Servisi](https://esliteknik.com/sinbo-servisi-konya/)
 - [Vestel Servisi](https://esliteknik.com/vestel-servisi-konya/)
 - [Tüm Markalar](https://esliteknik.com/tum-markalar/)
 

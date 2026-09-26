@@ -79,5 +79,17 @@ export const brandSeo: Record<string, BrandSeo> = {
   Vestel: {
     title: "Konya Vestel Servisi | Beyaz Eşya Tamiri – Eşli Teknik",
     description: "Konya Vestel servisi ve beyaz eşya tamiri için Eşli Teknik’e ulaşın. Çamaşır, bulaşık, kurutma ve buzdolabı arızalarında servis desteği alın."
+  },
+  Grundig: {
+    title: "Konya Grundig Servisi | Beyaz Eşya Tamiri – Eşli Teknik",
+    description: "Konya Grundig servisi ve beyaz eşya tamiri için Eşli Teknik’e ulaşın. Çamaşır, bulaşık, kurutma makinesi ve fırın arızalarında destek alın."
+  },
+  Regal: {
+    title: "Konya Regal Servisi | Beyaz Eşya Tamiri – Eşli Teknik",
+    description: "Konya Regal servisi ve beyaz eşya tamiri için Eşli Teknik’e ulaşın. Çamaşır makinesi, buzdolabı ve derin dondurucu arızalarında destek alın."
+  },
+  Sinbo: {
+    title: "Konya Sinbo Servisi | Süpürge ve Fırın Tamiri – Eşli Teknik",
+    description: "Konya Sinbo servisi için Eşli Teknik’e ulaşın. Sinbo elektrikli süpürge, mini fırın ve elektrikli ocak arızalarında servis desteği alın."
   }
 };

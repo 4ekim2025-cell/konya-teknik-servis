@@ -3,6 +3,7 @@ import path from "node:path";
 import { districtNeighborhoods, districtFaqs, serviceFaqs } from "../shared/seo-content";
 import { GOOGLE_BUSINESS_URL } from "../shared/business-contact";
 import { deviceFaultGuides } from "../shared/device-faults";
+import { brandGuides } from "../shared/brand-guides";
 
 const root = process.cwd();
 const outputDir = path.join(root, "dist", "public");
@@ -47,8 +48,8 @@ const districtDetails: Record<string, { intro: string; guide: string; services: 
 
 const brands = [
   ["altus", "Altus"], ["arcelik", "Arçelik"], ["arnica", "Arnica"], ["beko", "Beko"], ["bosch", "Bosch"],
-  ["electrolux", "Electrolux"], ["franke", "Franke"], ["hoover", "Hoover"], ["kumtel", "Kumtel"], ["philips", "Philips"],
-  ["profilo", "Profilo"], ["regal", "Regal"], ["rowenta", "Rowenta"], ["samsung", "Samsung"], ["siemens", "Siemens"], ["silverline", "Silverline"],
+  ["electrolux", "Electrolux"], ["franke", "Franke"], ["grundig", "Grundig"], ["hoover", "Hoover"], ["kumtel", "Kumtel"], ["philips", "Philips"],
+  ["profilo", "Profilo"], ["regal", "Regal"], ["rowenta", "Rowenta"], ["samsung", "Samsung"], ["siemens", "Siemens"], ["silverline", "Silverline"], ["sinbo", "Sinbo"],
   ["senocak", "Şenocak"], ["teka", "Teka"], ["ugur-sogutma", "Uğur Soğutma"], ["vestel", "Vestel"],
 ] as const;
 
@@ -67,6 +68,11 @@ for (const [slug, name] of brands) {
 for (const [route, [title]] of Object.entries(services)) {
   const guide = deviceFaultGuides[title.replace("Konya ", "").replace(" Tamiri | Eşli Teknik", "")];
   if (guide) services[route] = [title, guide.description];
+}
+for (const [slug, name] of brands) {
+  const guide = brandGuides[name];
+  const route = `/${slug}-servisi-konya/`;
+  if (guide && services[route]) services[route] = [services[route][0], guide.description];
 }
 
 const extra: Record<string, [string, string]> = {
@@ -108,6 +114,8 @@ function jsonLd(title: string, description: string, url: string, route: string) 
   const brand = brands.find(([slug]) => route === `/${slug}-servisi-konya/`);
   if (brand) {
     const [, brandName] = brand;
+    const brandGuide = brandGuides[brandName];
+    if (brandGuide) graph.push({ "@type": "FAQPage", "@id": `${url}#faq`, mainEntity: brandGuide.faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) });
     graph.push({ "@type": "Brand", "@id": `${url}#brand`, name: brandName, url });
     graph.push({ "@type": "Service", "@id": `${url}#service`, name: title, description, serviceType: `${brandName} cihaz teknik servisi`, areaServed: ["Karatay", "Meram", "Selçuklu"], provider: { "@id": `${siteUrl}/#business` } });
   } else if (services[route]) {
@@ -183,7 +191,7 @@ function staticContent(title: string, description: string, route: string) {
       : `<h2>${esc(heading)} Hizmeti</h2><p>${esc(device?.intro ?? description)} Model, arıza belirtisi, varsa hata kodu ve bulunduğunuz ilçe bilgisi ilk değerlendirmeyi kolaylaştırır.</p><h2>Yaygın belirtiler ve güvenli ilk kontroller</h2><p>${esc(device?.symptoms ?? description)} ${esc(safety)}</p><h2>Servis incelemesinde değerlendirilen başlıklar</h2><p>${esc(device?.parts ?? "Cihazın modeline ve arıza belirtisine göre ilgili parçalar incelenir.")} İşlem kapsamı ve parça ihtiyacı, inceleme sonrasında onayınıza sunulur.</p><h2>Ne zaman servis çağırmalı?</h2><p>${esc(device?.urgent ?? safety)} Konya’da Karatay, Meram ve Selçuklu için cihaz bilgisiyle WhatsApp’tan servis talebi iletebilir, kayıt açıldığında işlem aşamalarını online takip edebilirsiniz.</p><h2>Sık sorulan sorular</h2>${guide.map(([question, answer]) => `<h3>${esc(question)}</h3><p>${esc(answer)}</p>`).join("")}`;
   } else if (brand) {
     const [, brandName] = brand;
-    const deviceLinks = brandDeviceLinks[brandName] ?? []; sections = `<h2>${esc(brandName)} Servisi Konya</h2><p>EŞLİ TEKNİK, ${esc(brandName)} marka cihazlarda doğru yönlendirme için önce cihaz türü, model ve belirti bilgisini netleştirir. Aynı belirti farklı cihazlarda farklı nedenlerden kaynaklanabileceği için aşağıdaki cihaz rehberlerinden uygun olanı seçin.</p><nav aria-label="Marka cihaz rehberleri"><h2>${esc(brandName)} Cihaz Rehberleri</h2><p>${deviceLinks.map(([label, href]) => `<a href="${href}">${esc(label)}</a>`).join(" · ")}</p></nav><p>Cihaz türü netleşmeden parça veya teknik müdahale önerilmez. Yanık kokusu, su/gaz kaçağı veya sigorta attırma varsa cihazı kullanmayın ve servis desteği alın.</p>`;
+    const deviceLinks = brandDeviceLinks[brandName] ?? []; const brandGuide = brandGuides[brandName]; sections = brandGuide ? `<h2>${esc(brandName)} Servisi Konya</h2><p>${esc(brandGuide.intro)}</p><h2>${esc(brandName)} cihazlarında bilmeniz gerekenler</h2>${brandGuide.notes.map(note => `<h3>${esc(note.title)}</h3><p>${esc(note.text)}</p>`).join("")}${deviceLinks.length ? `<nav aria-label="Marka cihaz rehberleri"><h2>${esc(brandName)} Cihaz Rehberleri</h2><p>${deviceLinks.map(([label, href]) => `<a href="${href}">${esc(label)}</a>`).join(" · ")}</p></nav>` : ""}<h2>Sık sorulan sorular</h2>${brandGuide.faqs.map(([question, answer]) => `<h3>${esc(question)}</h3><p>${esc(answer)}</p>`).join("")}<p>EŞLİ TEKNİK bağımsız bir teknik servistir; üreticilerin resmî yetkili servisi değildir. Üretici garantisi devam eden cihazlarınız için üreticinin kendi servis ağına da başvurabilirsiniz.</p>` : `<h2>${esc(brandName)} Servisi Konya</h2><p>EŞLİ TEKNİK, ${esc(brandName)} marka cihazlarda doğru yönlendirme için önce cihaz türü, model ve belirti bilgisini netleştirir. Aynı belirti farklı cihazlarda farklı nedenlerden kaynaklanabileceği için aşağıdaki cihaz rehberlerinden uygun olanı seçin.</p><nav aria-label="Marka cihaz rehberleri"><h2>${esc(brandName)} Cihaz Rehberleri</h2><p>${deviceLinks.map(([label, href]) => `<a href="${href}">${esc(label)}</a>`).join(" · ")}</p></nav><p>Cihaz türü netleşmeden parça veya teknik müdahale önerilmez. Yanık kokusu, su/gaz kaçağı veya sigorta attırma varsa cihazı kullanmayın ve servis desteği alın.</p>`;
   } else if (route === "/tum-markalar/") {
     sections = `<h2>Konya’da Servis Verilen Markalar</h2><p>Eşli Teknik; ${brands.map(([, name]) => esc(name)).join(", ")} ve listede yer alan diğer marka ve model cihazlar için teknik servis desteği sunar.</p><h2>Servis Talebi</h2><p>Cihaz markası, modeli ve arıza bilgisini WhatsApp üzerinden paylaşarak servis süreci hakkında bilgi alabilirsiniz.</p>`;
   } else if (districts[route]) {

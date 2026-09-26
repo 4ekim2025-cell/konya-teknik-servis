@@ -39,7 +39,8 @@ client/
     siteConfig.ts       # Telefon ve WhatsApp bağlantıları (tek kaynak)
     *.test.ts           # Vitest testleri
 shared/
-  device-faults.ts      # Öncelikli 5 cihazın arıza rehberi ve sayfa açıklamaları (React + prerender ortak)
+  device-faults.ts      # 10 cihazın arıza rehberi, süre-ücret ve acil durum notları, sayfa açıklamaları (React + prerender ortak)
+  brand-guides.ts       # 22 markanın özgün içeriği: açıklama, giriş, markaya özel notlar, SSS (React + prerender ortak)
   business-contact.ts   # Google İşletme profili bağlantısı
   seo-content.ts        # İlçe mahalleleri, ilçe ve hizmet SSS'leri
 scripts/prerender.ts    # Build sonrası her rota için başlık/açıklama/canonical/JSON-LD ve statik içerik yazar
@@ -82,6 +83,12 @@ Testlerin çoğu dosyaları `readFileSync` ile okuyup belirli metinlerin varlı�
 - `/manus-storage/...` gibi göreli, geçici görsel yollarını üretim koduna ekleme.
 - `vite.config.ts` içindeki Manus eklentileri (debug collector, storage proxy, runtime) önceki geliştirme ortamından kalmadır ve üretimde etkisizdir. Kaldırılması ayrı bir iş olarak ele alınmalıdır.
 
+### İçerik tekrarı yasak
+- Bir sayfada her bilgi yalnızca bir kez geçer. Cihaz sayfalarında belirti/kontroller yalnızca arıza bölümünde, süre-ücret-acil durumlar tek bölümde; SSS sayfada başka yerde cevaplanmayan sorulardan oluşur.
+- Marka sayfalarında "bağımsız servisiz / yetkili servis değiliz" açıklaması içerik dosyasına yazılmaz; `BrandNotes` bileşeni ve prerender tek ortak satır olarak gösterir.
+- Markalar arasında marka adını değiştirip aynı cümleyi kullanma. Genel sorular (servis kim, ücret, hata kodu) marka SSS'sine konmaz.
+- Doğrulanamayan pazar/istatistik iddiası yazma ("Konya'da en yaygın", "şikâyetlerin çoğu" gibi).
+
 ### Kod stili
 Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılmış, tek satırlık bir stille yazılmıştır. Küçük değişikliklerde dosyanın tamamını yeniden biçimlendirme, çünkü bu diff'i okunmaz hale getirir.
 
@@ -93,6 +100,6 @@ Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılm
 
 ## Bilinen noktalar
 
-- `regal` markası `scripts/prerender.ts` içinde var, ancak `App.tsx` → `brandNamesByPath` listesinde yok.
+- Blog yazıları ve yasal sayfaların prerender HTML'i çok kısa (3 genel cümle); içerik yalnızca JavaScript ile yükleniyor.
 - `teslim-notlari.md` eski bir teslim notudur (örnek telefon numarası vb. içerir). Güncel bilgi için kodu ve `siteConfig.ts` dosyasını esas al.
 - Açık SEO önerileri için bkz. `docs/google-ai-search-visibility-audit-2026-08-30.md` ve `SEO-AUDIT-RAPORU.md`.

@@ -7,10 +7,10 @@ import { serviceFaqs } from "../../shared/seo-content";
 const projectRoot = resolve(import.meta.dirname, "..", "..");
 const contentPage = readFileSync(resolve(projectRoot, "client", "src", "pages", "ContentPage.tsx"), "utf8");
 const prerender = readFileSync(resolve(projectRoot, "scripts", "prerender.ts"), "utf8");
-const priorityDevices = ["Çamaşır Makinesi", "Buzdolabı", "Bulaşık Makinesi", "Fırın", "Kurutma Makinesi"];
+const priorityDevices = ["Çamaşır Makinesi", "Buzdolabı", "Bulaşık Makinesi", "Fırın", "Kurutma Makinesi", "Ocak", "Elektrikli Süpürge", "Davlumbaz", "Derin Dondurucu", "Su Sebili"];
 
-describe("öncelikli cihazların arıza rehberi", () => {
-  it("beş öncelikli cihazın her biri için en az beş arıza açıklar", () => {
+describe("cihaz sayfalarının arıza rehberi", () => {
+  it("on cihazın her biri için en az beş arıza açıklar", () => {
     priorityDevices.forEach(device => {
       const guide = deviceFaultGuides[device];
       expect(guide, device).toBeDefined();

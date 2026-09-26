@@ -4,11 +4,11 @@ import { brandSeo } from "@/brandSeo";
 const brands = [
   "Altus", "Arçelik", "Arnica", "Beko", "Bosch", "Electrolux", "Franke",
   "Hoover", "Kumtel", "Philips", "Profilo", "Rowenta", "Samsung", "Siemens",
-  "Silverline", "Şenocak", "Teka", "Uğur Soğutma", "Vestel",
+  "Silverline", "Şenocak", "Teka", "Uğur Soğutma", "Vestel", "Grundig", "Regal", "Sinbo",
 ];
 
 describe("marka SEO metadata kayıtları", () => {
-  it("19 marka için benzersiz title ve description tanımlar", () => {
+  it("22 marka için benzersiz title ve description tanımlar", () => {
     expect(Object.keys(brandSeo)).toEqual(brands);
     expect(new Set(brands.map(brand => brandSeo[brand].title)).size).toBe(brands.length);
     expect(new Set(brands.map(brand => brandSeo[brand].description)).size).toBe(brands.length);

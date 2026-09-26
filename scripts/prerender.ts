@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { districtNeighborhoods, districtFaqs, serviceFaqs } from "../shared/seo-content";
 import { GOOGLE_BUSINESS_URL } from "../shared/business-contact";
+import { deviceFaultGuides } from "../shared/device-faults";
 
 const root = process.cwd();
 const outputDir = path.join(root, "dist", "public");
@@ -60,6 +61,12 @@ const brandDeviceLinks: Record<string, [string,string][]> = {
 for (const [slug, name] of brands) {
   const title = `${name} Servisi Konya | Eşli Teknik`;
   services[`/${slug}-servisi-konya/`] = [title, `Konya’da ${name} servisi için Eşli Teknik’e WhatsApp’tan ulaşın. Beyaz eşya ve küçük ev aletleri için servis planlaması ve online iş takibi.`];
+}
+
+// Arıza rehberi olan cihazlarda sayfaya özel açıklama kullanılır (shared/device-faults.ts).
+for (const [route, [title]] of Object.entries(services)) {
+  const guide = deviceFaultGuides[title.replace("Konya ", "").replace(" Tamiri | Eşli Teknik", "")];
+  if (guide) services[route] = [title, guide.description];
 }
 
 const extra: Record<string, [string, string]> = {
@@ -148,6 +155,12 @@ const deviceStaticContent: Record<string, {intro:string; symptoms:string; parts:
   "Kurutma Makinesi": {intro:"Kurutma makinesinin ısıtmaması, çamaşırları nemli bırakması, tamburun dönmemesi veya programın uzaması hava akışı ve ısıtma grubunun incelenmesini gerektirir.", symptoms:"Tiftik filtresi, su haznesi, hava kanalı, nem sensörü ve program seçimi kılavuza göre kontrol edilebilir. Gövdeyi açmadan önce cihazın fişini çekin.", parts:"Rezistans, termik, nem sensörü, kayış, motor, yoğuşma grubu ve elektronik kart model ile belirtiye göre değerlendirilir.", urgent:"Aşırı ısınma, yanık kokusu, tamburun sıkışması veya sigorta attırma varsa makineyi çalıştırmayın."},
 };
 
+function faultsHtml(deviceName: string) {
+  const guide = deviceFaultGuides[deviceName];
+  if (!guide) return "";
+  return `<h2>${esc(deviceName)} arızaları: neden olur, ne kontrol edilir?</h2>${guide.faults.map(fault => `<h3>${esc(fault.title)}</h3><p><strong>Olası nedenler:</strong> ${esc(fault.causes)}</p><p><strong>Güvenle kontrol edebilecekleriniz:</strong> ${esc(fault.check)}</p>`).join("")}`;
+}
+
 function staticContent(title: string, description: string, route: string) {
   const brand = brands.find(([slug]) => route === `/${slug}-servisi-konya/`);
   const service = services[route];
@@ -164,7 +177,7 @@ function staticContent(title: string, description: string, route: string) {
     const deviceName = heading.replace("Konya ", "").replace(" Tamiri", "");
     const safety = deviceName === "Ocak" || deviceName === "Fırın" ? "Gaz kokusu, elektrik kaçağı, yanık kokusu veya cam hasarı varsa cihazı kullanmayın; gaz ve elektrik aksamını sökmeyin." : "Fişi çekmeden cihazın gövdesini veya elektrik aksamını açmayın; kaçak, yanık kokusu veya sigorta attırma varsa cihazı çalıştırmayın.";
     const device = deviceStaticContent[deviceName];
-    sections = `<h2>${esc(heading)} Hizmeti</h2><p>${esc(device?.intro ?? description)} Model, arıza belirtisi, varsa hata kodu ve bulunduğunuz ilçe bilgisi ilk değerlendirmeyi kolaylaştırır.</p><h2>Yaygın belirtiler ve güvenli ilk kontroller</h2><p>${esc(device?.symptoms ?? description)} ${esc(safety)}</p><h2>Servis incelemesinde değerlendirilen başlıklar</h2><p>${esc(device?.parts ?? "Cihazın modeline ve arıza belirtisine göre ilgili parçalar incelenir.")} İşlem kapsamı ve parça ihtiyacı, inceleme sonrasında onayınıza sunulur.</p><h2>Ne zaman servis çağırmalı?</h2><p>${esc(device?.urgent ?? safety)} Konya’da Karatay, Meram ve Selçuklu için cihaz bilgisiyle WhatsApp’tan servis talebi iletebilir, kayıt açıldığında işlem aşamalarını online takip edebilirsiniz.</p><h2>Sık sorulan sorular</h2>${guide.map(([question, answer]) => `<h3>${esc(question)}</h3><p>${esc(answer)}</p>`).join("")}`;
+    sections = `<h2>${esc(heading)} Hizmeti</h2><p>${esc(device?.intro ?? description)} Model, arıza belirtisi, varsa hata kodu ve bulunduğunuz ilçe bilgisi ilk değerlendirmeyi kolaylaştırır.</p><h2>Yaygın belirtiler ve güvenli ilk kontroller</h2><p>${esc(device?.symptoms ?? description)} ${esc(safety)}</p><h2>Servis incelemesinde değerlendirilen başlıklar</h2><p>${esc(device?.parts ?? "Cihazın modeline ve arıza belirtisine göre ilgili parçalar incelenir.")} İşlem kapsamı ve parça ihtiyacı, inceleme sonrasında onayınıza sunulur.</p><h2>Ne zaman servis çağırmalı?</h2><p>${esc(device?.urgent ?? safety)} Konya’da Karatay, Meram ve Selçuklu için cihaz bilgisiyle WhatsApp’tan servis talebi iletebilir, kayıt açıldığında işlem aşamalarını online takip edebilirsiniz.</p>${faultsHtml(deviceName)}<h2>Sık sorulan sorular</h2>${guide.map(([question, answer]) => `<h3>${esc(question)}</h3><p>${esc(answer)}</p>`).join("")}`;
   } else if (brand) {
     const [, brandName] = brand;
     const deviceLinks = brandDeviceLinks[brandName] ?? []; sections = `<h2>${esc(brandName)} Servisi Konya</h2><p>EŞLİ TEKNİK, ${esc(brandName)} marka cihazlarda doğru yönlendirme için önce cihaz türü, model ve belirti bilgisini netleştirir. Aynı belirti farklı cihazlarda farklı nedenlerden kaynaklanabileceği için aşağıdaki cihaz rehberlerinden uygun olanı seçin.</p><nav aria-label="Marka cihaz rehberleri"><h2>${esc(brandName)} Cihaz Rehberleri</h2><p>${deviceLinks.map(([label, href]) => `<a href="${href}">${esc(label)}</a>`).join(" · ")}</p></nav><p>Cihaz türü netleşmeden parça veya teknik müdahale önerilmez. Yanık kokusu, su/gaz kaçağı veya sigorta attırma varsa cihazı kullanmayın ve servis desteği alın.</p>`;

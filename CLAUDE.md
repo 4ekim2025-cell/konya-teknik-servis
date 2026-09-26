@@ -39,6 +39,7 @@ client/
     siteConfig.ts       # Telefon ve WhatsApp bağlantıları (tek kaynak)
     *.test.ts           # Vitest testleri
 shared/
+  device-faults.ts      # Öncelikli 5 cihazın arıza rehberi ve sayfa açıklamaları (React + prerender ortak)
   business-contact.ts   # Google İşletme profili bağlantısı
   seo-content.ts        # İlçe mahalleleri, ilçe ve hizmet SSS'leri
 scripts/prerender.ts    # Build sonrası her rota için başlık/açıklama/canonical/JSON-LD ve statik içerik yazar
@@ -77,6 +78,7 @@ Testlerin çoğu dosyaları `readFileSync` ile okuyup belirli metinlerin varlı�
 - Instagram erişim anahtarları yalnızca sunucu tarafındadır (`INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_USER_ID`). Asla `VITE_` önekiyle kullanma ve Git'e ekleme.
 - IndexNow: `scripts/indexnow.ts` üretim build'inin sonunda sitemap'teki URL'leri Bing/Yandex'e bildirir. Anahtar dosyası `client/public/<anahtar>.txt`; anahtarı değiştirirsen dosyanın adını ve içeriğini de değiştir. Yeni sayfa sitemap'e eklenince otomatik bildirilir.
 - Vercel projesi `esli3` ekibindedir (`konya-teknik-servis`). Önizleme linkleri Vercel girişi ister.
+- Arama motoru doğrulama dosyalarını silme: `client/public/googlee436d634b952fabd.html` (Search Console), `index.html` içindeki `google-site-verification` ve `msvalidate.01` etiketleri. Silinirse mülk erişimi kaybolur.
 - `/manus-storage/...` gibi göreli, geçici görsel yollarını üretim koduna ekleme.
 - `vite.config.ts` içindeki Manus eklentileri (debug collector, storage proxy, runtime) önceki geliştirme ortamından kalmadır ve üretimde etkisizdir. Kaldırılması ayrı bir iş olarak ele alınmalıdır.
 

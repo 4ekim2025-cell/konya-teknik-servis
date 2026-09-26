@@ -17,6 +17,8 @@ export const serviceFaqs: Record<string, [string, string][]> = {
   "Çamaşır Makinesi": [
     ["Çamaşır makinesi su almıyorsa ne kontrol edilir?", "Su vanasının açık, giriş hortumunun kıvrılmamış ve filtrede belirgin tıkanıklık olmadığını güvenli biçimde kontrol edebilirsiniz. Sorun sürerse servis kaydı oluşturun."],
     ["Çamaşır makinesi neden sıkma yapmaz?", "Dengesiz yük, tahliye problemi, kapak kilidi veya motor grubu etkilenmiş olabilir. Cihazı zorlamadan arıza belirtisini paylaşın."],
+    ["Çamaşır makinesi su boşaltmıyorsa ne yapabilirim?", "Suyun soğumasını bekleyin, önüne havlu ve düz bir kap koyarak ön alt kapaktaki pompa filtresini kılavuza göre temizleyin ve tahliye hortumunun kıvrılmadığını kontrol edin. Filtre temizken de su boşalmıyorsa tahliye pompası incelenmelidir."],
+    ["Çamaşır makinesi sıkmada neden çok sallanır ve ses yapar?", "Dengesiz yük, düz olmayan zemin ve ayarsız ayaklar en sık nedenlerdir; yeni kurulan makinede nakliye cıvatalarının sökülmemesi de şiddetli sarsıntı yapar. Sıkmada artan uğultu ve metalik ses amortisör veya kazan rulmanına işaret edebilir."],
     ["Çamaşır makinesi servisinde parça değişimi öncesi bilgi verilir mi?", "İnceleme sonrası gerekli işlem ve parça ihtiyacı açıklanır; onayınız alınmadan parça değişimi yapılmaz."],
     ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
     ["Aynı gün servis mümkün mü?", "Konya içindeki günlük planlama ve ekibin uygunluğuna göre aynı gün servis hedeflenir. Net bilgi talebinizde paylaşılır."]
@@ -24,6 +26,8 @@ export const serviceFaqs: Record<string, [string, string][]> = {
   "Bulaşık Makinesi": [
     ["Bulaşık makinesinin içinde su kalıyorsa ne yapılır?", "Cihazı zorlamadan filtreyi, tahliye hortumunu ve görünür tıkanıklıkları kılavuza uygun biçimde kontrol edin. Su kalmaya devam ederse pompa ve tahliye hattı için servis isteyin."],
     ["Bulaşık makinesi neden temiz yıkamaz?", "Filtre, püskürtme kolları, su sıcaklığı, deterjan kullanımı veya rezistans etkili olabilir. Belirtinin programın hangi aşamasında ortaya çıktığını paylaşın."],
+    ["Bulaşık makinesi su alıyor ama yıkamıyorsa neden olabilir?", "Tıkalı filtre ve püskürtme kolları, yıkama motoru, ısıtıcı rezistans veya kontrol kartı bu belirtiye yol açabilir. Önce filtreyi ve kolların serbestçe döndüğünü kontrol edin; sorun sürerse servis isteyin."],
+    ["Bulaşık makinesi altından neden su akıtır?", "Aşınmış kapak contası, gevşek hortum bağlantısı, pompa contası veya elde bulaşık deterjanı kullanımından kaynaklanan aşırı köpük su akıtmaya neden olur. Su yayılıyorsa musluğu kapatıp fişi kuru elle çekin."],
     ["Bulaşık makinesi servisinde aynı gün planlama yapılır mı?", "Konya içindeki günlük planlama ve ekip uygunluğuna göre aynı gün hedeflenebilir; net zaman servis talebi sırasında paylaşılır."],
     ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
     ["Aynı gün servis mümkün mü?", "Konya içindeki günlük planlama ve ekibin uygunluğuna göre aynı gün servis hedeflenir. Net bilgi talebinizde paylaşılır."]
@@ -31,12 +35,16 @@ export const serviceFaqs: Record<string, [string, string][]> = {
   "Buzdolabı": [
     ["Buzdolabı soğutmuyorsa fişi çekilmeli mi?", "Yanık kokusu, elektrik kaçağı veya sigorta attırma varsa cihazı kullanmayın. Diğer durumlarda sıcaklık, kapı ve hava dolaşımı gözlemlerini paylaşarak servis yönlendirmesi alın."],
     ["Buzdolabındaki buzlanma arıza mıdır?", "Tek başına her buzlanma aynı anlama gelmez; conta, hava kanalı, sensör veya defrost sistemi incelenebilir. Buzu kesici aletle kazımayın."],
+    ["Buzdolabının ışığı yanıyor ama soğutmuyorsa ne yapmalıyım?", "Sıcaklık ayarını, kapının tam kapandığını ve dolabın arkasında hava boşluğu kaldığını kontrol edin. Sorun sürüyorsa fan, defrost sistemi, sensör veya kompresör incelenmelidir; buzu kesici aletle kazımayın."],
+    ["Buzdolabı gazının bittiği nasıl anlaşılır?", "Soğutma gazı kendiliğinden bitmez, ancak bir kaçak varsa azalır. Kompresör çalıştığı hâlde dolabın giderek daha az soğutması kaçak belirtisi olabilir; kaçak noktası bulunup giderilmeden yapılan gaz dolumu kalıcı çözüm değildir."],
     ["Buzdolabı tamiri ne kadar sürer?", "Ayar, conta veya basit bağlantı işlemleri aynı ziyarette tamamlanabilir; parça ve soğutma sistemi işlemlerinde süre model ve parçaya göre değişir."],
     ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
     ["Aynı gün servis mümkün mü?", "Konya içindeki günlük planlama ve ekibin uygunluğuna göre aynı gün servis hedeflenir. Net bilgi talebinizde paylaşılır."]
   ],
   "Fırın": [
     ["Fırın ısıtmıyorsa kullanıcı neyi kontrol edebilir?", "Enerji bağlantısı, saat/program ayarı ve sıcaklık seçimi kontrol edilebilir. Rezistans veya termostatı sökmeyin; sorun sürerse servis isteyin."],
+    ["Fırın neden soğuk hava üflüyor?", "Fanlı pişirme programlarında havayı ısıtan fan rezistansı arızalandığında fan döner ama hava ısınmaz. Alt-üst ısıtma programında ısınma varsa arıza büyük olasılıkla fan rezistansındadır."],
+    ["Fırın neden sigorta attırır?", "Çatlamış veya gövdeye kaçak yapan rezistans, nem almış bağlantılar ve hasarlı kablolar sigortanın atmasına yol açar. Fırını tekrar tekrar çalıştırmayın; hangi programda attığını not edip servis isteyin."],
     ["Fırın tamiri aynı gün tamamlanır mı?", "Basit bağlantı, ayar veya uygun parça işlemleri aynı ziyarette tamamlanabilir. Kart veya özel parça gereken durumlarda süre değişebilir."],
     ["Gazlı fırında gaz kokusu varsa ne yapılmalı?", "Gaz vanasını kapatın, ortamı havalandırın ve elektrik düğmelerine dokunmadan yetkili destek alın. Cihazı kullanmaya devam etmeyin."],
     ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
@@ -52,6 +60,8 @@ export const serviceFaqs: Record<string, [string, string][]> = {
   "Kurutma Makinesi": [
     ["Kurutma makinesi ısıtmıyorsa ne yapılır?", "Filtre, su haznesi ve program seçimini kılavuza göre kontrol edin. Rezistans veya termik gruba müdahale etmeyin; sorun devam ederse servis isteyin."],
     ["Kurutma makinesi neden uzun sürer?", "Aşırı yük, filtre, hava akışı, nem sensörü veya ısıtma sistemi etkili olabilir. Çamaşır miktarı ve program bilgisini paylaşın."],
+    ["Kurutma makinesi çamaşırları neden ıslak bırakır?", "Tıkalı tiftik filtresi ve yoğuşturucu, aşırı yük, düşük kurutma seviyesi veya kirlenmiş nem sensörü çamaşırların nemli kalmasına yol açar. Filtreler temizken sorun sürüyorsa ısıtma sistemi incelenmelidir."],
+    ["Kurutma makinesi su tankı boşken neden dolu uyarısı verir?", "Tankın yerine tam oturmaması, tank içindeki şamandıranın takılması ya da suyu tanka basan pompanın arızalanması bu uyarıya neden olur. Tankı boşaltıp yerine tam oturtun; uyarı sürerse servis isteyin."],
     ["Kurutma makinesi servisinde parça değişimi nasıl belirlenir?", "Model ve arıza tespitinden sonra gerekli parça, işlem kapsamı ve süre açıklanır; onayınız alınmadan parça değişimi yapılmaz."],
     ["Takip linki nasıl çalışır?", "Servis kaydınız açıldıktan sonra size WhatsApp üzerinden özel bir bağlantı iletilir. Bağlantıdan işlem durumunu takip edebilirsiniz."],
     ["Aynı gün servis mümkün mü?", "Konya içindeki günlük planlama ve ekibin uygunluğuna göre aynı gün servis hedeflenir. Net bilgi talebinizde paylaşılır."]

@@ -75,6 +75,8 @@ Testlerin çoğu dosyaları `readFileSync` ile okuyup belirli metinlerin varlı�
 - Tüm rotalar sonda `/` ile biter (`vercel.json` → `trailingSlash: true`).
 - Yeni hizmet sayfası kalıbı: `/<cihaz>-tamiri-konya/`, marka sayfası kalıbı: `/<marka>-servisi-konya/`.
 - Instagram erişim anahtarları yalnızca sunucu tarafındadır (`INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_USER_ID`). Asla `VITE_` önekiyle kullanma ve Git'e ekleme.
+- IndexNow: `scripts/indexnow.ts` üretim build'inin sonunda sitemap'teki URL'leri Bing/Yandex'e bildirir. Anahtar dosyası `client/public/<anahtar>.txt`; anahtarı değiştirirsen dosyanın adını ve içeriğini de değiştir. Yeni sayfa sitemap'e eklenince otomatik bildirilir.
+- Vercel projesi `esli3` ekibindedir (`konya-teknik-servis`). Önizleme linkleri Vercel girişi ister.
 - `/manus-storage/...` gibi göreli, geçici görsel yollarını üretim koduna ekleme.
 - `vite.config.ts` içindeki Manus eklentileri (debug collector, storage proxy, runtime) önceki geliştirme ortamından kalmadır ve üretimde etkisizdir. Kaldırılması ayrı bir iş olarak ele alınmalıdır.
 

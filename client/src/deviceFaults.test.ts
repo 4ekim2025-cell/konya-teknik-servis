@@ -37,14 +37,28 @@ describe("öncelikli cihazların arıza rehberi", () => {
     expect(text).not.toMatch(/yetkili servis|garanti|₺|\bTL\b|%\d/i);
   });
 
-  it("gerçek aramalardan gelen soruları SSS'ye ve FAQ şemasına ekler", () => {
-    priorityDevices.forEach(device => expect(serviceFaqs[device].length).toBeGreaterThanOrEqual(7));
+  it("SSS'de arıza bölümünde veya süreç kartlarında zaten cevaplanan soruları tekrar etmez", () => {
+    priorityDevices.forEach(device => {
+      const questions = serviceFaqs[device].map(([question]) => question);
+      expect(questions.length).toBe(3);
+      expect(questions.join(" ")).not.toMatch(/takip linki|aynı gün/i);
+      const faultTitles = deviceFaultGuides[device].faults.map(fault => fault.title.toLocaleLowerCase("tr-TR"));
+      questions.forEach(question => faultTitles.forEach(title => expect(question.toLocaleLowerCase("tr-TR")).not.toContain(title)));
+    });
     expect(serviceFaqs["Buzdolabı"].map(([question]) => question)).toContain("Buzdolabı gazının bittiği nasıl anlaşılır?");
+  });
+
+  it("süre-ücret ve acil durum bilgisini arızalardan ayrı, tek yerde verir", () => {
+    priorityDevices.forEach(device => {
+      expect(deviceFaultGuides[device].service).toMatch(/onay/);
+      expect(deviceFaultGuides[device].urgent.length).toBeGreaterThan(80);
+    });
   });
 
   it("arıza rehberini hem React sayfasında hem prerender HTML'inde aynı kaynaktan gösterir", () => {
     expect(contentPage).toContain('import { deviceFaultGuides } from "@shared/device-faults";');
-    expect(contentPage).toContain("<Faults name={d.name}/>");
+    expect(contentPage).toContain("{faultGuide?<Faults name={d.name}/>:<>{!isDistrict&&<Guide d={d}/>}<DeviceCare d={d}/></>}");
+    expect(contentPage).toContain("{faultGuide?<FaultJumpList name={d.name}/>:");
     expect(contentPage).toContain("deviceFaultGuides[name]?.description");
     expect(prerender).toContain('import { deviceFaultGuides } from "../shared/device-faults";');
     expect(prerender).toContain("${faultsHtml(deviceName)}");

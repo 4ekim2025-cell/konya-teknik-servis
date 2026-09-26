@@ -47,12 +47,12 @@ export const brandGuides: Record<string, BrandGuide> = {
   },
   "Beko": {
     description: "Konya Karatay, Meram ve Selçuklu’da Beko çamaşır makinesi, bulaşık makinesi, buzdolabı ve fırın arızalarına bağımsız teknik servis desteği.",
-    intro: "Beko, Konya’da en sık karşılaşılan markalardan biri olarak çamaşır ve bulaşık makinesinden buzdolabı, derin dondurucu, fırına, davlumbaza, süpürgeye ve su sebiline kadar hemen her cihaz grubunda yer alıyor.",
+    intro: "Beko, Arçelik A.Ş.’nin hem Türkiye’de hem uluslararası pazarlarda kullandığı markasıdır. Çamaşır makinesinden su sebiline kadar geniş bir cihaz yelpazesi bulunduğundan, servis talebinizde arızalı cihazın türünü ve belirtiyi birlikte yazmanız ilk yönlendirmeyi hızlandırır.",
     notes: [
       { title: "Bulaşık makinesinde program hataları", text: "Beko bulaşık makinelerinde ekranda beliren program hataları genellikle su alma süresinin uzaması, ısıtıcı devresindeki bir sapma ya da tahliye pompasındaki tıkanıklıkla ilgilidir; ekranda gördüğünüz harf-rakam kombinasyonunu ve programın hangi dakikasında durduğunu paylaşmanız arıza türünü daraltmamıza yardımcı olur." },
       { title: "Çamaşır makinesinde su alma ve merkezkaç", text: "Beko çamaşır makinelerinde suyun içeri alınmaması genelde giriş valfindeki bir tıkanıklıktan, sıkma devrinde makinenin aşırı sallanması ise amortisör veya yay takozlarının yorulmasından kaynaklanır; sallanmanın hangi devirde başladığını belirtmeniz kontrolü kolaylaştırır." },
       { title: "Buzdolabı ve derin dondurucuda soğutma dengesi", text: "Beko buzdolabı ve derin dondurucularında bir bölmenin aşırı soğuk, diğerinin yeterince soğuk olmaması genelde hava kanalındaki bir tıkanıklıktan veya damper motorundan kaynaklanabilir; hangi bölmenin sorunlu olduğunu ve dolabın no-frost olup olmadığını belirtmeniz teşhisi hızlandırır." },
-      { title: "Geniş kullanıcı tabanında yedek parça planlaması", text: "Beko’nun Konya’da çok sayıda evde bulunması, farklı üretim yıllarına ait pek çok model ve buna bağlı çeşitli elektronik kart sürümü anlamına gelir; cihaz üzerindeki model ve seri numarası etiketinin net bir fotoğrafını paylaşmanız doğru parçanın önceden araştırılmasını sağlar." },
+      { title: "Farklı üretim yıllarında yedek parça planlaması", text: "Beko’nun uzun yıllar boyunca çok sayıda model üretmiş olması, aynı cihaz türünde bile farklı elektronik kart sürümleri bulunabileceği anlamına gelir; cihaz üzerindeki model ve seri numarası etiketinin net bir fotoğrafını paylaşmanız doğru parçanın önceden araştırılmasını sağlar." },
     ],
     faqs: [
       ["Beko fırın neden sadece tek taraf ısınıyor, alt-üst pişirme yapmıyor?", "Sadece bir rezistansın çalışması genelde diğer rezistansın yanmasından veya program seçici düğmenin ilgili konuma tam oturmamasından kaynaklanır; fırını farklı pişirme modlarında deneyip hangi modda ısınma olduğunu not etmeniz arızanın rezistans mı yoksa seçici mi olduğunu ayırt etmemize yardımcı olur."],
@@ -74,7 +74,7 @@ export const brandGuides: Record<string, BrandGuide> = {
   },
   "Electrolux": {
     description: "Konya’da Electrolux çamaşır makinesi, süpürge, buzdolabı ve fırın arızalarına bağımsız teknik servis; yerinde inceleme, net bilgilendirme.",
-    intro: "Electrolux, Konya’da daha çok süpürge ve çamaşır makinesiyle anılan İsveç kökenli bir marka; markanın buzdolabı, fırın ve bulaşık makinesi modelleri de bulunduğundan, servis talebinde önce cihaz türünün netleştirilmesi doğru yönlendirmenin ilk adımıdır.",
+    intro: "Electrolux, İsveç kökenli bir ev aletleri üreticisidir. Markanın farklı ülkelerde üretilmiş modelleri bulunduğu için cihaz etiketindeki ürün numarası (PNC), doğru yedek parçanın belirlenmesinde en güvenilir bilgidir.",
     notes: [
       { title: "Süpürgede emiş kaybı ve ısınma", text: "Electrolux süpürgelerde emiş gücünün azalması genelde toz haznesi veya torba filtresinin dolmasından, cihazın kısa süre çalışıp kendini kapatması ise aşırı ısınmaya karşı devreye giren koruma sisteminden kaynaklanabilir; filtreyi ne zaman temizlediğiniz bilgisi ilk değerlendirme noktasıdır." },
       { title: "Fırında ısı sensörü ve buzdolabında kompresör", text: "Electrolux fırınlarında sıcaklığın istenen seviyeye geç ulaşması genelde ısı sensöründeki bir sapmadan, buzdolabında sürekli çalışan kompresörün soğutamaması ise gaz kaçağı veya tıkalı kılcal borudan kaynaklanabilir; hangi cihazda hangi belirtinin görüldüğünü ayrı ayrı belirtmeniz teşhisi hızlandırır." },
@@ -86,7 +86,7 @@ export const brandGuides: Record<string, BrandGuide> = {
   },
   "Franke": {
     description: "Konya’da Franke ankastre ocak, fırın, davlumbaz ve bulaşık makinesi arızalarına bağımsız teknik servis desteği; yerinde inceleme.",
-    intro: "Franke, Konya’daki mutfaklarda daha çok ankastre ocak, fırın, davlumbaz ve bulaşık makinesi gibi gömme mutfak cihazlarıyla tanınır; az sayıda evde ankastre tipte buzdolabı modeli de bulunur, ancak marka çamaşır makinesi üretmez.",
+    intro: "Franke, İsviçre kökenli ve mutfak sistemleri odaklı bir üreticidir. Ankastre ocak, fırın ve davlumbaz gibi gömme cihazlarda bazı arızalar cihaz dolaptan çıkarılmadan incelenemediği için servis planlamasında montaj şekli de dikkate alınır.",
     notes: [
       { title: "Ankastre ocakta ateşleme sorunları", text: "Franke ankastre ocaklarda çakmağın çıt çıt sesi çıkarıp gazı tutuşturmaması genelde ateşleme buji ucundaki kir birikintisinden veya termokupl adı verilen güvenlik sensöründeki arızadan kaynaklanır; hangi gözün sorunlu olduğunu ve sesin sürekli mi yoksa aralıklı mı çıktığını belirtmeniz teşhisi kolaylaştırır." },
       { title: "Davlumbazda filtre ve motor bakımı", text: "Franke davlumbazlarında emişin azalması çoğunlukla yağ filtresinin uzun süre yıkanmamasından, sürekli çalışan motor sesinin yükselmesi ise rulmanların yağ kaybetmesinden kaynaklanır; karbon filtreli mi yoksa baca bağlantılı mı olduğunu bilmemiz doğru bakım planını belirlememizi sağlar." },
@@ -101,7 +101,7 @@ export const brandGuides: Record<string, BrandGuide> = {
   },
   "Grundig": {
     description: "Konya’da Grundig çamaşır makinesi, bulaşık makinesi, kurutma makinesi ve fırın arızalarına bağımsız teknik servis; net ön bilgilendirme.",
-    intro: "Grundig, Konya’da çamaşır ve bulaşık makinesi ikilisiyle tanınan bir marka; kurutma, fırın, süpürge ve davlumbaz modelleri de evlerde bulunur, ancak derin dondurucu veya su sebili üretmiyor.",
+    intro: "Grundig, kökleri Almanya’daki elektronik üretimine dayanan ve 2000’li yıllardan bu yana Arçelik A.Ş. bünyesinde yer alan bir markadır; bugün satılan Grundig beyaz eşyalar da bu grup tarafından üretilir.",
     notes: [
       { title: "Süpürgede kablo ve kömür aşınması", text: "Grundig kablolu süpürgelerde motorun aniden durması genelde kömürlerin aşınıp kontak kaybetmesinden, kordonun makaraya sarılırken kesik kesik geri gitmesi ise sarma mekanizmasındaki bir arızadan kaynaklanabilir; süpürgenin kaç yıldır kullanıldığı bilgisi kömür durumunu tahmin etmemize yardımcı olur." },
       { title: "Bulaşık makinesinde uzayan yıkama süreleri", text: "Grundig bulaşık makinelerinde standart bir programın olağandan çok daha uzun sürmesi genelde su ısıtma direncinin yavaş ısınmasından veya kirlilik sensörünün suyu hep kirli algılamasından kaynaklanabilir; hangi programı seçtiğinizi ve normalde kaç dakika sürdüğünü bilmemiz karşılaştırmalı değerlendirme yapmamızı sağlar." },
@@ -111,7 +111,7 @@ export const brandGuides: Record<string, BrandGuide> = {
     faqs: [
       ["Grundig servisi Arçelik mi?", "Grundig, Arçelik, Beko ve Altus ile birlikte Arçelik A.Ş. çatısı altındaki markalardan biridir; bu ortak yapı bazı modellerde benzer devre kartı ve motor mimarisi kullanılabileceği anlamına gelir, ancak Grundig kendi model serisine özgü parçalar da barındırır, bu yüzden doğru parça için cihazın kendi model etiketine bakılması gerekir."],
       ["Grundig süpürge neden kullanırken kordonu geri sarmıyor?", "Kordonun geri sarılmaması genelde sarma yayının gerginliğini kaybetmesinden veya makara içindeki mekanizmanın kordonla birlikte dolanmasından kaynaklanır; kordonu elle yavaşça çekip bıraktığınızda hiç tepki alıp almadığınızı kontrol etmeniz arızanın yay mı yoksa mekanizma mı olduğunu ayırt etmemize yardımcı olur."],
-      ["Grundig davlumbaz neden ışığı yanıyor ama motoru çalışmıyor?", "Işık ve motor Grundig davlumbazlarında ayrı devrelerden beslendiğinden, ışığın yanıp motorun çalışmaması genelde motor sargısındaki bir kopmayı veya hız kademe anahtarındaki temassızlığı gösterir; hangi kademede denediğinizi ve motorun hiç uğultu sesi çıkarıp çıkarmadığını belirtmeniz teşhisi hızlandırır."],
+      ["Grundig davlumbazın filtreleri ne sıklıkla temizlenmeli veya değiştirilmeli?", "Metal yağ filtreleri yıkanarak yeniden kullanılabilir; yıkama aralığı pişirme yoğunluğuna ve kullanım kılavuzundaki öneriye göre belirlenir. Havayı dışarı atmadan mutfağa geri veren modellerde bulunan karbon filtre ise yıkanmaz, belirli aralıklarla yenilenir. Tıkalı filtre çekişi zayıflatır ve motorun daha fazla zorlanmasına yol açar."],
     ],
   },
   "Hoover": {
@@ -167,7 +167,7 @@ export const brandGuides: Record<string, BrandGuide> = {
   },
   "Regal": {
     description: "Konya’da Regal çamaşır makinesi, buzdolabı, derin dondurucu ve fırın arızalarına bağımsız teknik servis; yerinde inceleme, net bilgi.",
-    intro: "Regal, Konya’da tek bir cihaz grubuyla sınırlı kalmayıp çamaşır makinesinden buzdolabına, süpürgeden davlumbaza kadar farklı evlerde karşımıza çıkıyor; su sebili grubunda ise marka olarak yer almıyor.",
+    intro: "Regal, çamaşır makinesinden davlumbaza kadar farklı cihaz gruplarında ürün sunan yerli bir beyaz eşya markasıdır.",
     notes: [
       { title: "Buzdolabı ve derin dondurucuda soğutmama", text: "Regal buzdolabı ve derin dondurucularında soğutmanın zayıflaması genelde kapı contasındaki hava kaçağından, sürekli çalışıp bir türlü istenen ısıya inememesi ise kompresör veya gaz kaçağından kaynaklanabilir; cihazın kaç yıldır kullanıldığı ve içindeki termostat ayarının kaçta olduğu bilgisi teşhisi hızlandırır." },
       { title: "Çamaşır makinesinde kapı kilidi ve program durması", text: "Regal çamaşır makinelerinde kapının yıkama sırasında aniden açılması veya hiç kilitlenmemesi genelde kapı kilit mekanizmasındaki bir arızayı işaret eder, programın ortasında donup kalması ise ana kontrol kartındaki bir sıfırlanmadan kaynaklanabilir; kapının kilitlenirken ses çıkarıp çıkarmadığı bilgisi teşhisi kolaylaştırır." },
@@ -181,8 +181,8 @@ export const brandGuides: Record<string, BrandGuide> = {
     ],
   },
   "Rowenta": {
-    description: "Konya’da Rowenta elektrikli süpürge arızalarına bağımsız teknik servis; hazne, motor ve emiş sorunlarında yerinde inceleme.",
-    intro: "Rowenta da Konya’da neredeyse yalnızca kablosuz ve klasik süpürge modelleriyle tercih edilen bir marka; hazne kilidi ve şarj ünitesi, bu modellerde sık aranan sorunlar arasında yer alıyor.",
+    description: "Rowenta kablosuz ve kablolu süpürgelerde batarya, şarj ve emiş sorunları için Konya’da teknik servis; WhatsApp’tan kayıt açın.",
+    intro: "Rowenta, Alman kökenli ve bugün Groupe SEB çatısı altında yer alan bir küçük ev aletleri markasıdır. Eşli Teknik bu marka için elektrikli süpürge servisi verir; kablosuz modellerde batarya ve şarj ünitesi, kablolu modellerde ise emiş hattı incelemenin odağındadır.",
     notes: [
       { title: "Hazne kilidinde açılma ve kapanma sorunu", text: "Rowenta süpürgelerde toz haznesinin yerine tam oturmaması veya kilit mandalının kırılması, hem emişin zayıflamasına hem de cihazın güvenlik nedeniyle çalışmayı reddetmesine yol açabilir; kilidin ne zaman kırıldığını ve haznenin ne kadar dolu kullanıldığını belirtmeniz teşhisi kolaylaştırır." },
       { title: "Motor ve filtre kaynaklı emiş kaybı", text: "Rowenta süpürgelerde emiş gücünün azalması genelde filtrenin yıkanmadan uzun süre kullanılmasından, motorun anormal ses çıkarması ise rulman aşınmasından kaynaklanır; süpürgenin ne sıklıkla temizlendiği bilgisi bakım geçmişini değerlendirmemize yardımcı olur." },
@@ -193,7 +193,7 @@ export const brandGuides: Record<string, BrandGuide> = {
     ],
   },
   "Siemens": {
-    description: "Konya’da Siemens çamaşır makinesi, bulaşık makinesi, buzdolabı ve fırın arızalarına bağımsız teknik servis; net ön inceleme.",
+    description: "Siemens çamaşır makinesi, bulaşık makinesi, buzdolabı ve ankastre fırınlarınız için Konya’da teknik servis; işlem ve ücret önceden açıklanır.",
     intro: "Siemens, Konya’da özellikle ankastre mutfak setlerinde —fırın, ocak ve davlumbaz üçlüsünde— tercih edilen bir marka; çamaşır ve bulaşık makinesi modelleri de yaygın kullanılıyor, bu geniş kullanım alanı arıza taleplerinin de birden fazla cihaz grubundan gelmesine yol açıyor.",
     notes: [
       { title: "Buzdolabında kapı contası ve enerji kaybı", text: "Siemens buzdolaplarında kapı contasının sertleşmesi veya köşelerinde kopma olması içeri sıcak hava girmesine, bu da kompresörün normalden sık ve uzun çalışmasına yol açabilir; contanın hangi kapıda ve nerede hasarlı göründüğünü belirtmeniz değişecek parçayı önceden netleştirmemize yardımcı olur." },
@@ -218,9 +218,9 @@ export const brandGuides: Record<string, BrandGuide> = {
   },
   "Sinbo": {
     description: "Konya’da Sinbo elektrikli süpürge, mini fırın ve elektrikli ocak arızalarına bağımsız teknik servis desteği, yerinde inceleme.",
-    intro: "Sinbo, Konya’da daha çok elektrikli süpürge ile mini ve midi fırın, elektrikli ocak gibi küçük mutfak cihazlarıyla tanınan bir marka; büyük beyaz eşya grubunda çamaşır veya bulaşık makinesi üretmiyor.",
+    intro: "Sinbo, küçük ev aletleri odaklı yerli bir markadır. Küçük ev aletlerinde parça tedariki modele göre değiştiği için ürün kutusundaki veya cihaz altındaki model kodunu paylaşmanız, onarımın mümkün olup olmadığını önceden netleştirmemizi sağlar.",
     notes: [
-      { title: "Süpürgede emiş ve motor sesi", text: "Sinbo süpürgelerinde emiş gücünün zamanla azalması genelde toz haznesi filtresinin tıkanmasından, motorun normalden yüksek sesle çalışması ise rulman aşınmasından kaynaklanabilir; süpürgenin torbalı mı torbasız mı olduğu bilgisi filtre kontrolünü kolaylaştırır." },
+      { title: "Süpürgede emiş ve motor sesi", text: "Sinbo süpürgelerinde emiş gücünün zamanla azalması genelde toz haznesi filtresinin tıkanmasından, motorun normalden yüksek sesle çalışması ise rulman aşınmasından kaynaklanabilir; şarjlı modellerde batarya süresinin kısalması ise ayrı bir kontrol gerektirir." },
       { title: "Mini fırında ısıtma teli arızaları", text: "Sinbo’nun mini ve midi fırınlarında ısının hiç yükselmemesi genelde alt veya üst ısıtma telinin yanmasından kaynaklanır, fırının içi ısınıyor ama süre dolunca kapanmıyor gibi bir belirti ise zaman ayarlayıcı düğmedeki bir arızayı gösterebilir; fırının hangi ısıtma modunda tepki vermediğini belirtmeniz teşhisi kolaylaştırır." },
       { title: "Elektrikli ocakta göz ısıtma sorunları", text: "Sinbo elektrikli ocaklarda sıcaklık ayar düğmesi en yüksek konuma getirilse bile gözün yeterince kızarmaması genelde uzun kullanım sonucu ısıtma telinin gücünü kaybetmesinden kaynaklanır; ocağı soğukken deneyip aynı yavaşlığın devam edip etmediğini ve düğmeyi çevirirken bir tık hissi alıp almadığınızı kontrol etmeniz faydalı olur." },
       { title: "Süpürgede hazne ve toz torbası uyumu", text: "Sinbo süpürgelerinde yanlış boy veya model toz torbası kullanılması emişin düşük hissedilmesine ve motorun daha çabuk ısınmasına yol açabilir; süpürgenizin model numarasını ve kullandığınız torbanın orijinal mi jenerik mi olduğunu paylaşmanız doğru parçanın belirlenmesini kolaylaştırır." },
@@ -245,7 +245,7 @@ export const brandGuides: Record<string, BrandGuide> = {
   },
   "Teka": {
     description: "Konya’da Teka ankastre ocak, fırın, davlumbaz ve bulaşık makinesi arızalarına bağımsız teknik servis; yerinde net değerlendirme.",
-    intro: "Teka, Konya mutfaklarında ankastre ocak, fırın ve davlumbaz üçlüsüyle; çamaşırhanelerde ise bulaşık, kurutma ve çamaşır makinesiyle, mutfakta ayrıca derin dondurucu ve su sebiliyle karşımıza çıkıyor.",
+    intro: "Teka, ankastre mutfak cihazları ve evyeleriyle bilinen uluslararası bir üreticidir. Çoğu Teka fırında model etiketi kapak açıldığında iç çerçevede, ankastre ocaklarda ise cihazın alt yüzeyinde bulunur; etiketin fotoğrafı doğru parçanın belirlenmesine yeter.",
     notes: [
       { title: "Ocak düğmelerinde kilitlenme ve dokunmatik panel", text: "Teka’nın dokunmatik kontrollü ocaklarında panelin hiçbir dokunuşa tepki vermemesi genelde yüzeydeki nemden veya güvenlik kilidinin yanlışlıkla etkinleşmesinden kaynaklanabilir, gaz modellerinde ise çakmağın tutuşturamaması ayrı bir arıza grubudur; ocağınızın elektrikli mi yoksa gazlı mı olduğunu belirtmeniz doğru yönlendirmeyi sağlar." },
       { title: "Bulaşık makinesinde kapı kilidi ve başlamama", text: "Teka bulaşık makinelerinde programın hiç başlamaması çoğunlukla kapının tam kapandığını algılayamayan kilit sensöründen kaynaklanır, bazı modellerde ise su musluğunun kapalı unutulması aynı belirtiyi taklit edebilir; kapıyı kapatırken bir tık sesi alıp almadığınızı belirtmeniz teşhisi hızlandırır." },
@@ -257,7 +257,7 @@ export const brandGuides: Record<string, BrandGuide> = {
   },
   "Uğur Soğutma": {
     description: "Konya’da Uğur Soğutma buzdolabı, derin dondurucu ve su sebili arızalarına bağımsız teknik servis; soğutma sistemine yerinde bakım.",
-    intro: "Uğur Soğutma, Konya’da buzdolabı, derin dondurucu ve su sebili gibi tamamen soğutma odaklı cihazlarıyla tanınıyor; ürün gamı yalnızca soğutma teknolojisine dayandığından kompresör ve gaz devresi arızaları markanın en sık karşılaşılan konusu oluyor.",
+    intro: "Uğur Soğutma, derin dondurucu ve soğutma cihazları üzerine uzmanlaşmış yerli bir üreticidir. Bu cihazlarda arıza tespiti kompresör, termostat ve soğutma devresinin birlikte değerlendirilmesini gerektirir.",
     notes: [
       { title: "Derin dondurucuda hata kodları ve ayar", text: "Uğur derin dondurucularında panelde beliren bir hata kodu genellikle sıcaklık artışı veya defrost devresindeki bir arızayı işaret eder, termostat ayarının yanlışlıkla değişmiş olması da benzer bir belirti verebilir; kodun görünümünü ve ayarın kaçta olduğu bilgisini paylaşmanız teşhisi hızlandırır." },
       { title: "Su sebilinde soğutma performansı", text: "Uğur su sebillerinde soğuk suyun yeterince soğumaması genelde kompresörün uzun süre yorulmasından veya gaz basıncının düşmesinden kaynaklanabilir; günde ortalama kaç damacana su için kullandığınız ve şikâyetin ne zamandır sürdüğü bilgisi değerlendirmeyi kolaylaştırır." },
@@ -269,7 +269,7 @@ export const brandGuides: Record<string, BrandGuide> = {
   },
   "Vestel": {
     description: "Konya Karatay, Meram ve Selçuklu’da Vestel çamaşır makinesi, buzdolabı, fırın ve derin dondurucu arızalarına bağımsız teknik servis.",
-    intro: "Vestel, Konya’da çok farklı cihaz gruplarında karşımıza çıkan bir marka; aynı evde hem büyük beyaz eşya hem küçük ev aletleri tarafında Vestel ürünü bulunması sık rastlanan bir durum.",
+    intro: "Vestel, Zorlu Grubu’na bağlı ve üretimini ağırlıklı olarak Manisa’daki tesislerinde yapan yerli bir markadır. Hem büyük beyaz eşya hem küçük ev aletleri grubundaki Vestel cihazlarına servis veriyoruz.",
     notes: [
       { title: "Buzdolabı ve derin dondurucuda arıza kodları", text: "Vestel buzdolabı ve derin dondurucularının bir kısmında panel üzerinde yanıp sönen ışık dizileri ya da harf-rakam kombinasyonlarıyla arıza bildirilir; bu göstergenin fotoğrafını, dolabın soğutup soğutmadığı ve içerideki sıcaklık ekranının ne gösterdiği bilgisiyle birlikte paylaşmanız teşhisi hızlandırır." },
       { title: "Çamaşır makinesinde su boşaltma ve sıkma", text: "Vestel çamaşır makinelerinde su boşaltmama şikâyeti sıklıkla tahliye pompasındaki tıkanıklıktan, sıkma turunun düşmesi ise dengesizlik sensöründen veya kömürlerin aşınmasından kaynaklanır; makinenin hangi program adımında durduğunu belirtmeniz arızayı öngörmemize yardımcı olur." },
@@ -284,7 +284,7 @@ export const brandGuides: Record<string, BrandGuide> = {
   },
   "Altus": {
     description: "Konya’da Altus çamaşır makinesi, buzdolabı, derin dondurucu ve su sebili arızalarına bağımsız teknik servis; hızlı yerinde randevu.",
-    intro: "Altus’un Konya’daki en yaygın kullanım alanı buzdolabı, derin dondurucu ve su sebili üçlüsü; bu üç cihazın hepsinin aynı evde bulunması Altus kullanıcıları arasında sık görülen bir tablo, süpürge grubunda ise marka olarak yer almıyor.",
+    intro: "Altus, Arçelik A.Ş.’nin ekonomik segmentte konumlanan markasıdır. Model etiketindeki ürün kodu, cihazın hangi ürün ailesine ait olduğunu ve uygun parçanın belirlenmesini kolaylaştırır.",
     notes: [
       { title: "Davlumbazda klape ve kapak mekanizması", text: "Altus davlumbazlarında bacaya bağlı klapenin tam kapanmaması dışarıdan koku ve soğuk hava girmesine yol açabilir, motorlu kapaklı modellerde kapağın açılıp kapanmaması ise genelde kapak motorundaki bir arızadan kaynaklanır; hangi modelde hangi belirtiyi gözlemlediğiniz teşhisi kolaylaştırır." },
       { title: "Su sebilinde soğutmama ve su akıtma", text: "Altus su sebillerinde soğuk su verilmemesi genelde soğutma ünitesindeki termostat veya kompresörden, sebilin altından su sızması ise damacana contasından ya da iç tanktaki bir çatlaktan kaynaklanabilir; sebilin alttan mı üstten mi damacanalı olduğunu belirtmeniz doğru yönlendirmeyi sağlar." },

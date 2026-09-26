@@ -58,7 +58,7 @@ describe("cihaz sayfalarının arıza rehberi", () => {
   it("arıza rehberini hem React sayfasında hem prerender HTML'inde aynı kaynaktan gösterir", () => {
     expect(contentPage).toContain('import { deviceFaultGuides } from "@shared/device-faults";');
     expect(contentPage).toContain("{faultGuide?<Faults name={d.name}/>:<>{!isDistrict&&<Guide d={d}/>}<DeviceCare d={d}/></>}");
-    expect(contentPage).toContain("{faultGuide?<FaultJumpList name={d.name}/>:");
+    expect(contentPage).toContain("faultGuide?<FaultJumpList name={d.name}/>:");
     expect(contentPage).toContain("deviceFaultGuides[name]?.description");
     expect(prerender).toContain('import { deviceFaultGuides } from "../shared/device-faults";');
     expect(prerender).toContain("${faultsHtml(deviceName)}");

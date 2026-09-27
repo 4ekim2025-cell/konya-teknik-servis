@@ -45,6 +45,9 @@ export const districtGuides: Record<string, DistrictGuide> = {
     hero: "Meram’daki evinizde arızalanan beyaz eşya ve küçük ev aletleri için WhatsApp’tan servis talebi oluşturun.",
     intro: "Meram’a atölyemizden planlı olarak servis veriyoruz. Bu ilçedeki son işlerimiz dört farklı cihazdan geliyor: titreyen bir çamaşır makinesi, kapağından su sızdıran bir bulaşık makinesi, buzlanma yüzünden ses yapan bir buzdolabı ve programı bitirmeyen bir kurutma makinesi. Her birinde ne bulduğumuzu ve ne yaptığımızı aşağıdaki servis kayıtlarında anlattık.",
     notes: [],
-    faqs: [],
+    faqs: [
+      ["Bulaşık makinesi suyu boşaltmıyorsa ne yapmalıyım?", "Öncelikle makineyi kapatıp fişini çekin. Filtre bölümünde su veya yemek artığı birikmiş olup olmadığını kontrol edin. Gider hortumunda kıvrılma ya da tıkanıklık da suyun boşalmasını engelleyebilir. Sorun devam ediyorsa tahliye pompası veya gider sistemi kontrol edilmelidir."],
+      ["Buzdolabım yeterince soğutmuyorsa ne yapmalıyım?", "Öncelikle sıcaklık ayarını ve kapının tam kapanıp kapanmadığını kontrol edin. Buzdolabının hava kanallarının yiyeceklerle kapatılmaması gerekir. Cihaz uzun süre çalışmasına rağmen yeterli soğutma yapmıyorsa fan, sensör veya soğutma sistemiyle ilgili bir arıza olabilir. Bu durumda servis tarafından kontrol edilmesi gerekir."],
+    ],
   },
 };

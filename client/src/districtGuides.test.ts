@@ -22,6 +22,7 @@ describe("ilçe sayfaları", () => {
   });
 
   it("ilçeler arasında aynı soruyu tekrar etmez ve genel süreç sorularını SSS'ye koymaz", () => {
+    districts.forEach(name => expect(districtGuides[name].faqs.length, name).toBeGreaterThanOrEqual(2));
     const questions = districts.flatMap(name => districtGuides[name].faqs.map(([question]) => question.replace(name, "X")));
     expect(new Set(questions).size).toBe(questions.length);
     expect(questions.join(" ")).not.toMatch(/takip|aynı gün|ne yazmalıyım|nasıl açılır|hangi bilgiler/i);

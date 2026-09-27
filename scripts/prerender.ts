@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { districtNeighborhoods, districtFaqs, serviceFaqs } from "../shared/seo-content";
+import { districtNeighborhoods, serviceFaqs } from "../shared/seo-content";
+import { districtGuides } from "../shared/district-guides";
 import { GOOGLE_BUSINESS_URL } from "../shared/business-contact";
 import { deviceFaultGuides } from "../shared/device-faults";
 import { brandGuides } from "../shared/brand-guides";
@@ -41,11 +42,6 @@ const districts: Record<string, string> = {
   "/selcuklu/": "Selçuklu Beyaz Eşya Servisi | Eşli Teknik Konya",
 };
 
-const districtDetails: Record<string, { intro: string; guide: string; services: string; safety: string; faqs: [string,string][] }> = {
-  Karatay: { intro: "Karatay’da çamaşır makinesi, buzdolabı, bulaşık makinesi ve diğer ev cihazlarınız için servis talebinizi WhatsApp’tan iletebilirsiniz.", guide: "Cihazın markasını, modelini ve yaşadığınız sorunu yazmanız ilk yönlendirme için yeterlidir. Karatay’daki açık adresinizi ve uygun olduğunuz zaman aralığını da paylaşırsanız servis planı daha kolay netleşir.", services: "Çamaşır makinesi, bulaşık makinesi, buzdolabı, derin dondurucu, fırın, ocak, davlumbaz ve su sebili için ilgili cihaz rehberlerini inceleyebilirsiniz.", safety: "Yanık kokusu, su kaçağı veya sigorta attırma varsa cihazı kullanmayın ve gövdesini açmayın.", faqs: districtFaqs.Karatay },
-  Meram: { intro: "Meram’da evinizdeki beyaz eşya veya küçük ev aleti için arıza bilgilerinizi paylaşarak servis planlaması hakkında bilgi alabilirsiniz.", guide: "Cihazın hangi belirtiyi gösterdiğini, modelini ve bulunduğunuz mahalleyi yazın. Fotoğraf veya hata kodu varsa mesajınıza ekleyebilirsiniz.", services: "Çamaşır, kurutma ve bulaşık makineleri; buzdolabı, derin dondurucu, fırın, ocak ve davlumbaz için cihaz türüne özel servis sayfalarından bilgi alabilirsiniz.", safety: "Su kaçağı, duman, yanık kokusu veya elektrik riski fark ederseniz cihazı kullanmayı bırakın.", faqs: districtFaqs.Meram },
-  Selçuklu: { intro: "Selçuklu’da beyaz eşya ve ankastre cihaz arızaları için cihaz bilgilerinizi göndererek servis sürecini başlatabilirsiniz.", guide: "Cihaz türünü, marka-model bilgisini, arızanın ne zaman başladığını ve açık adresinizi belirtin. Bu bilgiler talebinizin doğru cihaz rehberine yönlendirilmesini sağlar.", services: "Çamaşır ve kurutma makineleri, bulaşık makineleri, buzdolapları, derin dondurucular, fırınlar, ocaklar ve davlumbazlar için ilgili servis sayfalarını inceleyebilirsiniz.", safety: "Gaz, elektrik, su veya soğutma sistemine kendi başınıza müdahale etmeyin.", faqs: districtFaqs.Selçuklu },
-};
 
 const brands = [
   ["altus", "Altus"], ["arcelik", "Arçelik"], ["arnica", "Arnica"], ["beko", "Beko"], ["bosch", "Bosch"],
@@ -94,7 +90,7 @@ for (const post of blogPosts) extra[post.slug] = [`${post.title} | Eşli Teknik 
 const routes: Record<string, [string, string]> = {
   ...extra,
   ...services,
-  ...Object.fromEntries(Object.entries(districts).map(([route, title]) => [route, [title, `${title.replace(" | Eşli Teknik Konya", "")} bölgesinde beyaz eşya tamiri ve teknik servis için Eşli Teknik’e ulaşın.`]])),
+  ...Object.fromEntries(Object.entries(districts).map(([route, title]) => [route, [title, districtGuides[title.split(" Beyaz Eşya")[0]].description]])),
 };
 
 function esc(value: string) {
@@ -142,6 +138,9 @@ function jsonLd(title: string, description: string, url: string, route: string) 
   if (routeServiceFaqs) {
     graph.push({ "@type": "FAQPage", "@id": `${url}#faq`, mainEntity: routeServiceFaqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) });
   }
+
+  const districtGuide = districts[route] ? districtGuides[districts[route].split(" Beyaz Eşya")[0]] : undefined;
+  if (districtGuide?.faqs.length) graph.push({ "@type": "FAQPage", "@id": `${url}#faq`, mainEntity: districtGuide.faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) });
 
   return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replaceAll("</", "<\\/");
 }
@@ -218,9 +217,10 @@ function staticContent(title: string, description: string, route: string) {
     sections = `<h2>Konya’da Servis Verilen Markalar</h2><p>Eşli Teknik; ${brands.map(([, name]) => esc(name)).join(", ")} ve listede yer alan diğer marka ve model cihazlar için teknik servis desteği sunar.</p><h2>Servis Talebi</h2><p>Cihaz markası, modeli ve arıza bilgisini WhatsApp üzerinden paylaşarak servis süreci hakkında bilgi alabilirsiniz.</p>`;
   } else if (districts[route]) {
     const district = title.split(" Beyaz Eşya")[0];
-    const detail = districtDetails[district];
+    const guide = districtGuides[district];
     const neighborhoods = districtNeighborhoods[district] ?? [];
-    sections = `<h2>${esc(district)} Beyaz Eşya Servisi</h2><p>${esc(detail.intro)}</p><h2>${esc(district)} için hizmet rehberleri</h2><p>${esc(detail.services)}</p><h2>Servis öncesi güvenlik</h2><p>${esc(detail.safety)}</p><section aria-labelledby="district-neighborhoods-title"><h2 id="district-neighborhoods-title">Hizmet Verdiğimiz Mahalleler</h2><p>${neighborhoods.map((neighborhood, index) => `<span>${String(index + 1).padStart(2, "0")} ${esc(neighborhood)}</span>${index < neighborhoods.length - 1 ? " · " : ""}`).join("")}</p></section><h2>${esc(district)} hakkında sık sorulanlar</h2>${detail.faqs.map(([q,a]) => `<h3>${esc(q)}</h3><p>${esc(a)}</p>`).join("")}`;
+    const cases = blogPosts.filter(post => post.caseFile?.district.startsWith(district));
+    sections = `<p>${esc(guide.intro)}</p>${guide.notes.length ? `<h2>${esc(district)}’da karşılaştığımız durumlar</h2>${guide.notes.map(note => `<h3>${esc(note.title)}</h3><p>${esc(note.text)}</p>`).join("")}` : ""}${cases.length ? `<h2>${esc(district)}’dan son işlerimiz</h2><ul>${cases.map(post => `<li><a href="${post.slug}">${esc(post.title)}</a></li>`).join("")}</ul>` : ""}<section aria-labelledby="district-neighborhoods-title"><h2 id="district-neighborhoods-title">Hizmet Verdiğimiz Mahalleler</h2><p>${neighborhoods.map((neighborhood, index) => `<span>${String(index + 1).padStart(2, "0")} ${esc(neighborhood)}</span>${index < neighborhoods.length - 1 ? " · " : ""}`).join("")}</p></section>${guide.faqs.length ? `<h2>${esc(district)} hakkında sık sorulanlar</h2>${guide.faqs.map(([q, a]) => `<h3>${esc(q)}</h3><p>${esc(a)}</p>`).join("")}` : ""}`;
   } else if (route === "/online-servis-takibi/") {
     sections = `<h2>Servis Kaydı Nasıl Takip Edilir?</h2><p>Servis kaydı açıldıktan sonra size iletilen özel takip bağlantısını kullanarak servis sürecinizin durumunu online görüntüleyebilirsiniz.</p><h2>Takip Bağlantınız Yoksa</h2><p>WhatsApp üzerinden Eşli Teknik ile iletişime geçerek servis kaydınızın kontrol edilmesini isteyebilirsiniz.</p>`;
   } else if (route === "/iletisim/") {

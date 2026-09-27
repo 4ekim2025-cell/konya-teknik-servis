@@ -41,6 +41,7 @@ client/
 shared/
   device-faults.ts      # 10 cihazın arıza rehberi, süre-ücret ve acil durum notları, sayfa açıklamaları (React + prerender ortak)
   brand-guides.ts       # 22 markanın özgün içeriği: açıklama, giriş, markaya özel notlar, SSS (React + prerender ortak)
+  district-guides.ts    # Karatay/Selçuklu/Meram özgün içeriği: açıklama, giriş, sahadan notlar, SSS (React + prerender ortak; bilgi uydurulmaz)
   blog-posts.ts         # Blog yazıları, yazar (Esad Eşli), paylaşım bağlantıları (React + prerender ortak)
   business-contact.ts   # Google İşletme profili bağlantısı
   seo-content.ts        # İlçe mahalleleri, ilçe ve hizmet SSS'leri

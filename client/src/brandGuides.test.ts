@@ -48,4 +48,9 @@ describe("marka sayfalarının özgün içeriği", () => {
     expect(page).toContain('{brandGuide?<BrandNotes name={d.name}/>:');
     expect(page.match(/üreticilerin resmî yetkili servisi değildir/g)).toHaveLength(1);
   });
+
+  it("markalar arasında aynı kalıpla yazılmış 'termik koruma' sorusunu tekrar etmez", () => {
+    const answers = Object.values(brandGuides).flatMap(guide => guide.faqs.map(([, answer]) => answer));
+    expect(answers.filter(answer => answer.includes("aşırı ısınmaya karşı devreye giren termik koruma")).length).toBeLessThanOrEqual(1);
+  });
 });

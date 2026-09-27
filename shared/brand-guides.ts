@@ -29,7 +29,7 @@ export const brandGuides: Record<string, BrandGuide> = {
     ],
     faqs: [
       ["Arçelik derin dondurucu neden kapağı açıldığında güçlü koku yapıyor?", "Derin dondurucularda koku genelde uzun süre kapalı kalan gıdaların kokusunun plastik yüzeylere sinmesinden veya defrost suyunun tahliye kanalında birikip kokuşmasından kaynaklanır; dondurucunun ne sıklıkla açıldığını ve tahliye kanalının tıkalı olup olmadığını kontrol etmeniz faydalı olur."],
-      ["Arçelik davlumbaz neden çalışırken aniden kendiliğinden kapanıyor?", "Davlumbazın kendiliğinden kapanması genelde aşırı ısınmaya karşı devreye giren termik korumadan veya güç kablosundaki gevşek bir bağlantıdan kaynaklanabilir; kapanmanın hangi hız kademesinde ve ne kadar süre çalıştıktan sonra gerçekleştiğini not etmeniz teşhise yardımcı olur."],
+      ["Arçelik davlumbazda filtre uyarı ışığı temizlikten sonra neden sönmüyor?", "Filtre uyarı ışığı, belirli bir çalışma süresinden sonra temizliği hatırlatmak için yanar; filtreyi yıkamak ışığı kendiliğinden söndürmez. Çoğu modelde filtre yerine takıldıktan sonra kullanım kılavuzunda belirtilen tuşa birkaç saniye basılı tutularak uyarı sıfırlanır. Sıfırlamaya rağmen ışık sönmüyorsa kontrol panelinin incelenmesi gerekir."],
       ["Arçelik süpürge neden kullanırken ıslık sesi çıkarıyor?", "Islık benzeri bir ses genelde hortum veya boru bağlantılarındaki hava kaçağından ya da filtrenin tam oturmamasından kaynaklanır; sesin hangi emiş gücü kademesinde arttığını ve filtrenin yerine tam oturup oturmadığını kontrol etmeniz arıza kaynağını daraltmamıza yardımcı olur."],
     ],
   },
@@ -149,7 +149,7 @@ export const brandGuides: Record<string, BrandGuide> = {
       { title: "Klasik süpürgede hortum ve emiş kaybı", text: "Philips’in klasik torbalı ve torbasız süpürgelerinde emişin azalması genelde hortum içindeki bir tıkanıklıktan veya filtrenin doygunlaşmasından kaynaklanır; süpürgenin torba mı yoksa haznesi mi olduğu bilgisi doğru filtre kontrolünü sağlar." },
     ],
     faqs: [
-      ["Philips süpürge neden çalıştırınca kendi kendine kapanıyor?", "Kendiliğinden kapanma genelde aşırı ısınmaya karşı devreye giren termik korumadan veya hazne kapağının tam kapanmamasından kaynaklanır; kapanma öncesi kaç dakika çalıştığını ve hazne kapağının kilitlenirken bir tık sesi verip vermediğini not etmeniz teşhise yardımcı olur."],
+      ["Philips Airfryer’ın yapışmaz kaplaması soyulursa kullanmaya devam edebilir miyim?", "Kaplaması soyulan veya kabaran sepet ve hazne değiştirilmelidir; kopan kaplama parçaları yiyeceğe karışabilir ve soyulan bölgeye yemek yapışarak temizliği zorlaştırır. Kaplamayı korumak için sepeti metal kaşık ya da tel ile kazımayın, sert ovma bezi kullanmayın ve sıcakken soğuk suya daldırmayın."],
       ["Philips kablosuz süpürge neden düşük moddan yüksek moda geçemiyor?", "Mod değiştirilememesi genelde mod düğmesindeki bir temas sorunundan veya bataryanın düşük şarj seviyesinde yüksek modu desteklememesinden kaynaklanır; süpürgeyi tam şarj ettikten sonra aynı sorunu yaşayıp yaşamadığınızı kontrol etmeniz, arızanın batarya mı yoksa düğme mi olduğunu ayırt etmemize yardımcı olur."],
     ],
   },
@@ -278,7 +278,7 @@ export const brandGuides: Record<string, BrandGuide> = {
     ],
     faqs: [
       ["Vestel derin dondurucu neden sürekli çalışıp bir türlü istenen sıcaklığa inmiyor?", "Bu tür sürekli çalışma genelde kapı contasındaki hava kaçağından, dondurucunun aşırı dolu istiflenmesinden veya gaz basıncındaki düşüklükten kaynaklanır; dondurucunun kapasitesinin ne kadarının dolu olduğunu ve kapının tam kapanıp kapanmadığını kontrol etmeniz ilk aşamada faydalı olur."],
-      ["Vestel süpürge neden kullanırken aniden duruyor?", "Süpürgenin kullanım sırasında aniden durması genelde aşırı ısınmaya karşı devreye giren termik korumadan veya hazne ile filtre tıkanıklığından kaynaklanır; süpürgeyi durdurmadan önce kaç dakika çalıştığınızı ve filtreyi en son ne zaman temizlediğinizi not etmeniz teşhise yardımcı olur."],
+      ["Vestel mikrodalga fırın çalışıyor ama yiyeceği ısıtmıyorsa ne yapmalıyım?", "Tabak dönüyor, ışık yanıyor ama yiyecek ısınmıyorsa arıza çoğunlukla ısıyı üreten magnetron veya onu besleyen yüksek gerilim devresindedir. Bu parçalar cihaz fişten çekildikten sonra bile tehlikeli gerilim tutabildiği için mikrodalgayı kesinlikle kendiniz açmayın; cihazı kullanmayı bırakıp servis desteği alın."],
       ["Vestel su sebili neden damacana değişince su taşırıyor?", "Damacana değişiminde su taşırma genelde şamandıra mekanizmasının yapışmasından veya sebilin seviye sensöründeki bir arızadan kaynaklanır; damacanayı yerleştirdikten hemen sonra mı yoksa bir süre sonra mı taştığını gözlemlemeniz, arızanın mekanik mi elektronik mi olduğunu ayırt etmemize yardımcı olur."],
     ],
   },

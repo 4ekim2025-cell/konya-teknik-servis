@@ -1314,3 +1314,14 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-post-hero>div{max-width:none}
 .blog-post-layout{grid-template-columns:minmax(0,1fr) 340px;width:100%;max-width:none;margin:-36px 0 0;padding:0 var(--site-gutter) 100px;box-sizing:border-box}
 @media(max-width:860px){.blog-post-hero{padding-left:20px!important;padding-right:20px!important}.blog-post-layout{margin:-28px 0 0;padding:0 18px 70px}}
+
+/* Çerez onay şeridi (Google Analytics) */
+.cookie-consent{position:fixed;z-index:70;left:24px;bottom:24px;display:flex;align-items:center;gap:16px;width:min(560px,calc(100vw - 48px));padding:14px 16px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:#141414;color:#eee;box-shadow:0 14px 34px rgba(0,0,0,.3);font-size:13px;line-height:1.5}
+.cookie-consent p{margin:0}
+.cookie-consent a{color:#9fd8cf;text-decoration:underline}
+.cookie-consent div{display:flex;flex-shrink:0;gap:8px}
+.cookie-consent button{min-height:40px;padding:0 18px;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:transparent;color:#fff;font:800 13px Manrope,sans-serif;cursor:pointer}
+.cookie-consent button:hover,.cookie-consent button:focus-visible{background:#fff;color:#141414}
+.footer-links .footer-cookie-settings{display:flex;margin:8px 0;padding:0;border:0;background:none;color:#999;font:inherit;font-size:12px;text-align:left;cursor:pointer}
+.footer-links .footer-cookie-settings:hover{color:#fff}
+@media(max-width:860px){.cookie-consent{right:12px;left:12px;bottom:70px;flex-direction:column;align-items:stretch;gap:10px;width:auto}.cookie-consent div button{flex:1}}

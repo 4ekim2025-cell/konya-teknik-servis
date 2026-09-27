@@ -1308,3 +1308,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-page .simple-hero>div{padding:44px 0 92px}
 .blog-page .simple-hero h1{max-width:1000px}
 @media(max-width:860px){.blog-page .simple-hero>div{padding:34px 0 64px}}
+.blog-post-hero{padding-left:var(--site-gutter)!important;padding-right:var(--site-gutter)!important}
+.blog-post-hero>div{max-width:none}
+.blog-post-layout{grid-template-columns:minmax(0,1fr) 340px;width:100%;max-width:none;margin:-36px 0 0;padding:0 var(--site-gutter) 100px;box-sizing:border-box}
+@media(max-width:860px){.blog-post-hero{padding-left:20px!important;padding-right:20px!important}.blog-post-layout{margin:-28px 0 0;padding:0 18px 70px}}

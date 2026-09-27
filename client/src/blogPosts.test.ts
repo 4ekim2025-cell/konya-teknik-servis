@@ -37,6 +37,13 @@ describe("blog yazıları", () => {
     });
   });
 
+  it("yalnızca Türkçe kaynaklara bağlantı verir", () => {
+    blogPosts.flatMap(post => post.sources ?? []).forEach(source => {
+      expect(source.url).not.toMatch(/\.gov\/|fda\.|cdc\.|usda\./i);
+      expect(source.label).toMatch(/[çğıöşüÇĞİÖŞÜ]/);
+    });
+  });
+
   it("hukuki konu, fiyat ve yetkili servis iddiası içermez", () => {
     const text = JSON.stringify(blogPosts);
     expect(text).not.toMatch(/MEDAŞ|tazminat|hakem heyeti|mahkeme|₺|\bTL\b/i);

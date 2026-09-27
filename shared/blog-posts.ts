@@ -289,7 +289,6 @@ export const blogPosts: BlogPost[] = [
     ],
     sources: [
       { label: "DonanımHaber Forum — Buzdolabı motoru bozuldu, motor mu taktırayım, yeni dolap mı alayım?", url: "https://forum.donanimhaber.com/buzdolabi-motoru-bozuldu-motor-mu-taktirayim-yeni-dolap-mi-alayim--158478713" },
-      { label: "FDA — Food and water safety during power outages", url: "https://www.fda.gov/food/buy-store-serve-safe-food/food-and-water-safety-during-power-outages-and-floods" },
     ],
   },
   {

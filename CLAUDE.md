@@ -97,6 +97,7 @@ Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılm
 - Yazar: **Esad Eşli**. Her yazı `shared/blog-posts.ts` içinde tanımlanır; liste, yazı sayfası, prerender HTML'i, BlogPosting şeması ve sitemap bu kaynaktan beslenir. Yeni yazı eklenince `client/public/sitemap.xml` ve `llms.txt` de güncellenir.
 - Kategoriler: Ustanın Defterinden (yalnızca Esad Eşli'nin anlattığı gerçek işler; ayrıntı uydurulmaz), Bakım Rehberi, Karar Rehberi, Tüketici Rehberi.
 - İnternetten alınan deneyimler kaynağıyla özetlenir, Eşli Teknik müşterisi gibi sunulmaz, metin kopyalanmaz.
+- **Kaynaklar yalnızca Türkçe olur.** Okuyucu kitlesi Konya'daki ev kullanıcılarıdır; İngilizce veya yabancı dilde kaynak bağlantısı verilmez.
 - **Hukuki konular kapsam dışıdır** (MEDAŞ, tazminat, hakem heyeti, dava vb. yazılmaz). Fiyat yazılmaz.
 - Blog yazısı cihaz sayfasındaki cümleyi tekrar etmez: cihaz sayfası "neden olur, ne kontrol edilir", blog "nasıl yapılır / sahada ne oldu / nasıl karar verilir" sorusunu cevaplar.
 

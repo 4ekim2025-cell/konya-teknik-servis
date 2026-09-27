@@ -179,7 +179,7 @@ function blogIndexHtml() {
 function blogPostHtml(post: BlogPost) {
   const url = `${siteUrl}${post.slug}`;
   const share = blogShareLinks(url, post.title);
-  const caseFile = post.caseFile ? `<dl><dt>Bölge</dt><dd>${esc(post.caseFile.district)}</dd><dt>Cihaz</dt><dd>${esc(post.caseFile.brand)} ${esc(post.caseFile.device.toLocaleLowerCase("tr-TR"))}</dd><dt>Şikâyet</dt><dd>${esc(post.caseFile.complaint)}</dd><dt>Tespit</dt><dd>${esc(post.caseFile.finding)}</dd><dt>Yapılan işlem</dt><dd>${esc(post.caseFile.action)}</dd></dl>` : "";
+  const caseFile = post.caseFile ? `<dl><dt>Bölge</dt><dd>${esc(post.caseFile.district)}</dd><dt>Cihaz</dt><dd>${esc(post.caseFile.brand)} ${esc(post.caseFile.device.toLocaleLowerCase("tr-TR"))}</dd><dt>Şikâyet</dt><dd>${esc(post.caseFile.complaint)}</dd><dt>Tespit</dt><dd>${esc(post.caseFile.finding)}</dd><dt>Yapılan işlem</dt><dd>${esc(post.caseFile.action)}</dd></dl>${post.brandPath ? `<p><a href="${post.brandPath}">Konya ${esc(post.caseFile.brand)} servisi</a></p>` : ""}` : "";
   const sources = post.sources ? `<h2>Kaynaklar</h2><ul>${post.sources.map(source => `<li><a href="${source.url}" rel="nofollow">${esc(source.label)}</a></li>`).join("")}</ul>` : "";
   return `<nav aria-label="İçerik yolu"><a href="/">Ana Sayfa</a> › <a href="/blog/">Blog</a> › ${esc(post.category)}</nav>${blogMetaHtml(post)}<article>${caseFile}${post.blocks.map(blogBlockHtml).join("")}${sources}<p>Paylaşın: <a href="${share.whatsapp}">WhatsApp</a> · <a href="${share.facebook}">Facebook</a> · <a href="${share.x}">X</a></p><p><strong>${esc(BLOG_AUTHOR.name)}</strong> — ${esc(BLOG_AUTHOR.bio)}</p><p><a href="${post.servicePath}">${post.device === "Genel" ? "Eşli Teknik iletişim" : `Konya ${esc(post.device)} servisi`}</a></p></article>`;
 }

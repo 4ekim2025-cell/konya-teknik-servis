@@ -34,7 +34,12 @@ describe("blog yazıları", () => {
     cases.forEach(post => {
       expect(post.caseFile).toBeDefined();
       expect(post.caseFile?.district).toMatch(/^(Karatay|Meram|Selçuklu)/);
+      expect(post.brandPath).toMatch(/^\/[a-z-]+-servisi-konya\/$/);
+      expect(sitemap).toContain(`<loc>https://esliteknik.com${post.brandPath}</loc>`);
     });
+    expect(cases.filter(post => post.caseFile?.district.startsWith("Meram")).length).toBeGreaterThanOrEqual(4);
+    expect(page).toContain('className="blog-case-brand" href={post.brandPath}');
+    expect(prerender).toContain('<a href="${post.brandPath}">Konya ${esc(post.caseFile.brand)} servisi</a>');
   });
 
   it("yalnızca Türkçe kaynaklara bağlantı verir", () => {

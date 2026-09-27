@@ -41,9 +41,9 @@ export const districtGuides: Record<string, DistrictGuide> = {
     ],
   },
   Meram: {
-    description: "Meram’da beyaz eşya ve küçük ev aletleri servisi; Meram’dan son işimiz, hizmet verdiğimiz mahalleler ve servis talebi bilgileri.",
+    description: "Meram’da beyaz eşya servisi: Bosch, Vestel, Profilo ve Altus cihazlarda sahadan son işlerimiz, hizmet verdiğimiz mahalleler ve servis talebi.",
     hero: "Meram’daki evinizde arızalanan beyaz eşya ve küçük ev aletleri için WhatsApp’tan servis talebi oluşturun.",
-    intro: "Meram’a atölyemizden planlı olarak servis veriyoruz. Bu ilçeden son işlerimizden biri, programı bitirmek bilmeyen bir Altus kurutma makinesiydi; çamaşırlar kurumuştu ama arızalı sensör bunu makineye bildiremiyordu.",
+    intro: "Meram’a atölyemizden planlı olarak servis veriyoruz. Bu ilçedeki son işlerimiz dört farklı cihazdan geliyor: titreyen bir çamaşır makinesi, kapağından su sızdıran bir bulaşık makinesi, buzlanma yüzünden ses yapan bir buzdolabı ve programı bitirmeyen bir kurutma makinesi. Her birinde ne bulduğumuzu ve ne yaptığımızı aşağıdaki servis kayıtlarında anlattık.",
     notes: [],
     faqs: [],
   },

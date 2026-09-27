@@ -41,7 +41,7 @@ export const brandSeo: Record<string, BrandSeo> = {
     description: "Konya Kumtel servisi ve ankastre tamiri için Eşli Teknik’e ulaşın. Fırın, ocak ve davlumbazda ısıtma, ateşleme ve çekiş sorunlarında destek alın."
   },
   Philips: {
-    title: "Konya Philips Servisi | Süpürge Tamiri – Eşli Teknik",
+    title: "Konya Philips Servisi | Süpürge, Airfryer, Ütü – Eşli Teknik",
     description: "Konya Philips servisi: süpürge, kahve makinesi, Airfryer ve ütü tamiri için Eşli Teknik’e ulaşın. Motor, pompa, batarya ve ısınma sorunlarında servis desteği."
   },
   Profilo: {

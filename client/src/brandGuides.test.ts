@@ -39,6 +39,8 @@ describe("marka sayfalarının özgün içeriği", () => {
     });
     expect(page).toContain('"Grundig":"/grundig-servisi-konya/"');
     expect(page).toContain('"Sinbo":"/sinbo-servisi-konya/"');
+    const siteChrome = read("client/src/components/SiteChrome.tsx");
+    ["grundig", "sinbo", "regal"].forEach(slug => expect(siteChrome).toContain(`href: "/${slug}-servisi-konya/"`));
   });
 
   it("bağımsız servis açıklamasını marka metinlerinde değil, sayfada tek bir ortak satırda gösterir", () => {

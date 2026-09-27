@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ArrowLeft, ArrowRight, Check, ChevronDown, CircleCheck, Droplets, Fan, Flame, Gauge, MapPin, MessageCircle, Phone, Refrigerator, Sparkles, WashingMachine, Wrench, X } from "lucide-react";
 import { SITE_WHATSAPP_HREF } from "@/siteConfig";
+import { trackContact } from "@/analytics";
 
 type Device = { name: string; Icon: typeof WashingMachine };
 
@@ -119,6 +120,7 @@ export function SmartInfoModal() {
     setIsSending(true);
     const message = whatsappMessage;
     toast.success("Bilgileriniz hazırlandı", { description: "WhatsApp’a yönlendiriliyorsunuz." });
+    trackContact("whatsapp", "on_bilgi_formu");
     window.setTimeout(() => { window.location.href = `${SITE_WHATSAPP_HREF}?text=${encodeURIComponent(message)}`; }, 620);
   }
 

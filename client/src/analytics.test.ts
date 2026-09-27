@@ -35,5 +35,7 @@ describe("Google Analytics ve çerez onayı", () => {
     expect(contactKind("tel:+905511858773")).toBe("phone");
     expect(contactKind("/iletisim/")).toBeNull();
     expect(analytics).toContain('"whatsapp_click" : "phone_click"');
+    expect(read("client/src/components/SmartInfoModal.tsx")).toContain('trackContact("whatsapp", "on_bilgi_formu");');
+    expect(read("client/src/pages/Home.tsx")).toContain('trackContact("whatsapp","ariza_formu");');
   });
 });

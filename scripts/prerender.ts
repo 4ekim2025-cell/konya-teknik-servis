@@ -4,6 +4,7 @@ import { districtNeighborhoods, districtFaqs, serviceFaqs } from "../shared/seo-
 import { GOOGLE_BUSINESS_URL } from "../shared/business-contact";
 import { deviceFaultGuides } from "../shared/device-faults";
 import { brandGuides } from "../shared/brand-guides";
+import { BLOG_AUTHOR, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
 
 const root = process.cwd();
 const outputDir = path.join(root, "dist", "public");
@@ -78,12 +79,7 @@ for (const [slug, name] of brands) {
 const extra: Record<string, [string, string]> = {
   "/": ["EŞLİ TEKNİK | Konya Beyaz Eşya Teknik Servisi", defaultDescription],
   "/online-servis-takibi/": ["Online Servis Takibi | Eşli Teknik Konya", "Eşli Teknik servis kaydınızın durumunu online takip edin. Size iletilen takip bağlantısı üzerinden servis sürecini görüntüleyebilirsiniz."],
-  "/blog/": ["Bilgi Merkezi | Eşli Teknik Konya", "Konya beyaz eşya arıza rehberleri ve güvenli servis öncesi kontroller."],
-  "/blog/bulasik-makinesi-suyu-bosaltmiyor/": ["Bulaşık Makinesi Suyu Boşaltmıyor | Eşli Teknik", "Bulaşık makinesi suyu boşaltmıyorsa güvenli kontrolleri ve Konya servis rehberini inceleyin."],
-  "/blog/buzdolabi-sogutmuyor-konya/": ["Buzdolabı Soğutmuyor | Eşli Teknik", "Buzdolabı soğutmuyorsa güvenli kontrolleri ve Konya teknik servis rehberini inceleyin."],
-  "/blog/camasir-makinesi-su-almiyor-konya/": ["Çamaşır Makinesi Su Almıyor | Eşli Teknik", "Çamaşır makinesi su almıyorsa güvenli kontrolleri ve Konya servis rehberini inceleyin."],
-  "/blog/firin-isitmiyor-konya/": ["Fırın Isıtmıyor | Eşli Teknik", "Fırın ısıtmıyorsa güvenli kontrolleri ve Konya servis rehberini inceleyin."],
-  "/blog/kurutma-makinesi-kurutmuyor/": ["Kurutma Makinesi Kurutmuyor | Eşli Teknik", "Kurutma makinesi kurutmuyorsa güvenli kontrolleri ve Konya servis rehberini inceleyin."],
+  "/blog/": ["Blog | Eşli Teknik Konya", "Konya’da sahada karşılaştığımız gerçek beyaz eşya arızaları, bakım rehberleri ve servis sürecinde bilmeniz gerekenler. Yazar: Esad Eşli."],
   "/tum-markalar/": ["Konya Beyaz Eşya Servis Markaları | Eşli Teknik", "Eşli Teknik, Konya’da birçok beyaz eşya ve küçük ev aleti markası için teknik servis desteği sunar."],
   "/sss/": ["Sık Sorulan Sorular | Eşli Teknik Konya", "Eşli Teknik beyaz eşya servisi hakkında sık sorulan sorular, servis süreci, iletişim ve online takip bilgileri."],
   "/iletisim/": ["İletişim | Eşli Teknik Konya", "Eşli Teknik Konya beyaz eşya teknik servisine WhatsApp veya telefon üzerinden ulaşın."],
@@ -92,6 +88,8 @@ const extra: Record<string, [string, string]> = {
   "/gizlilik-politikasi/": ["Gizlilik Politikası | Eşli Teknik", "Eşli Teknik web sitesi gizlilik politikası ve kişisel verilerin işlenmesine ilişkin bilgiler."],
   "/cerez-politikasi/": ["Çerez Politikası | Eşli Teknik", "Eşli Teknik web sitesinde kullanılan çerezler ve tercihlerin yönetimi hakkında bilgiler."],
 };
+
+for (const post of blogPosts) extra[post.slug] = [`${post.title} | Eşli Teknik Blog`, post.description];
 
 const routes: Record<string, [string, string]> = {
   ...extra,
@@ -108,7 +106,7 @@ function jsonLd(title: string, description: string, url: string, route: string) 
     { "@type": "ProfessionalService", "@id": `${siteUrl}/#business`, name: siteName, url: siteUrl, sameAs: [GOOGLE_BUSINESS_URL], hasMap: GOOGLE_BUSINESS_URL, telephone: "+905511858773", description: defaultDescription, image: `${siteUrl}/favicon.png?v=share-logo-1`, logo: `${siteUrl}/favicon.png?v=share-logo-1`, priceRange: "₺", address: { "@type": "PostalAddress", streetAddress: "Gaziosmanpaşa Mahallesi Menzil Caddesi No:70", addressLocality: "Karatay", addressRegion: "Konya", postalCode: "42020", addressCountry: "TR" }, geo: { "@type": "GeoCoordinates", latitude: 37.85442, longitude: 32.532554 }, openingHoursSpecification: [{ "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], opens: "08:00", closes: "22:00" }], areaServed: ["Karatay, Konya", "Meram, Konya", "Selçuklu, Konya"] },
     { "@type": "WebSite", "@id": `${siteUrl}/#website`, url: siteUrl, name: siteName, inLanguage: "tr-TR" },
     { "@type": "WebPage", "@id": `${url}#webpage`, url, name: title, description, inLanguage: "tr-TR", isPartOf: { "@id": `${siteUrl}/#website` }, about: { "@id": `${siteUrl}/#business` } },
-    { "@type": "BreadcrumbList", "@id": `${url}#breadcrumb`, itemListElement: route === "/" ? [{ "@type": "ListItem", position: 1, name: "Ana Sayfa", item: siteUrl }] : [{ "@type": "ListItem", position: 1, name: "Ana Sayfa", item: siteUrl }, { "@type": "ListItem", position: 2, name: title.replace(" | Eşli Teknik", ""), item: url }] },
+    { "@type": "BreadcrumbList", "@id": `${url}#breadcrumb`, itemListElement: route === "/" ? [{ "@type": "ListItem", position: 1, name: "Ana Sayfa", item: siteUrl }] : (() => { const post = blogPosts.find(item => item.slug === route); return post ? [{ "@type": "ListItem", position: 1, name: "Ana Sayfa", item: siteUrl }, { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog/` }, { "@type": "ListItem", position: 3, name: post.title, item: url }] : [{ "@type": "ListItem", position: 1, name: "Ana Sayfa", item: siteUrl }, { "@type": "ListItem", position: 2, name: route === "/blog/" ? "Blog" : title.replace(" | Eşli Teknik", ""), item: url }]; })() },
   ];
 
   const brand = brands.find(([slug]) => route === `/${slug}-servisi-konya/`);
@@ -122,17 +120,11 @@ function jsonLd(title: string, description: string, url: string, route: string) 
     graph.push({ "@type": "Service", "@id": `${url}#service`, name: title, description, serviceType: title.replace("Konya ", "").replace(" | Eşli Teknik", ""), areaServed: ["Karatay", "Meram", "Selçuklu"], provider: { "@id": `${siteUrl}/#business` } });
   }
 
-  const guideRoutes = [
-    ["/blog/bulasik-makinesi-suyu-bosaltmiyor/", "Bulaşık Makinesi Suyu Boşaltmıyor"],
-    ["/blog/buzdolabi-sogutmuyor-konya/", "Buzdolabı Soğutmuyor"],
-    ["/blog/camasir-makinesi-su-almiyor-konya/", "Çamaşır Makinesi Su Almıyor"],
-    ["/blog/firin-isitmiyor-konya/", "Fırın Isıtmıyor"],
-    ["/blog/kurutma-makinesi-kurutmuyor/", "Kurutma Makinesi Kurutmuyor"],
-  ];
+  const blogPost = blogPosts.find(post => post.slug === route);
   if (route === "/blog/") {
-    graph.push({ "@type": "CollectionPage", "@id": `${url}#collection`, name: title, description, mainEntity: { "@type": "ItemList", itemListElement: guideRoutes.map(([guideRoute, guideTitle], index) => ({ "@type": "ListItem", position: index + 1, name: guideTitle, url: `${siteUrl}${guideRoute}` })) } });
-  } else if (guideRoutes.some(([guideRoute]) => guideRoute === route)) {
-    graph.push({ "@type": "Article", "@id": `${url}#article`, headline: title.replace(" | Eşli Teknik", ""), description, image: `${siteUrl}/esli-teknik-konya-hero-background.webp`, datePublished: "2026-09-11", dateModified: "2026-09-11", inLanguage: "tr-TR", author: { "@type": "Organization", name: "EŞLİ TEKNİK", url: siteUrl }, publisher: { "@type": "Organization", name: "EŞLİ TEKNİK", url: siteUrl, logo: { "@type": "ImageObject", url: `${siteUrl}/favicon.png` } }, mainEntityOfPage: { "@id": `${url}#webpage` }, articleSection: "Arıza Rehberleri" });
+    graph.push({ "@type": "Blog", "@id": `${url}#blog`, name: "Eşli Teknik Blog", description, inLanguage: "tr-TR", publisher: { "@id": `${siteUrl}/#business` }, blogPost: blogPosts.map(post => ({ "@type": "BlogPosting", headline: post.title, url: `${siteUrl}${post.slug}`, datePublished: post.published, dateModified: post.updated, author: { "@type": "Person", name: BLOG_AUTHOR.name } })) });
+  } else if (blogPost) {
+    graph.push({ "@type": "BlogPosting", "@id": `${url}#article`, headline: blogPost.title, description: blogPost.description, articleSection: blogPost.category, image: `${siteUrl}/esli-teknik-konya-hero-background.webp`, datePublished: blogPost.published, dateModified: blogPost.updated, inLanguage: "tr-TR", mainEntityOfPage: { "@id": `${url}#webpage` }, isPartOf: { "@id": `${siteUrl}/blog/#blog` }, author: { "@type": "Person", name: BLOG_AUTHOR.name, jobTitle: "Teknik servis ustası", worksFor: { "@id": `${siteUrl}/#business` } }, publisher: { "@id": `${siteUrl}/#business` } });
   }
 
   if (route === "/sss/") {
@@ -146,7 +138,7 @@ function jsonLd(title: string, description: string, url: string, route: string) 
       ],
     });
   }
-  const routeServiceFaqs = Object.entries(serviceFaqs).find(([deviceName]) => title.includes(deviceName))?.[1];
+  const routeServiceFaqs = route.startsWith("/blog/") ? undefined : Object.entries(serviceFaqs).find(([deviceName]) => title.includes(deviceName))?.[1];
   if (routeServiceFaqs) {
     graph.push({ "@type": "FAQPage", "@id": `${url}#faq`, mainEntity: routeServiceFaqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) });
   }
@@ -169,10 +161,40 @@ function faultsHtml(deviceName: string) {
   return `<h2>${esc(deviceName)} arızaları: neden olur, ne kontrol edilir?</h2>${guide.faults.map(fault => `<h3>${esc(fault.title)}</h3><p><strong>Olası nedenler:</strong> ${esc(fault.causes)}</p><p><strong>Güvenle kontrol edebilecekleriniz:</strong> ${esc(fault.check)}</p>`).join("")}`;
 }
 
+function blogBlockHtml(block: BlogBlock) {
+  if (block.type === "h2") return `<h2>${esc(block.text)}</h2>`;
+  if (block.type === "p") return `<p>${esc(block.text)}</p>`;
+  if (block.type === "list") return `<ul>${block.items.map(item => `<li>${esc(item)}</li>`).join("")}</ul>`;
+  if (block.type === "steps") return `<ol>${block.items.map(item => `<li><h3>${esc(item.title)}</h3><p>${esc(item.text)}</p></li>`).join("")}</ol>`;
+  return `<aside><strong>${esc(block.title)}</strong><p>${esc(block.text)}</p></aside>`;
+}
+
+function blogMetaHtml(post: BlogPost) {
+  return `<p>Yazar: ${esc(BLOG_AUTHOR.name)} · Yayın: <time datetime="${post.published}">${formatBlogDate(post.published)}</time>${post.updated !== post.published ? ` · Güncelleme: <time datetime="${post.updated}">${formatBlogDate(post.updated)}</time>` : ""}</p>`;
+}
+
+function blogIndexHtml() {
+  return `<p>Konya’da sahada karşılaştığımız gerçek arızalar, bakım rehberleri ve servis sürecinde bilmeniz gerekenler. Yazılar ${esc(BLOG_AUTHOR.name)} tarafından hazırlanır.</p>${blogPosts.map(post => `<article><p>${esc(post.category)}${post.caseFile ? ` · ${esc(post.caseFile.district)} · ${esc(post.caseFile.brand)}` : ""}</p><h2><a href="${post.slug}">${esc(post.title)}</a></h2><p>${esc(post.excerpt)}</p>${blogMetaHtml(post)}</article>`).join("")}`;
+}
+
+function blogPostHtml(post: BlogPost) {
+  const url = `${siteUrl}${post.slug}`;
+  const share = blogShareLinks(url, post.title);
+  const caseFile = post.caseFile ? `<dl><dt>Bölge</dt><dd>${esc(post.caseFile.district)}</dd><dt>Cihaz</dt><dd>${esc(post.caseFile.brand)} ${esc(post.caseFile.device.toLocaleLowerCase("tr-TR"))}</dd><dt>Şikâyet</dt><dd>${esc(post.caseFile.complaint)}</dd><dt>Tespit</dt><dd>${esc(post.caseFile.finding)}</dd><dt>Yapılan işlem</dt><dd>${esc(post.caseFile.action)}</dd></dl>` : "";
+  const sources = post.sources ? `<h2>Kaynaklar</h2><ul>${post.sources.map(source => `<li><a href="${source.url}" rel="nofollow">${esc(source.label)}</a></li>`).join("")}</ul>` : "";
+  return `<nav aria-label="İçerik yolu"><a href="/">Ana Sayfa</a> › <a href="/blog/">Blog</a> › ${esc(post.category)}</nav>${blogMetaHtml(post)}<article>${caseFile}${post.blocks.map(blogBlockHtml).join("")}${sources}<p>Paylaşın: <a href="${share.whatsapp}">WhatsApp</a> · <a href="${share.facebook}">Facebook</a> · <a href="${share.x}">X</a></p><p><strong>${esc(BLOG_AUTHOR.name)}</strong> — ${esc(BLOG_AUTHOR.bio)}</p><p><a href="${post.servicePath}">${post.device === "Genel" ? "Eşli Teknik iletişim" : `Konya ${esc(post.device)} servisi`}</a></p></article>`;
+}
+
+function deviceBlogLinksHtml(deviceName: string) {
+  const posts = blogPostsForDevice(deviceName);
+  return posts.length ? `<nav aria-label="Blogdan ilgili yazılar"><h2>Sahadan notlar ve rehberler</h2><ul>${posts.map(post => `<li><a href="${post.slug}">${esc(post.title)}</a></li>`).join("")}</ul></nav>` : "";
+}
+
 function staticContent(title: string, description: string, route: string) {
   const brand = brands.find(([slug]) => route === `/${slug}-servisi-konya/`);
   const service = services[route];
-  const heading = route === "/" ? "Konya Beyaz Eşya Teknik Servisi" : title.replace(" | Eşli Teknik", "");
+  const blogPost = blogPosts.find(post => post.slug === route);
+  const heading = route === "/" ? "Konya Beyaz Eşya Teknik Servisi" : blogPost ? blogPost.title : route === "/blog/" ? "Eşli Teknik Blog" : title.replace(" | Eşli Teknik", "");
   let sections = `<h2>Konya’da Teknik Servis Desteği</h2><p>EŞLİ TEKNİK, Konya’da Karatay, Meram ve Selçuklu ilçelerinde beyaz eşya ve küçük ev aletleri için teknik servis desteği sunar. Servis talebinizi WhatsApp veya telefon üzerinden iletebilir, servis sürecini online takip edebilirsiniz.</p>`;
   if (route === "/hakkimizda/") {
     sections = `<h2>Konya’da teknik servis desteği</h2><p>EŞLİ TEKNİK; Karatay, Meram ve Selçuklu başta olmak üzere Konya’da beyaz eşya ve küçük ev aletleri için teknik servis desteği sunar. Servis talebinizi WhatsApp veya telefon üzerinden iletebilir, cihaz ve arıza bilgilerinizi paylaşarak doğru yönlendirmeyi alabilirsiniz.</p><h2>Şeffaf ve planlı servis süreci</h2><p>Amacımız yalnızca cihazı onarmak değil; servis planını, inceleme kapsamını ve işlem sonrasını anlaşılır biçimde paylaşmaktır. Uygunluk bilgisi adres ve ekip planına göre netleştirilir.</p><h2>Hizmet bölgemiz</h2><p>Karatay, Meram ve Selçuklu ilçelerinde servis planlaması yapılır. Talebinizde cihazın bulunduğu mahalleyi, marka-model bilgisini ve arıza belirtisini paylaşmanız yönlendirme sürecini hızlandırır.</p><p><a href="/iletisim/">İletişim sayfasına geçin</a> · <a href="/camasir-makinesi-tamiri-konya/">Cihaz servis rehberlerini inceleyin</a></p>`;
@@ -187,7 +209,7 @@ function staticContent(title: string, description: string, route: string) {
     const device = deviceStaticContent[deviceName];
     const faultGuide = deviceFaultGuides[deviceName];
     sections = faultGuide
-      ? `${faultsHtml(deviceName)}<h2>İnceleme, süre ve ücret</h2><p>${esc(faultGuide.service)}</p><h2>Beklemeden servis isteyin</h2><p>${esc(faultGuide.urgent)}</p><h2>Sık sorulan sorular</h2>${guide.map(([question, answer]) => `<h3>${esc(question)}</h3><p>${esc(answer)}</p>`).join("")}`
+      ? `${faultsHtml(deviceName)}<h2>İnceleme, süre ve ücret</h2><p>${esc(faultGuide.service)}</p><h2>Beklemeden servis isteyin</h2><p>${esc(faultGuide.urgent)}</p>${deviceBlogLinksHtml(deviceName)}<h2>Sık sorulan sorular</h2>${guide.map(([question, answer]) => `<h3>${esc(question)}</h3><p>${esc(answer)}</p>`).join("")}`
       : `<h2>${esc(heading)} Hizmeti</h2><p>${esc(device?.intro ?? description)} Model, arıza belirtisi, varsa hata kodu ve bulunduğunuz ilçe bilgisi ilk değerlendirmeyi kolaylaştırır.</p><h2>Yaygın belirtiler ve güvenli ilk kontroller</h2><p>${esc(device?.symptoms ?? description)} ${esc(safety)}</p><h2>Servis incelemesinde değerlendirilen başlıklar</h2><p>${esc(device?.parts ?? "Cihazın modeline ve arıza belirtisine göre ilgili parçalar incelenir.")} İşlem kapsamı ve parça ihtiyacı, inceleme sonrasında onayınıza sunulur.</p><h2>Ne zaman servis çağırmalı?</h2><p>${esc(device?.urgent ?? safety)} Konya’da Karatay, Meram ve Selçuklu için cihaz bilgisiyle WhatsApp’tan servis talebi iletebilir, kayıt açıldığında işlem aşamalarını online takip edebilirsiniz.</p><h2>Sık sorulan sorular</h2>${guide.map(([question, answer]) => `<h3>${esc(question)}</h3><p>${esc(answer)}</p>`).join("")}`;
   } else if (brand) {
     const [, brandName] = brand;
@@ -210,6 +232,8 @@ function staticContent(title: string, description: string, route: string) {
   if (relatedServiceLinks[route]) sections += `<nav aria-label="İlgili hizmet rehberleri"><h2>İlgili hizmetler</h2><p>${relatedServiceLinks[route].map(([name, href]) => `<a href="${href}">${esc(name)}</a>`).join(" · ")}</p></nav>`;
   if (route === "/camasir-makinesi-tamiri-konya/") sections += `<nav aria-label="Çamaşır makinesi servis markaları"><h2>Çamaşır Makinesi İçin Hizmet Verdiğimiz Markalar</h2><p><a href="/altus-servisi-konya/">Altus Servisi</a> · <a href="/regal-servisi-konya/">Regal Servisi</a> · <a href="/arcelik-servisi-konya/">Arçelik Servisi</a> · <a href="/beko-servisi-konya/">Beko Servisi</a> · <a href="/bosch-servisi-konya/">Bosch Servisi</a></p></nav>`;
   if (districts[route]) sections += `<nav aria-label="İlçedeki hizmet rehberleri"><h2>${esc(title.split(" Beyaz Eşya")[0])} için hizmetler</h2><p><a href="/camasir-makinesi-tamiri-konya/">Çamaşır Makinesi Tamiri</a> · <a href="/buzdolabi-tamiri-konya/">Buzdolabı Tamiri</a> · <a href="/bulasik-makinesi-tamiri-konya/">Bulaşık Makinesi Tamiri</a></p></nav>`;
+  if (route === "/blog/") sections = blogIndexHtml();
+  else if (blogPost) sections = blogPostHtml(blogPost);
   const staticHero = route === "/" ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" width="1920" height="1080" alt="Konya Eşli Teknik beyaz eşya servis hizmeti" fetchpriority="high" decoding="async" />` : service ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" width="1920" height="1080" alt="${esc(heading)}" loading="lazy" decoding="async" />` : brand ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" width="1920" height="1080" alt="${esc(heading)}" loading="lazy" decoding="async" />` : districts[route] ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" width="1920" height="1080" alt="${esc(heading)}" loading="lazy" decoding="async" />` : "";
   const staticContact = `<section class="static-business-contact" aria-labelledby="static-business-contact-title"><div><span class="section-kicker">EŞLİ TEKNİK İLETİŞİM</span><h2 id="static-business-contact-title">Konya’da servis desteği için<br/><em>doğrudan ulaşın.</em></h2><p>Karatay, Meram ve Selçuklu başta olmak üzere Konya’da beyaz eşya ve küçük ev aletleri teknik servis desteği sunuyoruz.</p></div><address><p><strong>Adres</strong><br/>Gaziosmanpaşa Mahallesi Menzil Caddesi No:70, Karatay / Konya</p><p><strong>Telefon</strong><br/><a href="tel:+905511858773">0551 185 87 73</a></p><p><strong>Çalışma saatleri</strong><br/>Her gün 08:00–22:00</p><a class="static-business-map" href="${GOOGLE_BUSINESS_URL}">Adresi haritada açın</a></address></section>`;
   return `<main id="seo-prerender" lang="tr">${staticHero}<h1>${esc(heading)}</h1><p>${esc(description)}</p>${sections}${staticContact}</main>`;

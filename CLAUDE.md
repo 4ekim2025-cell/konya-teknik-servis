@@ -41,6 +41,7 @@ client/
 shared/
   device-faults.ts      # 10 cihazın arıza rehberi, süre-ücret ve acil durum notları, sayfa açıklamaları (React + prerender ortak)
   brand-guides.ts       # 22 markanın özgün içeriği: açıklama, giriş, markaya özel notlar, SSS (React + prerender ortak)
+  blog-posts.ts         # Blog yazıları, yazar (Esad Eşli), paylaşım bağlantıları (React + prerender ortak)
   business-contact.ts   # Google İşletme profili bağlantısı
   seo-content.ts        # İlçe mahalleleri, ilçe ve hizmet SSS'leri
 scripts/prerender.ts    # Build sonrası her rota için başlık/açıklama/canonical/JSON-LD ve statik içerik yazar
@@ -92,6 +93,13 @@ Testlerin çoğu dosyaları `readFileSync` ile okuyup belirli metinlerin varlı�
 ### Kod stili
 Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılmış, tek satırlık bir stille yazılmıştır. Küçük değişikliklerde dosyanın tamamını yeniden biçimlendirme, çünkü bu diff'i okunmaz hale getirir.
 
+### Blog kuralları
+- Yazar: **Esad Eşli**. Her yazı `shared/blog-posts.ts` içinde tanımlanır; liste, yazı sayfası, prerender HTML'i, BlogPosting şeması ve sitemap bu kaynaktan beslenir. Yeni yazı eklenince `client/public/sitemap.xml` ve `llms.txt` de güncellenir.
+- Kategoriler: Ustanın Defterinden (yalnızca Esad Eşli'nin anlattığı gerçek işler; ayrıntı uydurulmaz), Bakım Rehberi, Karar Rehberi, Tüketici Rehberi.
+- İnternetten alınan deneyimler kaynağıyla özetlenir, Eşli Teknik müşterisi gibi sunulmaz, metin kopyalanmaz.
+- **Hukuki konular kapsam dışıdır** (MEDAŞ, tazminat, hakem heyeti, dava vb. yazılmaz). Fiyat yazılmaz.
+- Blog yazısı cihaz sayfasındaki cümleyi tekrar etmez: cihaz sayfası "neden olur, ne kontrol edilir", blog "nasıl yapılır / sahada ne oldu / nasıl karar verilir" sorusunu cevaplar.
+
 ## Git akışı
 
 - `main` doğrudan canlı siteye yayınlanır. Değişiklikleri **ayrı bir branch'te** yap ve **pull request** aç. Vercel her PR için bir önizleme linki üretir.
@@ -100,6 +108,6 @@ Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılm
 
 ## Bilinen noktalar
 
-- Blog yazıları ve yasal sayfaların prerender HTML'i çok kısa (3 genel cümle); içerik yalnızca JavaScript ile yükleniyor.
+- Yasal sayfaların (KVKK, gizlilik, çerez) prerender HTML'i çok kısa; içerik yalnızca JavaScript ile yükleniyor.
 - `teslim-notlari.md` eski bir teslim notudur (örnek telefon numarası vb. içerir). Güncel bilgi için kodu ve `siteConfig.ts` dosyasını esas al.
 - Açık SEO önerileri için bkz. `docs/google-ai-search-visibility-audit-2026-08-30.md` ve `SEO-AUDIT-RAPORU.md`.

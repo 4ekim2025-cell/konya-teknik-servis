@@ -47,7 +47,19 @@ Eşli Teknik bağımsız bir teknik servis işletmesidir; resmî yetkili servis 
 
 ## Bilgi Merkezi
 
-- [Arıza Rehberleri](https://esliteknik.com/blog/)
+- [Blog: sahadan arıza hikâyeleri ve bakım rehberleri](https://esliteknik.com/blog/) — Yazar: Esad Eşli
+  - [Yazır’da kirli yıkayan Arçelik çamaşır makinesi: sorun deterjanda değil, kireçte çıktı](https://esliteknik.com/blog/camasir-makinesi-kirli-yikiyor-rezistans-kirec/) (Ustanın Defterinden)
+  - [Karatay’da su almayan Beko çamaşır makinesi: arıza basınç anahtarındaydı](https://esliteknik.com/blog/beko-camasir-makinesi-su-almiyor-basinc-anahtari/) (Ustanın Defterinden)
+  - [Selçuklu’da kirli yıkayan Bosch bulaşık makinesi: parça değil, temizlik yetti](https://esliteknik.com/blog/bosch-bulasik-makinesi-kirli-yikiyor-puskurtme-kollari/) (Ustanın Defterinden)
+  - [Karatay’da çalışmayan Regal bulaşık makinesi: neden hiç dokunmadan yetkili servise yönlendirdik?](https://esliteknik.com/blog/regal-bulasik-makinesi-calismiyor-kontrol-karti/) (Ustanın Defterinden)
+  - [Meram’da hiç durmayan Altus kurutma makinesi: çamaşırlar kurumuştu, makine bilmiyordu](https://esliteknik.com/blog/altus-kurutma-makinesi-cok-uzun-calisiyor-nem-sensoru/) (Ustanın Defterinden)
+  - [Bulaşık makinesi suyu boşaltmıyor: dipteki suyu boşaltma ve filtre temizliği adım adım](https://esliteknik.com/blog/bulasik-makinesi-suyu-bosaltmiyor/) (Bakım Rehberi)
+  - [Çamaşır makinesi su almıyor: kireçli suda giriş süzgeci temizliği adım adım](https://esliteknik.com/blog/camasir-makinesi-su-almiyor-konya/) (Bakım Rehberi)
+  - [Kurutma makinesi kurutmuyor: çoğu zaman arıza değil, bakım](https://esliteknik.com/blog/kurutma-makinesi-kurutmuyor/) (Bakım Rehberi)
+  - [Buzdolabı soğutmuyor: tamir mi, yenisi mi?](https://esliteknik.com/blog/buzdolabi-sogutmuyor-konya/) (Karar Rehberi)
+  - [Fırın ısıtmıyor: “atın” denmeden önce bilmeniz gerekenler](https://esliteknik.com/blog/firin-isitmiyor-konya/) (Karar Rehberi)
+  - [Sahte “yetkili servis” ilanları: arayan servisin gerçek olup olmadığını nasıl anlarsınız?](https://esliteknik.com/blog/sahte-yetkili-servis-nasil-anlasilir/) (Tüketici Rehberi)
+  - [Servis şikâyetlerinin arkasında çoğu zaman belirsizlik var: sormanız gereken altı soru](https://esliteknik.com/blog/beyaz-esya-servisinde-sorulacak-sorular/) (Tüketici Rehberi)
 - [Sık Sorulan Sorular](https://esliteknik.com/sss/)
 - [Online Servis Takibi](https://esliteknik.com/online-servis-takibi/)
 - [İletişim](https://esliteknik.com/iletisim/)

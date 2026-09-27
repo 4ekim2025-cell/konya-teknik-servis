@@ -6,6 +6,7 @@ import { cookieSections, kvkkSections, privacySections, type LegalSection } from
 import { GOOGLE_BUSINESS_URL } from "../shared/business-contact";
 import { deviceFaultGuides } from "../shared/device-faults";
 import { brandGuides } from "../shared/brand-guides";
+import { brandSeo } from "../client/src/brandSeo";
 import { BLOG_AUTHOR, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
 
 const root = process.cwd();
@@ -75,15 +76,15 @@ for (const [slug, name] of brands) {
 
 const extra: Record<string, [string, string]> = {
   "/": ["EŞLİ TEKNİK | Konya Beyaz Eşya Teknik Servisi", defaultDescription],
-  "/online-servis-takibi/": ["Online Servis Takibi | Eşli Teknik Konya", "Eşli Teknik servis kaydınızın durumunu online takip edin. Size iletilen takip bağlantısı üzerinden servis sürecini görüntüleyebilirsiniz."],
+  "/online-servis-takibi/": ["Konya Online Servis Takibi | Eşli Teknik", "Konya teknik servis kaydınızın durumunu online takip edin. Eşli Teknik servis sürecinde WhatsApp ile iletilen özel bağlantıyı kullanın."],
   "/blog/": ["Blog | Eşli Teknik Konya", "Konya’da sahada karşılaştığımız gerçek beyaz eşya arızaları, bakım rehberleri ve servis sürecinde bilmeniz gerekenler. Yazar: Esad Eşli."],
-  "/tum-markalar/": ["Konya Beyaz Eşya Servis Markaları | Eşli Teknik", "Eşli Teknik, Konya’da birçok beyaz eşya ve küçük ev aleti markası için teknik servis desteği sunar."],
-  "/sss/": ["Sık Sorulan Sorular | Eşli Teknik Konya", "Eşli Teknik beyaz eşya servisi hakkında sık sorulan sorular, servis süreci, iletişim ve online takip bilgileri."],
-  "/iletisim/": ["İletişim | Eşli Teknik Konya", "Eşli Teknik Konya beyaz eşya teknik servisine WhatsApp veya telefon üzerinden ulaşın."],
+  "/tum-markalar/": ["Konya Beyaz Eşya Servis Markaları | Eşli Teknik", "Konya’da Eşli Teknik’in servis desteği sunduğu beyaz eşya ve küçük ev aleti markalarını inceleyin; cihazınız için WhatsApp’tan ulaşın."],
+  "/sss/": ["Konya Teknik Servis SSS | Eşli Teknik", "Konya beyaz eşya tamiri ve teknik servis hakkında sık sorulan soruların yanıtlarını; servis planı, WhatsApp iletişimi ve online takip bilgilerini inceleyin."],
+  "/iletisim/": ["Konya Teknik Servis İletişim | Eşli Teknik", "Konya beyaz eşya tamiri ve teknik servis talebi için Eşli Teknik’e WhatsApp veya telefonla ulaşın. Karatay, Meram ve Selçuklu’ya servis planlayın."],
   "/hakkimizda/": ["Hakkımızda | Eşli Teknik Konya", "Eşli Teknik hakkında bilgi alın. Konya’da beyaz eşya ve küçük ev aletleri için teknik servis desteği."],
-  "/kvkk/": ["KVKK | Eşli Teknik", "Eşli Teknik kişisel verilerin korunması ve işlenmesine ilişkin bilgilendirme metni."],
-  "/gizlilik-politikasi/": ["Gizlilik Politikası | Eşli Teknik", "Eşli Teknik web sitesi gizlilik politikası ve kişisel verilerin işlenmesine ilişkin bilgiler."],
-  "/cerez-politikasi/": ["Çerez Politikası | Eşli Teknik", "Eşli Teknik web sitesinde kullanılan çerezler ve tercihlerin yönetimi hakkında bilgiler."],
+  "/kvkk/": ["KVKK Aydınlatma Metni | Eşli Teknik", "Eşli Teknik’in servis talebi ve iletişim süreçlerinde kişisel verilerin işlenmesine ilişkin KVKK aydınlatma metnini inceleyin."],
+  "/gizlilik-politikasi/": ["Gizlilik Politikası | Eşli Teknik Konya", "Eşli Teknik web sitesinde, WhatsApp iletişiminde ve teknik servis talebi süreçlerinde gizlilik ve veri kullanımı hakkında bilgi alın."],
+  "/cerez-politikasi/": ["Çerez Politikası | Eşli Teknik Konya", "Eşli Teknik web sitesinde kullanılan çerezlerin amaçları, türleri ve çerez tercihlerinizi nasıl yönetebileceğiniz hakkında bilgi alın."],
 };
 
 for (const post of blogPosts) extra[post.slug] = [`${post.title} | Eşli Teknik Blog`, post.description];
@@ -250,14 +251,19 @@ function staticContent(title: string, description: string, route: string) {
 if (!fs.existsSync(indexPath)) throw new Error(`Build output not found: ${indexPath}`);
 const template = fs.readFileSync(indexPath, "utf8");
 
+// Sekme/arama başlığı React sayfasının koyduğu başlıkla aynı olmalı; JavaScript çalıştırmayan botlar (Bing, yapay zekâ tarayıcıları) da aynısını görür.
+// İç kullanım (h1, breadcrumb, Service adı) için routes'taki sade başlık korunur.
+const documentTitles: Record<string, string> = Object.fromEntries(brands.map(([slug, name]) => [`/${slug}-servisi-konya/`, brandSeo[name]?.title]).filter(([, value]) => value));
+
 for (const [route, [title, description]] of Object.entries(routes)) {
   const url = `${siteUrl}${route}`;
+  const documentTitle = documentTitles[route] ?? title;
   let html = template;
-  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`);
+  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(documentTitle)}</title>`);
   html = html.replace(/<meta name="description" content="[^"]*"\s*\/>/, `<meta name="description" content="${esc(description)}" />`);
-  html = html.replace(/<meta property="og:title" content="[^"]*"\s*\/>/, `<meta property="og:title" content="${esc(title)}" />`);
+  html = html.replace(/<meta property="og:title" content="[^"]*"\s*\/>/, `<meta property="og:title" content="${esc(documentTitle)}" />`);
   html = html.replace(/<meta property="og:description" content="[^"]*"\s*\/>/, `<meta property="og:description" content="${esc(description)}" />`);
-  html = html.replace(/<meta name="twitter:title" content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${esc(title)}" />`);
+  html = html.replace(/<meta name="twitter:title" content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${esc(documentTitle)}" />`);
   html = html.replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${esc(description)}" />`);
   html = html.replace(/<link rel="canonical" href="[^"]*"\s*\/>/, `<link rel="canonical" href="${url}" />`);
   html = html.replace(/<meta property="og:image" content="[^"]*"\s*\/>/, `<meta property="og:image" content="${siteUrl}/favicon.png?v=share-logo-1" />`);

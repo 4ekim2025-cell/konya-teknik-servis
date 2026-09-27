@@ -1253,7 +1253,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-case-file-head span{display:grid;gap:2px}
 .blog-case-file-head small{color:#9fd8cf;font:800 10px Manrope,sans-serif;letter-spacing:.12em}
 .blog-case-file-head strong{font:800 17px Manrope,sans-serif;letter-spacing:-.02em}
-.blog-case-file-head em{display:inline-flex;align-items:center;gap:5px;margin-left:auto;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.12);font-size:12.5px;font-style:normal;white-space:nowrap}
+.blog-case-file-head em{display:inline-flex;align-items:center;gap:5px;margin-left:auto;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.14);color:#fcf5db;font-size:12.5px;font-style:normal;font-weight:700;white-space:nowrap}
 .blog-case-file dl{display:grid;margin:0}
 .blog-case-file dl>div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;padding:12px 20px;border-top:1px solid #dcebe8}
 .blog-case-file dl>div:first-child{border-top:0}
@@ -1305,3 +1305,4 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-page .simple-hero h1{max-width:760px;margin:18px 0 15px;color:#fff;font-size:clamp(44px,5vw,72px);letter-spacing:-.067em}
 .blog-page .simple-hero h1 em{color:#fcf5db}
 .blog-page .simple-hero p{max-width:650px;color:rgba(252,245,219,.9);font-size:16px;line-height:1.72}
+.blog-page .simple-hero>div{padding-bottom:34px}

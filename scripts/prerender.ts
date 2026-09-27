@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { districtNeighborhoods, serviceFaqs } from "../shared/seo-content";
 import { districtGuides } from "../shared/district-guides";
+import { cookieSections, kvkkSections, privacySections, type LegalSection } from "../shared/legal-pages";
 import { GOOGLE_BUSINESS_URL } from "../shared/business-contact";
 import { deviceFaultGuides } from "../shared/device-faults";
 import { brandGuides } from "../shared/brand-guides";
@@ -176,6 +177,12 @@ function blogIndexHtml() {
   return `<p>Konya’da sahada karşılaştığımız gerçek arızalar, bakım rehberleri ve servis sürecinde bilmeniz gerekenler. Yazılar ${esc(BLOG_AUTHOR.name)} tarafından hazırlanır.</p>${blogPosts.map(post => `<article><p>${esc(post.category)}${post.caseFile ? ` · ${esc(post.caseFile.district)} · ${esc(post.caseFile.brand)}` : ""}</p><h2><a href="${post.slug}">${esc(post.title)}</a></h2><p>${esc(post.excerpt)}</p>${blogMetaHtml(post)}</article>`).join("")}`;
 }
 
+const legalSectionsByRoute: Record<string, LegalSection[]> = { "/kvkk/": kvkkSections, "/gizlilik-politikasi/": privacySections, "/cerez-politikasi/": cookieSections };
+
+function legalSectionsHtml(sections: LegalSection[]) {
+  return sections.map((section, index) => `<section><h2>${index + 1}. ${esc(section.title)}</h2>${(section.paragraphs ?? []).map(text => `<p>${esc(text)}</p>`).join("")}${section.items ? `<ul>${section.items.map(item => `<li>${esc(item)}</li>`).join("")}</ul>` : ""}${section.after ? `<p>${esc(section.after)}</p>` : ""}${section.contact ? `<p>${section.contact.map(esc).join("<br/>")}</p>` : ""}</section>`).join("");
+}
+
 function blogPostHtml(post: BlogPost) {
   const url = `${siteUrl}${post.slug}`;
   const share = blogShareLinks(url, post.title);
@@ -233,6 +240,7 @@ function staticContent(title: string, description: string, route: string) {
   if (route === "/camasir-makinesi-tamiri-konya/") sections += `<nav aria-label="Çamaşır makinesi servis markaları"><h2>Çamaşır Makinesi İçin Hizmet Verdiğimiz Markalar</h2><p><a href="/altus-servisi-konya/">Altus Servisi</a> · <a href="/regal-servisi-konya/">Regal Servisi</a> · <a href="/arcelik-servisi-konya/">Arçelik Servisi</a> · <a href="/beko-servisi-konya/">Beko Servisi</a> · <a href="/bosch-servisi-konya/">Bosch Servisi</a></p></nav>`;
   if (districts[route]) sections += `<nav aria-label="İlçedeki hizmet rehberleri"><h2>${esc(title.split(" Beyaz Eşya")[0])} için hizmetler</h2><p><a href="/camasir-makinesi-tamiri-konya/">Çamaşır Makinesi Tamiri</a> · <a href="/buzdolabi-tamiri-konya/">Buzdolabı Tamiri</a> · <a href="/bulasik-makinesi-tamiri-konya/">Bulaşık Makinesi Tamiri</a></p></nav>`;
   if (route === "/blog/") sections = blogIndexHtml();
+  if (legalSectionsByRoute[route]) sections = legalSectionsHtml(legalSectionsByRoute[route]);
   else if (blogPost) sections = blogPostHtml(blogPost);
   const staticHero = route === "/" ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" width="1920" height="1080" alt="Konya Eşli Teknik beyaz eşya servis hizmeti" fetchpriority="high" decoding="async" />` : service ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" width="1920" height="1080" alt="${esc(heading)}" loading="lazy" decoding="async" />` : brand ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" width="1920" height="1080" alt="${esc(heading)}" loading="lazy" decoding="async" />` : districts[route] ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" width="1920" height="1080" alt="${esc(heading)}" loading="lazy" decoding="async" />` : "";
   const staticContact = `<section class="static-business-contact" aria-labelledby="static-business-contact-title"><div><span class="section-kicker">EŞLİ TEKNİK İLETİŞİM</span><h2 id="static-business-contact-title">Konya’da servis desteği için<br/><em>doğrudan ulaşın.</em></h2><p>Karatay, Meram ve Selçuklu başta olmak üzere Konya’da beyaz eşya ve küçük ev aletleri teknik servis desteği sunuyoruz.</p></div><address><p><strong>Adres</strong><br/>Gaziosmanpaşa Mahallesi Menzil Caddesi No:70, Karatay / Konya</p><p><strong>Telefon</strong><br/><a href="tel:+905511858773">0551 185 87 73</a></p><p><strong>Çalışma saatleri</strong><br/>Her gün 08:00–22:00</p><a class="static-business-map" href="${GOOGLE_BUSINESS_URL}">Adresi haritada açın</a></address></section>`;
@@ -259,6 +267,8 @@ for (const [route, [title, description]] of Object.entries(routes)) {
   if (!html.includes('property="og:url"')) html = html.replace("</head>", `<meta property="og:url" content="${url}" />\n  </head>`);
   html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">${jsonLd(title, description, url, route)}</script>`);
   html = html.replace('<div id="root"></div>', `<div id="root">${staticContent(title, description, route)}</div>`);
+  // Ana sayfa görseli yalnızca ana sayfada kullanılır; diğer sayfalarda önceden indirilmesi boşuna veri ve süre harcar.
+  if (route !== "/") html = html.replace(/\s*<link rel="preload" as="image" href="\/esli-teknik-konya-hero-background\.webp"[^>]*\/>/g, "");
 
   const targetDir = route === "/" ? outputDir : path.join(outputDir, route.replace(/^\//, "").replace(/\/$/, ""));
   fs.mkdirSync(targetDir, { recursive: true });

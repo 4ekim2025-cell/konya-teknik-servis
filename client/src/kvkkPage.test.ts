@@ -3,10 +3,12 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const projectRoot = resolve(import.meta.dirname, "..", "..");
+// Yasal metinler shared/legal-pages.ts'te; sayfa yapısı ContentPage.tsx'te. İkisi birlikte kontrol edilir.
 const contentPage = readFileSync(
   resolve(projectRoot, "client", "src", "pages", "ContentPage.tsx"),
   "utf8",
-);
+) + readFileSync(resolve(projectRoot, "shared", "legal-pages.ts"), "utf8");
+const prerender = readFileSync(resolve(projectRoot, "scripts", "prerender.ts"), "utf8");
 const styles = readFileSync(resolve(projectRoot, "client", "src", "index.css"), "utf8");
 const chrome = readFileSync(resolve(projectRoot, "client", "src", "components", "SiteChrome.tsx"), "utf8");
 
@@ -39,5 +41,14 @@ describe("KVKK ve gizlilik alt sayfa standardı", () => {
     expect(styles).toContain(".kvkk-page .legal-layout");
     expect(styles).toContain(".kvkk-page .legal-document");
     expect(styles).toContain("@media(max-width:860px){.kvkk-page .simple-hero");
+  });
+
+  it("yasal metinleri prerender HTML'inde de tam olarak yayınlar", () => {
+    expect(prerender).toContain('"/kvkk/": kvkkSections, "/gizlilik-politikasi/": privacySections, "/cerez-politikasi/": cookieSections');
+    expect(prerender).toContain("sections = legalSectionsHtml(legalSectionsByRoute[route])");
+  });
+
+  it("ana sayfa görselini yalnızca ana sayfada önceden indirir", () => {
+    expect(prerender).toContain('if (route !== "/") html = html.replace(');
   });
 });

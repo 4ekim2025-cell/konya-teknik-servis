@@ -27,7 +27,7 @@ describe("Google Analytics ve çerez onayı", () => {
     expect(consent).toContain('onClick={()=>choose("granted")}>Kabul et</button>');
     expect(app).toContain("<CookieConsent/>");
     expect(chrome).toContain("Çerez Tercihleri</button>");
-    expect(page).toContain('{title:"Google Analytics",paragraphs:');
+    expect(read("shared/legal-pages.ts")).toContain('{title:"Google Analytics",paragraphs:');
   });
 
   it("WhatsApp ve telefon bağlantılarını ayırt eder", () => {

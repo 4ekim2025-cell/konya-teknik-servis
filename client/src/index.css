@@ -1305,4 +1305,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-page .simple-hero h1{max-width:760px;margin:18px 0 15px;color:#fff;font-size:clamp(44px,5vw,72px);letter-spacing:-.067em}
 .blog-page .simple-hero h1 em{color:#fcf5db}
 .blog-page .simple-hero p{max-width:650px;color:rgba(252,245,219,.9);font-size:16px;line-height:1.72}
-.blog-page .simple-hero>div{padding-bottom:34px}
+.blog-page .simple-hero>div{padding:44px 0 92px}
+.blog-page .simple-hero h1{max-width:1000px}
+@media(max-width:860px){.blog-page .simple-hero>div{padding:34px 0 64px}}

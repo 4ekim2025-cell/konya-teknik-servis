@@ -126,6 +126,7 @@ Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılm
 
 - `client/src/prerendered.ts`: React başlamadan önce `#root` içindeki prerender HTML'i saklanır; sayfa kodu yüklenirken ve yüklenemezse (Googlebot'ta chunk hatası = soft 404) bu statik içerik gösterilir. `main.tsx`, `App.tsx` (`lazyWithRetry`, `RouteFallback`) ve `ErrorBoundary` bu yapıya bağlıdır; kaldırma.
 - Yasal sayfaların (KVKK, gizlilik, çerez) metni `shared/legal-pages.ts` içindedir; React sayfası ve prerender HTML'i buradan beslenir. Metin hukuki içeriktir, proje sahibinin onayı olmadan değiştirme.
-- Ana sayfa arka plan görselinin `preload` etiketi yalnızca `/` rotasında kalır; prerender diğer sayfalardan kaldırır.
+- Ana sayfa arka plan görseli `srcset` ile telefonda 800px (`-800.webp`), bilgisayarda 1600px sürümüyle yüklenir; `preload` etiketi yalnızca `/` rotasında kalır, prerender diğer sayfalardan kaldırır.
+- Hız (27.09.2026, PageSpeed mobil): ana sayfa 80, SEO 100. Kalan tek büyük kalem 66 KB'lık CSS'in çizimi engellemesi; kritik CSS ayırma işine **girilmedi** (proje sahibinin kararı, tasarım riski). Yeniden önermeden önce proje sahibine sor.
 - `teslim-notlari.md` eski bir teslim notudur (örnek telefon numarası vb. içerir). Güncel bilgi için kodu ve `siteConfig.ts` dosyasını esas al.
 - Açık SEO önerileri için bkz. `docs/google-ai-search-visibility-audit-2026-08-30.md` ve `SEO-AUDIT-RAPORU.md`.

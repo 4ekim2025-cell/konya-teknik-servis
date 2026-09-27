@@ -66,6 +66,9 @@
       }
     }
     </script>
+    <!-- Google için yazılan statik içerik (#seo-prerender) HTML'de kalır ama JavaScript çalışan tarayıcıda, React sayfası gelene kadar gizlenir; yenilemede "başka sayfa" görünmesini önler. 5 sn içinde React gelmezse içerik görünür olur. -->
+    <script>document.documentElement.classList.add("js-app");setTimeout(function(){document.documentElement.classList.remove("js-app")},5000);</script>
+    <style>.js-app #root>#seo-prerender{visibility:hidden}</style>
   </head>
   <body>
     <div id="root"></div>

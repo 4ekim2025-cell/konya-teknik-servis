@@ -124,7 +124,7 @@ Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılm
 
 ## Bilinen noktalar
 
-- `client/src/prerendered.ts`: React başlamadan önce `#root` içindeki prerender HTML'i saklanır; sayfa kodu yüklenirken ve yüklenemezse (Googlebot'ta chunk hatası = soft 404) bu statik içerik gösterilir. `main.tsx`, `App.tsx` (`lazyWithRetry`, `RouteFallback`) ve `ErrorBoundary` bu yapıya bağlıdır; kaldırma.
+- `client/src/prerendered.ts`: React başlamadan önce `#root` içindeki prerender HTML'i saklanır; sayfa kodu yüklenemezse (Googlebot'ta chunk hatası = soft 404) `ErrorBoundary` bu statik içeriği gösterir; yüklenirken ziyaretçiye iskelet (`RouteFallback`) gösterilir. `index.html`'deki `js-app` sınıfı statik içeriği JavaScript çalışan tarayıcıda React gelene kadar gizler (yenilemede "başka sayfa" görünmesini önler; 5 sn güvenlik süresi). `main.tsx`, `App.tsx` (`lazyWithRetry`), `ErrorBoundary` ve bu gizleme kuralı birlikte çalışır; kaldırma.
 - Yasal sayfaların (KVKK, gizlilik, çerez) metni `shared/legal-pages.ts` içindedir; React sayfası ve prerender HTML'i buradan beslenir. Metin hukuki içeriktir, proje sahibinin onayı olmadan değiştirme.
 - Ana sayfa arka plan görseli `srcset` ile telefonda 800px (`-800.webp`), bilgisayarda 1600px sürümüyle yüklenir; `preload` etiketi yalnızca `/` rotasında kalır, prerender diğer sayfalardan kaldırır.
 - Hız (27.09.2026, PageSpeed mobil): ana sayfa 80, SEO 100. Kalan tek büyük kalem 66 KB'lık CSS'in çizimi engellemesi; kritik CSS ayırma işine **girilmedi** (proje sahibinin kararı, tasarım riski). Yeniden önermeden önce proje sahibine sor.

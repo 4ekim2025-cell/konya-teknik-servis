@@ -278,7 +278,7 @@ export const blogPosts: BlogPost[] = [
     caseFile: { district: "Karatay", brand: "Philips", device: "Kahve makinesi", complaint: "Makine su almıyor", finding: "Pompa arızası", action: "Pompa değiştirildi; cihaz yeniden çalışır hâle getirildi" },
     brandPath: "/philips-servisi-konya/",
     blocks: [
-      { type: "p", text: "Karatay’daki müşterimizin Philips kahve makinesi su almıyordu. İncelemede suyu hazneden alıp demleme ünitesine basan pompanın arızalı olduğunu tespit ettik. Pompa değiştirildi ve makine yeniden kahve yapmaya başladı." },
+      { type: "p", text: "Karatay’daki müşterimizin Philips kahve makinesi su almıyordu. İncelemede suyu hazneden alıp demleme ünitesine basan pompanın arızalı olduğunu tespit ettik. Yeni pompa takıldıktan sonra makine suyu yeniden çekti ve kahve hazırlamaya devam etti." },
       { type: "h2", text: "Pompa ne iş yapar?" },
       { type: "p", text: "Kahve makinesinde su, hazneden kendiliğinden akmaz; pompa onu çekip belirli bir basınçla kahvenin içinden geçirir. Pompa zayıfladığında önce kahve inceleşir ve bardak geç dolar, ilerleyen aşamada makine suyu hiç çekemez hâle gelir." },
       { type: "h2", text: "Servis çağırmadan önce bakabilecekleriniz" },
@@ -370,7 +370,7 @@ export const blogPosts: BlogPost[] = [
     caseFile: { district: "Meram", brand: "Philips", device: "Ütü", complaint: "Ütü tabanı yeterince ısınmıyor", finding: "Rezistans arızası", action: "Rezistans değiştirildi; ısıtma sorunu giderildi" },
     brandPath: "/philips-servisi-konya/",
     blocks: [
-      { type: "p", text: "Meram’daki müşterimizin Philips ütüsünün tabanı yeterince ısınmıyordu. İncelemede ısıyı üreten rezistansın arızalı olduğunu tespit ettik. Rezistans değiştirildi ve ütü yeniden normal sıcaklığa ulaşmaya başladı." },
+      { type: "p", text: "Meram’daki müşterimizin Philips ütüsünün tabanı yeterince ısınmıyordu. İncelemede ısıyı üreten rezistansın arızalı olduğunu tespit ettik. Yeni rezistansla taban yeniden ayarlanan sıcaklığa ulaştı." },
       { type: "h2", text: "Isınmayan ütüde ilk bakılacaklar" },
       { type: "steps", items: [
         { title: "Ayarı kontrol edin", text: "Sıcaklık düğmesinin veya seçilen kumaş programının en düşük konumda kalmadığından emin olun." },

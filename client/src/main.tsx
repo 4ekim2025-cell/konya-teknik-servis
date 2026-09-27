@@ -1,5 +1,8 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import { savePrerenderedHtml } from "./prerendered";
 
-createRoot(document.getElementById("root")!).render(<App />);
+const rootElement = document.getElementById("root")!;
+savePrerenderedHtml(rootElement);
+createRoot(rootElement).render(<App />);

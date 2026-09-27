@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 import { Component, ReactNode } from "react";
+import { prerenderedHtml } from "@/prerendered";
 
 interface Props {
   children: ReactNode;
@@ -23,6 +24,16 @@ class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      const html = prerenderedHtml();
+      if (html) {
+        // Sayfa kodu yüklenemediyse arama motoru ve ziyaretçi boş sayfa yerine statik içeriği görür.
+        return (
+          <div className="prerender-fallback">
+            <div dangerouslySetInnerHTML={{ __html: html }} />
+            <button type="button" className="prerender-reload" onClick={() => window.location.reload()}>Sayfayı yenile</button>
+          </div>
+        );
+      }
       return (
         <div className="flex items-center justify-center min-h-screen p-8 bg-background">
           <div className="flex flex-col items-center w-full max-w-2xl p-8">

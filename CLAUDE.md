@@ -123,6 +123,7 @@ Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılm
 
 ## Bilinen noktalar
 
+- `client/src/prerendered.ts`: React başlamadan önce `#root` içindeki prerender HTML'i saklanır; sayfa kodu yüklenirken ve yüklenemezse (Googlebot'ta chunk hatası = soft 404) bu statik içerik gösterilir. `main.tsx`, `App.tsx` (`lazyWithRetry`, `RouteFallback`) ve `ErrorBoundary` bu yapıya bağlıdır; kaldırma.
 - Yasal sayfaların (KVKK, gizlilik, çerez) prerender HTML'i çok kısa; içerik yalnızca JavaScript ile yükleniyor.
 - `teslim-notlari.md` eski bir teslim notudur (örnek telefon numarası vb. içerir). Güncel bilgi için kodu ve `siteConfig.ts` dosyasını esas al.
 - Açık SEO önerileri için bkz. `docs/google-ai-search-visibility-audit-2026-08-30.md` ve `SEO-AUDIT-RAPORU.md`.

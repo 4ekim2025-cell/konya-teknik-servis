@@ -42,7 +42,7 @@ export const brandSeo: Record<string, BrandSeo> = {
   },
   Philips: {
     title: "Konya Philips Servisi | Süpürge Tamiri – Eşli Teknik",
-    description: "Konya Philips servisi ve süpürge tamiri için Eşli Teknik’e ulaşın. Çekiş, motor, filtre, şarj ve batarya sorunlarında servis desteği alın."
+    description: "Konya Philips servisi: süpürge, kahve makinesi, Airfryer ve ütü tamiri için Eşli Teknik’e ulaşın. Motor, pompa, batarya ve ısınma sorunlarında servis desteği."
   },
   Profilo: {
     title: "Konya Profilo Servisi | Beyaz Eşya Tamiri – Eşli Teknik",

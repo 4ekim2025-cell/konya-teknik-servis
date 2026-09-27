@@ -142,8 +142,8 @@ export const brandGuides: Record<string, BrandGuide> = {
     ],
   },
   "Philips": {
-    description: "Konya’da Philips elektrikli süpürge arızalarına bağımsız teknik servis; emiş, motor ve batarya sorunlarında yerinde inceleme.",
-    intro: "Philips’in Konya’daki varlığı büyük ölçüde elektrikli süpürge modelleriyle sınırlı; kablosuz modellerin şarj süresi ve emiş gücü, klasik gövdeli modellere göre kullanıcılar tarafından daha sık soruluyor.",
+    description: "Konya’da Philips süpürge, kahve makinesi, Airfryer ve ütü arızalarına bağımsız teknik servis; Karatay, Meram ve Selçuklu’dan gerçek servis kayıtları.",
+    intro: "Philips cihazlarda sahada yalnızca süpürgelerle değil; kahve makinesi, Airfryer ve ütü gibi küçük ev aletleriyle de çalışıyoruz. Pompa, batarya, rezistans ve termal koruma gibi parçaların değiştiği gerçek işlerimizi aşağıdaki servis kayıtlarında anlattık.",
     notes: [
       { title: "Kablosuz süpürgede batarya ömrü", text: "Philips kablosuz süpürgelerde şarj süresinin kısalması veya cihazın tam şarj olmaması genelde batarya hücrelerinin zamanla kapasite kaybetmesinden kaynaklanır; süpürgenin kaç yıldır kullanıldığı ve günlük ortalama kaç dakika çalıştırıldığı bilgisi batarya değerlendirmesini kolaylaştırır." },
       { title: "Klasik süpürgede hortum ve emiş kaybı", text: "Philips’in klasik torbalı ve torbasız süpürgelerinde emişin azalması genelde hortum içindeki bir tıkanıklıktan veya filtrenin doygunlaşmasından kaynaklanır; süpürgenin torba mı yoksa haznesi mi olduğu bilgisi doğru filtre kontrolünü sağlar." },

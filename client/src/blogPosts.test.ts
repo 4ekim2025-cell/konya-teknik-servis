@@ -38,6 +38,7 @@ describe("blog yazıları", () => {
       expect(sitemap).toContain(`<loc>https://esliteknik.com${post.brandPath}</loc>`);
     });
     expect(cases.filter(post => post.caseFile?.district.startsWith("Meram")).length).toBeGreaterThanOrEqual(4);
+    expect(cases.filter(post => post.caseFile?.brand === "Philips").length).toBeGreaterThanOrEqual(5);
     expect(page).toContain('className="blog-case-brand" href={post.brandPath}');
     expect(page).toContain("{isBrand&&<BrandCases name={d.name}/>}");
     expect(prerender).toContain("post.caseFile?.brand === brandName");

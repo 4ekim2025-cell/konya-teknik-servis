@@ -39,6 +39,8 @@ describe("blog yazıları", () => {
     });
     expect(cases.filter(post => post.caseFile?.district.startsWith("Meram")).length).toBeGreaterThanOrEqual(4);
     expect(page).toContain('className="blog-case-brand" href={post.brandPath}');
+    expect(page).toContain("{isBrand&&<BrandCases name={d.name}/>}");
+    expect(prerender).toContain("post.caseFile?.brand === brandName");
     expect(prerender).toContain('<a href="${post.brandPath}">Konya ${esc(post.caseFile.brand)} servisi</a>');
   });
 

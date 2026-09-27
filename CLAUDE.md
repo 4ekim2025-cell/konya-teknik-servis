@@ -8,6 +8,18 @@ Konya'da (Karatay, Meram, Selçuklu) beyaz eşya ve küçük ev aletleri servisi
 
 Sitenin amacı ziyaretçiyi üç eyleme yönlendirmektir: **WhatsApp'tan servis talebi**, **telefonla arama** ve **online servis takibi** sayfası. Google'da yerel aramalarda görünürlük (SEO) en önemli iş hedefidir.
 
+## KESİN KURAL: Arama görünürlüğü asla geriletilmez
+
+> "Bu site içerisinde yapılacak hiçbir düzenleme Google veya yapay zeka aramalarında sitenin geri gitmesine sebep olmamalı. Bu çok önemli." — Esad Eşli
+
+Bu kural diğer tüm isteklerden önce gelir. Her değişiklikten önce şunları kontrol et:
+- Mevcut URL'ler silinmez, taşınmaz, yönlendirilmez; `sitemap.xml`'den sayfa çıkarılmaz.
+- Bir sayfanın başlığı (`title`, `h1`), meta açıklaması, canonical'ı ve JSON-LD şeması kaldırılmaz; değişirse eşdeğer veya daha güçlü olmalıdır.
+- Prerender HTML'indeki statik içerik azaltılmaz (içerik yalnızca JavaScript'e taşınmaz); iç bağlantılar kaldırılmaz.
+- `noindex`, `robots.txt` engeli, doğrulama dosyası/etiketi silme, NAP (ad-adres-telefon) değişikliği yapılmaz.
+- `llms.txt` ve yapay zeka aramalarının okuduğu yapılandırılmış bilgiler korunur.
+- Bir değişikliğin sıralamayı düşürme ihtimali varsa, yapmadan önce proje sahibine riskini açıkça söyle ve onay al.
+
 ## Teknoloji
 
 React 19 + TypeScript + Vite 7, Tailwind CSS 4 + özel CSS (`client/src/index.css`), shadcn/ui, Wouter, Lucide ikonları, Vitest. Paket yöneticisi **pnpm**.

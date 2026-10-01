@@ -61,6 +61,7 @@ Eşli Teknik bağımsız bir teknik servis işletmesidir; resmî yetkili servis 
   - [Karatay’da şarj olmayan Philips dikey süpürge: batarya değişti](https://esliteknik.com/blog/philips-dikey-supurge-sarj-olmuyor-batarya/) (Ustanın Defterinden)
   - [Selçuklu’da çalışırken kapanan Philips Airfryer: termal koruma yenilendi](https://esliteknik.com/blog/philips-airfryer-calisirken-kapaniyor-termal-koruma/) (Ustanın Defterinden)
   - [Meram’da tabanı ısınmayan Philips ütü: rezistans değişti](https://esliteknik.com/blog/philips-utu-isinmiyor-rezistans/) (Ustanın Defterinden)
+  - [Meram’da kırılan Arçelik su sebili musluğu: musluk, rakor ve o-ring değişti](https://esliteknik.com/blog/arcelik-su-sebili-sicak-su-muslugu-kirildi/) (Ustanın Defterinden)
   - [Bulaşık makinesi suyu boşaltmıyor: dipteki suyu boşaltma ve filtre temizliği adım adım](https://esliteknik.com/blog/bulasik-makinesi-suyu-bosaltmiyor/) (Bakım Rehberi)
   - [Çamaşır makinesi su almıyor: kireçli suda giriş süzgeci temizliği adım adım](https://esliteknik.com/blog/camasir-makinesi-su-almiyor-konya/) (Bakım Rehberi)
   - [Kurutma makinesi kurutmuyor: çoğu zaman arıza değil, bakım](https://esliteknik.com/blog/kurutma-makinesi-kurutmuyor/) (Bakım Rehberi)

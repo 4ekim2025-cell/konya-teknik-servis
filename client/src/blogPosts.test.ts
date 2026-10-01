@@ -39,6 +39,7 @@ describe("blog yazıları", () => {
     });
     expect(cases.filter(post => post.caseFile?.district.startsWith("Meram")).length).toBeGreaterThanOrEqual(4);
     expect(cases.filter(post => post.caseFile?.brand === "Philips").length).toBeGreaterThanOrEqual(5);
+    expect(cases.some(post => post.caseFile?.device === "Su sebili" && post.servicePath === "/su-sebili-tamiri-konya/")).toBe(true);
     expect(page).toContain('className="blog-case-brand" href={post.brandPath}');
     expect(page).toContain("{isBrand&&<BrandCases name={d.name}/>}");
     expect(prerender).toContain("post.caseFile?.brand === brandName");

@@ -1,0 +1,19 @@
+{
+  "slug": "/blog/deneme-taslak/",
+  "order": 220,
+  "status": "draft",
+  "category": "Bakım Rehberi",
+  "title": "deneme taslak",
+  "description": "bu bir deneme taslağı silişnecek",
+  "excerpt": "deneme özeti",
+  "published": "2026-10-02",
+  "updated": "2026-10-02",
+  "device": "Çamaşır Makinesi",
+  "servicePath": "/camasir-makinesi-tamiri-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "deneme paragrafı"
+    }
+  ]
+}

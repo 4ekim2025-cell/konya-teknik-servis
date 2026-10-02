@@ -8,7 +8,7 @@
  *  - Gizli değerler yalnızca ortam değişkenlerindedir: ADMIN_PASSWORD_HASH, ADMIN_SESSION_SECRET, GITHUB_CONTENT_TOKEN.
  */
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { LoginGuard, MIN_SECRET_LENGTH, RateLimiter, clearedSessionCookie, createSessionToken, readCookie, SESSION_COOKIE, sessionCookie, verifyPassword, verifySessionToken } from "./auth.js";
+import { LoginGuard, MIN_SECRET_LENGTH, RateLimiter, ipKey, clearedSessionCookie, createSessionToken, readCookie, SESSION_COOKIE, sessionCookie, verifyPassword, verifySessionToken } from "./auth.js";
 import { GithubError, createGithubClient, readGithubConfig, type GithubClient } from "./github.js";
 import { AdminError, createAdminService, type AdminService, type SaveBody } from "./service.js";
 
@@ -31,7 +31,7 @@ export type AdminDeps = {
   now: () => number;
   sleep: (ms: number) => Promise<void>;
   loginGuard: LoginGuard;
-  /** Tüm IP'lerden gelen toplam hatalı giriş sayısını sınırlar. */
+  /** Tüm IP'lerden gelen toplam hatalı girişi sayar; eşik aşılınca giriş kilitlenmez, her deneme yavaşlatılır. */
   globalGuard: LoginGuard;
   limiter: RateLimiter;
   fetchImpl?: typeof fetch;
@@ -40,6 +40,9 @@ export type AdminDeps = {
 };
 
 const FAILED_LOGIN_DELAY_MS = 800;
+/** Ortak sayaç eşiği aşılınca parola sınanmadan önce eklenen bekleme: eşikte 2 sn, eşiğin üç katında 5 sn. */
+const GLOBAL_SLOWDOWN_MS = [2000, 5000] as const;
+const MAX_PASSWORD_LENGTH = 200;
 const header = (req: AdminHttpRequest, name: string): string | undefined => {
   const value = req.headers[name];
   return Array.isArray(value) ? value[0] : value;
@@ -119,7 +122,8 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
   const method = req.method.toUpperCase();
   const secure = header(req, "x-forwarded-proto") === "https" || Boolean(env.VERCEL);
 
-  if (!deps.limiter.take(req.ip)) return fail(429, "rate_limited", "Çok fazla istek; bir dakika sonra tekrar deneyin.", undefined, { "Retry-After": "60" });
+  const clientKey = ipKey(req.ip);
+  if (!deps.limiter.take(clientKey)) return fail(429, "rate_limited", "Çok fazla istek; bir dakika sonra tekrar deneyin.", undefined, { "Retry-After": "60" });
 
   const url = new URL(req.url, "http://panel.local");
   const action = url.searchParams.get("action") ?? "";
@@ -141,19 +145,28 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
     if (method !== "POST") return fail(405, "method_not_allowed", "Bu eylem POST ister.", undefined, { Allow: "POST" });
     if (!csrfOk(req)) return fail(403, "csrf", "İstek reddedildi.");
     if (!loginConfigured(env)) return fail(503, "admin_not_configured", "Panel henüz kurulmadı. Kurulum adımları docs/blog-paneli-kurulum.md dosyasındadır.");
-    for (const guard of [deps.loginGuard, deps.globalGuard]) {
-      const state = guard.check(guard === deps.loginGuard ? req.ip : "*");
-      if (!state.allowed) return fail(429, "locked", `Çok fazla hatalı deneme. ${Math.ceil(state.retryAfterSeconds / 60)} dakika sonra tekrar deneyin.`, undefined, { "Retry-After": String(state.retryAfterSeconds) });
-    }
+    // Eksik ya da bozuk istek parola denemesi değildir: sayaçlara yazılmaz (boş isteklerle kilit tetiklenemesin).
+    if (req.bodyError === "too_large") return fail(413, "too_large", "İstek çok büyük.");
+    if (req.bodyError === "invalid_json") return fail(400, "bad_json", "İstek gövdesi geçerli JSON değil.");
     const password = isRecord(req.body) && typeof req.body.password === "string" ? req.body.password : "";
-    const valid = password.length > 0 && password.length <= 200 && (await verifyPassword(password, env.ADMIN_PASSWORD_HASH));
+    if (password.length === 0 || password.length > MAX_PASSWORD_LENGTH) return fail(400, "bad_request", "Parola gerekli.");
+
+    // Deneme, parola sınanmadan önce sayılır; aynı anda gelen istekler IP kilidini aşamaz.
+    const own = deps.loginGuard.begin(clientKey);
+    if (!own.allowed) return fail(429, "locked", `Çok fazla hatalı deneme. ${Math.ceil(own.retryAfterSeconds / 60)} dakika sonra tekrar deneyin.`, undefined, { "Retry-After": String(own.retryAfterSeconds) });
+
+    // Ortak sayaç kilitlemez (sahibi dışarıda bırakılamasın); toplu denemede her isteği yavaşlatır.
+    const pressure = deps.globalGuard.count("*");
+    deps.globalGuard.failure("*");
+    if (pressure >= deps.globalGuard.maxFailures) await deps.sleep(GLOBAL_SLOWDOWN_MS[pressure >= deps.globalGuard.maxFailures * 3 ? 1 : 0]);
+
+    const valid = await verifyPassword(password, env.ADMIN_PASSWORD_HASH);
     if (!valid) {
-      deps.loginGuard.failure(req.ip);
-      deps.globalGuard.failure("*");
       await deps.sleep(FAILED_LOGIN_DELAY_MS);
       return fail(401, "invalid_credentials", "Parola hatalı.");
     }
-    deps.loginGuard.success(req.ip);
+    deps.loginGuard.success(clientKey);
+    deps.globalGuard.cancel("*");
     const token = createSessionToken(env.ADMIN_SESSION_SECRET!.trim(), deps.now());
     return reply(200, { ok: true }, { "Set-Cookie": sessionCookie(token, secure) });
   }

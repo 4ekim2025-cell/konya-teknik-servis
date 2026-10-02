@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { applyDeviceAndBrand, blockingSummary, checklist, emptyBlock, filterItems, insertAt, moveItem, newPost, removeAt, setCaseFile, setCategory, slugFor, toPayload } from "./admin/editorModel";
+import { applyDeviceAndBrand, blockingSummary, checklist, emptyBlock, filterItems, insertAt, newestFirst, moveItem, newPost, removeAt, setCaseFile, setCategory, slugFor, toPayload } from "./admin/editorModel";
 
 const longText = "Kelime ".repeat(160).trim();
 const valid = () => ({
@@ -77,6 +77,12 @@ describe("editör modeli", () => {
     const payload = toPayload({ ...valid(), serviceLabel: " ", sources: [{ label: "", url: "" }] });
     expect("serviceLabel" in payload).toBe(false);
     expect("sources" in payload).toBe(false);
+  });
+
+  it("panel listesi en son yazıyı en üstte gösterir", () => {
+    const item = (slug: string, published: string, order: number) => ({ post: { ...valid(), slug, published, updated: published, order } });
+    const sorted = newestFirst([item("/blog/eski/", "2026-08-01", 10), item("/blog/yeni/", "2026-10-02", 230), item("/blog/ayni-gun-once/", "2026-10-02", 220)]);
+    expect(sorted.map(entry => entry.post.slug)).toEqual(["/blog/yeni/", "/blog/ayni-gun-once/", "/blog/eski/"]);
   });
 
   it("liste süzgeci metin, kategori ve duruma göre çalışır", () => {

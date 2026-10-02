@@ -1,0 +1,82 @@
+{
+  "slug": "/blog/camasir-makinesi-su-almiyor-konya/",
+  "order": 160,
+  "category": "Bakım Rehberi",
+  "title": "Çamaşır makinesi su almıyor: kireçli suda giriş süzgeci temizliği adım adım",
+  "description": "Kireçli Konya suyunda çamaşır makinesinin su giriş süzgeci neden tıkanır, nasıl temizlenir ve temizlik işe yaramazsa ne yapılmalı?",
+  "excerpt": "Konya’nın kireçli suyu, çamaşır makinesinin su giriş süzgecini zamanla tıkayabilir. Süzgeci temizlemek çoğu zaman beş dakikalık bir iştir.",
+  "published": "2026-09-11",
+  "updated": "2026-09-27",
+  "device": "Çamaşır Makinesi",
+  "servicePath": "/camasir-makinesi-tamiri-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Çamaşır makinesinin su giriş hortumunda, şebekeden gelen kum ve tortunun makineye girmesini önleyen küçük bir süzgeç bulunur. Konya’nın şebeke suyu sert sular arasındadır (yaklaşık 30–45 °F); bu tür suyun kullanıldığı evlerde süzgeç zamanla kireç ve tortuyla tıkanabilir, makine su almaz ya da çok yavaş su alır. Kireç yalnızca süzgeci değil, makinenin ısıtıcı rezistansını da etkiler; Yazır’daki bir işimizde çamaşır makinesinin rezistansı bu yüzden yanmıştı."
+    },
+    {
+      "type": "h2",
+      "text": "Süzgeç tıkalı mı, nasıl anlarsınız?"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Makine program başında uzun süre bekliyor ve su alma sesi çok zayıf geliyorsa",
+        "Su almadığına dair hata veya uyarı veriyorsa",
+        "Aynı evdeki diğer musluklarda su basıncı normalse"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Adım adım süzgeç temizliği"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Musluğu kapatın, fişi çekin",
+          "text": "Makinenin bağlı olduğu musluğu tamamen kapatın ve makinenin fişini çekin."
+        },
+        {
+          "title": "Hortumu sökün",
+          "text": "Giriş hortumunu makinenin arkasındaki bağlantıdan elle çevirerek sökün. Hortumda kalan az miktarda su için altına bir kap veya havlu koyun. Bazı modellerde süzgeç, hortumun musluk tarafındaki ucundadır."
+        },
+        {
+          "title": "Süzgeci bulun",
+          "text": "Bağlantı ağzının içinde küçük, ağ şeklinde bir süzgeç göreceksiniz. Üzeri beyaz tortu veya kum ile kaplıysa tıkanıklık buradadır."
+        },
+        {
+          "title": "Temizleyin",
+          "text": "Süzgeci kılavuzunuz izin veriyorsa bir pense yardımıyla nazikçe çıkarın; akan su altında yumuşak bir fırçayla temizleyin. Kireç tabakası sertse süzgeci bir süre sirkeli suda bekletip yeniden fırçalayabilirsiniz."
+        },
+        {
+          "title": "Yerine takın ve sızıntıyı kontrol edin",
+          "text": "Süzgeci ve hortumdaki contayı yerine takıp hortumu elle sıkın. Musluğu açtıktan sonra bağlantıda damlama olup olmadığını kontrol edin."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Süzgeç temiz ama makine hâlâ su almıyorsa"
+    },
+    {
+      "type": "p",
+      "text": "Bu durumda sorun makinenin içindedir: su giriş ventili, kapak kilidi, su seviyesini algılayan basınç anahtarı veya kontrol kartı. Bu parçaların teşhisi makinenin açılmasını gerektirir. Karatay’da gittiğimiz bir Beko çamaşır makinesinde, su almama sorununun nedeni basınç anahtarıydı."
+    },
+    {
+      "type": "note",
+      "title": "Güvenlik",
+      "text": "Hortumu sökmeden önce musluğu mutlaka kapatın. Hortum bağlantısını anahtarla aşırı sıkmayın; contaya zarar verebilir."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Arçelik — Çamaşır makinesi su almıyor",
+      "url": "https://www.arcelik.com.tr/destek/camasir-makinesi/camasir-makinesi-su-almiyor"
+    },
+    {
+      "label": "Siemens — Çamaşır makinesi su almıyor",
+      "url": "https://www.siemens-home.bsh-group.com/tr/musteri-hizmetleri/destek-merkezi/sorun-giderme/camasir-makinesi/su-dolmuyor"
+    }
+  ]
+}

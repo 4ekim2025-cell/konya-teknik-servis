@@ -1,0 +1,77 @@
+{
+  "slug": "/blog/vestel-bulasik-makinesi-kapaktan-su-sizdiriyor/",
+  "order": 70,
+  "category": "Ustanın Defterinden",
+  "title": "Meram’da kapağından su sızdıran Vestel bulaşık makinesi: kapak yayları ve iç panel",
+  "description": "Meram’da kapağından su sızdıran Vestel bulaşık makinesinde kapak yayları ve iç kapak panelinin değişimini, kapağın evde nasıl kontrol edileceğini anlatıyoruz.",
+  "excerpt": "Su, makinenin altından değil kapağın kenarından geliyordu. Kapak yayları ve iç kapak paneli değiştirildiğinde sızıntı durdu.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Bulaşık Makinesi",
+  "servicePath": "/bulasik-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Meram",
+    "brand": "Vestel",
+    "device": "Bulaşık makinesi",
+    "complaint": "Yıkama sırasında kapaktan su sızıyor",
+    "finding": "Sızıntı kapaktan; kapak yayları ve iç kapak paneli kaynaklı",
+    "action": "Kapak yayları ve iç kapak paneli değiştirildi"
+  },
+  "brandPath": "/vestel-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Meram’daki müşterimizin Vestel bulaşık makinesi yıkama sırasında kapağından su sızdırıyordu. Bulaşık makinesinde su kaçağı şikâyetinde ilk iş suyun nereden geldiğini bulmaktır; çünkü hortum bağlantısından gelen bir kaçakla kapaktan gelen bir sızıntının çözümü tamamen farklıdır."
+    },
+    {
+      "type": "h2",
+      "text": "Tespit ve yapılan işlem"
+    },
+    {
+      "type": "p",
+      "text": "Bu makinede sızıntı kapaktan geliyordu. Kapak yaylarını ve iç kapak panelini değiştirdik; makine yeniden su sızdırmadan yıkamaya başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Kapak yayları ne işe yarar?"
+    },
+    {
+      "type": "p",
+      "text": "Bulaşık makinesinin kapağı, yanlarındaki yaylar sayesinde açılırken yavaşça iner, kapanırken de gövdeye dengeli biçimde oturur. Yaylar esnekliğini yitirdiğinde ya da biri koptuğunda kapak bir tarafa yüklenir ve gövdeye her noktada aynı baskıyı yapamaz. Kapakla gövde arasında kalan küçük bir aralık bile, yıkama sırasında püskürtülen suyun dışarı yol bulmasına yeter."
+    },
+    {
+      "type": "p",
+      "text": "İç kapak paneli ise kapağın makinenin içine bakan yüzüdür ve yıkama suyuyla doğrudan temas eder. Bu panelde oluşan eğilme veya çatlak, suyun kapağın içine ve oradan dışarıya sızmasına neden olabilir."
+    },
+    {
+      "type": "h2",
+      "text": "Kapağı evde nasıl kontrol edersiniz?"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Kapağı yarıya kadar açın",
+          "text": "Kapağı yarı açık konumda bırakın. Sağlam yaylarla kapak olduğu yerde durur ya da yavaşça iner; kendi ağırlığıyla hızla düşüyorsa yaylar zayıflamış olabilir."
+        },
+        {
+          "title": "İki yanı karşılaştırın",
+          "text": "Kapağı açıp kapatırken bir tarafın diğerinden ağır hareket edip etmediğine, kapanışta bir köşenin geride kalıp kalmadığına bakın."
+        },
+        {
+          "title": "İç yüzeyi inceleyin",
+          "text": "Kapağın iç yüzeyinde eğilme, çatlak veya kenarlarda açılma olup olmadığını kontrol edin."
+        },
+        {
+          "title": "Sızıntının yerini not edin",
+          "text": "Su kapağın alt kenarından mı, köşelerinden mi geliyor? Servis talebinde bunu belirtmeniz teşhisi hızlandırır."
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Kapaktan gelen sızıntıda akla ilk conta gelir. Ancak kapak gövdeye eşit oturmuyorsa yeni conta da sızıntıyı durdurmaz; bu yüzden önce kapağın nasıl kapandığına bakmak gerekir."
+    }
+  ]
+}

@@ -32,7 +32,8 @@ React 19 + TypeScript + Vite 7, Tailwind CSS 4 + özel CSS (`client/src/index.cs
 | `pnpm dev` | Geliştirme sunucusu (port 3000) |
 | `pnpm check` | TypeScript tür denetimi |
 | `pnpm test` | Vitest testleri |
-| `pnpm build` | Vite build → `scripts/prerender.ts` ile statik SEO HTML'leri → sunucu paketi |
+| `pnpm content` | `content/blog/*.json` yazılarını doğrular; `shared/blog-content.generated.ts`, `sitemap.xml` blog satırları ve `llms.txt` blog bölümünü üretir (`--check`: yazmadan denetler) |
+| `pnpm build` | İçerik derleyici (`scripts/build-content.ts`) → Vite build → `scripts/prerender.ts` ile statik SEO HTML'leri → sunucu paketi |
 
 Bir değişikliği bitmiş saymadan önce `pnpm check`, `pnpm test` ve `pnpm build` çalıştır. Ortam npm'e erişemiyorsa bunu açıkça söyle ve doğrulamayı PR'ın Vercel önizleme build'ine bırak.
 
@@ -54,10 +55,15 @@ shared/
   device-faults.ts      # 10 cihazın arıza rehberi, süre-ücret ve acil durum notları, sayfa açıklamaları (React + prerender ortak)
   brand-guides.ts       # 22 markanın özgün içeriği: açıklama, giriş, markaya özel notlar, SSS (React + prerender ortak)
   district-guides.ts    # Karatay/Selçuklu/Meram özgün içeriği: açıklama, giriş, sahadan notlar, SSS (React + prerender ortak; bilgi uydurulmaz)
-  blog-posts.ts         # Blog yazıları, yazar (Esad Eşli), paylaşım bağlantıları (React + prerender ortak)
+  blog-posts.ts         # Blog yazı listesi (blog-content.generated.ts'ten okunur) + cihaza göre filtre; blog-meta.ts'i de dışa aktarır (React + prerender ortak)
+  blog-meta.ts          # Blog türleri, yazar (Esad Eşli), kategoriler, okuma süresi/tarih/paylaşım yardımcıları (veri içermez)
+  blog-schema.ts        # Blog yazısı Zod şeması: içerik kurallarının tek kaynağı (derleyici, testler, ileride panel)
+  blog-content.generated.ts  # ÜRETİLİR, elle düzenleme: content/blog/*.json'dan scripts/build-content.ts üretir
   business-contact.ts   # Google İşletme profili bağlantısı
   seo-content.ts        # İlçe mahalleleri, ilçe ve hizmet SSS'leri
   legal-pages.ts        # KVKK, Gizlilik ve Çerez Politikası metinleri (React + prerender ortak)
+content/blog/*.json     # Blog yazıları: yazı başına bir dosya (dosya adı = adres: /blog/<ad>/ → <ad>.json)
+scripts/build-content.ts  # Build'in ilk adımı: yazıları doğrular, sıralar, sitemap/llms.txt blog bölümünü ve üretilen veri dosyasını yazar
 scripts/prerender.ts    # Build sonrası her rota için başlık/açıklama/canonical/JSON-LD ve statik içerik yazar
 server/, api/           # Instagram akışı uç noktası (/api/instagram-feed)
 docs/                   # Vercel rehberi, SEO denetimleri, geliştirme notları
@@ -109,7 +115,9 @@ Testlerin çoğu dosyaları `readFileSync` ile okuyup belirli metinlerin varlı�
 Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılmış, tek satırlık bir stille yazılmıştır. Küçük değişikliklerde dosyanın tamamını yeniden biçimlendirme, çünkü bu diff'i okunmaz hale getirir.
 
 ### Blog kuralları
-- Yazar: **Esad Eşli**. Her yazı `shared/blog-posts.ts` içinde tanımlanır; liste, yazı sayfası, prerender HTML'i, BlogPosting şeması ve sitemap bu kaynaktan beslenir. Yeni yazı eklenince `client/public/sitemap.xml` ve `llms.txt` de güncellenir.
+- Yazar: **Esad Eşli**. Her yazı `content/blog/<ad>.json` dosyasında tanımlanır (dosya adı adresle aynıdır). Liste, yazı sayfası, prerender HTML'i, BlogPosting şeması, sitemap ve `llms.txt` bu kaynaktan beslenir. **Yeni yazı eklemek için yalnızca JSON dosyası eklenir**; `pnpm content` (build'de otomatik) `shared/blog-content.generated.ts` dosyasını ve `sitemap.xml` / `llms.txt` blog satırlarını eşitler. Üretilen üç dosyayı elle düzenleme; JSON'u değiştirdikten sonra `pnpm content` çalıştırıp çıktıyı birlikte commit et (`pnpm content --check` ve testler güncel olup olmadığını denetler).
+- Kurallar `shared/blog-schema.ts` Zod şemasındadır (slug kalıbı, açıklama ≤ 160 karakter ve benzersiz, kategori, `updated >= published`, usta vakasında `caseFile` + ilçe Karatay/Meram/Selçuklu + `brandPath`, yasaklı ifadeler, yalnızca Türkçe kaynak). Kurala aykırı yazı build'i durdurur.
+- Alanlar: `order` listelerdeki sırayı belirler (küçük olan önce; araya yazı eklemek için 10'ar aralık bırakılmıştır, benzersiz olmalı, siteye gitmez). `status: "draft"` olan yazı siteye, sitemap'e ve `llms.txt`'ye alınmaz. Yayındaki yazının adresi (slug) değiştirilmez. Sitemap'te rehber yazıları (Bakım/Karar Rehberi) 0.7, diğerleri 0.6 öncelik alır; `lastmod` yazının `updated` tarihidir.
 - Kategoriler: Ustanın Defterinden (yalnızca Esad Eşli'nin anlattığı gerçek işler; ayrıntı uydurulmaz), Bakım Rehberi, Karar Rehberi, Tüketici Rehberi.
 - İnternetten alınan deneyimler kaynağıyla özetlenir, Eşli Teknik müşterisi gibi sunulmaz, metin kopyalanmaz.
 - **Kaynaklar yalnızca Türkçe olur.** Okuyucu kitlesi Konya'daki ev kullanıcılarıdır; İngilizce veya yabancı dilde kaynak bağlantısı verilmez.

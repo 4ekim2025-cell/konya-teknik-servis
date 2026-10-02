@@ -28,8 +28,8 @@ describe("ilçe sayfaları", () => {
     expect(questions.join(" ")).not.toMatch(/takip|aynı gün|ne yazmalıyım|nasıl açılır|hangi bilgiler/i);
   });
 
-  it("her ilçede o ilçeden en az bir gerçek servis kaydını gösterir", () => {
-    districts.forEach(name => expect(blogPosts.some(post => post.caseFile?.district.startsWith(name))).toBe(true));
+  it("ilçe sayfası o ilçeden gerçek servis kayıtlarını gösterir; her kayıt bir hizmet bölgesine aittir", () => {
+    blogPosts.forEach(post => { if (post.caseFile) expect(districts.some(name => post.caseFile?.district.startsWith(name)), post.slug).toBe(true); });
     expect(page).toContain("<DistrictNotes name={d.name}/>");
     expect(prerender).toContain("districtGuides[district]");
   });

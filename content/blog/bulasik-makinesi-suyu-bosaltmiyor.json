@@ -1,0 +1,95 @@
+{
+  "slug": "/blog/bulasik-makinesi-suyu-bosaltmiyor/",
+  "order": 150,
+  "category": "Bakım Rehberi",
+  "title": "Bulaşık makinesi suyu boşaltmıyor: dipteki suyu boşaltma ve filtre temizliği adım adım",
+  "description": "Bulaşık makinesinin dibinde su kaldıysa suyu güvenle boşaltma, filtreyi temizleme ve tahliye hattını kontrol etme adımlarını anlatıyoruz.",
+  "excerpt": "Makinenin dibinde su kaldığında panik yapmadan, doğru sırayla ne yapacağınızı ve nerede durmanız gerektiğini adım adım anlatıyoruz.",
+  "published": "2026-09-11",
+  "updated": "2026-09-27",
+  "device": "Bulaşık Makinesi",
+  "servicePath": "/bulasik-makinesi-tamiri-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Program bittiğinde makinenin dibinde su görmek can sıkıcıdır; ancak sorunun büyük kısmı makinenin tabanındaki filtre ve tahliye hattıyla ilgilidir. Aşağıdaki adımlar, üreticilerin kullanım kılavuzlarında önerdiği temel kontrollerle uyumludur. Kendi modelinizin kılavuzunu mutlaka birlikte kontrol edin."
+    },
+    {
+      "type": "h2",
+      "text": "Başlamadan önce hazırlık"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Birkaç havlu ve düz, geniş bir kap",
+        "Sünger veya küçük bir kupa",
+        "Filtreyi temizlemek için yumuşak bir fırça",
+        "Keskin cam veya metal parçalara karşı eldiven"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Adım adım"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Makineyi kapatın",
+          "text": "Programı iptal edin, makineyi kapatın ve fişini çekin. İçerideki su sıcak olabilir; soğumasını bekleyin."
+        },
+        {
+          "title": "Alt sepeti çıkarın",
+          "text": "Tabana rahatça ulaşabilmek için alt sepeti tamamen dışarı alın ve zemine havlu serin."
+        },
+        {
+          "title": "Suyu alın",
+          "text": "Dipteki suyu sünger veya kupa yardımıyla kaba alın. Suyun tamamını almak zorunda değilsiniz; filtreye ulaşabilecek kadar azaltmanız yeterli."
+        },
+        {
+          "title": "Filtreyi çıkarıp temizleyin",
+          "text": "Çoğu modelde filtre saat yönünün tersine çevrilerek çıkarılır. Filtre parçalarını akan su altında fırçayla temizleyin; yuvasında kalan artıkları da alın."
+        },
+        {
+          "title": "Yerine tam oturtun",
+          "text": "Filtreyi yerine takıp kilitlenene kadar çevirin. Yarım takılmış filtre hem tahliyeyi hem yıkama kalitesini bozar."
+        },
+        {
+          "title": "Tahliye hortumunu kontrol edin",
+          "text": "Hortumu lavabo dolabının içinden takip edin: arada bir ezilme veya sert bir büküm olmamalı. Hortum yakın zamanda yeni bir sifona bağlandıysa, sifondaki bağlantı ağzının kapalı plastik kapağının açıldığından emin olun."
+        },
+        {
+          "title": "Kısa bir programla deneyin",
+          "text": "Makineyi boş olarak kısa bir programda çalıştırın ve sonunda dipte su kalıp kalmadığına bakın."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Nerede durmalısınız?"
+    },
+    {
+      "type": "p",
+      "text": "Filtre temiz ve hortum açık olduğu hâlde su kalmaya devam ediyorsa arıza büyük olasılıkla tahliye pompası veya kontrol tarafındadır. Tahliye sırasında hiç ses gelmiyorsa pompa çalışmıyor olabilir; uğultu gelip su çıkmıyorsa pompada sıkışan bir parça olabilir. Bu noktadan sonra makinenin alt kısmını açmak kullanıcı işi değildir."
+    },
+    {
+      "type": "note",
+      "title": "Sahadan",
+      "text": "Filtre yalnızca tahliyeyi değil, yıkama kalitesini de etkiler. Bir müşterimizin bulaşık makinesinde kirli yıkama şikâyeti, filtre ve püskürtme kollarının temizlenmesiyle parça değişmeden giderildi. Bu işi “Ustanın Defterinden” bölümünde anlattık."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Bosch — Bulaşık makinesi su boşaltmama sorunu",
+      "url": "https://www.bosch-home.com.tr/musteri-hizmetleri/yardim-destek/bulasik-makinesi-hakkinda/suyu-bosaltmiyor"
+    },
+    {
+      "label": "Arçelik — Bulaşık makinesi suyu boşaltmıyor",
+      "url": "https://www.arcelik.com.tr/destek/bulasik-makinesi/bulasik-makinesi-suyu-bosaltmiyor"
+    },
+    {
+      "label": "Beko — Bulaşık makinesi suyu boşaltmıyor",
+      "url": "https://www.beko.com.tr/blog/bulasik-makinesi-suyu-bosaltmiyor-bulasik-makinesi"
+    }
+  ]
+}

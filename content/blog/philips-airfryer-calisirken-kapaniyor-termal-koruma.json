@@ -1,0 +1,54 @@
+{
+  "slug": "/blog/philips-airfryer-calisirken-kapaniyor-termal-koruma/",
+  "order": 120,
+  "category": "Ustanın Defterinden",
+  "title": "Selçuklu’da çalışırken kapanan Philips Airfryer: termal koruma yenilendi",
+  "description": "Selçuklu’da pişirme sırasında kapanan Philips Airfryer’da termal koruma parçasının yenilenmesini ve cihazın aşırı ısınmaktan nasıl korunacağını anlatıyoruz.",
+  "excerpt": "Airfryer pişirmenin ortasında kendiliğinden kapanıyordu. Aşırı ısınmaya karşı devreyi kesen termal koruma parçası yenilendi.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Küçük Ev Aletleri",
+  "servicePath": "/philips-servisi-konya/",
+  "serviceLabel": "Philips servisi",
+  "caseFile": {
+    "district": "Selçuklu",
+    "brand": "Philips",
+    "device": "Airfryer",
+    "complaint": "Cihaz çalışırken kapanıyor",
+    "finding": "Termal koruma parçası arızalı",
+    "action": "Termal koruma parçası yenilendi; cihaz sorunsuz çalıştı"
+  },
+  "brandPath": "/philips-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Selçuklu’daki müşterimizin Philips Airfryer’ı pişirmenin ortasında kendiliğinden kapanıyordu. İncelemede, cihazı aşırı ısınmaya karşı koruyan termal koruma parçasının arızalandığını tespit ettik. Parça yenilendi ve cihaz sonraki denemelerde kapanmadan çalıştı."
+    },
+    {
+      "type": "h2",
+      "text": "Termal koruma ne işe yarar?"
+    },
+    {
+      "type": "p",
+      "text": "Termal koruma, cihazın içi güvenli sıcaklığı aştığında elektriği keserek hem cihazı hem mutfağı korur. Parçanın kendisi zamanla zayıfladığında, cihaz normal sıcaklıkta çalışırken bile devreyi kesmeye başlayabilir. Kullanıcı açısından belirti aynıdır: cihaz pişirme sırasında kapanır."
+    },
+    {
+      "type": "h2",
+      "text": "Airfryer’ı aşırı ısınmadan korumak için"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Cihazın arkasındaki hava çıkışını kapatmayın; duvara ve üst dolaba kullanım kılavuzunda belirtilen mesafeden daha yakın kullanmayın.",
+        "Hazne ve rezistans çevresinde biriken yağı ve kırıntıyı düzenli temizleyin.",
+        "Sepeti taşacak kadar doldurmayın; sıcak havanın dolaşması gerekir.",
+        "Cihazı perde, kağıt havlu ya da plastik eşyaların yakınında çalıştırmayın."
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Güvenlik uyarısı",
+      "text": "Sık kapanan bir cihazda termal koruma asla devre dışı bırakılmaz ya da köprülenmez. Bu parça, aşırı ısınan bir cihazın yangına yol açmasını engelleyen son önlemdir."
+    }
+  ]
+}

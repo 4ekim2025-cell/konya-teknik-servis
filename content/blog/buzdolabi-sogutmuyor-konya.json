@@ -1,0 +1,70 @@
+{
+  "slug": "/blog/buzdolabi-sogutmuyor-konya/",
+  "order": 180,
+  "category": "Karar Rehberi",
+  "title": "Buzdolabı soğutmuyor: tamir mi, yenisi mi?",
+  "description": "Buzdolabı soğutmuyorsa servis gelene kadar gıdaları nasıl korursunuz ve tamir ile yeni cihaz arasında hangi kriterlere göre karar verirsiniz?",
+  "excerpt": "Soğutmayan buzdolabında iki soru öne çıkar: servis gelene kadar gıdalar ne olacak ve tamir ettirmeye değer mi?",
+  "published": "2026-09-11",
+  "updated": "2026-09-27",
+  "device": "Buzdolabı",
+  "servicePath": "/buzdolabi-tamiri-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Bir forumda paylaşılan deneyimde, 14 yıllık bir buzdolabının kompresörü bozulan kullanıcı “motor mu taktırayım, yeni dolap mı alayım?” diye soruyor. Gelen cevaplar iki tarafa ayrılıyor: bir kısmı eski cihazların sağlam gövdesine güvenerek tamiri öneriyor, diğerleri yeni cihazın enerji verimliliğini ve yeni parçaların ömrünü öne çıkarıyor. Tartışmada öne çıkan teknik uyarı ise kompresör değişiminde cihazın gaz tipine uygun kompresör seçilmesi ve soğutma devresinin temizlenmesi gerektiği."
+    },
+    {
+      "type": "p",
+      "text": "Bu kararın tek bir doğru cevabı yok; ama doğru soruları sormak mümkün."
+    },
+    {
+      "type": "h2",
+      "text": "Önce gıdalarınızı koruyun"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Kapıyı mümkün olduğunca açmayın; kapalı bir buzdolabı içindeki soğuğu bir süre korur.",
+        "Genel gıda güvenliği önerilerine göre kapısı açılmayan bir buzdolabı yiyecekleri yaklaşık 4 saat, dolu bir derin dondurucu ise yaklaşık 48 saat güvenli sıcaklıkta tutabilir.",
+        "Çiğ et, süt ürünleri ve pişmiş yemekler gibi çabuk bozulan gıdaları öncelikle başka bir soğutucuya alın.",
+        "Sıcaklığı bilinmeyen ve uzun süre soğuksuz kalmış çabuk bozulan gıdaları tüketmeyin."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Tamir mi, yenisi mi? Beş soru"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Arıza nerede?",
+          "text": "Conta, fan, sensör veya defrost sistemi gibi arızalar çoğunlukla ekonomik biçimde onarılabilir. Kompresör değişimi veya soğutma devresindeki bir kaçağın onarımı ise daha kapsamlı bir iştir. Karar vermeden önce arızanın tam olarak nerede olduğunu öğrenin."
+        },
+        {
+          "title": "Cihazın genel durumu nasıl?",
+          "text": "Gövdede paslanma, çatlamış iç plastikler, sertleşmiş contalar veya sürekli tekrarlayan arızalar varsa tek bir parçanın değişimi cihazı uzun süre ayakta tutmayabilir."
+        },
+        {
+          "title": "Parça bulunuyor mu?",
+          "text": "Eski modellerde bazı parçaların temini zorlaşabilir. Parçanın bulunup bulunmadığını ve ne kadar sürede geleceğini sorun."
+        },
+        {
+          "title": "Enerji tüketimi ne durumda?",
+          "text": "Eski bir buzdolabı, özellikle contaları yıpranmışsa, yeni bir cihaza göre daha fazla enerji tüketebilir. Bu fark uzun vadede karara etki eder."
+        },
+        {
+          "title": "Yapılacak işlem açıkça anlatıldı mı?",
+          "text": "Özellikle kompresör ve gaz işlemlerinde hangi parçanın değişeceğini, kaçağın bulunup bulunmadığını ve işlemin nasıl test edileceğini önceden öğrenin."
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "DonanımHaber Forum — Buzdolabı motoru bozuldu, motor mu taktırayım, yeni dolap mı alayım?",
+      "url": "https://forum.donanimhaber.com/buzdolabi-motoru-bozuldu-motor-mu-taktirayim-yeni-dolap-mi-alayim--158478713"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "slug": "/blog/philips-utu-isinmiyor-rezistans/",
+  "order": 130,
+  "category": "Ustanın Defterinden",
+  "title": "Meram’da tabanı ısınmayan Philips ütü: rezistans değişti",
+  "description": "Meram’da tabanı yeterince ısınmayan Philips ütüde rezistans değişimini ve ısınma sorununun kablodan mı, ütünün içinden mi kaynaklandığını anlamayı anlatıyoruz.",
+  "excerpt": "Ütünün tabanı yeterince ısınmıyordu. Isıyı üreten rezistans değiştirildiğinde sorun giderildi.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Küçük Ev Aletleri",
+  "servicePath": "/philips-servisi-konya/",
+  "serviceLabel": "Philips servisi",
+  "caseFile": {
+    "district": "Meram",
+    "brand": "Philips",
+    "device": "Ütü",
+    "complaint": "Ütü tabanı yeterince ısınmıyor",
+    "finding": "Rezistans arızası",
+    "action": "Rezistans değiştirildi; ısıtma sorunu giderildi"
+  },
+  "brandPath": "/philips-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Meram’daki müşterimizin Philips ütüsünün tabanı yeterince ısınmıyordu. İncelemede ısıyı üreten rezistansın arızalı olduğunu tespit ettik. Yeni rezistansla taban yeniden ayarlanan sıcaklığa ulaştı."
+    },
+    {
+      "type": "h2",
+      "text": "Isınmayan ütüde ilk bakılacaklar"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Ayarı kontrol edin",
+          "text": "Sıcaklık düğmesinin veya seçilen kumaş programının en düşük konumda kalmadığından emin olun."
+        },
+        {
+          "title": "Isı ışığını izleyin",
+          "text": "Ütüyü prize taktığınızda ısı ışığı yanıyor mu, belirli aralıklarla sönüp yeniden yanıyor mu? Işık hiç yanmıyorsa elektrik ütüye ulaşmıyor olabilir."
+        },
+        {
+          "title": "Kabloyu inceleyin",
+          "text": "Kablonun ütüye girdiği bölüm en çok kıvrılan yerdir. Bu bölümde kararma, çatlak veya ütü kablo oynadıkça kesilip geliyorsa ütüyü kullanmayın."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "text": "Işık normal yanıp sönüyor, kablo sağlam görünüyor ama taban yine de yeterince ısınmıyorsa arıza büyük ihtimalle ütünün içindedir; bu cihazda olduğu gibi rezistans veya sıcaklığı yöneten parçalar incelenir."
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Ütü tabanına kireç veya yapışmış kumaş kalıntısı da ısının kumaşa geçişini zayıflatır. Tabanı kılavuzda önerilen yöntemle temiz tutmak, ütünün ısınmadığı hissini gereksiz yere yaşamamanızı sağlar."
+    }
+  ]
+}

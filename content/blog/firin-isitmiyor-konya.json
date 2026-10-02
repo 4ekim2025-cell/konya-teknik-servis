@@ -1,0 +1,79 @@
+{
+  "slug": "/blog/firin-isitmiyor-konya/",
+  "order": 190,
+  "category": "Karar Rehberi",
+  "title": "Fırın ısıtmıyor: “atın” denmeden önce bilmeniz gerekenler",
+  "description": "Fırın ısıtmıyorsa en sık nedenler, belirtiye göre olası arızalar ve fırını atmaya karar vermeden önce sorulması gereken sorular.",
+  "excerpt": "Isıtmayan fırınların önemli bir kısmında sorun, değiştirilebilir bir parçadadır. Karar vermeden önce doğru teşhis gerekir.",
+  "published": "2026-09-11",
+  "updated": "2026-09-27",
+  "device": "Fırın",
+  "servicePath": "/firin-tamiri-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Bir forumda paylaşılan deneyimde, bir kullanıcının midi fırını önce az ısıtmaya, sonra hiç ısıtmamaya başlıyor. Evine gelen teknisyen tamirin pahalı olacağını söyleyip fırını atmasını öneriyor. Kullanıcı ise fırını incelediğinde alt rezistanslardan birinin koptuğunu görüyor; uygun bir yedek parçayla fırın yeniden çalışıyor."
+    },
+    {
+      "type": "p",
+      "text": "Bu hikâyeden çıkarılacak ders, fırını kendiniz tamir etmeniz değil. Rezistans ve bağlantılarla çalışmak elektrik güvenliği gerektirir. Ders şu: bir cihaz için “tamir edilemez” denmeden önce arızanın ne olduğu açıkça tespit edilmelidir."
+    },
+    {
+      "type": "h2",
+      "text": "Belirtiye göre olası neden"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Ekran yanıyor, saat yanıp sönüyor, fırın ısıtmıyor",
+          "text": "Dijital ekranlı fırınların çoğu, elektrik gidip geldikten sonra saat yeniden kurulana kadar ısıtmaya geçmez. Saati ayarlayıp tekrar deneyin."
+        },
+        {
+          "title": "Altı pişmiyor ama üstü pişiyor",
+          "text": "Alt rezistans arızası en olası nedendir."
+        },
+        {
+          "title": "Fanlı programda soğuk hava üflüyor",
+          "text": "Havayı ısıtan fan rezistansı arızalanmış olabilir. Alt-üst ısıtma programında ısınma varsa bu ihtimal güçlenir."
+        },
+        {
+          "title": "Işık, ekran ve ısıtma birlikte çalışmıyor",
+          "text": "Fırına hiç enerji ulaşmıyor olabilir. Önce fırının bağlı olduğu sigortaya bakın; sigorta inmemişse sorun büyük olasılıkla fırının içindeki elektrik aksamındadır."
+        },
+        {
+          "title": "Isınıyor ama sıcaklığı tutturamıyor",
+          "text": "Termostat veya sıcaklık sensörü doğru ölçüm yapmıyor olabilir; kapak contasındaki ısı kaçağı da bu belirtiye yol açar."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Atmaya karar vermeden önce sorun"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Arızalı parça tam olarak hangisi?",
+        "Bu parça modeliniz için bulunabiliyor mu?",
+        "Parça değişiminden sonra fırın nasıl test edilecek?",
+        "Fırının gövdesi, kapak camı ve contası iyi durumda mı?"
+      ]
+    },
+    {
+      "type": "p",
+      "text": "Bu soruların cevapları açık değilse ikinci bir görüş almak makul bir yoldur."
+    },
+    {
+      "type": "note",
+      "title": "Güvenlik",
+      "text": "Fırının arka kapağını açmayın ve rezistansa dokunmayın. Gaz kokusu, duman veya kapak camında çatlak varsa fırını kullanmayı bırakın."
+    }
+  ],
+  "sources": [
+    {
+      "label": "DonanımHaber Forum — Fırın rezistans arızası (kopmuş) ve değişimi",
+      "url": "https://forum.donanimhaber.com/firin-rezistans-arizasi-kopmus-ve-degisimi--137258531"
+    }
+  ]
+}

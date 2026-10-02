@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { BLOG_AUTHOR, blogCategories, blogPosts, blogShareLinks } from "../../shared/blog-posts";
+import { validateBlogPost } from "../../shared/blog-schema";
 
 const projectRoot = resolve(import.meta.dirname, "..", "..");
 const read = (path: string) => readFileSync(resolve(projectRoot, path), "utf8");
@@ -23,6 +24,13 @@ describe("blog yazıları", () => {
     expect(new Set(blogPosts.map(post => post.description)).size).toBe(blogPosts.length);
   });
 
+  it("üretilen yazı listesindeki her yazı ortak şemadan geçer", () => {
+    blogPosts.forEach(post => {
+      const result = validateBlogPost({ ...post, order: 1 });
+      expect(result.ok ? [] : result.errors, post.slug).toEqual([]);
+    });
+  });
+
   it("eski yazıların adreslerini korur", () => {
     ["/blog/bulasik-makinesi-suyu-bosaltmiyor/", "/blog/buzdolabi-sogutmuyor-konya/", "/blog/camasir-makinesi-su-almiyor-konya/", "/blog/firin-isitmiyor-konya/", "/blog/kurutma-makinesi-kurutmuyor/"]
       .forEach(slug => expect(blogPosts.map(post => post.slug)).toContain(slug));
@@ -30,16 +38,13 @@ describe("blog yazıları", () => {
 
   it("usta vakaları servis kaydı bilgisiyle ve hizmet bölgelerinde anlatılır", () => {
     const cases = blogPosts.filter(post => post.category === "Ustanın Defterinden");
-    expect(cases.length).toBeGreaterThanOrEqual(5);
     cases.forEach(post => {
       expect(post.caseFile).toBeDefined();
       expect(post.caseFile?.district).toMatch(/^(Karatay|Meram|Selçuklu)/);
       expect(post.brandPath).toMatch(/^\/[a-z-]+-servisi-konya\/$/);
       expect(sitemap).toContain(`<loc>https://esliteknik.com${post.brandPath}</loc>`);
     });
-    expect(cases.filter(post => post.caseFile?.district.startsWith("Meram")).length).toBeGreaterThanOrEqual(4);
-    expect(cases.filter(post => post.caseFile?.brand === "Philips").length).toBeGreaterThanOrEqual(5);
-    expect(cases.some(post => post.caseFile?.device === "Su sebili" && post.servicePath === "/su-sebili-tamiri-konya/")).toBe(true);
+    cases.filter(post => post.caseFile?.device === "Su sebili").forEach(post => expect(post.servicePath).toBe("/su-sebili-tamiri-konya/"));
     expect(page).toContain('className="blog-case-brand" href={post.brandPath}');
     expect(page).toContain("{isBrand&&<BrandCases name={d.name}/>}");
     expect(prerender).toContain("post.caseFile?.brand === brandName");

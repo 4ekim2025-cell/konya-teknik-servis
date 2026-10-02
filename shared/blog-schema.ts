@@ -8,7 +8,7 @@
  * "Ustanın Defterinden" yazısı servis kaydı (ilçe, marka) ve marka sayfası bağlantısı taşır.
  */
 import { z } from "zod";
-import { blogCategories, type BlogCategory, type BlogPost } from "./blog-meta";
+import { blogCategories, type BlogCategory, type BlogPost } from "./blog-meta.js";
 
 /** Yazı adresi: /blog/<küçük-harf-ve-tire>/ — sonda eğik çizgi (vercel.json trailingSlash). */
 export const BLOG_SLUG_PATTERN = /^\/blog\/[a-z0-9-]+\/$/;
@@ -29,7 +29,7 @@ const TURKISH_LETTER = /[çğıöşüÇĞİÖŞÜ]/;
 
 export const USTA_CATEGORY: BlogCategory = "Ustanın Defterinden";
 
-function isRealDate(value: string): boolean {
+export function isRealDate(value: string): boolean {
   const date = new Date(`${value}T00:00:00Z`);
   return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }

@@ -92,6 +92,12 @@ export function checklist(post: BlogPostInput): Checklist {
   return { errors, advisory: advisoryChecks(payload), canPublish: errors.length === 0 };
 }
 
+/** Kaydı engelleyen hataların kısa özeti: alan yolu ("description: ") atılır, en çok `limit` madde gösterilir. */
+export function blockingSummary(errors: string[], limit = 4): string {
+  const short = errors.map(line => line.replace(/^[A-Za-z0-9_.]+: /, ""));
+  return short.slice(0, limit).join("; ") + (short.length > limit ? `; +${short.length - limit} madde daha (ayrıntı sayfanın altındaki kontrol listesinde)` : "");
+}
+
 export type ListFilter = { query: string; category: string; status: "" | "published" | "draft" };
 
 export function filterItems<T extends { post: BlogPostInput }>(items: T[], filter: ListFilter): T[] {

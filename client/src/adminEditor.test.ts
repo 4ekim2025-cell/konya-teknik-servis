@@ -1,5 +1,7 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { applyDeviceAndBrand, checklist, emptyBlock, filterItems, insertAt, moveItem, newPost, removeAt, setCaseFile, setCategory, slugFor, toPayload } from "./admin/editorModel";
+import { applyDeviceAndBrand, blockingSummary, checklist, emptyBlock, filterItems, insertAt, moveItem, newPost, removeAt, setCaseFile, setCategory, slugFor, toPayload } from "./admin/editorModel";
 
 const longText = "Kelime ".repeat(160).trim();
 const valid = () => ({
@@ -53,6 +55,18 @@ describe("editör modeli", () => {
     expect(bad.errors.length).toBeGreaterThan(0);
     expect(checklist({ ...valid(), blocks: [{ type: "p", text: "Fiyat 500 ₺" }] }).canPublish).toBe(false);
     expect(checklist({ ...valid(), description: "x".repeat(161) }).canPublish).toBe(false);
+  });
+
+  it("boş yeni yazı kaydedilemez; eksikler kısa özetle gösterilir ve düğme kapalı kalır", () => {
+    const empty = checklist(newPost("2026-10-02", 220));
+    expect(empty.canPublish).toBe(false);
+    const summary = blockingSummary(empty.errors, 2);
+    expect(summary).toContain("Adres zorunlu");
+    expect(summary).not.toContain("slug:");
+    expect(summary).toContain("madde daha");
+    expect(blockingSummary(["description: Açıklama boş olamaz"])).toBe("Açıklama boş olamaz");
+    const editor = readFileSync(resolve(import.meta.dirname, "admin/EditorView.tsx"), "utf8");
+    expect(editor).toContain('disabled={busy || !sheet.canPublish} onClick={() => submit("draft")}');
   });
 
   it("usta yazısı servis kaydı ve marka adresi olmadan hazır sayılmaz", () => {

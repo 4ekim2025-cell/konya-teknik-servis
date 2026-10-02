@@ -361,11 +361,38 @@ describe("sağlayıcı: anahtar, hata türleri ve yedek", () => {
     const limited = await other.draft(otherCookie, CASES.karatayBeko);
     expect(limited.status).toBe(503);
     expect(limited.body.error).toBe("ai_rate_limited");
-    other.ai.queue.push({ status: 500 });
-    expect((await other.draft(otherCookie, CASES.karatayBeko)).body.error).toBe("ai_unavailable");
+    // 5xx: aynı model bir kez daha, sonra iki yedek model ikişer kez denenir; hepsi başarısızsa 502.
+    for (let i = 0; i < 6; i++) other.ai.queue.push({ status: 503 });
+    const down = await other.draft(otherCookie, CASES.karatayBeko);
+    expect(down.status).toBe(502);
+    expect(down.body.error).toBe("ai_unavailable");
+    expect(other.ai.requests.slice(-6).map(request => request.model)).toEqual(["gemini-flash-latest", "gemini-flash-latest", "gemini-3.5-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.5-flash-lite"]);
 
     const everything = JSON.stringify([kit.log, other.log]);
     for (const secret of ["AIzaYANLISANAHTAR000000", other.ai.geminiKey, other.ai.groqKey, "sağlayıcı-gövdesi-sızmamalı", GITHUB_TOKEN, SECRET, PASSWORD]) expect(everything).not.toContain(secret);
+  });
+
+  it("model geçici olarak yanıt vermezse (503) yeniden dener; model bulunamazsa (404) yedek Flash modeline geçer", async () => {
+    const kit = await setup();
+    const cookie = await kit.login();
+    kit.ai.queue.push({ status: 503 });
+    const retried = await kit.draft(cookie, CASES.karatayBeko);
+    expect(retried.status).toBe(200);
+    expect(kit.ai.requests.map(request => request.model)).toEqual(["gemini-flash-latest", "gemini-flash-latest"]);
+
+    kit.ai.queue.push({ status: 404 });
+    const switched = await kit.draft(cookie, CASES.meramBosch);
+    expect(switched.status).toBe(200);
+    expect(kit.ai.requests.slice(2).map(request => request.model)).toEqual(["gemini-flash-latest", "gemini-3.5-flash"]);
+    expect(validateBlogPost(switched.body.post).ok).toBe(true);
+  });
+
+  it("anahtar ve kota hatasında model değiştirilmez (boşuna istek gitmez)", async () => {
+    const kit = await setup();
+    const cookie = await kit.login();
+    kit.ai.queue.push({ status: 429 });
+    expect((await kit.draft(cookie, CASES.karatayBeko)).body.error).toBe("ai_rate_limited");
+    expect(kit.ai.requests).toHaveLength(1);
   });
 
   it("Gemini kotası dolunca, anahtarı varsa Groq'a geçer; yanıt hangi sağlayıcının yazdığını söyler", async () => {
@@ -457,7 +484,7 @@ describe("yapı: tek fonksiyon, sunucuda kalan anahtar, kaydetmeyen akış", () 
     expect(ai).not.toMatch(/from "\.\/(github|service)\.js"/);
     expect(ai).not.toContain("console.");
     const handler = read("server/admin/handler.ts");
-    expect(handler).toContain('console.error("admin: yapay zeka hatası", error.provider, error.kind)');
+    expect(handler).toContain('console.error("admin: yapay zeka hatası", error.provider, error.kind, error.status)');
     expect(handler.slice(handler.indexOf('case "ai-draft"'), handler.indexOf("default:", handler.indexOf('case "ai-draft"')))).not.toMatch(/service\.|github/i);
   });
 

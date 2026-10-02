@@ -130,7 +130,8 @@ function describeAiError(error: AiError): AdminHttpResponse {
   if (error.kind === "auth") return fail(502, "ai_auth_failed", "Yapay zeka anahtarı geçersiz ya da yetkisiz. Vercel'deki GEMINI_API_KEY değerini kontrol edin.");
   if (error.kind === "rate") return fail(503, "ai_rate_limited", "Yapay zeka servisinin ücretsiz kullanım sınırına ulaşıldı; bir süre sonra tekrar deneyin.");
   if (error.kind === "blocked") return fail(502, "ai_blocked", "Yapay zeka servisi bu girdiyi yanıtlamadı; metni sadeleştirip tekrar deneyin.");
-  return fail(502, "ai_unavailable", "Yapay zeka servisine şu an ulaşılamıyor; birazdan tekrar deneyin. Yazıyı elle de yazabilirsiniz.");
+  if (error.kind === "bad_response") return fail(502, "ai_bad_response", "Yapay zeka servisi isteği kabul etmedi ya da boş yanıt verdi. Model adı (GEMINI_MODEL) ayarlıysa kontrol edin; yazıyı elle de yazabilirsiniz.");
+  return fail(502, "ai_unavailable", "Yapay zeka servisi şu an yanıt vermiyor (aşırı yük ya da bağlantı sorunu); birkaç dakika sonra tekrar deneyin. Yazıyı elle de yazabilirsiniz.");
 }
 
 export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps): Promise<AdminHttpResponse> {
@@ -250,7 +251,7 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
       case "ai-draft": {
         const wrong = needs("POST");
         if (wrong) return wrong;
-        const providers = createAiProviders(env, deps.aiFetchImpl);
+        const providers = createAiProviders(env, deps.aiFetchImpl, deps.aiFetchImpl ? 0 : undefined);
         if (!providers.length) return fail(503, "ai_not_configured", "Yapay zeka anahtarı (GEMINI_API_KEY) tanımlı değil. Kurulum adımları docs/blog-paneli-kurulum.md dosyasındadır.");
         const input = validateAiCaseInput(body.input);
         if (!input.ok) return fail(422, "validation_failed", input.errors[0], { errors: input.errors });
@@ -266,7 +267,7 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
   } catch (error) {
     if (error instanceof AiRejectedError) return fail(502, "ai_output_rejected", "Yapay zeka çıktısı içerik kurallarından geçmedi; editöre aktarılmadı. Tekrar deneyin ya da yazıyı elle yazın.", { errors: error.reasons.slice(0, 12) });
     if (error instanceof AiError) {
-      console.error("admin: yapay zeka hatası", error.provider, error.kind);
+      console.error("admin: yapay zeka hatası", error.provider, error.kind, error.status);
       return describeAiError(error);
     }
     if (error instanceof AdminError) return fail(error.status, error.code, error.message, error.errors ? { errors: error.errors } : undefined);

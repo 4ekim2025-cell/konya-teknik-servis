@@ -7,6 +7,9 @@ import { GOOGLE_BUSINESS_URL } from "../shared/business-contact";
 import { deviceFaultGuides } from "../shared/device-faults";
 import { brandGuides } from "../shared/brand-guides";
 import { brandSeo } from "../client/src/brandSeo";
+import { ADMIN_ROUTE, renderAdminShell } from "../shared/admin-shell";
+import { redirectPageHtml } from "../shared/blog-redirects";
+import { loadRedirects } from "./build-content";
 import { BLOG_AUTHOR, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
 
 const root = process.cwd();
@@ -281,4 +284,17 @@ for (const [route, [title, description]] of Object.entries(routes)) {
   fs.writeFileSync(path.join(targetDir, "index.html"), html, "utf8");
 }
 
-console.log(`SEO prerender complete: ${Object.keys(routes).length} routes`);
+// Panel kabuğu: yalnızca /yonetim/; routes listesinde, sitemap'te ve llms.txt'de yer almaz.
+fs.mkdirSync(path.join(outputDir, ADMIN_ROUTE.replace(/\//g, "")), { recursive: true });
+fs.writeFileSync(path.join(outputDir, ADMIN_ROUTE.replace(/\//g, ""), "index.html"), renderAdminShell(template), "utf8");
+
+// Panelden silinip yönlendirilen yazılar: eski adres 404 yerine hedef sayfaya gider (içerik/redirects.json).
+const redirectResult = loadRedirects(process.cwd(), blogPosts.map(post => post.slug));
+if (redirectResult.errors.length) throw new Error(`Yönlendirmeler geçersiz:\n${redirectResult.errors.join("\n")}`);
+for (const redirect of redirectResult.redirects) {
+  const dir = path.join(outputDir, redirect.from.replace(/^\//, "").replace(/\/$/, ""));
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "index.html"), redirectPageHtml(redirect.to, siteUrl), "utf8");
+}
+
+console.log(`SEO prerender complete: ${Object.keys(routes).length} routes${redirectResult.redirects.length ? `, ${redirectResult.redirects.length} yönlendirme` : ""}`);

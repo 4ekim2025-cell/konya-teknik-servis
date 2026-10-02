@@ -3,6 +3,7 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import { instagramFeedHandler } from "./instagram-feed.js";
+import { adminHandler } from "./admin/handler.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,6 +21,8 @@ async function startServer() {
   app.use(express.static(staticPath));
 
   app.all("/api/instagram-feed", (req, res) => instagramFeedHandler(req, res));
+  // Blog paneli API'si: gövdeyi kendisi okur (express.json kullanma), noindex/no-store başlıklarını kendisi koyar.
+  app.all(["/api/admin", "/api/admin/"], (req, res) => void adminHandler(req, res));
 
 
   // Handle client-side routing - serve index.html for all routes

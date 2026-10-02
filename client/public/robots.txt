@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /yonetim/
+Disallow: /api/admin
 
 Sitemap: https://esliteknik.com/sitemap.xml

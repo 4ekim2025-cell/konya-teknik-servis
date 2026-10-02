@@ -9,7 +9,7 @@ Plan tarihi: 2026-10-02. Proje sahibi: Esad Eşli.
 | # | Aşama | Durum |
 |---|---|---|
 | 1 | İçeriği koddan ayırma | Tamamlandı, PR'da (birleştirme bekliyor) |
-| 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Bekliyor |
+| 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Tamamlandı, PR'da (birleştirme bekliyor) |
 | 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Bekliyor |
 | 4 | Fotoğraflar (Vercel Blob) | Bekliyor |
 | 5 | Google İşletme (API yok / API var) | Bekliyor |
@@ -54,7 +54,7 @@ Blog yazıları bugün `shared/blog-posts.ts` içinde kodla ekleniyor; her yazı
 
 Yayın akışı: giriş → editörde yaz ve önizle → "Yayınla" → API kuralları sunucuda tekrar denetler → GitHub'a tek commit → Vercel derler (içerik derleyici, prerender, IndexNow) → panel derleme durumunu gösterir. Derleme hata verirse Vercel eski sürümü yayında tutar.
 
-Taslaklar yazı dosyasında `status: "draft"` olarak saklanır; derleyici taslakları siteye, sitemap'e ve `llms.txt`'ye almaz. Taslak commit'lerinin gereksiz derleme başlatmaması için Vercel'in commit mesajı atlama işareti kullanılır (2. aşamada doğrulanacak).
+Taslaklar yazı dosyasında `status: "draft"` olarak saklanır; derleyici taslakları siteye, sitemap'e ve `llms.txt`'ye almaz. Taslak commit'lerinin gereksiz derleme başlatmaması için Vercel'in commit mesajı atlama işareti kullanılır (2. aşamada `[panel-taslak]` işaretiyle `vercel.json` → `ignoreCommand` olarak kuruldu; Vercel önizlemesinde çalıştığı doğrulanmadı, bkz. `docs/blog-paneli-kurulum.md`).
 
 ## Aşama 1 — İçeriği koddan ayırma
 

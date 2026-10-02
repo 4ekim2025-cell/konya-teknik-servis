@@ -1498,22 +1498,5 @@ export const blogPostsData: BlogPost[] = [
         "url": "https://konyagundem.com/gundem/yetkili-servis-sikayetleri-artti-66797h"
       }
     ]
-  },
-  {
-    "slug": "/blog/test/",
-    "category": "Bakım Rehberi",
-    "title": "test",
-    "description": "burada açıklamalar var",
-    "excerpt": "burada yazı başında gözüken ÖZET alanı",
-    "published": "2026-10-02",
-    "updated": "2026-10-02",
-    "device": "Çamaşır Makinesi",
-    "servicePath": "/camasir-makinesi-tamiri-konya/",
-    "blocks": [
-      {
-        "type": "p",
-        "text": "burada da içerik mevcut"
-      }
-    ]
   }
 ];

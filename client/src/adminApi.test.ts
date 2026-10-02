@@ -453,6 +453,17 @@ describe("kaydetme: taslak ve yayın (GitHub taklidiyle uçtan uca)", () => {
     expect(build.posts.at(-1)!.slug).toBe("/blog/yeni-deneme-yazisi/");
   });
 
+  it("başlıktaki köşeli ayraçlar commit mesajına geçmez: yayın commit'i derlemeyi atlatan işareti taşıyamaz", async () => {
+    const kit = await setup();
+    const cookie = await kit.login();
+    const response = await kit.call({ method: "POST", action: "save", cookie, body: { mode: "publish", post: newPost({ title: "Deneme [panel-taslak] [skip ci] başlığı" }) } });
+    expect(response.status).toBe(200);
+    const message = lastCommitChanges(kit.repo).message;
+    expect(message).not.toContain(SKIP_BUILD_MARKER);
+    expect(message).not.toContain("[");
+    expect(message).toContain("Deneme (panel-taslak) (skip ci) başlığı");
+  });
+
   it("doğrudan yayın da aynı şekilde tek commit'tir; sitemap ve llms.txt'deki diğer satırlara dokunulmaz", async () => {
     const kit = await setup();
     const cookie = await kit.login();

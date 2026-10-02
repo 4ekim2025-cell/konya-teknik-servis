@@ -114,6 +114,24 @@ describe("yazı şeması kuralları", () => {
     }
   });
 
+  it("tek satırlık alanlarda satır sonunu, sitede olmayan sayfayı ve aşırı uzun adresi reddeder", () => {
+    for (const field of ["title", "description", "excerpt", "device", "serviceLabel"]) {
+      expect(errorsOf(sample({ [field]: "Birinci satır\n- [Sahte](https://baska.example/)" })).join("\n"), field).toContain("tek satır olmalı");
+    }
+    expect(errorsOf(sample({ blocks: [{ type: "h2", text: "Ara\nbaşlık" }] })).join("\n")).toContain("tek satır olmalı");
+    expect(errorsOf(sample({ sources: [{ label: "Kaynak şeysi\nikinci satır", url: "https://konyagundem.com/haber" }] })).join("\n")).toContain("tek satır olmalı");
+    expect(errorsOf(sample({ blocks: [{ type: "p", text: "Paragraf içinde\nsatır sonu serbesttir." }] }))).toEqual([]);
+    expect(errorsOf(sample({ servicePath: "/olmayan-sayfa/" })).join("\n")).toContain("sitedeki bir hizmet, marka ya da iletişim sayfası");
+    expect(errorsOf(sample({ brandPath: "/uydurma-servisi-konya/" })).join("\n")).toContain("sitedeki bir marka sayfası");
+    expect(errorsOf(sample({ servicePath: "/philips-servisi-konya/" }))).toEqual([]);
+    expect(errorsOf(sample({ slug: `/blog/${"a".repeat(100)}/` }))).toEqual([]);
+    expect(errorsOf(sample({ slug: `/blog/${"a".repeat(101)}/` })).join("\n")).toContain("Adres /blog/");
+  });
+
+  it("prerender JSON-LD içinde < karakterini \\u003c olarak yazar (betik bloğu metinle kapanamaz)", () => {
+    expect(read("scripts/prerender.ts")).toContain('.replaceAll("<", "\\\\u003c")');
+  });
+
   it("blokları denetler: bilinmeyen tür, boş metin, boş liste, fazladan alan", () => {
     expect(errorsOf(sample({ blocks: [] })).join("\n")).toContain("en az bir blok");
     expect(errorsOf(sample({ blocks: [{ type: "video", text: "x" }] })).length).toBeGreaterThan(0);

@@ -36,7 +36,8 @@ export type SaveOutcome = { noChange: true } | { noChange: false; commit: string
 export type DeleteOutcome = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean };
 export type BuildRow = BuildStatus & { skipped: boolean };
 
-const oneLine = (value: string) => value.replace(/\s+/g, " ").trim().slice(0, 120);
+/** Commit mesajına giren başlık: tek satır; köşeli ayraçlar yuvarlağa çevrilir ki başlıktaki "[panel-taslak]", "[skip ci]" gibi ifadeler derlemeyi atlatmasın. */
+const oneLine = (value: string) => value.replace(/\s+/g, " ").replace(/\[/g, "(").replace(/\]/g, ")").trim().slice(0, 120);
 const postPath = (slug: string) => `${CONTENT_DIR}/${blogFileName(slug)}`;
 export const hashPost = (post: BlogPostInput) => createHash("sha1").update(serializePost(post)).digest("hex").slice(0, 16);
 

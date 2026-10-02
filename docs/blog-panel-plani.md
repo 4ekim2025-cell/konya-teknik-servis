@@ -8,9 +8,9 @@ Plan tarihi: 2026-10-02. Proje sahibi: Esad Eşli.
 
 | # | Aşama | Durum |
 |---|---|---|
-| 1 | İçeriği koddan ayırma | Tamamlandı, PR'da (birleştirme bekliyor) |
-| 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Tamamlandı, PR'da (birleştirme bekliyor) |
-| 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Bekliyor |
+| 1 | İçeriği koddan ayırma | Tamamlandı (main'de) |
+| 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Tamamlandı (main'de, canlıda); güvenlik incelemesi bulguları PR #6–#9 ile düzeltildi |
+| 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Kod tamamlandı, PR'da (birleştirme bekliyor). Gerçek modelle deneme, `GEMINI_API_KEY` Vercel'e girildikten sonra proje sahibince yapılacak |
 | 4 | Fotoğraflar (Vercel Blob) | Bekliyor |
 | 5 | Google İşletme (API yok / API var) | Bekliyor |
 | 6 | Zamanlama ve istatistik | Bekliyor |
@@ -49,7 +49,7 @@ Blog yazıları bugün `shared/blog-posts.ts` içinde kodla ekleniyor; her yazı
 | Ortak şema | `shared/blog-schema.ts` (Zod) | Tek kural seti: editör, API ve testler |
 | İçerik derleyici | `scripts/build-content.ts` | JSON dosyalarından yazı listesini, sitemap'i ve `llms.txt` blog bölümünü üretir |
 | Panel arayüzü | `client/src/admin/` | Lazy yüklenen ayrı bölüm |
-| Panel API'si | `api/admin/*` | Giriş, listeleme, kaydetme, yayınlama, silme, derleme durumu |
+| Panel API'si | `api/admin.ts` → `server/admin/` (tek fonksiyon, `?action=`) | Giriş, listeleme, kaydetme, yayınlama, silme, derleme durumu, yapay zeka taslağı (`ai-draft`) |
 | Ayarlar | `content/settings.json` | Gizli olmayan ayarlar (ör. Google İşletme API var/yok) |
 
 Yayın akışı: giriş → editörde yaz ve önizle → "Yayınla" → API kuralları sunucuda tekrar denetler → GitHub'a tek commit → Vercel derler (içerik derleyici, prerender, IndexNow) → panel derleme durumunu gösterir. Derleme hata verirse Vercel eski sürümü yayında tutar.
@@ -100,6 +100,15 @@ Kapsam:
 - Aşama başında Gemini ücretsiz katman limitlerini resmi sayfadan doğrula (planlama sırasında doğrulanamadı). Yetersizse Groq.
 
 Kabul ölçütü: üç farklı vaka girdisiyle üretilen taslaklar şemadan geçer ve girilmemiş vaka ayrıntısı içermez.
+
+Nasıl kuruldu (2026-10-02):
+- **Limit doğrulaması:** Google'ın fiyat sayfasına göre Flash modellerinde ücretsiz katman var ("Free of charge"); limit sayfası artık sayı vermiyor, "limitler Google AI Studio'da görülür" diyor. Kesin dakika/gün sayıları yalnızca proje sahibinin AI Studio "Rate limit" ekranından okunabilir. Bu yüzden kod sağlayıcıdan bağımsızdır: birincil Gemini (`GEMINI_API_KEY`, model varsayılanı `gemini-flash-latest`), anahtarı girilirse yedek Groq (`GROQ_API_KEY`). Ücretsiz katmanda gönderilen metin Google tarafından ürün geliştirmede kullanılabilir; forma müşteri adı, telefon, açık adres yazılmaz.
+- **Yeni fonksiyon yok:** `/api/admin?action=ai-draft`. Oturum, CSRF ve genel istek sınırından geçer; ayrıca günlük sınır (`AI_DAILY_LIMIT`, varsayılan 20; bellek içi, örnek başına). Hiçbir şey kaydetmez, GitHub'a dokunmaz.
+- **Model ne yazar:** yalnızca başlık, açıklama, özet, bloklar, Google İşletme metni, Instagram metni. Servis kaydı (ilçe, marka, cihaz, şikâyet, tespit, işlem) formdan aynen kopyalanır; `servicePath`/`brandPath`/`serviceLabel` `shared/blog-taxonomy.ts`'ten türetilir. Fazladan alan (slug, adres, kaynak…) taşıyan çıktı reddedilir.
+- **Girilmemiş ayrıntı denetimi** (`shared/blog-ai.ts` → `findUngroundedDetails`): çıktıdaki her sayı girdide geçmeli; girdide olmayan başka marka/ilçe, tarih, kişi, adres, süre, söz/vaat ("aynı gün", "ücretsiz"…), bağlantı reddedilir; fiyat/hukuk/yetkili servis kuralları sosyal metinlere de uygulanır. Denetim sunucuda çalışır, editör yanıtı doldurmadan önce aynı denetimi yeniden çalıştırır. Geçmeyen çıktı için model bir kez daha denenir; yine geçmezse taslak dönmez.
+- **Sınırı:** denetim kalıp tabanlıdır; rakamsız ve kalıba uymayan uydurma bir cümleyi (ör. "müşteri çok memnun kaldı") yakalayamaz. Bu yüzden taslak hiçbir zaman kendiliğinden kaydedilmez; proje sahibi okuyup onaylar.
+- **Sınama:** `client/src/adminAi.test.ts`, sağlayıcıyı bellek içi taklitle (`client/src/adminFakeAi.ts`) sınar; gerçek API çağrısı yoktur. Gerçek modelin üç vakadaki davranışı anahtar girildikten sonra panelden denenir.
+- Sosyal metinler şimdilik kaydedilmez (kopyalanır); kalıcı "paylaşım paketi" 5. aşamadadır.
 
 ## Aşama 4 — Fotoğraflar
 

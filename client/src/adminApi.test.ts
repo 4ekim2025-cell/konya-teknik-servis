@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { planBuild } from "../../scripts/build-content";
 import { BLOG_SLUGS_LINKED_FROM_CODE } from "../../shared/blog-protected";
 import { redirectPageHtml } from "../../shared/blog-redirects";
-import { clearedSessionCookie, createSessionToken, hashPassword, LoginGuard, RateLimiter, readCookie, sessionCookie, verifyPassword, verifySessionToken } from "../../server/admin/auth";
+import { clearedSessionCookie, createSessionToken, hashPassword, ipKey, LoginGuard, RateLimiter, readCookie, sessionCookie, verifyPassword, verifySessionToken } from "../../server/admin/auth";
 import { GithubError, createGithubClient, readGithubConfig } from "../../server/admin/github";
 import { handleAdminRequest, type AdminDeps, type AdminHttpRequest, type AdminHttpResponse } from "../../server/admin/handler";
 import { SKIP_BUILD_MARKER, createAdminService } from "../../server/admin/service";
@@ -179,6 +179,22 @@ describe("parola ve oturum (auth)", () => {
     expect(guard.check("x").allowed).toBe(true);
   });
 
+  it("begin denemeyi önceden sayar, kilitliyken saymaz; cancel sayımı ve gereksiz kilidi geri alır", () => {
+    let now = 0;
+    const guard = new LoginGuard({ maxFailures: 3, windowMs: 1000, lockMs: 5000 }, () => now);
+    expect([guard.begin("ip").allowed, guard.begin("ip").allowed, guard.begin("ip").allowed]).toEqual([true, true, true]);
+    expect(guard.begin("ip").allowed).toBe(false);
+    expect(guard.count("ip")).toBe(3);
+    guard.cancel("ip");
+    expect(guard.count("ip")).toBe(2);
+    expect(guard.check("ip").allowed).toBe(true);
+    guard.cancel("ip"); guard.cancel("ip"); guard.cancel("ip");
+    expect(guard.count("ip")).toBe(0);
+    guard.failure("y");
+    now = 1001;
+    expect(guard.count("y")).toBe(0);
+  });
+
   it("istek sınırı pencere içinde aşılınca reddeder, pencere geçince sıfırlanır", () => {
     let now = 0;
     const limiter = new RateLimiter(2, 1000, () => now);
@@ -223,10 +239,47 @@ describe("giriş akışı (/api/admin?action=login)", () => {
     expect((await kit.call({ method: "POST", action: "login", body: { password: PASSWORD } })).status).toBe(200);
   });
 
-  it("farklı IP'lerden gelen toplu denemeyi genel sayaçla durdurur", async () => {
+  it("farklı IP'lerden gelen toplu deneme girişi kilitlemez, yavaşlatır: sahibi doğru parolayla yine girer", async () => {
     const kit = await setup();
     for (let i = 0; i < 30; i++) await kit.call({ method: "POST", action: "login", body: { password: "yanlış-parola-123" }, ip: `198.51.100.${i}` });
-    expect((await kit.call({ method: "POST", action: "login", body: { password: PASSWORD }, ip: "192.0.2.50" })).status).toBe(429);
+    expect(kit.sleeps).toEqual(new Array(30).fill(800));
+    kit.sleeps.length = 0;
+    expect((await kit.call({ method: "POST", action: "login", body: { password: PASSWORD }, ip: "192.0.2.50" })).status).toBe(200);
+    expect(kit.sleeps).toEqual([2000]);
+    for (let i = 0; i < 60; i++) await kit.call({ method: "POST", action: "login", body: { password: "yanlış-parola-123" }, ip: `203.0.${i}.9` });
+    kit.sleeps.length = 0;
+    expect((await kit.call({ method: "POST", action: "login", body: { password: "yanlış-parola-123" }, ip: "192.0.2.51" })).status).toBe(401);
+    expect(kit.sleeps).toEqual([5000, 800]);
+  });
+
+  it("aynı anda gelen denemeler IP kilidini aşamaz: yalnızca 5'i sınanır", async () => {
+    const kit = await setup();
+    const results = await Promise.all(Array.from({ length: 20 }, (_, i) => kit.call({ method: "POST", action: "login", body: { password: `yanlış-${i}-parola` } })));
+    expect(results.filter(result => result.status === 401)).toHaveLength(5);
+    expect(results.filter(result => result.status === 429)).toHaveLength(15);
+  });
+
+  it("boş, eksik ya da bozuk giriş isteği deneme sayılmaz; sahibi kilitlenmez", async () => {
+    const kit = await setup();
+    for (let i = 0; i < 40; i++) expect((await kit.call({ method: "POST", action: "login", body: i % 2 ? {} : { password: "" } })).status).toBe(400);
+    expect((await kit.call({ method: "POST", action: "login", body: { password: "x".repeat(201) } })).status).toBe(400);
+    const badJson = await handleAdminRequest({ method: "POST", url: "/api/admin?action=login", headers: { host: "esliteknik.com", "content-type": "application/json", "x-admin-request": "1" }, bodyError: "invalid_json", ip: "203.0.113.7" }, kit.deps);
+    expect(badJson.status).toBe(400);
+    expect(kit.sleeps).toEqual([]);
+    expect((await kit.call({ method: "POST", action: "login", body: { password: PASSWORD } })).status).toBe(200);
+  });
+
+  it("IPv6'da sayaç anahtarı /64 önekidir; aynı ağdan adres değiştirerek kilit aşılamaz", async () => {
+    expect(ipKey("203.0.113.7")).toBe("203.0.113.7");
+    expect(ipKey("::ffff:203.0.113.7")).toBe("203.0.113.7");
+    expect(ipKey("2a02:ff0:1:2:aaaa:bbbb:cccc:dddd")).toBe("2a02:ff0:1:2::/64");
+    expect(ipKey("2A02:0FF0:0001:0002::1")).toBe("2a02:ff0:1:2::/64");
+    expect(ipKey("2a02:ff0:1:3::1")).toBe("2a02:ff0:1:3::/64");
+    expect(ipKey("::1")).toBe("0:0:0:0::/64");
+    const kit = await setup();
+    for (let i = 0; i < 5; i++) await kit.call({ method: "POST", action: "login", body: { password: "yanlış-parola-123" }, ip: `2a02:ff0:1:2::${i + 1}` });
+    expect((await kit.call({ method: "POST", action: "login", body: { password: PASSWORD }, ip: "2a02:ff0:1:2::99" })).status).toBe(429);
+    expect((await kit.call({ method: "POST", action: "login", body: { password: PASSWORD }, ip: "2a02:ff0:1:3::99" })).status).toBe(200);
   });
 
   it("kurulmamış panelde giriş 503 verir; oturum sorgusu 'configured: false' der", async () => {

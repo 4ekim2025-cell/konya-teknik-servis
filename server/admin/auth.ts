@@ -3,7 +3,9 @@
  *  - Parola yalnızca scrypt özeti olarak ortam değişkeninde durur (`ADMIN_PASSWORD_HASH`); `pnpm admin:hash` ile üretilir.
  *  - Oturum, `ADMIN_SESSION_SECRET` ile HMAC imzalı, HttpOnly + SameSite=Strict çerezdir (30 gün). Anahtar değişirse tüm oturumlar düşer.
  *  - Hatalı parolada bekleme + IP başına geçici kilit + genel istek sınırı (bellek içi; sunucusuz örnekler arası paylaşılmaz,
- *    bu yüzden ek koruma olarak uzun rastgele parola kullanılır).
+ *    bu yüzden asıl koruma uzun rastgele paroladır).
+ *  - Deneme, parola sınanmadan ÖNCE sayılır (`begin`); aynı anda gelen istekler kilidi aşamaz.
+ *  - Tüm IP'lerin toplam hatası girişi kilitlemez, yalnızca yavaşlatır: aksi hâlde herkes birkaç istekle sahibini dışarıda bırakabilirdi.
  */
 import { createHmac, randomBytes, scrypt, timingSafeEqual, type BinaryLike, type ScryptOptions } from "node:crypto";
 
@@ -111,6 +113,51 @@ export class LoginGuard {
   success(key: string): void {
     this.failures.delete(key);
   }
+
+  /**
+   * Denemeyi parola sınanmadan önce sayar. Kilitliyse saymadan reddeder. Sayım eşzamansız işten (scrypt) önce yapıldığı için
+   * aynı anda gelen istekler sınırı aşamaz. Parola doğruysa `success` (IP sayacı) ya da `cancel` (ortak sayaç) ile geri alınır.
+   */
+  begin(key: string): { allowed: boolean; retryAfterSeconds: number } {
+    const state = this.check(key);
+    if (state.allowed) this.failure(key);
+    return state;
+  }
+
+  /** `begin` ya da `failure` ile sayılmış tek denemeyi geri alır; sayı sınırın altına inerse kilidi kaldırır. */
+  cancel(key: string): void {
+    const entry = this.failures.get(key);
+    if (!entry) return;
+    const count = entry.count - 1;
+    if (count <= 0) this.failures.delete(key);
+    else this.failures.set(key, { ...entry, count, lockedUntil: count >= this.options.maxFailures ? entry.lockedUntil : 0 });
+  }
+
+  /** Pencere içinde sayılmış deneme sayısı. */
+  count(key: string): number {
+    const entry = this.failures.get(key);
+    return entry && this.now() - entry.first <= this.options.windowMs ? entry.count : 0;
+  }
+
+  get maxFailures(): number {
+    return this.options.maxFailures;
+  }
+}
+
+/**
+ * Sayaç anahtarı: IPv4 olduğu gibi, IPv6'da /64 öneki. Bir aboneye genelde bütün bir /64 verilir;
+ * tam adres anahtar olsaydı adres değiştirerek IP kilidi ve istek sınırı aşılabilirdi.
+ */
+export function ipKey(ip: string): string {
+  const value = ip.trim().toLowerCase();
+  const mapped = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/.exec(value);
+  if (mapped) return mapped[1];
+  if (!value.includes(":")) return value;
+  const [head, tail = ""] = value.split("::");
+  const left = head ? head.split(":") : [];
+  const right = tail ? tail.split(":") : [];
+  const groups = value.includes("::") ? [...left, ...new Array<string>(Math.max(0, 8 - left.length - right.length)).fill("0"), ...right] : left;
+  return `${groups.slice(0, 4).map(group => group.replace(/^0+(?=.)/, "")).join(":")}::/64`;
 }
 
 /** Anahtar başına pencere içi istek sınırı (`/api/admin/` genel sınırı). */

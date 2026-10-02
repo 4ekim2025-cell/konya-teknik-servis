@@ -17,7 +17,8 @@ type Env = Record<string, string | undefined>;
 
 export type AiErrorKind = "auth" | "rate" | "unavailable" | "blocked" | "bad_response";
 export class AiError extends Error {
-  constructor(public kind: AiErrorKind, public provider: string) {
+  /** `status`: sağlayıcının HTTP durum kodu (ağ hatası ya da zaman aşımında 0). Günlüğe yazılır; gizli bilgi içermez. */
+  constructor(public kind: AiErrorKind, public provider: string, public status = 0) {
     super(`yapay zeka sağlayıcısı: ${kind}`);
     this.name = "AiError";
   }
@@ -34,6 +35,9 @@ export type AiPrompt = { system: string; user: string };
 export type AiProvider = { name: "gemini" | "groq"; model: string; generate: (prompt: AiPrompt) => Promise<string> };
 
 export const DEFAULT_GEMINI_MODEL = "gemini-flash-latest";
+/** Seçilen model yanıt vermezse (5xx: aşırı yük, 404: model kapatılmış) sırayla denenen ücretsiz katman Flash modelleri. */
+export const GEMINI_FALLBACK_MODELS = ["gemini-3.5-flash", "gemini-3.5-flash-lite"] as const;
+const RETRY_DELAY_MS = 1500;
 export const DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile";
 export const DEFAULT_AI_DAILY_LIMIT = 20;
 const MODEL_PATTERN = /^[A-Za-z0-9._\/-]{1,80}$/;
@@ -59,7 +63,7 @@ async function post(provider: string, fetchImpl: typeof fetch, url: string, head
   } catch {
     throw new AiError("unavailable", provider);
   }
-  if (!response.ok) throw new AiError(kindOf(response.status), provider);
+  if (!response.ok) throw new AiError(kindOf(response.status), provider, response.status);
   try {
     return await response.json();
   } catch {
@@ -69,24 +73,52 @@ async function post(provider: string, fetchImpl: typeof fetch, url: string, head
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 
-function geminiProvider(key: string, model: string, fetchImpl: typeof fetch): AiProvider {
-  return {
+const pause = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
+
+/**
+ * Gemini: seçilen model geçici olarak yanıt vermezse (5xx) kısa bir beklemeyle bir kez daha denenir; yine olmazsa ya da model
+ * bulunamazsa (404) yedek Flash modellerine geçilir. Anahtar (401/403) ve kota (429) hatalarında model değiştirilmez.
+ */
+function geminiProvider(key: string, model: string, fetchImpl: typeof fetch, retryDelayMs: number): AiProvider {
+  const models = [model, ...GEMINI_FALLBACK_MODELS.filter(name => name !== model)];
+  const provider: AiProvider = {
     name: "gemini",
     model,
     async generate(prompt) {
-      const data = await post("gemini", fetchImpl, `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, { "x-goog-api-key": key }, {
-        systemInstruction: { parts: [{ text: prompt.system }] },
-        contents: [{ role: "user", parts: [{ text: prompt.user }] }],
-        generationConfig: { responseMimeType: "application/json", temperature: 0.4, maxOutputTokens: 16384 },
-      });
-      const candidate = isRecord(data) && Array.isArray(data.candidates) ? data.candidates[0] : undefined;
-      const parts = isRecord(candidate) && isRecord(candidate.content) && Array.isArray(candidate.content.parts) ? candidate.content.parts : undefined;
-      if (!parts) throw new AiError(isRecord(data) && isRecord(data.promptFeedback) && data.promptFeedback.blockReason ? "blocked" : "bad_response", "gemini");
-      const text = parts.map(part => (isRecord(part) && typeof part.text === "string" && part.thought !== true ? part.text : "")).join("");
-      if (!text) throw new AiError("bad_response", "gemini");
-      return text;
+      let last = new AiError("unavailable", "gemini");
+      for (const name of models) {
+        for (let attempt = 1; attempt <= 2; attempt++) {
+          try {
+            const text = await geminiCall(key, name, fetchImpl, prompt);
+            provider.model = name;
+            return text;
+          } catch (error) {
+            last = error instanceof AiError ? error : new AiError("unavailable", "gemini");
+            if (last.kind === "auth" || last.kind === "rate" || last.kind === "blocked") throw last;
+            // Yalnızca 5xx aynı modelde yeniden denenir; zaman aşımı (0) ve 400/404'te doğrudan sıradaki modele geçilir.
+            if (last.status < 500 || attempt === 2) break;
+            await pause(retryDelayMs);
+          }
+        }
+      }
+      throw last;
     },
   };
+  return provider;
+}
+
+async function geminiCall(key: string, model: string, fetchImpl: typeof fetch, prompt: AiPrompt): Promise<string> {
+  const data = await post("gemini", fetchImpl, `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, { "x-goog-api-key": key }, {
+    systemInstruction: { parts: [{ text: prompt.system }] },
+    contents: [{ role: "user", parts: [{ text: prompt.user }] }],
+    generationConfig: { responseMimeType: "application/json", temperature: 0.4, maxOutputTokens: 16384 },
+  });
+  const candidate = isRecord(data) && Array.isArray(data.candidates) ? data.candidates[0] : undefined;
+  const parts = isRecord(candidate) && isRecord(candidate.content) && Array.isArray(candidate.content.parts) ? candidate.content.parts : undefined;
+  if (!parts) throw new AiError(isRecord(data) && isRecord(data.promptFeedback) && data.promptFeedback.blockReason ? "blocked" : "bad_response", "gemini");
+  const text = parts.map(part => (isRecord(part) && typeof part.text === "string" && part.thought !== true ? part.text : "")).join("");
+  if (!text) throw new AiError("bad_response", "gemini");
+  return text;
 }
 
 function groqProvider(key: string, model: string, fetchImpl: typeof fetch): AiProvider {
@@ -109,10 +141,10 @@ function groqProvider(key: string, model: string, fetchImpl: typeof fetch): AiPr
 }
 
 /** Ortam değişkenlerinden sağlayıcıları sırayla kurar: Gemini, ardından (varsa) Groq. Anahtar yoksa boş dizi. */
-export function createAiProviders(env: Env, fetchImpl: typeof fetch = fetch): AiProvider[] {
+export function createAiProviders(env: Env, fetchImpl: typeof fetch = fetch, retryDelayMs: number = RETRY_DELAY_MS): AiProvider[] {
   const providers: AiProvider[] = [];
   const gemini = env.GEMINI_API_KEY?.trim();
-  if (gemini) providers.push(geminiProvider(gemini, modelName(env.GEMINI_MODEL, DEFAULT_GEMINI_MODEL), fetchImpl));
+  if (gemini) providers.push(geminiProvider(gemini, modelName(env.GEMINI_MODEL, DEFAULT_GEMINI_MODEL), fetchImpl, retryDelayMs));
   const groq = env.GROQ_API_KEY?.trim();
   if (groq) providers.push(groqProvider(groq, modelName(env.GROQ_MODEL, DEFAULT_GROQ_MODEL), fetchImpl));
   return providers;

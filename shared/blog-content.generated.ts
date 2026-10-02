@@ -1498,5 +1498,77 @@ export const blogPostsData: BlogPost[] = [
         "url": "https://konyagundem.com/gundem/yetkili-servis-sikayetleri-artti-66797h"
       }
     ]
+  },
+  {
+    "slug": "/blog/selcukluda-su-almayan-philips-camasir-makinesi-basinc-anahtari/",
+    "category": "Ustanın Defterinden",
+    "title": "Selçuklu’da su almayan Philips çamaşır makinesi: basınç anahtarı",
+    "description": "Selçuklu’da su almayan Philips çamaşır makinesinde basınç anahtarı arızasını nasıl tespit edip giderdiğimizi ve bu parçanın görevini anlatıyoruz.",
+    "excerpt": "Selçuklu’dan gelen su almama şikayeti üzerine incelediğimiz Philips çamaşır makinesinde arızanın basınç anahtarından kaynaklandığını belirledik.",
+    "published": "2026-10-02",
+    "updated": "2026-10-02",
+    "device": "Çamaşır Makinesi",
+    "servicePath": "/camasir-makinesi-tamiri-konya/",
+    "caseFile": {
+      "district": "Selçuklu",
+      "brand": "Philips",
+      "device": "Çamaşır makinesi",
+      "complaint": "makine su almıyor",
+      "finding": "basınç anahtar arızalı",
+      "action": "basınç anahtarı değiştirildi"
+    },
+    "brandPath": "/philips-servisi-konya/",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Selçuklu ilçesinden gelen çamaşır makinesinin su almadığı yönündeki talep üzerine adrese ulaştık. Philips marka çamaşır makinesinde karşılaştığımız bu belirti karşısında, öncelikle tesisat kaynaklı basit sorunların elenmesi gerekir."
+      },
+      {
+        "type": "h2",
+        "text": "Tespit: Basınç anahtarı arızası"
+      },
+      {
+        "type": "p",
+        "text": "Yaptığımız teknik incelemeler sonucunda, makinenin su almama nedeninin basınç anahtarındaki arıza olduğunu belirledik. Arızalı olan basınç anahtarı yenisiyle değiştirildi ve makine tekrar normal şekilde su almaya başladı."
+      },
+      {
+        "type": "h2",
+        "text": "Basınç anahtarı ne işe yarar?"
+      },
+      {
+        "type": "p",
+        "text": "Basınç anahtarı, çamaşır makinesinin kazanındaki su seviyesini ölçen ve bu bilgiyi kontrol kartına ileten parçadır. Makineye ne kadar su girdiğini bu parça sayesinde algılar. Basınç anahtarı arızalandığında makine su seviyesini doğru tayin edemez ve güvenlik amacıyla su almayı durdurabilir veya hiç başlatmayabilir."
+      },
+      {
+        "type": "h2",
+        "text": "Servis çağırmadan önce yapabileceğiniz kontroller"
+      },
+      {
+        "type": "steps",
+        "items": [
+          {
+            "title": "Musluğu kontrol edin",
+            "text": "Çamaşır makinesine bağlı olan su musluğunun açık olduğundan ve şebekede su kesintisi bulunmadığından emin olun."
+          },
+          {
+            "title": "Giriş hortumunu inceleyin",
+            "text": "Makinenin arkasındaki su giriş hortumunun bükülüp bükülmediğini veya ezilip ezilmediğini kontrol edin."
+          },
+          {
+            "title": "Filtre temizliğini yapın",
+            "text": "Giriş hortumunun makineye bağlandığı noktadaki küçük süzgeç filtrelerin tıkanıp tıkanmadığına bakın."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Bu basit kontrollerin ardından sorun devam ediyorsa, cihazın iç bileşenlerine müdahale edilmesi gerekir. Basınç anahtarı veya ventiller gibi elektriksel parçaların kontrolü uzmanlık gerektirdiğinden kullanıcıların makineyi sökmesi önerilmez."
+      },
+      {
+        "type": "note",
+        "title": "Ustanın notu",
+        "text": "Çamaşır makinesi su almadığında akla ilk olarak musluklar gelse de, sistemdeki suyun seviyesini ölçen sensör niteliğindeki basınç anahtarı gibi parçaların arızası da bu duruma yol açabilir. Doğru teşhis, gereksiz parça değişimini önler."
+      }
+    ]
   }
 ];

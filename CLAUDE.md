@@ -13,10 +13,10 @@ Sitenin amacı ziyaretçiyi üç eyleme yönlendirmektir: **WhatsApp'tan servis 
 > "Bu site içerisinde yapılacak hiçbir düzenleme Google veya yapay zeka aramalarında sitenin geri gitmesine sebep olmamalı. Bu çok önemli." — Esad Eşli
 
 Bu kural diğer tüm isteklerden önce gelir. Her değişiklikten önce şunları kontrol et:
-- Mevcut URL'ler silinmez, taşınmaz, yönlendirilmez; `sitemap.xml`'den sayfa çıkarılmaz.
+- Mevcut URL'ler silinmez, taşınmaz, yönlendirilmez; `sitemap.xml`'den sayfa çıkarılmaz. **Tek istisna:** proje sahibinin blog panelinden bilerek yaptığı yazı silme (bkz. "Blog paneli"); panel yayındaki yazıyı yalnızca onay penceresiyle siler, isteğe bağlı yönlendirme önerir. Kod/Claude tarafından blog yazısı silinmez.
 - Bir sayfanın başlığı (`title`, `h1`), meta açıklaması, canonical'ı ve JSON-LD şeması kaldırılmaz; değişirse eşdeğer veya daha güçlü olmalıdır.
 - Prerender HTML'indeki statik içerik azaltılmaz (içerik yalnızca JavaScript'e taşınmaz); iç bağlantılar kaldırılmaz.
-- `noindex`, `robots.txt` engeli, doğrulama dosyası/etiketi silme, NAP (ad-adres-telefon) değişikliği yapılmaz.
+- `noindex`, `robots.txt` engeli, doğrulama dosyası/etiketi silme, NAP (ad-adres-telefon) değişikliği yapılmaz (tek istisna: yalnızca yönetim yolları `/yonetim/` ve `/api/admin`, bilerek noindex/Disallow'dur).
 - `llms.txt` ve yapay zeka aramalarının okuduğu yapılandırılmış bilgiler korunur.
 - Bir değişikliğin sıralamayı düşürme ihtimali varsa, yapmadan önce proje sahibine riskini açıkça söyle ve onay al.
 
@@ -33,6 +33,7 @@ React 19 + TypeScript + Vite 7, Tailwind CSS 4 + özel CSS (`client/src/index.cs
 | `pnpm check` | TypeScript tür denetimi |
 | `pnpm test` | Vitest testleri |
 | `pnpm content` | `content/blog/*.json` yazılarını doğrular; `shared/blog-content.generated.ts`, `sitemap.xml` blog satırları ve `llms.txt` blog bölümünü üretir (`--check`: yazmadan denetler) |
+| `pnpm admin:hash "parola"` | Panel parolasının scrypt özetini (`ADMIN_PASSWORD_HASH`) ve oturum anahtarını (`ADMIN_SESSION_SECRET`) üretir; Vercel ortam değişkenlerine yapıştırılır |
 | `pnpm build` | İçerik derleyici (`scripts/build-content.ts`) → Vite build → `scripts/prerender.ts` ile statik SEO HTML'leri → sunucu paketi |
 
 Bir değişikliği bitmiş saymadan önce `pnpm check`, `pnpm test` ve `pnpm build` çalıştır. Ortam npm'e erişemiyorsa bunu açıkça söyle ve doğrulamayı PR'ın Vercel önizleme build'ine bırak.
@@ -65,7 +66,7 @@ shared/
 content/blog/*.json     # Blog yazıları: yazı başına bir dosya (dosya adı = adres: /blog/<ad>/ → <ad>.json)
 scripts/build-content.ts  # Build'in ilk adımı: yazıları doğrular, sıralar, sitemap/llms.txt blog bölümünü ve üretilen veri dosyasını yazar
 scripts/prerender.ts    # Build sonrası her rota için başlık/açıklama/canonical/JSON-LD ve statik içerik yazar
-server/, api/           # Instagram akışı uç noktası (/api/instagram-feed)
+server/, api/           # Instagram akışı (/api/instagram-feed) ve blog paneli API'si (/api/admin → server/admin/)
 docs/                   # Vercel rehberi, SEO denetimleri, geliştirme notları
 ```
 
@@ -123,6 +124,16 @@ Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılm
 - **Kaynaklar yalnızca Türkçe olur.** Okuyucu kitlesi Konya'daki ev kullanıcılarıdır; İngilizce veya yabancı dilde kaynak bağlantısı verilmez.
 - **Hukuki konular kapsam dışıdır** (MEDAŞ, tazminat, hakem heyeti, dava vb. yazılmaz). Fiyat yazılmaz.
 - Blog yazısı cihaz sayfasındaki cümleyi tekrar etmez: cihaz sayfası "neden olur, ne kontrol edilir", blog "nasıl yapılır / sahada ne oldu / nasıl karar verilir" sorusunu cevaplar.
+
+### Blog paneli (`/yonetim/`, `api/admin.ts`)
+- Kurulum ve ortam değişkenleri: `docs/blog-paneli-kurulum.md`. Plan: `docs/blog-panel-plani.md`.
+- Kod: sunucu `server/admin/` (`auth.ts` giriş/oturum, `github.ts` GitHub yazma, `service.ts` iş kuralları, `handler.ts` HTTP), ortak kurallar `shared/blog-*.ts` (şema, `blog-publish.ts` kaydetme kuralları, `blog-build.ts` üretilen dosyalar, `blog-taxonomy.ts` ilçe/marka/cihaz listeleri, `blog-redirects.ts`), arayüz `client/src/admin/` (App'te lazy ayrı parça).
+- Panel yazıyı **tek commit** olarak `content/` altına ve üretilen üç dosyaya yazar (GitHub anahtarı yazma izni kod tarafında da yalnızca bunlarla sınırlıdır). Taslak commit'i mesajında `[panel-taslak]` taşır; `scripts/vercel-ignore-build.sh` bu commit'lerde build'i atlar.
+- Yayındaki yazının adresi (slug) değişmez; yayın taslağa geri çevrilmez. Ana sayfadan sabit bağlantı verilen yazılar (`shared/blog-protected.ts`) panelden silinemez; yeni sabit blog bağlantısı eklersen bu listeye de ekle (test kırılır).
+- Silinen yayın yazısı için panel `content/redirects.json` kaydı ekleyebilir; `scripts/prerender.ts` bunları anında yönlendiren statik sayfa olarak yazar. Yönlendirme yoksa adres 404 verir.
+- `/yonetim/` ve `/api/admin` **noindex** kalır: `X-Robots-Tag` başlığı (`vercel.json`), `robots.txt` Disallow, sitemap/`llms.txt`/site içi bağlantılarda yer almaz, prerender kabuğu (`shared/admin-shell.ts`) canonical/JSON-LD içermez. Bu kuralları gevşetme.
+- Sırlar (`ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET`, `GITHUB_CONTENT_TOKEN`) yalnızca Vercel ortam değişkenleridir; `VITE_` öneki yok, günlüğe/yanıta yazılmaz. Giriş ve GitHub yazma kodunda değişiklik yapılırsa bağımsız (Opus) incelemeden geçmelidir.
+- Yeni npm bağımlılığı eklenmedi (scrypt/HMAC/fetch yerel). Panel testleri GitHub'ı bellek içi taklitle (`client/src/adminFakeGithub.ts`) sınar.
 
 ## Git akışı
 

@@ -69,7 +69,6 @@ Eşli Teknik bağımsız bir teknik servis işletmesidir; resmî yetkili servis 
   - [Fırın ısıtmıyor: “atın” denmeden önce bilmeniz gerekenler](https://esliteknik.com/blog/firin-isitmiyor-konya/) (Karar Rehberi)
   - [Sahte “yetkili servis” ilanları: arayan servisin gerçek olup olmadığını nasıl anlarsınız?](https://esliteknik.com/blog/sahte-yetkili-servis-nasil-anlasilir/) (Tüketici Rehberi)
   - [Servis şikâyetlerinin arkasında çoğu zaman belirsizlik var: sormanız gereken altı soru](https://esliteknik.com/blog/beyaz-esya-servisinde-sorulacak-sorular/) (Tüketici Rehberi)
-  - [Selçuklu’da su almayan Philips çamaşır makinesi: basınç anahtarı](https://esliteknik.com/blog/selcukluda-su-almayan-philips-camasir-makinesi-basinc-anahtari/) (Ustanın Defterinden)
 - [Sık Sorulan Sorular](https://esliteknik.com/sss/)
 - [Online Servis Takibi](https://esliteknik.com/online-servis-takibi/)
 - [İletişim](https://esliteknik.com/iletisim/)

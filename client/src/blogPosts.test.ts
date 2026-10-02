@@ -64,6 +64,14 @@ describe("blog yazıları", () => {
     expect(text).not.toMatch(/yetkili servisiyiz|yetkili servisi olarak/i);
   });
 
+  it("prerender kaynak adresini kaçışlı basar ve değiştirme metinlerini işlev olarak verir ($ kalıpları yorumlanmaz)", () => {
+    expect(prerender).toContain('<a href="${esc(source.url)}" rel="nofollow">');
+    expect(prerender).not.toContain('href="${source.url}"');
+    const replaceLines = prerender.split("\n").filter(line => line.includes("html = html.replace("));
+    expect(replaceLines.length).toBeGreaterThan(10);
+    replaceLines.forEach(line => expect(line, line.trim().slice(0, 80)).toMatch(/, \(\) => /));
+  });
+
   it("yazar ve paylaşım bağlantılarını hem sayfada hem prerender HTML'inde gösterir", () => {
     expect(BLOG_AUTHOR.name).toBe("Esad Eşli");
     const links = blogShareLinks("https://esliteknik.com/blog/ornek/", "Örnek");

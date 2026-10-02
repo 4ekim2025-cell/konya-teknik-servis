@@ -1,0 +1,57 @@
+{
+  "slug": "/blog/qqqqu-musluk-rakor-ve-o-ring-degisti/",
+  "order": 220,
+  "category": "Ustanın Defterinden",
+  "title": "qqqqu: musluk, rakor ve o-ring değişti",
+  "description": "Meram’da sıcakor ve o-ring değişimini ve musluk kırıldığında ilk yapılacakları anlatıyoruz.",
+  "excerpt": "Sebilin sıcak su musluğu parça olarak tamamen kırılmıştı. Musluk, musluğu sebile bağlayan rakor ve sızdırmazlığı sağlayan o-ring birlikte yenilendi.",
+  "published": "2026-10-02",
+  "updated": "2026-10-02",
+  "device": "Çamaşır Makinesi",
+  "servicePath": "/camasir-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Karatay",
+    "brand": "Arçelik",
+    "device": "Çamaşır makinesi",
+    "complaint": "Sıcak su musluğu kırıldı",
+    "finding": "Musluk parça olarak tamamen kırılmış; onarılabilecek durumda değil",
+    "action": "Musluk, musluk rakoru ve o-ring değiştirildi"
+  },
+  "brandPath": "/arcelik-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Meram’daki müşterimizin Arçelik su sebilinde sıcak su musluğu parça olarak tamamen kırılmıştı. Musluğu, onu sebile bağlayan musluk rakorunu ve bağlantıdaki o-ringi birlikte yeniledik; sebil yeniden sıcak su vermeye başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Neden yalnızca musluk değişmedi?"
+    },
+    {
+      "type": "p",
+      "text": "Musluk sebile bir rakorla bağlanır. Rakorla musluk arasındaki o-ring, suyun bağlantı yerinden kaçmasını önleyen küçük bir conta halkasıdır. Kırık bir musluk sökülürken bu parçalar da zorlanır; yeni musluğu eskimiş rakor ve o-ringle takmak, bağlantı yerinden sızıntı riskini sürdürür. Bu yüzden musluk değişiminde bağlantı parçalarını da yenilemek işi tek seferde bitirir."
+    },
+    {
+      "type": "h2",
+      "text": "Sıcak su musluğu kırıldığında ilk yapılacaklar"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Isıtmayı kapatın, fişi çekin",
+          "text": "Sebilin arkasındaki sıcak su düğmesini kapatın ve fişini prizden çekin. Haznedeki su bir süre sıcak kalır; kırık musluktan gelen suya elinizi uzatmayın."
+        },
+        {
+          "title": "Damacanayı ayırın",
+          "text": "Üstten damacanalı modellerde damacanayı yerinden kaldırın, alttan damacanalı modellerde damacana bağlantısını ayırın. Böylece hazneye yeni su gelmez."
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Birçok sebilde sıcak su musluğu çocuk güvenlik kilidiyle açılır. Kilidi açmadan musluğa bastırmak ya da damacana takarken musluklara yaslanmak musluğu zorlar; musluğu kullanım kılavuzunda gösterildiği şekilde açın."
+    }
+  ]
+}

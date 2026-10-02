@@ -5,9 +5,9 @@ import { describe, expect, it } from "vitest";
 import { planBuild } from "../../scripts/build-content";
 import { BLOG_SLUGS_LINKED_FROM_CODE } from "../../shared/blog-protected";
 import { redirectPageHtml } from "../../shared/blog-redirects";
-import { clearedSessionCookie, createSessionToken, hashPassword, ipKey, LoginGuard, RateLimiter, readCookie, sessionCookie, verifyPassword, verifySessionToken } from "../../server/admin/auth";
+import { clearedSessionCookie, createSessionToken, hashPassword, ipKey, LoginGuard, RateLimiter, readCookie, sessionCookie, sessionSigningKey, verifyPassword, verifySessionToken } from "../../server/admin/auth";
 import { GithubError, createGithubClient, readGithubConfig } from "../../server/admin/github";
-import { handleAdminRequest, type AdminDeps, type AdminHttpRequest, type AdminHttpResponse } from "../../server/admin/handler";
+import { clientIp, handleAdminRequest, type AdminDeps, type AdminHttpRequest, type AdminHttpResponse } from "../../server/admin/handler";
 import { SKIP_BUILD_MARKER, createAdminService } from "../../server/admin/service";
 import { FakeGithubRepo } from "./adminFakeGithub";
 
@@ -157,7 +157,8 @@ describe("parola ve oturum (auth)", () => {
     expect(secure).toContain("SameSite=Strict");
     expect(secure).toContain("Max-Age=2592000");
     expect(secure).toContain("; Secure");
-    expect(secure).toContain("Path=/");
+    expect(secure).toContain("Path=/api/admin;");
+    expect(clearedSessionCookie(true)).toContain("Path=/api/admin;");
     expect(sessionCookie("abc", false)).not.toContain("Secure");
     expect(clearedSessionCookie(true)).toContain("Max-Age=0");
     expect(readCookie("a=1; esli_admin=tok; b=2", "esli_admin")).toBe("tok");
@@ -280,6 +281,27 @@ describe("giriş akışı (/api/admin?action=login)", () => {
     for (let i = 0; i < 5; i++) await kit.call({ method: "POST", action: "login", body: { password: "yanlış-parola-123" }, ip: `2a02:ff0:1:2::${i + 1}` });
     expect((await kit.call({ method: "POST", action: "login", body: { password: PASSWORD }, ip: "2a02:ff0:1:2::99" })).status).toBe(429);
     expect((await kit.call({ method: "POST", action: "login", body: { password: PASSWORD }, ip: "2a02:ff0:1:3::99" })).status).toBe(200);
+  });
+
+  it("parola (özeti) değişince eski oturum çerezi düşer; yalnızca oturum anahtarıyla imzalı çerez kabul edilmez", async () => {
+    const kit = await setup();
+    const cookie = await kit.login();
+    expect((await kit.call({ action: "session", cookie })).body.authenticated).toBe(true);
+    expect((await kit.call({ action: "session", cookie: `esli_admin=${createSessionToken(SECRET, kit.clock.now)}` })).body.authenticated).toBe(false);
+    kit.env.ADMIN_PASSWORD_HASH = await hashPassword("yeni-parola-değişti-456");
+    expect((await kit.call({ action: "session", cookie })).body.authenticated).toBe(false);
+    expect((await kit.call({ action: "posts", cookie })).status).toBe(401);
+    expect(sessionSigningKey(SECRET, undefined)).toBeUndefined();
+    expect(sessionSigningKey("kısa", "scrypt$x")).toBeUndefined();
+    expect(sessionSigningKey(SECRET, "a")).not.toBe(sessionSigningKey(SECRET, "b"));
+  });
+
+  it("iletilen IP başlıklarına yalnızca Vercel'de güvenir; başka ortamda bağlantı adresini kullanır", () => {
+    const req = { headers: { "x-vercel-forwarded-for": "198.51.100.1", "x-real-ip": "198.51.100.2", "x-forwarded-for": "198.51.100.3, 10.0.0.1" }, socket: { remoteAddress: "192.0.2.10" } } as never;
+    expect(clientIp(req, true)).toBe("198.51.100.1");
+    expect(clientIp(req, false)).toBe("192.0.2.10");
+    expect(clientIp({ headers: { "x-forwarded-for": "198.51.100.3, 10.0.0.1" }, socket: { remoteAddress: "192.0.2.10" } } as never, true)).toBe("198.51.100.3");
+    expect(clientIp({ headers: {}, socket: {} } as never, true)).toBe("unknown");
   });
 
   it("kurulmamış panelde giriş 503 verir; oturum sorgusu 'configured: false' der", async () => {

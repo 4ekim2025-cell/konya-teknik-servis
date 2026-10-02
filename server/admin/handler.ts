@@ -8,7 +8,7 @@
  *  - Gizli değerler yalnızca ortam değişkenlerindedir: ADMIN_PASSWORD_HASH, ADMIN_SESSION_SECRET, GITHUB_CONTENT_TOKEN.
  */
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { LoginGuard, MIN_SECRET_LENGTH, RateLimiter, ipKey, clearedSessionCookie, createSessionToken, readCookie, SESSION_COOKIE, sessionCookie, verifyPassword, verifySessionToken } from "./auth.js";
+import { LoginGuard, MIN_SECRET_LENGTH, RateLimiter, ipKey, clearedSessionCookie, createSessionToken, readCookie, SESSION_COOKIE, sessionCookie, sessionSigningKey, verifyPassword, verifySessionToken } from "./auth.js";
 import { GithubError, createGithubClient, readGithubConfig, type GithubClient } from "./github.js";
 import { AdminError, createAdminService, type AdminService, type SaveBody } from "./service.js";
 
@@ -127,7 +127,8 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
 
   const url = new URL(req.url, "http://panel.local");
   const action = url.searchParams.get("action") ?? "";
-  const authenticated = verifySessionToken(readCookie(req.headers.cookie, SESSION_COOKIE), env.ADMIN_SESSION_SECRET?.trim(), deps.now());
+  const signingKey = sessionSigningKey(env.ADMIN_SESSION_SECRET, env.ADMIN_PASSWORD_HASH);
+  const authenticated = verifySessionToken(readCookie(req.headers.cookie, SESSION_COOKIE), signingKey, deps.now());
 
   // --- Oturumsuz erişime açık iki eylem ve çıkış ---
   if (action === "session") {
@@ -167,7 +168,7 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
     }
     deps.loginGuard.success(clientKey);
     deps.globalGuard.cancel("*");
-    const token = createSessionToken(env.ADMIN_SESSION_SECRET!.trim(), deps.now());
+    const token = createSessionToken(signingKey!, deps.now());
     return reply(200, { ok: true }, { "Set-Cookie": sessionCookie(token, secure) });
   }
 
@@ -243,12 +244,17 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
 
 const MAX_BODY_BYTES = 512 * 1024;
 
-function clientIp(req: IncomingMessage): string {
+/**
+ * İstemci IP'si. İletilen IP başlıklarına yalnızca Vercel'de güvenilir (Vercel bu başlıkları kendisi yazar); başka ortamda
+ * başlıkları istemci uydurabileceği için bağlantının kendi adresi kullanılır. Aksi hâlde IP kilidi ve istek sınırı başlıkla aşılırdı.
+ */
+export function clientIp(req: Pick<IncomingMessage, "headers" | "socket">, trustForwardedHeaders: boolean): string {
   const pick = (name: string) => {
     const value = req.headers[name];
     return (Array.isArray(value) ? value[0] : value)?.split(",")[0].trim();
   };
-  return pick("x-vercel-forwarded-for") || pick("x-real-ip") || pick("x-forwarded-for") || req.socket.remoteAddress || "unknown";
+  const forwarded = trustForwardedHeaders ? pick("x-vercel-forwarded-for") || pick("x-real-ip") || pick("x-forwarded-for") : undefined;
+  return forwarded || req.socket.remoteAddress || "unknown";
 }
 
 async function readJsonBody(req: IncomingMessage): Promise<Pick<AdminHttpRequest, "body" | "bodyError">> {
@@ -274,7 +280,7 @@ export async function adminHandler(req: IncomingMessage, res: ServerResponse, ov
   try {
     const method = (req.method ?? "GET").toUpperCase();
     const parsed = method === "GET" || method === "HEAD" ? {} : await readJsonBody(req);
-    result = await handleAdminRequest({ method, url: req.url ?? "/api/admin", headers: req.headers, ip: clientIp(req), ...parsed }, deps);
+    result = await handleAdminRequest({ method, url: req.url ?? "/api/admin", headers: req.headers, ip: clientIp(req, Boolean(deps.env.VERCEL)), ...parsed }, deps);
   } catch {
     result = fail(500, "internal_error", "Beklenmeyen bir hata oluştu.");
   }

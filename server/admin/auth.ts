@@ -1,13 +1,14 @@
 /**
  * Panel girişi: tek kullanıcı, tek parola.
  *  - Parola yalnızca scrypt özeti olarak ortam değişkeninde durur (`ADMIN_PASSWORD_HASH`); `pnpm admin:hash` ile üretilir.
- *  - Oturum, `ADMIN_SESSION_SECRET` ile HMAC imzalı, HttpOnly + SameSite=Strict çerezdir (30 gün). Anahtar değişirse tüm oturumlar düşer.
+ *  - Oturum, `ADMIN_SESSION_SECRET` + parola özetinden türeyen anahtarla HMAC imzalı, HttpOnly + SameSite=Strict çerezdir (30 gün,
+ *    yalnızca /api/admin yoluna gönderilir). Oturum anahtarı YA DA parola değişirse tüm oturumlar düşer.
  *  - Hatalı parolada bekleme + IP başına geçici kilit + genel istek sınırı (bellek içi; sunucusuz örnekler arası paylaşılmaz,
  *    bu yüzden asıl koruma uzun rastgele paroladır).
  *  - Deneme, parola sınanmadan ÖNCE sayılır (`begin`); aynı anda gelen istekler kilidi aşamaz.
  *  - Tüm IP'lerin toplam hatası girişi kilitlemez, yalnızca yavaşlatır: aksi hâlde herkes birkaç istekle sahibini dışarıda bırakabilirdi.
  */
-import { createHmac, randomBytes, scrypt, timingSafeEqual, type BinaryLike, type ScryptOptions } from "node:crypto";
+import { createHash, createHmac, randomBytes, scrypt, timingSafeEqual, type BinaryLike, type ScryptOptions } from "node:crypto";
 
 export const SESSION_COOKIE = "esli_admin";
 export const SESSION_MAX_AGE_SECONDS = 30 * 24 * 60 * 60;
@@ -46,6 +47,17 @@ export async function verifyPassword(password: string, stored: string | undefine
   }
 }
 
+/**
+ * Oturum imza anahtarı: oturum anahtarı + parola özetinin özeti. Parola değiştirildiğinde (özet değişir) eski çerezlerin
+ * hepsi geçersiz olur; çalınmış bir oturum parola değişikliğiyle kapatılabilir. Ayar eksikse `undefined` döner.
+ */
+export function sessionSigningKey(secret: string | undefined, passwordHash: string | undefined): string | undefined {
+  const key = secret?.trim();
+  const hash = passwordHash?.trim();
+  if (!key || key.length < MIN_SECRET_LENGTH || !hash) return undefined;
+  return `${key}.${createHash("sha256").update(hash).digest("base64url")}`;
+}
+
 const sign = (payload: string, secret: string) => createHmac("sha256", secret).update(payload).digest("base64url");
 
 /** `v1.<bitiş-saniye>.<rastgele>.<imza>` biçiminde oturum belirteci. */
@@ -76,13 +88,16 @@ export function readCookie(header: string | string[] | undefined, name: string):
   return undefined;
 }
 
+/** Çerez yalnızca panel API'sine gönderilir; sitenin diğer sayfalarına ve uç noktalarına gitmez. */
+export const SESSION_COOKIE_PATH = "/api/admin";
+
 /** `secure: false` yalnızca http://localhost geliştirmesi içindir. */
 export function sessionCookie(token: string, secure: boolean): string {
-  return `${SESSION_COOKIE}=${token}; Path=/; Max-Age=${SESSION_MAX_AGE_SECONDS}; HttpOnly; SameSite=Strict${secure ? "; Secure" : ""}`;
+  return `${SESSION_COOKIE}=${token}; Path=${SESSION_COOKIE_PATH}; Max-Age=${SESSION_MAX_AGE_SECONDS}; HttpOnly; SameSite=Strict${secure ? "; Secure" : ""}`;
 }
 
 export function clearedSessionCookie(secure: boolean): string {
-  return `${SESSION_COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict${secure ? "; Secure" : ""}`;
+  return `${SESSION_COOKIE}=; Path=${SESSION_COOKIE_PATH}; Max-Age=0; HttpOnly; SameSite=Strict${secure ? "; Secure" : ""}`;
 }
 
 /** Hatalı girişleri sayar: pencere içinde `maxFailures` hatadan sonra anahtar (IP) `lockMs` boyunca kilitlenir. */

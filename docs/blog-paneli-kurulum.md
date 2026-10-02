@@ -12,6 +12,8 @@ pnpm admin:hash "en az 12 karakterlik parolanız"
 
 Çıktıdaki iki satırı kopyalayın: `ADMIN_PASSWORD_HASH=...` ve `ADMIN_SESSION_SECRET=...`. Parolanın kendisi hiçbir yere kaydedilmez.
 
+Parolayı değiştirmek için aynı komutu yeni parolayla çalıştırıp iki değeri de Vercel'de güncelleyin ve yeniden dağıtın. `ADMIN_PASSWORD_HASH` ya da `ADMIN_SESSION_SECRET` değiştiğinde açık olan tüm oturumlar kapanır; bir cihazın çalındığından ya da oturumun ele geçtiğinden şüphelenirseniz yapılacak iş budur.
+
 ## 2. GitHub anahtarı
 
 GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → Generate:

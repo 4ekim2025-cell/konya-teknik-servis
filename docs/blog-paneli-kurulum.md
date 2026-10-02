@@ -50,7 +50,7 @@ Editördeki "Yapay zeka ile taslak oluştur" formu için Google Gemini anahtarı
 | Ad | Değer |
 |---|---|
 | `GEMINI_API_KEY` | AI Studio anahtarı (zorunlu) |
-| `GEMINI_MODEL` | (isteğe bağlı) varsayılan `gemini-flash-latest` |
+| `GEMINI_MODEL` | (isteğe bağlı) varsayılan `gemini-flash-latest`. Model yanıt vermezse sırayla `gemini-3.5-flash` ve `gemini-3.5-flash-lite` denenir |
 | `GROQ_API_KEY` | (isteğe bağlı) yedek sağlayıcı; https://console.groq.com/keys. Gemini kotası dolunca ya da ulaşılamayınca kullanılır |
 | `GROQ_MODEL` | (isteğe bağlı) varsayılan `llama-3.3-70b-versatile` |
 | `AI_DAILY_LIMIT` | (isteğe bağlı) panelin günlük taslak sınırı, varsayılan 20 |
@@ -82,6 +82,7 @@ Bilinmesi gerekenler:
 
 - "Panel henüz kurulmadı": `ADMIN_PASSWORD_HASH` ya da `ADMIN_SESSION_SECRET` (en az 32 karakter) eksik.
 - "Yapay zeka anahtarı tanımlı değil": `GEMINI_API_KEY` eksik ya da değişken eklendikten sonra yeniden dağıtım yapılmadı.
+- "Yapay zeka servisi şu an yanıt vermiyor": Google tarafında geçici hata. Panel kendiliğinden yeniden dener ve yedek modele geçer; yine olmazsa birkaç dakika sonra deneyin. Neden, Vercel → Logs içinde `admin: yapay zeka hatası` satırındaki durum kodundan okunur.
 - "Yapay zeka servisinin ücretsiz kullanım sınırına ulaşıldı": Google kotası doldu; bir süre sonra deneyin ya da `GROQ_API_KEY` ekleyin.
 - "GitHub anahtarı geçersiz": anahtarın süresi bitmiş ya da bu depoda Contents: Read and write izni yok.
 - Başka biri/başka yerden commit yapıldıysa kaydetme "başka yerde değişti" uyarısı verir; listeyi yenileyip tekrar deneyin.

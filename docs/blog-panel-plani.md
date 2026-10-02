@@ -10,7 +10,7 @@ Plan tarihi: 2026-10-02. Proje sahibi: Esad Eşli.
 |---|---|---|
 | 1 | İçeriği koddan ayırma | Tamamlandı (main'de) |
 | 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Tamamlandı (main'de, canlıda); güvenlik incelemesi bulguları PR #6–#9 ile düzeltildi |
-| 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Kod tamamlandı, PR'da (birleştirme bekliyor). Gerçek modelle deneme, `GEMINI_API_KEY` Vercel'e girildikten sonra proje sahibince yapılacak |
+| 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Tamamlandı (main'de, canlıda; PR #10–#13). Gerçek Gemini ile panelden denendi, proje sahibi 2026-10-02'de onayladı |
 | 4 | Fotoğraflar (Vercel Blob) | Bekliyor |
 | 5 | Google İşletme (API yok / API var) | Bekliyor |
 | 6 | Zamanlama ve istatistik | Bekliyor |
@@ -107,7 +107,10 @@ Nasıl kuruldu (2026-10-02):
 - **Model ne yazar:** yalnızca başlık, açıklama, özet, bloklar, Google İşletme metni, Instagram metni. Servis kaydı (ilçe, marka, cihaz, şikâyet, tespit, işlem) formdan aynen kopyalanır; `servicePath`/`brandPath`/`serviceLabel` `shared/blog-taxonomy.ts`'ten türetilir. Fazladan alan (slug, adres, kaynak…) taşıyan çıktı reddedilir.
 - **Girilmemiş ayrıntı denetimi** (`shared/blog-ai.ts` → `findUngroundedDetails`): çıktıdaki her sayı girdide geçmeli; girdide olmayan başka marka/ilçe, tarih, kişi, adres, süre, söz/vaat ("aynı gün", "ücretsiz"…), bağlantı reddedilir; fiyat/hukuk/yetkili servis kuralları sosyal metinlere de uygulanır. Denetim sunucuda çalışır, editör yanıtı doldurmadan önce aynı denetimi yeniden çalıştırır. Geçmeyen çıktı için model bir kez daha denenir; yine geçmezse taslak dönmez.
 - **Sınırı:** denetim kalıp tabanlıdır; rakamsız ve kalıba uymayan uydurma bir cümleyi (ör. "müşteri çok memnun kaldı") yakalayamaz. Bu yüzden taslak hiçbir zaman kendiliğinden kaydedilmez; proje sahibi okuyup onaylar.
-- **Sınama:** `client/src/adminAi.test.ts`, sağlayıcıyı bellek içi taklitle (`client/src/adminFakeAi.ts`) sınar; gerçek API çağrısı yoktur. Gerçek modelin üç vakadaki davranışı anahtar girildikten sonra panelden denenir.
+- **Sınama:** `client/src/adminAi.test.ts`, sağlayıcıyı bellek içi taklitle (`client/src/adminFakeAi.ts`) sınar; gerçek API çağrısı yoktur. Gerçek modelle deneme canlı panelden proje sahibince yapıldı ve onaylandı.
+- **Yedek model (PR #11):** canlıdaki ilk denemede Gemini yaklaşık 1 saniyede sunucu hatası döndü. Artık 5xx'te aynı model bir kez daha, sonra `gemini-3.5-flash` ve `gemini-3.5-flash-lite` denenir; 404'te doğrudan yedeğe geçilir; anahtar (401/403) ve kota (429) hatasında model değiştirilmez. Günlüğe sağlayıcının HTTP durum kodu yazılır.
+- **Giriş kalıbı (PR #12–#13, proje sahibinin kararı):** yazı şu iki cümleyle başlar: "[ilçe] ilçesinden [marka] marka [cihaz]ının [şikâyet] yönünde şikâyet aldık. Adrese ulaştık." Talebin nasıl geldiği (arama, mesaj) ve müşteri ayrıntısı yazılmaz. Kalıp `server/admin/ai.ts` içindeki yönergededir.
+- **Açık kalan doğrulama:** geliştirme ortamında npm erişimi olmadığı için `pnpm check` ve `pnpm test` bu aşamada çalıştırılamadı (Vercel build'leri geçti). Bir sonraki aşamaya başlarken çalıştırılmalı; `blogPosts.test.ts` içindeki prerender testi (`scripts/prerender.ts`, `html.replace(..., "")` satırı) bu aşamadan bağımsız olarak kırmızıdır.
 - Sosyal metinler şimdilik kaydedilmez (kopyalanır); kalıcı "paylaşım paketi" 5. aşamadadır.
 
 ## Aşama 4 — Fotoğraflar

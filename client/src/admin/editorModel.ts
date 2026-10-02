@@ -111,4 +111,9 @@ export function filterItems<T extends { post: BlogPostInput }>(items: T[], filte
   });
 }
 
+/** Panel listesi: en son yazı en üstte (yayın tarihi yeni olan önce; aynı gündekilerde son eklenen önce). Sitedeki sırayı değiştirmez. */
+export function newestFirst<T extends { post: BlogPostInput }>(items: readonly T[]): T[] {
+  return [...items].sort((a, b) => b.post.published.localeCompare(a.post.published) || b.post.order - a.post.order);
+}
+
 export const isPublished = (post: { status?: string }): boolean => post.status !== "draft";

@@ -2,14 +2,14 @@ import { useMemo, useState } from "react";
 import { blogCategories } from "@shared/blog-meta";
 import { formatBlogDate } from "@shared/blog-meta";
 import { api, ApiError, type PostItem, type PostsResponse } from "./api";
-import { filterItems, isPublished, type ListFilter } from "./editorModel";
+import { filterItems, isPublished, newestFirst, type ListFilter } from "./editorModel";
 import DeleteDialog from "./DeleteDialog";
 
 export default function PostsView({ data, onEdit, onNew, onChanged, notify }: { data: PostsResponse; onEdit: (item: PostItem) => void; onNew: () => void; onChanged: () => Promise<void>; notify: (message: string) => void }) {
   const [filter, setFilter] = useState<ListFilter>({ query: "", category: "", status: "" });
   const [deleting, setDeleting] = useState<PostItem | null>(null);
   const [busySlug, setBusySlug] = useState("");
-  const items = useMemo(() => filterItems([...data.items].sort((a, b) => a.post.order - b.post.order), filter), [data.items, filter]);
+  const items = useMemo(() => filterItems(newestFirst(data.items), filter), [data.items, filter]);
 
   const remove = async (item: PostItem) => {
     if (isPublished(item.post)) return setDeleting(item);

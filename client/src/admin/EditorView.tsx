@@ -5,7 +5,7 @@ import { BLOG_DESCRIPTION_MAX, USTA_CATEGORY, type BlogPostInput } from "@shared
 import { api, ApiError, type HistoryEntry, type PostItem, type PostsResponse } from "./api";
 import { nextOrder, todayInIstanbul } from "@shared/blog-publish";
 import {
-  applyDeviceAndBrand, BLOCK_LABELS, checklist, emptyBlock, insertAt, isPublished, moveItem, newPost, removeAt, replaceAt, setCaseFile, setCategory, slugFor, toPayload,
+  applyDeviceAndBrand, BLOCK_LABELS, blockingSummary, checklist, emptyBlock, insertAt, isPublished, moveItem, newPost, removeAt, replaceAt, setCaseFile, setCategory, slugFor, toPayload,
   type BlockType, type BlogBlockInput,
 } from "./editorModel";
 
@@ -136,10 +136,11 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
         <strong>{origin ? (published ? "Yayındaki yazıyı düzenle" : "Taslağı düzenle") : "Yeni yazı"}</strong>
         <span className="admin-spacer" />
         <button className="admin-btn" onClick={() => setShowPreview(value => !value)}>{showPreview ? "Önizlemeyi gizle" : "Canlı önizleme"}</button>
-        {!published && <button className="admin-btn" disabled={busy || !post.slug} onClick={() => submit("draft")}>Taslak kaydet</button>}
+        {!published && <button className="admin-btn" disabled={busy || !sheet.canPublish} onClick={() => submit("draft")}>Taslak kaydet</button>}
         <button className="admin-btn admin-btn-primary" disabled={busy || !sheet.canPublish} onClick={() => submit("publish")}>{published ? "Güncelle ve yayınla" : "Yayınla"}</button>
       </div>
 
+      {!sheet.canPublish && <p className="admin-note" role="status">Kaydetmek için tamamlanması gerekenler: {blockingSummary(sheet.errors)}</p>}
       {message && <p className="admin-ok" role="status">{message}</p>}
       {errors.length > 0 && <div className="admin-error" role="alert"><strong>Kaydedilemedi:</strong><ul>{errors.map(line => <li key={line}>{line}</li>)}</ul></div>}
 
@@ -271,7 +272,7 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
               {sheet.errors.length === 0 && <li className="is-good">✓ Zorunlu kurallar tamam; yayınlanabilir</li>}
               {sheet.advisory.map(check => <li key={check.id} className={check.ok ? "is-good" : "is-warn"}>{check.ok ? "✓" : "!"} {check.label}</li>)}
             </ul>
-            <p className="admin-muted">✕ işaretliler yayını engeller. ! işaretliler öneridir; yayını engellemez.</p>
+            <p className="admin-muted">✕ işaretliler taslak kaydını da yayını da engeller. ! işaretliler öneridir; engellemez.</p>
           </fieldset>
         </div>
 

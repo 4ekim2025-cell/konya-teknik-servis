@@ -46,7 +46,7 @@ describe("panel: arama motoru kuralları", () => {
   });
 
   it("sır değişkenleri VITE_ önekiyle kullanılmaz", () => {
-    for (const file of [".env.example", "server/admin/handler.ts", "server/admin/github.ts"]) expect(read(file), file).not.toMatch(/VITE_(ADMIN|GITHUB)/);
+    for (const file of [".env.example", "server/admin/handler.ts", "server/admin/github.ts", "server/admin/ai.ts"]) expect(read(file), file).not.toMatch(/VITE_(ADMIN|GITHUB|GEMINI|GROQ|AI)/);
     expect(read(".env.example")).toContain("ADMIN_PASSWORD_HASH=");
     expect(read(".env.example")).toContain("GITHUB_CONTENT_TOKEN=");
   });

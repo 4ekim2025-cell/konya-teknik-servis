@@ -5,12 +5,16 @@
  *  - `session` ve `login` dışındaki HİÇBİR eylem geçerli oturum çerezi olmadan çalışmaz: veri döndürmez, GitHub'a dokunmaz.
  *  - Yazan her istek JSON olmalı, `X-Admin-Request: 1` başlığı taşımalı ve (varsa) Origin başlığı sitenin kendisi olmalıdır.
  *  - Yanıtlar `noindex` başlığı taşır ve önbelleğe alınmaz. Hata yanıtları gizli anahtar ya da GitHub gövdesi içermez.
- *  - Gizli değerler yalnızca ortam değişkenlerindedir: ADMIN_PASSWORD_HASH, ADMIN_SESSION_SECRET, GITHUB_CONTENT_TOKEN.
+ *  - Gizli değerler yalnızca ortam değişkenlerindedir: ADMIN_PASSWORD_HASH, ADMIN_SESSION_SECRET, GITHUB_CONTENT_TOKEN, GEMINI_API_KEY, GROQ_API_KEY.
+ *  - `ai-draft` (yapay zeka taslağı) hiçbir şey kaydetmez: GitHub'a dokunmaz, yalnızca editöre dolacak taslağı döndürür. Aynı oturum,
+ *    CSRF ve istek sınırından geçer; ayrıca günlük kullanım sınırı vardır. Model çıktısı kurallardan geçmezse taslak dönmez.
  */
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { LoginGuard, MIN_SECRET_LENGTH, RateLimiter, ipKey, clearedSessionCookie, createSessionToken, readCookie, SESSION_COOKIE, sessionCookie, sessionSigningKey, verifyPassword, verifySessionToken } from "./auth.js";
 import { GithubError, createGithubClient, readGithubConfig, type GithubClient } from "./github.js";
 import { AdminError, createAdminService, type AdminService, type SaveBody } from "./service.js";
+import { AiError, AiRejectedError, DailyQuota, aiDailyLimit, createAiProviders, generateAiDraft } from "./ai.js";
+import { validateAiCaseInput } from "../../shared/blog-ai.js";
 
 export type AdminEnv = Record<string, string | undefined>;
 type HeaderValue = string | string[] | undefined;
@@ -37,6 +41,10 @@ export type AdminDeps = {
   fetchImpl?: typeof fetch;
   /** Testlerde hazır servis verilir; yoksa ortam değişkenlerinden kurulur. */
   service?: AdminService;
+  /** Yapay zeka sağlayıcısına giden `fetch` (testlerde bellek içi taklit). */
+  aiFetchImpl?: typeof fetch;
+  /** Yapay zeka taslağının günlük kullanım sayacı; verilmezse örnek ömrü boyunca paylaşılan sayaç kullanılır. */
+  aiQuota?: DailyQuota;
 };
 
 const FAILED_LOGIN_DELAY_MS = 800;
@@ -74,6 +82,7 @@ const shared = {
   loginGuard: new LoginGuard(),
   globalGuard: new LoginGuard({ maxFailures: 30, windowMs: 15 * 60 * 1000, lockMs: 15 * 60 * 1000 }),
   limiter: new RateLimiter(120, 60 * 1000),
+  aiQuota: new DailyQuota(),
   service: undefined as { key: string; value: AdminService } | undefined,
 };
 
@@ -115,6 +124,13 @@ function describeGithubError(error: GithubError): AdminHttpResponse {
   if (error.kind === "rate") return fail(503, "github_rate_limited", "GitHub istek sınırına ulaşıldı; birkaç dakika sonra tekrar deneyin.");
   if (error.kind === "notfound") return fail(502, "github_not_found", "Depo ya da dal bulunamadı. GITHUB_REPO ve GITHUB_BRANCH ayarlarını kontrol edin.");
   return fail(502, "github_unavailable", "GitHub'a şu an ulaşılamıyor; birazdan tekrar deneyin.");
+}
+
+function describeAiError(error: AiError): AdminHttpResponse {
+  if (error.kind === "auth") return fail(502, "ai_auth_failed", "Yapay zeka anahtarı geçersiz ya da yetkisiz. Vercel'deki GEMINI_API_KEY değerini kontrol edin.");
+  if (error.kind === "rate") return fail(503, "ai_rate_limited", "Yapay zeka servisinin ücretsiz kullanım sınırına ulaşıldı; bir süre sonra tekrar deneyin.");
+  if (error.kind === "blocked") return fail(502, "ai_blocked", "Yapay zeka servisi bu girdiyi yanıtlamadı; metni sadeleştirip tekrar deneyin.");
+  return fail(502, "ai_unavailable", "Yapay zeka servisine şu an ulaşılamıyor; birazdan tekrar deneyin. Yazıyı elle de yazabilirsiniz.");
 }
 
 export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps): Promise<AdminHttpResponse> {
@@ -231,10 +247,28 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
         if (!service) return fail(503, "github_not_configured", "GitHub anahtarı (GITHUB_CONTENT_TOKEN) tanımlı değil.");
         return reply(200, { rows: await service.builds() });
       }
+      case "ai-draft": {
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        const providers = createAiProviders(env, deps.aiFetchImpl);
+        if (!providers.length) return fail(503, "ai_not_configured", "Yapay zeka anahtarı (GEMINI_API_KEY) tanımlı değil. Kurulum adımları docs/blog-paneli-kurulum.md dosyasındadır.");
+        const input = validateAiCaseInput(body.input);
+        if (!input.ok) return fail(422, "validation_failed", input.errors[0], { errors: input.errors });
+        // Sayım sağlayıcı çağrılmadan önce yapılır; geçersiz girdi ve kurulmamış anahtar kotadan düşmez.
+        const quota = (deps.aiQuota ?? shared.aiQuota).take(aiDailyLimit(env));
+        if (!quota.allowed) return fail(429, "ai_daily_limit", `Bugünkü yapay zeka taslağı sınırına (${aiDailyLimit(env)}) ulaşıldı; yarın tekrar deneyin ya da yazıyı elle yazın.`);
+        const draft = await generateAiDraft(input.input, providers, new Date(deps.now()));
+        return reply(200, { post: draft.post, googleBusiness: draft.googleBusiness, instagram: draft.instagram, provider: draft.provider, attempts: draft.attempts, remaining: quota.remaining });
+      }
       default:
         return fail(404, "unknown_action", "Bilinmeyen eylem.");
     }
   } catch (error) {
+    if (error instanceof AiRejectedError) return fail(502, "ai_output_rejected", "Yapay zeka çıktısı içerik kurallarından geçmedi; editöre aktarılmadı. Tekrar deneyin ya da yazıyı elle yazın.", { errors: error.reasons.slice(0, 12) });
+    if (error instanceof AiError) {
+      console.error("admin: yapay zeka hatası", error.provider, error.kind);
+      return describeAiError(error);
+    }
     if (error instanceof AdminError) return fail(error.status, error.code, error.message, error.errors ? { errors: error.errors } : undefined);
     if (error instanceof GithubError) return describeGithubError(error);
     console.error("admin: beklenmeyen hata", error instanceof Error ? error.name : "bilinmiyor");

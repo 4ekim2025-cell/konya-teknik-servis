@@ -10,6 +10,7 @@ import {
 } from "./editorModel";
 
 const Preview = lazy(() => import("./Preview"));
+const AiDraftBox = lazy(() => import("./AiDraftBox"));
 
 type Props = { data: PostsResponse; item: PostItem | null; reload: () => Promise<PostsResponse | null>; onClose: () => void; notify: (message: string) => void };
 
@@ -126,6 +127,15 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
     } catch (failure) { setErrors([failure instanceof ApiError ? failure.message : "Sürüm alınamadı."]); }
   };
 
+  // Yapay zeka taslağı yalnızca editöre dolar; kaydedilmiş taslağın adresi ve sırası korunur. Kaydetme yine aşağıdaki düğmelerle yapılır.
+  const fillFromAi = (draft: BlogPostInput) => {
+    setPost(current => (origin ? { ...draft, slug: current.slug, order: current.order } : draft));
+    setSlugEdited(Boolean(origin));
+    setErrors([]);
+    setMessage("Yapay zeka taslağı editöre dolduruldu. Henüz kaydedilmedi; okuyup düzelttikten sonra kaydedin.");
+  };
+  const hasContent = Boolean(post.title.trim() || post.description.trim() || post.blocks.some(block => JSON.stringify(block) !== JSON.stringify(emptyBlock(block.type))));
+
   const addBlock = (type: BlockType) => patch({ blocks: [...post.blocks, emptyBlock(type)] });
   const sources = post.sources ?? [];
 
@@ -146,6 +156,9 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
 
       <div className={`admin-editor-grid ${showPreview ? "has-preview" : ""}`}>
         <div className="admin-form">
+          <Suspense fallback={null}>
+            <AiDraftBox existing={data.items.filter(entry => entry.post.slug !== origin?.slug).map(entry => ({ slug: entry.post.slug, order: entry.post.order }))} canGenerate={!published} hasContent={hasContent} onDraft={fillFromAi} />
+          </Suspense>
           <Field label="Kategori">
             <select value={post.category} onChange={event => setPost(setCategory(post, event.target.value as BlogPostInput["category"]))}>
               {blogCategories.map(category => <option key={category}>{category}</option>)}

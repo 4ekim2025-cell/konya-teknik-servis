@@ -1,4 +1,5 @@
 import type { BlogPostInput } from "@shared/blog-schema";
+import type { AiCaseInput } from "@shared/blog-ai";
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string, message: string, public errors?: string[]) {
@@ -13,6 +14,7 @@ export type SaveResponse = { noChange: true } | { noChange: false; commit: strin
 export type DeleteResponse = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean };
 export type HistoryEntry = { sha: string; message: string; date: string; author: string };
 export type BuildRow = { sha: string; message: string; date: string; state: "success" | "pending" | "failure" | "unknown"; description: string; url?: string; skipped: boolean };
+export type AiDraftResponse = { post: BlogPostInput; googleBusiness: string; instagram: string; provider: string; attempts: number; remaining: number };
 export type Session = { configured: boolean; authenticated: boolean };
 
 type Options = { method?: "GET" | "POST"; query?: Record<string, string>; body?: unknown };
@@ -51,4 +53,6 @@ export const api = {
   history: (slug: string) => call<{ entries: HistoryEntry[] }>("history", { query: { slug } }),
   version: (slug: string, sha: string) => call<{ post: BlogPostInput }>("version", { query: { slug, sha } }),
   builds: () => call<{ rows: BuildRow[] }>("builds"),
+  /** Yapay zeka taslağı: yalnızca editöre dolacak metni döndürür; hiçbir şey kaydetmez. */
+  aiDraft: (input: AiCaseInput) => call<AiDraftResponse>("ai-draft", { method: "POST", body: { input } }),
 };

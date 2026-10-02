@@ -38,6 +38,30 @@ Vercel → `esli3/konya-teknik-servis` → Settings → Environment Variables (P
 
 Değişkenleri ekledikten sonra yeniden dağıtım (redeploy) gerekir.
 
+## 3b. Yapay zeka taslağı (isteğe bağlı)
+
+Editördeki "Yapay zeka ile taslak oluştur" formu için Google Gemini anahtarı gerekir. Anahtar girilmezse panelin geri kalanı aynen çalışır; form "anahtar tanımlı değil" der.
+
+1. https://aistudio.google.com/apikey adresine Google hesabınızla girin, **Create API key** ile anahtar oluşturun. Faturalandırma (billing) açmayın; proje ücretsiz katmanda kalmalı.
+2. Aynı yerde **Rate limit** ekranından Flash modelinin günlük istek sınırına bakın (Google bu sayıyı artık belgelerinde yazmıyor, yalnızca burada gösteriyor).
+3. Vercel → Settings → Environment Variables: ad `GEMINI_API_KEY`, ortam **Production** (önizlemede de denemek için **Preview**), "Sensitive" işaretli. `VITE_` öneki kullanmayın.
+4. Yeniden dağıtın.
+
+| Ad | Değer |
+|---|---|
+| `GEMINI_API_KEY` | AI Studio anahtarı (zorunlu) |
+| `GEMINI_MODEL` | (isteğe bağlı) varsayılan `gemini-flash-latest` |
+| `GROQ_API_KEY` | (isteğe bağlı) yedek sağlayıcı; https://console.groq.com/keys. Gemini kotası dolunca ya da ulaşılamayınca kullanılır |
+| `GROQ_MODEL` | (isteğe bağlı) varsayılan `llama-3.3-70b-versatile` |
+| `AI_DAILY_LIMIT` | (isteğe bağlı) panelin günlük taslak sınırı, varsayılan 20 |
+
+Bilinmesi gerekenler:
+
+- Ücretsiz katmanda gönderilen metin Google tarafından ürün geliştirmede kullanılabilir. Forma müşteri adı, telefon, açık adres yazmayın.
+- Yapay zeka hiçbir şeyi kaydetmez ve yayınlamaz; taslak editöre dolar, siz okuyup düzelttikten sonra kaydedersiniz. Google İşletme ve Instagram metinleri kaydedilmez; sayfadan ayrılmadan kopyalayın.
+- Girdide olmayan sayı, başka marka/ilçe, tarih, kişi, adres, fiyat, vaat ya da bağlantı içeren çıktı editöre aktarılmaz; "içerik kurallarından geçmedi" uyarısı çıkar. Tekrar deneyin ya da eksik bilgiyi "Serbest not"a yazın.
+- Günlük sınır sunucu örneği başına sayılır; kesin tavan Google'ın ücretsiz kotasıdır (faturalandırma kapalıyken aşımda ücret oluşmaz, istek reddedilir).
+
 ## 4. Önizlemede deneme (canlıya geçmeden)
 
 Önizleme ortamında panel, önizlemenin kendi dalına yazar; `main` etkilenmez. Önizleme linki Vercel girişi ister. Deneme listesi:
@@ -57,6 +81,8 @@ Değişkenleri ekledikten sonra yeniden dağıtım (redeploy) gerekir.
 ## Sorun giderme
 
 - "Panel henüz kurulmadı": `ADMIN_PASSWORD_HASH` ya da `ADMIN_SESSION_SECRET` (en az 32 karakter) eksik.
+- "Yapay zeka anahtarı tanımlı değil": `GEMINI_API_KEY` eksik ya da değişken eklendikten sonra yeniden dağıtım yapılmadı.
+- "Yapay zeka servisinin ücretsiz kullanım sınırına ulaşıldı": Google kotası doldu; bir süre sonra deneyin ya da `GROQ_API_KEY` ekleyin.
 - "GitHub anahtarı geçersiz": anahtarın süresi bitmiş ya da bu depoda Contents: Read and write izni yok.
 - Başka biri/başka yerden commit yapıldıysa kaydetme "başka yerde değişti" uyarısı verir; listeyi yenileyip tekrar deneyin.
 - Yanlış yayınlanan yazı: yazıyı açın → "Önceki sürümler" → eski sürümü yükleyin → yeniden yayınlayın. Yazıyı silmek yerine bunu tercih edin; silinen yazının adresi 404 verir (yönlendirme seçilmediyse).

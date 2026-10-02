@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { defineConfig, loadEnv, type Plugin, type ViteDevServer } from "vite";
 import { instagramFeedHandler } from "./server/instagram-feed";
+import { adminHandler } from "./server/admin/handler";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
 // =============================================================================
@@ -213,6 +214,17 @@ const plugins = [
         const pathname = req.url?.split("?")[0];
         if (pathname !== "/api/instagram-feed" && pathname !== "/api/instagram-feed/") return next();
         void instagramFeedHandler(req, res, env);
+      });
+    },
+  },
+  {
+    name: "admin-api",
+    configureServer(server: ViteDevServer) {
+      const env = { ...loadEnv(server.config.mode, PROJECT_ROOT, ""), ...process.env };
+      server.middlewares.use((req, res, next) => {
+        const pathname = req.url?.split("?")[0];
+        if (pathname !== "/api/admin" && pathname !== "/api/admin/") return next();
+        void adminHandler(req, res, { env });
       });
     },
   },

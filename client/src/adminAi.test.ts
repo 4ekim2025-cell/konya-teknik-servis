@@ -422,7 +422,7 @@ describe("prompt", () => {
     expect(facts(CASES.selcukluPhilips)).toEqual({ konu: "Çalışırken kapanan airfryer", ilce: "Selçuklu · Yazır", marka: "Philips", cihaz: "Airfryer", sikayet: "Airfryer çalışırken kapanıyor", tespit: "Fan motoru sıkışmış, termal koruma devreye giriyor", yapilanIslem: "Fan motoru temizlendi ve yağlandı", serbestNot: "Cihaz 3 yıllıktı. Model HD9252." });
     expect(prompt.user.match(/<ornek-\d>/g)?.length ?? 0).toBeLessThanOrEqual(2);
     for (const hidden of ["/blog/", "-servisi-konya/", "-tamiri-konya/", '"order"', '"slug"']) expect(prompt.user, hidden).not.toContain(hidden);
-    for (const rule of ["AYRINTI UYDURMA", "Fiyat", "Yetkili servis", "Hukuki konu", "yabancı kaynak", "arayan müşterimizin", "Tutanak dili kullanma"]) expect(prompt.system, rule).toContain(rule);
+    for (const rule of ["AYRINTI UYDURMA", "Fiyat", "Yetkili servis", "Hukuki konu", "yabancı kaynak", "marka [cihaz]ının [şikâyet] yönünde şikâyet aldık. Adrese ulaştık."]) expect(prompt.system, rule).toContain(rule);
   });
 });
 

@@ -9,9 +9,10 @@
  */
 import { z } from "zod";
 import { blogCategories, type BlogCategory, type BlogPost } from "./blog-meta.js";
+import { BLOG_BRANDS, BLOG_DEVICES, GENERAL_SERVICE_PATHS } from "./blog-taxonomy.js";
 
-/** Yazı adresi: /blog/<küçük-harf-ve-tire>/ — sonda eğik çizgi (vercel.json trailingSlash). */
-export const BLOG_SLUG_PATTERN = /^\/blog\/[a-z0-9-]+\/$/;
+/** Yazı adresi: /blog/<küçük-harf-ve-tire>/ — sonda eğik çizgi (vercel.json trailingSlash); ad en çok 100 karakter (dosya adı olur). */
+export const BLOG_SLUG_PATTERN = /^\/blog\/[a-z0-9-]{1,100}\/$/;
 /** Markanın sitedeki servis sayfası: /<marka>-servisi-konya/ */
 export const BLOG_BRAND_PATH_PATTERN = /^\/[a-z-]+-servisi-konya\/$/;
 /** Hizmet sayfası ya da genel sayfa: /<ad>/ */
@@ -46,6 +47,13 @@ function isHttpUrl(value: string): boolean {
 }
 
 const filled = (field: string) => z.string().refine(value => value.trim().length > 0, `${field} boş olamaz`);
+/** Satır sonu ve denetim karakterleri: tek satırlık alanlar llms.txt, başlık ve meta etiketlerine satır olarak yazılır. */
+export const BLOG_CONTROL_CHARS = /[\u0000-\u001f\u007f\u2028\u2029]/;
+const line = (field: string) => filled(field).refine(value => !BLOG_CONTROL_CHARS.test(value), `${field} tek satır olmalı (satır sonu içeremez)`);
+
+/** Yazının bağlantı verebileceği sayfalar: sitede gerçekten var olan hizmet, marka ve iletişim sayfaları (shared/blog-taxonomy.ts). */
+const KNOWN_BRAND_PATHS = new Set(BLOG_BRANDS.map(brand => brand.path));
+const KNOWN_SERVICE_PATHS = new Set([...BLOG_DEVICES.flatMap(option => (option.servicePath ? [option.servicePath] : [])), ...KNOWN_BRAND_PATHS, ...GENERAL_SERVICE_PATHS.map(item => item.path)]);
 const isoDate = (field: string) =>
   z
     .string()
@@ -54,31 +62,34 @@ const isoDate = (field: string) =>
 
 export const blogBlockSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("p"), text: filled("Paragraf") }).strict(),
-  z.object({ type: z.literal("h2"), text: filled("Ara başlık") }).strict(),
+  z.object({ type: z.literal("h2"), text: line("Ara başlık") }).strict(),
   z.object({ type: z.literal("list"), items: z.array(filled("Liste maddesi")).min(1, "Liste en az bir madde içermeli") }).strict(),
   z
     .object({
       type: z.literal("steps"),
-      items: z.array(z.object({ title: filled("Adım başlığı"), text: filled("Adım metni") }).strict()).min(1, "Adımlar en az bir adım içermeli"),
+      items: z.array(z.object({ title: line("Adım başlığı"), text: filled("Adım metni") }).strict()).min(1, "Adımlar en az bir adım içermeli"),
     })
     .strict(),
-  z.object({ type: z.literal("note"), title: filled("Not başlığı"), text: filled("Not metni") }).strict(),
+  z.object({ type: z.literal("note"), title: line("Not başlığı"), text: filled("Not metni") }).strict(),
 ]);
 
 export const blogCaseFileSchema = z
   .object({
-    district: filled("İlçe"),
-    brand: filled("Marka"),
-    device: filled("Cihaz"),
-    complaint: filled("Şikâyet"),
-    finding: filled("Tespit"),
-    action: filled("Yapılan işlem"),
+    district: line("İlçe"),
+    brand: line("Marka"),
+    device: line("Cihaz"),
+    complaint: line("Şikâyet"),
+    finding: line("Tespit"),
+    action: line("Yapılan işlem"),
   })
   .strict();
 
 export const blogSourceSchema = z
   .object({
-    label: z.string().refine(value => TURKISH_LETTER.test(value), "Kaynak adı Türkçe olmalı (yalnızca Türkçe kaynak kullanılır)"),
+    label: z
+      .string()
+      .refine(value => TURKISH_LETTER.test(value), "Kaynak adı Türkçe olmalı (yalnızca Türkçe kaynak kullanılır)")
+      .refine(value => !BLOG_CONTROL_CHARS.test(value), "Kaynak adı tek satır olmalı (satır sonu içeremez)"),
     url: z
       .string()
       .refine(isHttpUrl, "Kaynak adresi geçerli bir bağlantı olmalı")
@@ -100,16 +111,16 @@ export const blogPostSchema = z
     /** Yoksa yayında kabul edilir. Taslaklar siteye, sitemap'e ve llms.txt'ye alınmaz. Siteye gitmez. */
     status: z.enum(["published", "draft"]).optional(),
     category: blogCategorySchema,
-    title: filled("Başlık"),
-    description: filled("Açıklama").refine(value => value.length <= BLOG_DESCRIPTION_MAX, `Açıklama en fazla ${BLOG_DESCRIPTION_MAX} karakter olmalı`),
-    excerpt: filled("Özet"),
+    title: line("Başlık"),
+    description: line("Açıklama").refine(value => value.length <= BLOG_DESCRIPTION_MAX, `Açıklama en fazla ${BLOG_DESCRIPTION_MAX} karakter olmalı`),
+    excerpt: line("Özet"),
     published: isoDate("Yayın tarihi"),
     updated: isoDate("Güncelleme tarihi"),
-    device: filled("Cihaz"),
+    device: line("Cihaz"),
     servicePath: z.string().regex(BLOG_SERVICE_PATH_PATTERN, "Hizmet adresi /ad/ biçiminde olmalı"),
     caseFile: blogCaseFileSchema.optional(),
     brandPath: z.string().regex(BLOG_BRAND_PATH_PATTERN, "Marka adresi /marka-servisi-konya/ biçiminde olmalı").optional(),
-    serviceLabel: filled("Servis düğmesi metni").optional(),
+    serviceLabel: line("Servis düğmesi metni").optional(),
     blocks: z.array(blogBlockSchema).min(1, "Yazı en az bir blok içermeli"),
     sources: z.array(blogSourceSchema).optional(),
   })
@@ -124,6 +135,10 @@ export const blogPostSchema = z
       else if (!BLOG_DISTRICT_PATTERN.test(post.caseFile.district)) issue(["caseFile", "district"], "İlçe Karatay, Meram veya Selçuklu ile başlamalı");
       if (!post.brandPath) issue(["brandPath"], "Ustanın Defterinden yazısında markanın servis sayfası (brandPath) zorunlu");
     }
+
+    // Biçimi doğru ama sitede olmayan sayfa ölü iç bağlantı (ve silmede 404'e yönlendirme) üretirdi.
+    if (BLOG_SERVICE_PATH_PATTERN.test(post.servicePath) && !KNOWN_SERVICE_PATHS.has(post.servicePath)) issue(["servicePath"], "Hizmet adresi sitedeki bir hizmet, marka ya da iletişim sayfası olmalı");
+    if (post.brandPath && BLOG_BRAND_PATH_PATTERN.test(post.brandPath) && !KNOWN_BRAND_PATHS.has(post.brandPath)) issue(["brandPath"], "Marka adresi sitedeki bir marka sayfası olmalı");
 
     const text = JSON.stringify(post);
     const forbidden = text.match(BLOG_FORBIDDEN_TEXT);

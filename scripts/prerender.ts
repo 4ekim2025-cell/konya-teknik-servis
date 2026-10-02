@@ -147,7 +147,8 @@ function jsonLd(title: string, description: string, url: string, route: string) 
   const districtGuide = districts[route] ? districtGuides[districts[route].split(" Beyaz Eşya")[0]] : undefined;
   if (districtGuide?.faqs.length) graph.push({ "@type": "FAQPage", "@id": `${url}#faq`, mainEntity: districtGuide.faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) });
 
-  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replaceAll("</", "<\\/");
+  // "<" her yerde \u003c olarak yazılır: metindeki "</script>" ya da "<!--" betik bloğunu kapatamaz/yutamaz; JSON değeri aynıdır.
+  return JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replaceAll("<", "\\u003c");
 }
 
 const deviceStaticContent: Record<string, {intro:string; symptoms:string; parts:string; urgent:string}> = {

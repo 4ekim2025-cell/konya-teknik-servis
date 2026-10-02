@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { renderAdminShell } from "../../shared/admin-shell";
 import { BLOG_SLUGS_LINKED_FROM_CODE } from "../../shared/blog-protected";
@@ -52,20 +53,66 @@ describe("panel: arama motoru kuralları", () => {
 });
 
 describe("vercel-ignore-build.sh", () => {
-  const run = (message?: string) => {
+  const script = join(root, "scripts/vercel-ignore-build.sh");
+  const git = (cwd: string, ...args: string[]) => execFileSync("git", ["-c", "user.name=test", "-c", "user.email=test@example.com", "-c", "commit.gpgsign=false", ...args], { cwd, stdio: "pipe" }).toString().trim();
+  /** Geçici depo: her adım bir dosyayı değiştirip commit eder; commit kimliklerini döndürür. */
+  const repoWith = (steps: string[]) => {
+    const dir = mkdtempSync(join(tmpdir(), "ignore-"));
+    git(dir, "init", "-q");
+    const shas = steps.map((file, index) => {
+      mkdirSync(join(dir, dirname(file)), { recursive: true });
+      writeFileSync(join(dir, file), `${index}\n`);
+      git(dir, "add", "-A");
+      git(dir, "commit", "-q", "-m", `adım ${index}`);
+      return git(dir, "rev-parse", "HEAD");
+    });
+    return { dir, shas };
+  };
+  const run = (cwd: string, message?: string, previous?: string) => {
     try {
-      execFileSync("bash", [join(root, "scripts/vercel-ignore-build.sh")], { env: { PATH: process.env.PATH ?? "", ...(message === undefined ? {} : { VERCEL_GIT_COMMIT_MESSAGE: message }) }, stdio: "pipe" });
+      execFileSync("bash", [script], { cwd, env: { PATH: process.env.PATH ?? "", ...(message === undefined ? {} : { VERCEL_GIT_COMMIT_MESSAGE: message }), ...(previous === undefined ? {} : { VERCEL_GIT_PREVIOUS_SHA: previous }) }, stdio: "pipe" });
       return 0;
     } catch (error) {
       return (error as { status: number }).status;
     }
   };
-  it("yalnızca panel taslağı commit'inde build'i atlar (0), diğer her durumda build eder (1)", () => {
-    expect(run("content: taslak kaydedildi — Deneme [panel-taslak]")).toBe(0);
-    expect(run("content: yayınlandı — Deneme")).toBe(1);
-    expect(run("feat: yeni özellik")).toBe(1);
-    expect(run("")).toBe(1);
-    expect(run(undefined)).toBe(1);
+  const DRAFT = "content: taslak kaydedildi — Deneme [panel-taslak]";
+
+  it("işaretli commit yalnızca content/blog değiştiyse build'i atlar (0); işaretsiz her commit build edilir (1)", () => {
+    const { dir, shas } = repoWith(["shared/x.ts", "content/blog/a.json", "content/blog/b.json"]);
+    try {
+      expect(run(dir, DRAFT)).toBe(0);
+      expect(run(dir, DRAFT, shas[0])).toBe(0);
+      expect(run(dir, "content: yayınlandı — Deneme")).toBe(1);
+      expect(run(dir, "feat: yeni özellik")).toBe(1);
+      expect(run(dir, "")).toBe(1);
+      expect(run(dir, undefined)).toBe(1);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("son yayından beri site dosyası değiştiyse taslak işareti build'i atlatamaz; karşılaştırma yapılamazsa build edilir", () => {
+    const { dir, shas } = repoWith(["shared/x.ts", "client/public/sitemap.xml", "content/blog/a.json"]);
+    try {
+      expect(run(dir, DRAFT, shas[0])).toBe(1);
+      expect(run(dir, DRAFT, shas[1])).toBe(0);
+      expect(run(dir, DRAFT, "0000000000000000000000000000000000000000")).toBe(1);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+    const single = repoWith(["content/blog/a.json"]);
+    try {
+      expect(run(single.dir, DRAFT)).toBe(1);
+    } finally {
+      rmSync(single.dir, { recursive: true, force: true });
+    }
+    const redirects = repoWith(["shared/x.ts", "content/redirects.json"]);
+    try {
+      expect(run(redirects.dir, DRAFT)).toBe(1);
+    } finally {
+      rmSync(redirects.dir, { recursive: true, force: true });
+    }
   });
 });
 

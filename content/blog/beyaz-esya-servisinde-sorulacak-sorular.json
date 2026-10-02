@@ -1,0 +1,69 @@
+{
+  "slug": "/blog/beyaz-esya-servisinde-sorulacak-sorular/",
+  "order": 210,
+  "category": "Tüketici Rehberi",
+  "title": "Servis şikâyetlerinin arkasında çoğu zaman belirsizlik var: sormanız gereken altı soru",
+  "description": "Beyaz eşya servis şikâyetlerinde uzun bekleme ve belirsizlik öne çıkıyor. Servis sürecinde sormanız gereken altı soruyu anlatıyoruz.",
+  "excerpt": "Şikâyet verilerinde en çok uzun onarım süresi, parça bekleme ve tekrarlayan arızalar öne çıkıyor. Doğru sorular belirsizliği azaltır.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Genel",
+  "servicePath": "/online-servis-takibi/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Konya Gündem’in Haziran 2026’da Şikâyetvar verilerine dayanarak aktardığına göre beyaz eşya servislerine yönelik şikâyetler bir yılda 2.812’den 4.467’ye çıktı. Şikâyetlerde en çok uzun onarım süreleri, yedek parça bekleme ve tekrarlayan arızalar öne çıkıyor. Yedek parçaya yönelik şikâyetlerdeki artış da cihaz fiyatları yükseldikçe daha fazla kişinin tamire yöneldiğini gösteriyor."
+    },
+    {
+      "type": "p",
+      "text": "Bu şikâyetlerin ortak noktası belirsizlik: cihazın ne zaman döneceğini, neyin değiştiğini ya da sürecin nerede olduğunu bilmemek. Servis sürecinde soracağınız birkaç soru bu belirsizliği büyük ölçüde azaltır."
+    },
+    {
+      "type": "h2",
+      "text": "Servis sürecinde sorulacak altı soru"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Arıza tam olarak ne?",
+          "text": "“Kart gitmiş” veya “motor bozuk” gibi genel ifadeler yerine hangi parçanın neden arızalandığını sorun."
+        },
+        {
+          "title": "Hangi parça değişecek ve neden?",
+          "text": "Değişecek parçanın adını ve bu parçanın belirtiyle ilişkisini öğrenin."
+        },
+        {
+          "title": "Ücret işlem başlamadan netleşiyor mu?",
+          "text": "Parça ve işçilik bilgisi iş başlamadan açıklanmalı; onayınız alınmadan işlem yapılmamalı."
+        },
+        {
+          "title": "Parça stokta mı, gelmesi ne kadar sürer?",
+          "text": "Parça sipariş edilecekse tahmini süreyi ve cihazın bu sürede nerede kalacağını sorun."
+        },
+        {
+          "title": "Süreci nasıl takip edeceğim?",
+          "text": "Sürecin hangi aşamada olduğunu öğrenmek için kimi arayacağınızı veya hangi bağlantıyı kullanacağınızı öğrenin."
+        },
+        {
+          "title": "Değişen parçayı görebilir miyim?",
+          "text": "Çıkan parçayı görmek istemek makul bir taleptir ve yapılan işlemin anlaşılmasını kolaylaştırır."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Online servis takibi bu yüzden var"
+    },
+    {
+      "type": "p",
+      "text": "Eşli Teknik’te servis kaydı açıldığında size WhatsApp üzerinden özel bir takip bağlantısı gönderiyoruz. Bu bağlantıdan cihazınızın hangi aşamada olduğunu telefonunuzdan görebilirsiniz. Amacımız, “cihazım ne durumda?” sorusunu sizin sormak zorunda kalmamanız."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Konya Gündem — Yetkili servis şikâyetleri arttı (Haziran 2026)",
+      "url": "https://konyagundem.com/gundem/yetkili-servis-sikayetleri-artti-66797h"
+    }
+  ]
+}

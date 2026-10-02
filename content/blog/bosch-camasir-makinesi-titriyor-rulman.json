@@ -1,0 +1,77 @@
+{
+  "slug": "/blog/bosch-camasir-makinesi-titriyor-rulman/",
+  "order": 60,
+  "category": "Ustanın Defterinden",
+  "title": "Meram’da titreyip gürültüyle çalışan Bosch çamaşır makinesi: arıza rulmandaydı",
+  "description": "Meram’da ciddi titreyen ve çok sesli çalışan Bosch çamaşır makinesinde arızanın rulmanda çıkmasını ve rulman sesinin evde nasıl ayırt edileceğini anlatıyoruz.",
+  "excerpt": "Makine ciddi biçimde titriyor ve çok sesli çalışıyordu. Sorunun kaynağı, tamburun dönüşünü taşıyan rulmandı.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Çamaşır Makinesi",
+  "servicePath": "/camasir-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Meram",
+    "brand": "Bosch",
+    "device": "Çamaşır makinesi",
+    "complaint": "Makine ciddi biçimde titriyor ve çok sesli çalışıyor",
+    "finding": "Rulman arızası",
+    "action": "Rulman değiştirildi"
+  },
+  "brandPath": "/bosch-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Meram’daki müşterimizin Bosch çamaşır makinesi çalışırken ciddi biçimde titriyor ve normalden çok daha yüksek sesle çalışıyordu. Titreme şikâyetinde ilk bakılan şeyler makinenin dengesi ve içindeki yüktür; ancak bu makinede sesin kaynağı daha içerideydi."
+    },
+    {
+      "type": "h2",
+      "text": "Tespit: aşınmış rulman"
+    },
+    {
+      "type": "p",
+      "text": "İncelemede arızanın rulmanda olduğunu tespit ettik ve rulmanı değiştirdik. Değişimden sonra makine yeniden dengeli ve sessiz çalışmaya başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Rulman ne işe yarar, aşınınca ne olur?"
+    },
+    {
+      "type": "p",
+      "text": "Rulman, tamburun bağlı olduğu mili taşıyan ve dönüşün pürüzsüz olmasını sağlayan parçadır. Aşındığında tambur milin etrafında boşluk yapmaya başlar. Bu boşluk dönüş sırasında uğultuya, devir arttıkça da titreşime dönüşür; ses ve sarsıntı en belirgin hâlini yüksek devirli sıkmada alır."
+    },
+    {
+      "type": "h2",
+      "text": "Rulman sesini evde nasıl ayırt edersiniz?"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Makineyi kapatın",
+          "text": "Makine boşken fişini çekin; aşağıdaki kontroller makine çalışırken yapılmaz."
+        },
+        {
+          "title": "Tamburu elle çevirin",
+          "text": "Tamburu elinizle yavaşça döndürün. Sağlam rulmanda dönüş sessizdir; aşınmış rulmanda hışırtı ya da taneli bir sürtünme sesi duyulur."
+        },
+        {
+          "title": "Tamburu yukarı aşağı oynatın",
+          "text": "Tamburun üst kenarından tutup yukarı aşağı hareket ettirin. Belirgin bir boşluk ve takırtı hissediyorsanız rulmanın kontrol edilmesi gerekir."
+        },
+        {
+          "title": "Boş makineyi dinleyin",
+          "text": "Tambur boşken kısa bir sıkma programı çalıştırın. Boş makinede de artan bir uğultu varsa sorun yükten değil, makinenin kendisindendir."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "text": "Tambur sessiz ve boşluksuz dönüyor, ses yalnızca dolu makinede duyuluyorsa önce yükün dağılımına ve makinenin zemine oturmasına bakılır; bu kontrolleri çamaşır makinesi arıza rehberimizde bulabilirsiniz."
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Rulman sesi kendiliğinden geçmez, zamanla artar. Aşınmış rulmanla çalışmaya devam etmek mile ve tamburu taşıyan diğer parçalara da zarar verebilir. Ses başladığında kontrol ettirmek, onarımı büyümeden yapmayı sağlar."
+    }
+  ]
+}

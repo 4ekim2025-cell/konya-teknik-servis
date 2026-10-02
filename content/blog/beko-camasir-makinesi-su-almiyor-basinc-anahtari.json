@@ -1,0 +1,73 @@
+{
+  "slug": "/blog/beko-camasir-makinesi-su-almiyor-basinc-anahtari/",
+  "order": 20,
+  "category": "Ustanın Defterinden",
+  "title": "Karatay’da su almayan Beko çamaşır makinesi: arıza basınç anahtarındaydı",
+  "description": "Karatay’da su almayan Beko çamaşır makinesinde arızanın basınç anahtarında çıkmasını ve bu parçanın ne işe yaradığını anlatıyoruz.",
+  "excerpt": "Musluk açık, hortum sağlamdı; makine yine de su almıyordu. Sorun, tamburdaki su seviyesini algılayan basınç anahtarındaydı.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Çamaşır Makinesi",
+  "servicePath": "/camasir-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Karatay",
+    "brand": "Beko",
+    "device": "Çamaşır makinesi",
+    "complaint": "Makine su almıyor",
+    "finding": "Basınç anahtarı arızalı",
+    "action": "Basınç anahtarı değiştirildi"
+  },
+  "brandPath": "/beko-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Karatay’dan gelen servis talebinde Beko çamaşır makinesinin program başlatıldığında su almadığı belirtiliyordu. Bu belirtide önce kullanıcı tarafındaki basit nedenler elenir: musluk açık mı, giriş hortumu kıvrılmış mı, hortumdaki süzgeç kireçle tıkanmış mı?"
+    },
+    {
+      "type": "h2",
+      "text": "Tespit: basınç anahtarı"
+    },
+    {
+      "type": "p",
+      "text": "Su girişi tarafında bir sorun olmadığını gördükten sonra makinenin su seviyesini algılayan basınç anahtarını kontrol ettik ve arızalı olduğunu tespit ettik. Basınç anahtarı değiştirildi, makine yeniden su almaya başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Basınç anahtarı ne işe yarar?"
+    },
+    {
+      "type": "p",
+      "text": "Basınç anahtarı, kazanın altından gelen ince bir hortumdaki hava basıncını ölçerek tamburda ne kadar su olduğunu makineye bildirir. Makine su almayı, ısıtmaya geçmeyi ve suyu boşaltmayı bu bilgiye göre yönetir. Anahtar yanlış bilgi verdiğinde makine tamburun zaten dolu olduğunu sanabilir ve su almaz; tersi durumda ise sürekli su almaya devam edebilir."
+    },
+    {
+      "type": "h2",
+      "text": "Servis çağırmadan önce kontrol edebilecekleriniz"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Musluğu kontrol edin",
+          "text": "Musluğun sonuna kadar açık olduğundan ve evin diğer musluklarında su bulunduğundan emin olun."
+        },
+        {
+          "title": "Hortumu gözden geçirin",
+          "text": "Giriş hortumunun makinenin arkasında ezilmediğini ve kıvrılmadığını kontrol edin."
+        },
+        {
+          "title": "Kapağı yeniden kapatın",
+          "text": "Kapak kilidi kapalı olduğunu algılamazsa makine su almaz; kapağı sıkıca kapatıp programı yeniden başlatın."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "text": "Bu kontroller sorunu çözmüyorsa arıza su giriş ventili, basınç anahtarı veya kontrol kartı gibi parçalarda olabilir. Bu parçaların teşhisi için makinenin açılması gerektiğinden kullanıcı müdahalesi önerilmez."
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Aynı belirti çok farklı parçalardan kaynaklanabilir. Parça değiştirmeden önce hangisinin arızalı olduğunu ölçerek bulmak, gereksiz masrafın önüne geçer."
+    }
+  ]
+}

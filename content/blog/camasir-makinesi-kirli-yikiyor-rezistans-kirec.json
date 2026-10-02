@@ -1,0 +1,80 @@
+{
+  "slug": "/blog/camasir-makinesi-kirli-yikiyor-rezistans-kirec/",
+  "order": 10,
+  "category": "Ustanın Defterinden",
+  "title": "Yazır’da kirli yıkayan Arçelik çamaşır makinesi: sorun deterjanda değil, kireçte çıktı",
+  "description": "Selçuklu Yazır’da çamaşırları kirli yıkayan Arçelik makinede suyun ısınmadığını, nedeninin kireç tutmuş rezistans olduğunu anlatıyoruz.",
+  "excerpt": "Şikâyet kirli yıkamaydı; inceleme sonunda makinenin suyu hiç ısıtmadığı, rezistansın ise kireç yüzünden yandığı ortaya çıktı.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Çamaşır Makinesi",
+  "servicePath": "/camasir-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Selçuklu · Yazır",
+    "brand": "Arçelik",
+    "device": "Çamaşır makinesi",
+    "complaint": "Çamaşırlar kirli çıkıyor",
+    "finding": "Su ısınmıyor; ısıtıcı rezistans kireç tutmuş ve yanmış",
+    "action": "Rezistans değiştirildi"
+  },
+  "brandPath": "/arcelik-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Yazır’daki müşterimiz, Arçelik çamaşır makinesinin çamaşırları eskisi gibi temiz yıkamadığını söyleyerek bize ulaştı. Böyle bir şikâyette akla ilk gelen deterjan, program seçimi ya da makinenin fazla doldurulmasıdır. Bu yüzden inceleme her zaman en basit ihtimallerden başlar."
+    },
+    {
+      "type": "h2",
+      "text": "İnceleme: makine suyu hiç ısıtmıyordu"
+    },
+    {
+      "type": "p",
+      "text": "Yıkama sırasında yaptığımız kontrolde makinenin su alıp tamburu döndürdüğünü, ancak suyu ısıtmadığını gördük. Yüksek sıcaklıklı bir program seçilse bile su soğuk kalıyordu. Deterjanlar ve özellikle yağlı lekeler belirli bir sıcaklığın altında yeterince çözülmediği için çamaşırlar kirli çıkıyordu."
+    },
+    {
+      "type": "p",
+      "text": "Isıtıcı rezistansı kontrol ettiğimizde yüzeyinin kalın bir kireç tabakasıyla kaplandığını ve rezistansın yandığını tespit ettik. Rezistans değiştirildi ve makine suyu yeniden ısıtmaya başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Kireç rezistansı neden yakar?"
+    },
+    {
+      "type": "p",
+      "text": "Rezistans, ürettiği ısıyı çevresindeki suya aktararak soğur. Kireç tabakası rezistansın üzerini bir yalıtım katmanı gibi kaplar; ısı suya geçemez ve rezistans kendi ısısında aşırı ısınır. Bir süre sonra rezistans yanar. Konya şebeke suyu üzerine yapılan akademik çalışmalarda sertlik değerleri genellikle 30–45 °F (Fransız sertliği) aralığında ölçülüyor; bu, sert su sınıfına girer. Bu yüzden sahada rezistans ve su giriş süzgeçlerinde kireç birikimiyle sık karşılaşıyoruz."
+    },
+    {
+      "type": "h2",
+      "text": "Bu arızayı önceden fark etmek mümkün mü?"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Beyazlar giderek grileşiyor, sıcak programda bile lekeler çıkmıyorsa",
+        "Aynı programın süresi belirgin biçimde uzamışsa",
+        "Tamburun içinde, kazanın dibinde beyaz kireç parçacıkları görülüyorsa"
+      ]
+    },
+    {
+      "type": "p",
+      "text": "Bu belirtiler her zaman rezistans arızası anlamına gelmez; ancak su ısıtma tarafının kontrol edilmesi gerektiğini gösterir."
+    },
+    {
+      "type": "h2",
+      "text": "Kireçli suda makineyi korumak için"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Kullanım kılavuzunda önerilen tambur temizleme veya kireç çözme programını düzenli çalıştırın.",
+        "Kireç önleyici ürün kullanıyorsanız dozunu üreticinin tavsiyesine göre ayarlayın.",
+        "Deterjanı fazla koymayın; artan köpük ve kalıntı da tortu birikimini artırır."
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Kirli yıkama şikâyetinde deterjanı değiştirmeden önce suyun ısınıp ısınmadığına bakmak gerekir. Isıtma yoksa sorun deterjanda değil, makinededir."
+    }
+  ]
+}

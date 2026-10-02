@@ -1,0 +1,81 @@
+{
+  "slug": "/blog/bosch-bulasik-makinesi-kirli-yikiyor-puskurtme-kollari/",
+  "order": 30,
+  "category": "Ustanın Defterinden",
+  "title": "Selçuklu’da kirli yıkayan Bosch bulaşık makinesi: parça değil, temizlik yetti",
+  "description": "Selçuklu’da kirli yıkayan Bosch bulaşık makinesinde tıkalı püskürtme kolları ve gider filtresinin temizlenmesiyle sorunun nasıl çözüldüğünü anlatıyoruz.",
+  "excerpt": "Bulaşıklar kirli çıkıyordu ama hiçbir parça arızalı değildi. Püskürtme kollarındaki tıkalı delikler yeterli suyun ulaşmasını engelliyordu.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Bulaşık Makinesi",
+  "servicePath": "/bulasik-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Selçuklu",
+    "brand": "Bosch",
+    "device": "Bulaşık makinesi",
+    "complaint": "Bulaşıklar temiz yıkanmıyor",
+    "finding": "Püskürtme kollarının bazı delikleri yemek artığıyla tıkalı",
+    "action": "Püskürtme kolları ve gider filtresi temizlendi; parça değişmedi"
+  },
+  "brandPath": "/bosch-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Selçuklu’daki müşterimizin Bosch bulaşık makinesi bulaşıkları kirli bırakıyordu. Bu şikâyetle gittiğimizde pompadan rezistansa kadar birçok ihtimali değerlendiririz; ancak bu evde sorunun kaynağı çok daha basitti."
+    },
+    {
+      "type": "h2",
+      "text": "Tespit: püskürtme kollarındaki tıkalı delikler"
+    },
+    {
+      "type": "p",
+      "text": "Püskürtme kollarının üzerindeki deliklerin bir kısmı yemek artıklarıyla tıkanmıştı. Kollar dönmeye devam etse de tıkalı deliklerden su çıkmadığı için bulaşıkların bir bölümüne yeterli su ulaşmıyordu. Püskürtme kollarını çıkarıp deliklerini açtık, ayrıca gider filtresini temizledik. Makine herhangi bir parça değişmeden yeniden temiz yıkamaya başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Püskürtme kollarını evde nasıl kontrol edersiniz?"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Makineyi kapatın",
+          "text": "Program bitmiş ve makine soğumuş olsun; fişi çekin ya da makineyi kapatın."
+        },
+        {
+          "title": "Kolları çıkarın",
+          "text": "Alt ve üst püskürtme kollarını kullanım kılavuzunda gösterildiği şekilde çıkarın. Çoğu modelde kollar yukarı çekilerek ya da vidası çevrilerek sökülür."
+        },
+        {
+          "title": "Delikleri açın",
+          "text": "Kolları musluk altında yıkayın; tıkalı delikleri kürdan gibi ince bir uçla nazikçe açın. Deliği genişletecek sivri ve sert aletler kullanmayın."
+        },
+        {
+          "title": "Filtreyi temizleyin",
+          "text": "Makinenin tabanındaki filtreyi çıkarıp akan su altında fırçayla temizleyin ve yerine tam oturtun."
+        },
+        {
+          "title": "Serbest dönüşü kontrol edin",
+          "text": "Kolları yerine taktıktan sonra elle çevirin; hiçbir tabağa veya tencere sapına takılmadan dönmeleri gerekir."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Tıkanmayı önlemek için"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Bulaşıkları makineye koymadan önce kemik, çekirdek ve büyük yemek artıklarını sıyırın.",
+        "Filtreyi kullanım yoğunluğunuza göre düzenli aralıklarla temizleyin.",
+        "Büyük tencere ve tepsileri kolların dönüşünü engellemeyecek şekilde yerleştirin."
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Her kirli yıkama şikâyeti parça değişimi gerektirmez. Önce temizlik ve yerleşim kontrol edilir; parça ancak bunlar sorunu çözmediğinde gündeme gelir."
+    }
+  ]
+}

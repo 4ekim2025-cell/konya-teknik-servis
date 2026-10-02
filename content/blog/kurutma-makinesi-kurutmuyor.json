@@ -1,0 +1,87 @@
+{
+  "slug": "/blog/kurutma-makinesi-kurutmuyor/",
+  "order": 170,
+  "category": "Bakım Rehberi",
+  "title": "Kurutma makinesi kurutmuyor: çoğu zaman arıza değil, bakım",
+  "description": "Kurutma makinesi kurutmuyorsa filtre, yoğuşturucu ve su haznesi bakımıyla başlayın. Bakımın bittiği ve servisin başladığı noktayı anlatıyoruz.",
+  "excerpt": "Kurutmayan makinelerin önemli bir kısmında sorun, tüyle tıkanan filtre ve yoğuşturucudur. Bakımın nerede bittiğini de bilmek gerekir.",
+  "published": "2026-09-11",
+  "updated": "2026-09-27",
+  "device": "Kurutma Makinesi",
+  "servicePath": "/kurutma-makinesi-tamiri-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Bir forumda paylaşılan deneyimde, ısı pompalı kurutma makinesi kullanan bir kullanıcı makinesinin kurutma performansının düştüğünü fark ediyor. Sorunun kaynağı, tiftik filtresinden kaçan ince tüylerin zamanla yoğuşturucuya yapışması çıkıyor ve kullanıcı yıllık bakımı kendisinin de yapabileceğini öğreniyor. Aynı forumda başka bir kullanıcı ise tüm filtreleri temizlemesine rağmen makinesinin hiç sıcak hava üretmediğini anlatıyor; orada sorun bakımla çözülebilecek bir durum değil."
+    },
+    {
+      "type": "p",
+      "text": "Bu iki hikâye, kurutma makinelerinde doğru sırayı gösteriyor: önce bakım, sonra servis."
+    },
+    {
+      "type": "h2",
+      "text": "Adım adım bakım"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Tiftik filtresini her kurutmada temizleyin",
+          "text": "Kapak kenarındaki filtreyi çıkarıp tüyleri elle alın. Filtre yağlanmış gibi görünüyorsa ılık suyla yıkayıp tamamen kuruduktan sonra takın."
+        },
+        {
+          "title": "Alt filtreyi kontrol edin",
+          "text": "Birçok modelde makinenin ön alt kısmında ikinci bir filtre veya sünger filtre bulunur. Kullanım kılavuzundaki aralıklarla çıkarıp yıkayın."
+        },
+        {
+          "title": "Yoğuşturucuyu temizleyin",
+          "text": "Yoğuşturuculu modellerde yoğuşturucu çıkarılabilir; kılavuza göre çıkarıp akan suyla yıkayın. Isı pompalı ve kendi kendini temizleyen modellerde bu işlem makinenin kendi sistemiyle ya da kılavuzda anlatılan şekilde yapılır."
+        },
+        {
+          "title": "Su haznesini boşaltın",
+          "text": "Hazneyi her kullanımdan sonra boşaltın, ara sıra yıkayın ve yerine tık sesiyle oturtun."
+        },
+        {
+          "title": "Doğru programı seçin",
+          "text": "Tamburu yarısından fazla doldurmayın, iyi sıkılmış çamaşır koyun ve ihtiyacınıza uygun kuruluk seviyesini seçin."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Bakımın bittiği nokta"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Filtreler temiz olduğu hâlde makine hiç sıcak hava üretmiyorsa",
+        "Isı pompalı modelde program başladıktan birkaç dakika sonra kompresör sesi hiç duyulmuyorsa",
+        "Çamaşırlar kuruduğu hâlde makine durmadan çalışıyorsa",
+        "Makineden yanık kokusu geliyor ya da kasası elle tutulamayacak kadar ısınıyorsa"
+      ]
+    },
+    {
+      "type": "p",
+      "text": "Bu durumlarda sorun ısıtma sistemi, kompresör, nem sensörü veya kontrol tarafındadır ve teşhis için servis gerekir. Meram’da gittiğimiz bir Altus kurutma makinesinde saatlerce süren kurutmanın nedeni arızalı sensördü."
+    },
+    {
+      "type": "note",
+      "title": "Güvenlik",
+      "text": "Tüy birikimi yangın riskini artırır. Filtreler temizlenmeden makineyi çalıştırmayın."
+    }
+  ],
+  "sources": [
+    {
+      "label": "DonanımHaber Forum — Kurutma makinesi yıllık bakımı",
+      "url": "https://forum.donanimhaber.com/kurutma-makinesi-yillik-bakimi--69447179"
+    },
+    {
+      "label": "DonanımHaber Forum — Beko kurutma makinesi kurutmuyor",
+      "url": "https://forum.donanimhaber.com/beko-camasir-kurutma-makinesi-kurutmuyor-yardim-lutfen--140385914"
+    },
+    {
+      "label": "Electrolux — Kurutma makinesi filtre ve yoğuşturucu temizliği",
+      "url": "https://support.electrolux.com.tr/support-articles/article/kurutma-makinesi-filtrelerinin-ve-kondanserin-temizlenmesi"
+    }
+  ]
+}

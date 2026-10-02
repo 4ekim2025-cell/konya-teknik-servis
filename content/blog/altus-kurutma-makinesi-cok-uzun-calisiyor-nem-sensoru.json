@@ -1,0 +1,61 @@
+{
+  "slug": "/blog/altus-kurutma-makinesi-cok-uzun-calisiyor-nem-sensoru/",
+  "order": 50,
+  "category": "Ustanın Defterinden",
+  "title": "Meram’da hiç durmayan Altus kurutma makinesi: çamaşırlar kurumuştu, makine bilmiyordu",
+  "description": "Meram’da çok uzun süre çalışan Altus kurutma makinesinde arızanın nem sensöründe çıkmasını ve sensörün nasıl çalıştığını anlatıyoruz.",
+  "excerpt": "Kurutma programı saatlerce sürüyordu. Çamaşırlar aslında kurumuştu; ama arızalı sensör bunu makineye bildiremiyordu.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Kurutma Makinesi",
+  "servicePath": "/kurutma-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Meram",
+    "brand": "Altus",
+    "device": "Kurutma makinesi",
+    "complaint": "Makine çok uzun süre çalışıyor",
+    "finding": "Nem sensörü arızası",
+    "action": "Sensör değiştirildi"
+  },
+  "brandPath": "/altus-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Meram’daki müşterimizin Altus kurutma makinesi, programı bitirmek bilmiyordu. Kurutma süreleri olağandan çok daha uzundu. İncelemede arızanın, çamaşırların kuruyup kurumadığını algılayan sensörde olduğunu tespit ettik. Sensör değiştirildi ve makine yeniden normal sürede programı tamamlamaya başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Makine çamaşırın kuruduğunu nasıl anlar?"
+    },
+    {
+      "type": "p",
+      "text": "Sensörlü kurutma programlarında makine, süreyi baştan belirlemek yerine çamaşırdaki nemi ölçer. Tamburun içinde çamaşıra temas eden sensör, ıslak çamaşırla kuru çamaşır arasındaki farkı algılar ve istenen kuruluk seviyesine ulaşıldığında programı bitirir. Sensör arızalandığında makine çamaşırın kuruduğunu anlayamaz ve çalışmaya devam eder."
+    },
+    {
+      "type": "h2",
+      "text": "Her uzun kurutma sensör arızası mıdır?"
+    },
+    {
+      "type": "p",
+      "text": "Hayır. Uzun kurutmanın en yaygın nedenleri tıkalı filtreler, aşırı yük ve iyi sıkılmamış çamaşırdır. Sensör yüzeyinin yumuşatıcı kalıntısıyla kaplanması da algılamayı zayıflatabilir. Bu nedenle benzer bir şikâyette önce filtreler ve sensör yüzeyinin temizliği kontrol edilir. Bu cihazda ise sensörün kendisi arızalıydı."
+    },
+    {
+      "type": "h2",
+      "text": "Servis çağırmadan önce"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Tiftik filtresini ve varsa alt filtreyi temizleyin.",
+        "Tamburu yarısından fazla doldurmayın.",
+        "Sırılsıklam çamaşır sensörlü programı uzatır; kurutmadan önce çamaşırların iyi sıkıldığını kontrol edin.",
+        "Sensör yüzeyinin nasıl temizleneceğini kullanım kılavuzundan kontrol edin."
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Makine çamaşırlar kuruduğu hâlde uzun süre çalışıyorsa bu, gereksiz enerji tüketimi ve kumaşların yıpranması demektir. Sorun sürüyorsa kontrol ettirmek gerekir."
+    }
+  ]
+}

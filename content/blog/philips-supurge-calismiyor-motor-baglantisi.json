@@ -1,0 +1,52 @@
+{
+  "slug": "/blog/philips-supurge-calismiyor-motor-baglantisi/",
+  "order": 100,
+  "category": "Ustanın Defterinden",
+  "title": "Selçuklu’da hiç çalışmayan Philips süpürge: arıza motor bağlantısındaydı",
+  "description": "Selçuklu’da hiç çalışmayan Philips süpürgede motor bağlantısının onarılmasını ve süpürge tamamen tepkisizken evde nelere bakılacağını anlatıyoruz.",
+  "excerpt": "Süpürge hiç çalışmıyordu. Motor değişmedi; sorun motora giden bağlantıdaydı ve onarıldı.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Elektrikli Süpürge",
+  "servicePath": "/elektrikli-supurge-tamiri-konya/",
+  "caseFile": {
+    "district": "Selçuklu",
+    "brand": "Philips",
+    "device": "Elektrikli süpürge",
+    "complaint": "Süpürge hiç çalışmıyor",
+    "finding": "Motor bağlantısında arıza",
+    "action": "Motor bağlantısı onarıldı; cihaz yeniden çalıştırıldı"
+  },
+  "brandPath": "/philips-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Selçuklu’daki müşterimizin Philips süpürgesi çalışmıyordu. Hiç çalışmayan süpürgede akla ilk gelen motorun yanmasıdır; ancak incelemede elektriğin motora ulaşmadığını, sorunun motor bağlantısında olduğunu gördük. Bağlantı onarıldı ve süpürge yeniden çalışmaya başladı; motor değişimine gerek kalmadı."
+    },
+    {
+      "type": "h2",
+      "text": "Motor bağlantısı neden bozulur?"
+    },
+    {
+      "type": "p",
+      "text": "Süpürge kullanım sırasında sürekli titreşir, taşınır ve zaman zaman darbe alır. Motorla güç devresi arasındaki bağlantı noktaları bu hareketle gevşeyebilir ya da kopabilir. Böyle bir durumda motor sağlam olsa bile cihaz hiç çalışmaz ya da yalnızca kablo belirli bir konumdayken çalışır."
+    },
+    {
+      "type": "h2",
+      "text": "Süpürge hiç tepki vermiyorsa"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Prizi başka bir cihazla deneyerek elektriğin geldiğinden emin olun.",
+        "Kablonun tamamını açıp ezik, kesik ya da soyulmuş bir bölüm olup olmadığına bakın.",
+        "Kablo oynatıldığında süpürge kısa süreliğine çalışıyorsa cihazı kullanmayı bırakın; gevşek bir bağlantı ısınma ve kıvılcıma yol açabilir."
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Tamamen çalışmayan bir süpürge her zaman motor değişimi gerektirmez. Önce elektriğin motora kadar ulaşıp ulaşmadığı ölçülür; bu ölçüm, gereksiz bir parça değişiminin önüne geçer."
+    }
+  ]
+}

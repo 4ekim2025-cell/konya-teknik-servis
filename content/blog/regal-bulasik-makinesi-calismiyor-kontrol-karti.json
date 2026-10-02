@@ -1,0 +1,64 @@
+{
+  "slug": "/blog/regal-bulasik-makinesi-calismiyor-kontrol-karti/",
+  "order": 40,
+  "category": "Ustanın Defterinden",
+  "title": "Karatay’da çalışmayan Regal bulaşık makinesi: neden hiç dokunmadan yetkili servise yönlendirdik?",
+  "description": "Karatay’da elektrik dalgalanmasıyla kontrol kartı yanan Regal bulaşık makinesine, garantisi sürdüğü için neden hiç müdahale etmediğimizi anlatıyoruz.",
+  "excerpt": "Arıza kontrol kartındaydı ve cihaz hâlâ garanti süresindeydi. Böyle bir durumda doğru olan, cihazı açmadan müşteriyi üreticinin servisine yönlendirmekti.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Bulaşık Makinesi",
+  "servicePath": "/bulasik-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Karatay",
+    "brand": "Regal",
+    "device": "Bulaşık makinesi",
+    "complaint": "Makine hiç çalışmıyor",
+    "finding": "Elektrik dalgalanması sonucu kontrol kartı yanmış; cihaz garanti süresinde",
+    "action": "Müdahale edilmedi, müşteri üreticinin yetkili servisine yönlendirildi"
+  },
+  "brandPath": "/regal-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Karatay’daki müşterimizin Regal bulaşık makinesi hiç çalışmıyordu. Yaptığımız kontrolde makinenin kontrol kartının yandığını tespit ettik. Karatay’da elektrik dalgalanmalarıyla sahada sık karşılaşıyoruz ve bu karttaki hasar da dalgalanmadan kaynaklanıyordu. Ancak cihazın hâlâ garanti süresinde olduğunu öğrendik."
+    },
+    {
+      "type": "h2",
+      "text": "Neden müdahale etmedik?"
+    },
+    {
+      "type": "p",
+      "text": "Garanti süresindeki bir cihazın üretici servisi dışında açılması, garanti hakkınızı riske atabilir. Kontrol kartı gibi bir parçanın değişimi de garanti kapsamında üreticinin servisi tarafından yapılabilecek bir işlemdir. Bu nedenle makineye hiçbir müdahalede bulunmadık ve müşterimizi markanın yetkili servisine yönlendirdik. Kontrol kartı değiştirildiğinde makinenin yeniden çalışması beklenir."
+    },
+    {
+      "type": "p",
+      "text": "Eşli Teknik bağımsız bir teknik servistir. Bir cihazı tamir etmek bizim işimiz; ama bazen müşteri için en doğru çözüm başka bir servise gitmektir. Garantisi süren cihazlarda bunu açıkça söylemeyi doğru buluyoruz."
+    },
+    {
+      "type": "h2",
+      "text": "Kontrol kartları neden arızalanır?"
+    },
+    {
+      "type": "p",
+      "text": "Kontrol kartı, makinenin programlarını, su alma ve boşaltmayı, ısıtmayı yöneten elektronik devredir. Elektrik dalgalanmaları, nem ve bağlı parçalardan birinde oluşan kısa devre kart arızalarının sık görülen nedenleri arasındadır."
+    },
+    {
+      "type": "h2",
+      "text": "Kartı korumak için neler yapılabilir?"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Makineyi uzatma kablosu yerine doğrudan topraklı bir prize bağlayın.",
+        "Gerilim dalgalanmalarına karşı akım korumalı priz veya uygun bir koruma cihazı kullanmayı değerlendirin.",
+        "Elektrik kesilip geri geldiğinde makine çalışıyorsa programı iptal edip bir süre bekledikten sonra yeniden başlatın."
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Garantili cihazınız mı arızalandı?",
+      "text": "Servis çağırmadan önce cihazın faturasına veya garanti belgesine bakın. Garanti süresi devam ediyorsa önce üreticinin servisine başvurmanız sizin için daha doğru olur."
+    }
+  ]
+}

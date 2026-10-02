@@ -1,0 +1,74 @@
+{
+  "slug": "/blog/sahte-yetkili-servis-nasil-anlasilir/",
+  "order": 200,
+  "category": "Tüketici Rehberi",
+  "title": "Sahte “yetkili servis” ilanları: arayan servisin gerçek olup olmadığını nasıl anlarsınız?",
+  "description": "İnternette yetkili servis gibi görünen ilanlara karşı servis çağırmadan önce yapabileceğiniz basit kontrolleri ve Ticaret Bakanlığı’nın önerisini anlatıyoruz.",
+  "excerpt": "Arama sonuçlarında “yetkili servis” yazan her ilan yetkili değildir. Servis çağırmadan önce birkaç dakikalık kontrol sizi korur.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Genel",
+  "servicePath": "/iletisim/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Ticaret Bakanlığı, Haziran 2026’da tüketicileri kendilerini yetkili servis olarak tanıtan sahte servislere karşı uyardı. Bakanlığın açıklamasına göre bu tür işletmeler arama motorlarında üst sıralara çıkıp markaların logolarını izinsiz kullanabiliyor. 2026 yazında farklı illerde bu yöntemle yapılan dolandırıcılıklara ilişkin haberler de basına yansıdı."
+    },
+    {
+      "type": "h2",
+      "text": "Yetkili, bağımsız ve sahte servis arasındaki fark"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Yetkili servis, üreticinin kendi servis ağındadır; garantisi devam eden cihazlarda ilk başvuru adresidir.",
+        "Bağımsız servis, belirli bir üreticiye bağlı olmadan tamir hizmeti verir. Eşli Teknik bağımsız bir teknik servistir ve bunu açıkça belirtir.",
+        "Sahte servis ise yetkili olmadığı hâlde kendini yetkili gibi tanıtır. Sorun bağımsız olmak değil, olmadığı bir şey gibi görünmektir."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Servis çağırmadan önce beş kontrol"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Markanın resmî sitesine bakın",
+          "text": "Yetkili servis arıyorsanız servis bilgisini markanın resmî internet sitesinden veya çağrı merkezinden alın. Ticaret Bakanlığı da yetkili servis bilgisinin resmî kaynaklardan ve Bakanlığın servis bilgi sistemi üzerinden doğrulanmasını öneriyor."
+        },
+        {
+          "title": "Adres ve işletme bilgisini kontrol edin",
+          "text": "Servisin açık adresi, işletme adı ve Google’daki işletme profili birbiriyle uyumlu mu? Yalnızca bir telefon numarasından ibaret ilanlara temkinli yaklaşın."
+        },
+        {
+          "title": "Kendini nasıl tanıttığına dikkat edin",
+          "text": "Telefonda “yetkili servisiz” diyen bir işletmenin sitesinde hangi markanın servisi olduğu açıkça yazmıyorsa soru sorun."
+        },
+        {
+          "title": "Yapılacak işlemi önceden öğrenin",
+          "text": "Arızanın ne olduğu, hangi parçanın değişeceği ve ücretin ne olacağı iş başlamadan açıklanmalı. Onayınız alınmadan parça değişimi yapılmamalı."
+        },
+        {
+          "title": "Cihazınızın nereye gittiğini bilin",
+          "text": "Cihaz atölyeye götürülecekse işletmenin adresini ve cihazı kimin teslim aldığını not edin."
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Bizim yaklaşımımız",
+      "text": "Eşli Teknik hiçbir markanın yetkili servisi olduğunu iddia etmez. Garantisi devam eden cihazlarda müşterilerimizi üreticinin servisine yönlendiriyoruz."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Yeni Akit — Ticaret Bakanlığı’ndan “sahte yetkili servis” uyarısı (Haziran 2026)",
+      "url": "https://www.yeniakit.com.tr/foto-galeri/ticaret-bakanligindan-dolandiricilik-uyarisi-sahte-yetkili-servis-tuzagina-dusmeyin-159448"
+    },
+    {
+      "label": "Cumhuriyet — “Beyaz eşya yetkili servis” ilanıyla dolandırıcılık haberi (Ağustos 2026)",
+      "url": "https://www.cumhuriyet.com.tr/turkiye/beyaz-esya-yetkili-servis-ilaniyla-dolandiricilik-2-gozalti-2532445"
+    }
+  ]
+}

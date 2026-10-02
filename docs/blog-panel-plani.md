@@ -8,7 +8,7 @@ Plan tarihi: 2026-10-02. Proje sahibi: Esad Eşli.
 
 | # | Aşama | Durum |
 |---|---|---|
-| 1 | İçeriği koddan ayırma | Bekliyor |
+| 1 | İçeriği koddan ayırma | Tamamlandı, PR'da (birleştirme bekliyor) |
 | 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Bekliyor |
 | 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Bekliyor |
 | 4 | Fotoğraflar (Vercel Blob) | Bekliyor |

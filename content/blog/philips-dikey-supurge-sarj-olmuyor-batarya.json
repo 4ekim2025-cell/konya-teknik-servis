@@ -1,0 +1,56 @@
+{
+  "slug": "/blog/philips-dikey-supurge-sarj-olmuyor-batarya/",
+  "order": 110,
+  "category": "Ustanın Defterinden",
+  "title": "Karatay’da şarj olmayan Philips dikey süpürge: batarya değişti",
+  "description": "Karatay’da şarj olmayan Philips dikey süpürgede batarya değişimini, sorunun batarya mı adaptör mü olduğunu ayırt etmeyi ve bataryayı korumayı anlatıyoruz.",
+  "excerpt": "Dikey süpürge şarj olmuyordu. Sorun bataryadaydı; batarya değiştirildiğinde şarj sorunu giderildi.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Elektrikli Süpürge",
+  "servicePath": "/elektrikli-supurge-tamiri-konya/",
+  "caseFile": {
+    "district": "Karatay",
+    "brand": "Philips",
+    "device": "Dikey süpürge",
+    "complaint": "Süpürge şarj olmuyor",
+    "finding": "Batarya arızası",
+    "action": "Batarya değiştirildi; şarj sorunu giderildi"
+  },
+  "brandPath": "/philips-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Karatay’daki müşterimizin Philips dikey süpürgesi şarj olmuyordu. Şarj sorunu yaşayan kablosuz süpürgelerde üç parça sorgulanır: adaptör, cihazdaki şarj girişi ve batarya. Bu cihazda sorun bataryadaydı; batarya değiştirildi ve süpürge yeniden şarj olmaya başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Sorun batarya mı, adaptör mü?"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Adaptör prize takılıyken şarj ışığı hiç yanmıyorsa önce adaptör, kablosu ve prizin kendisi kontrol edilir.",
+        "Işık yanıyor ama cihaz saatlerce beklemesine rağmen dolmuyorsa ya da ışık hata verir gibi yanıp sönüyorsa bataryadan şüphelenilir.",
+        "Cihaz dolu göründüğü hâlde birkaç dakikada kapanıyorsa batarya kapasitesini yitirmiş olabilir."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Bataryayı daha uzun kullanmak için"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Süpürgeyi uzun süre tamamen boş bırakmayın; uzun süre kullanmayacaksanız kısmen dolu saklayın.",
+        "Çok soğuk bir balkonda veya güneş alan bir yerde şarj etmeyin.",
+        "Yalnızca cihazla gelen adaptörü ya da uyumlu olduğu kesin olan bir adaptörü kullanın."
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Güvenlik uyarısı",
+      "text": "Batarya gövdesinde şişme, çatlak ya da ısınma fark ederseniz cihazı şarja takmayın ve kullanmayın. Şişmiş lityum bataryalar yangın riski taşır."
+    }
+  ]
+}

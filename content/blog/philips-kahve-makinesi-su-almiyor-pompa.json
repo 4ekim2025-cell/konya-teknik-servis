@@ -1,0 +1,70 @@
+{
+  "slug": "/blog/philips-kahve-makinesi-su-almiyor-pompa/",
+  "order": 90,
+  "category": "Ustanın Defterinden",
+  "title": "Karatay’da su çekmeyen Philips kahve makinesi: pompa değişti",
+  "description": "Karatay’da su almayan Philips kahve makinesinde pompanın değiştirilmesini, pompa arızasının nasıl anlaşıldığını ve kireçten korunmayı anlatıyoruz.",
+  "excerpt": "Makine suyu çekmiyordu; arıza, suyu hazneden alıp basan pompadaydı. Pompa değiştirildi ve makine yeniden kahve yapmaya başladı.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Küçük Ev Aletleri",
+  "servicePath": "/philips-servisi-konya/",
+  "serviceLabel": "Philips servisi",
+  "caseFile": {
+    "district": "Karatay",
+    "brand": "Philips",
+    "device": "Kahve makinesi",
+    "complaint": "Makine su almıyor",
+    "finding": "Pompa arızası",
+    "action": "Pompa değiştirildi; cihaz yeniden çalışır hâle getirildi"
+  },
+  "brandPath": "/philips-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Karatay’daki müşterimizin Philips kahve makinesi su almıyordu. İncelemede suyu hazneden alıp demleme ünitesine basan pompanın arızalı olduğunu tespit ettik. Yeni pompa takıldıktan sonra makine suyu yeniden çekti ve kahve hazırlamaya devam etti."
+    },
+    {
+      "type": "h2",
+      "text": "Pompa ne iş yapar?"
+    },
+    {
+      "type": "p",
+      "text": "Kahve makinesinde su, hazneden kendiliğinden akmaz; pompa onu çekip belirli bir basınçla kahvenin içinden geçirir. Pompa zayıfladığında önce kahve inceleşir ve bardak geç dolar, ilerleyen aşamada makine suyu hiç çekemez hâle gelir."
+    },
+    {
+      "type": "h2",
+      "text": "Servis çağırmadan önce bakabilecekleriniz"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Hazneyi yerine oturtun",
+          "text": "Su haznesini çıkarıp yeniden takın; tam oturmayan haznede alt kısımdaki valf açılmaz ve makine su çekemez."
+        },
+        {
+          "title": "Su filtresini kontrol edin",
+          "text": "Haznede su filtresi kullanıyorsanız yeni takılan filtre hava yapabilir. Filtreyi kılavuzda anlatıldığı şekilde hazırlayıp yeniden takın."
+        },
+        {
+          "title": "Sesi dinleyin",
+          "text": "Makine çalışırken pompa sesi geliyor ama su akmıyorsa bunu, hiç ses gelmiyorsa onu da not edin. Bu bilgi arızanın pompada mı, besleme tarafında mı olduğunu ayırmaya yardım eder."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Kireç pompayı nasıl etkiler?"
+    },
+    {
+      "type": "p",
+      "text": "Konya’nın sert suyunda kireç, su yolunda ve pompada zamanla birikir. Birikinti suyun geçişini daraltır ve pompayı zorlar. Makinenin kireç çözme uyarısı yandığında programı ertelememek ve kullanım kılavuzunda önerilen kireç çözücüyü kullanmak, pompanın ömrünü uzatır."
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Su çekmeyen makineyi uzun süre çalıştırmaya devam etmek pompayı susuz çalıştırır ve zorlar. Hazne ve filtre kontrolünden sonra sorun sürüyorsa makineyi kullanmayı bırakın."
+    }
+  ]
+}

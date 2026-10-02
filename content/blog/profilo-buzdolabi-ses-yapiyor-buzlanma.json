@@ -1,0 +1,89 @@
+{
+  "slug": "/blog/profilo-buzdolabi-ses-yapiyor-buzlanma/",
+  "order": 80,
+  "category": "Ustanın Defterinden",
+  "title": "Meram’da ses yapan Profilo buzdolabı: kaynağı biriken buzdu",
+  "description": "Meram’da ses yapan Profilo buzdolabında defrost arızasına bağlı buzlanmayı ve yaklaşık 24 saatlik buz çözme işleminin adım adım nasıl yapılacağını anlatıyoruz.",
+  "excerpt": "Buzdolabından gelen ses, defrost sisteminin eritemediği buzdan kaynaklanıyordu. Parça değiştirmeden, buzun tamamen erimesiyle sorun çözüldü.",
+  "published": "2026-09-27",
+  "updated": "2026-09-27",
+  "device": "Buzdolabı",
+  "servicePath": "/buzdolabi-tamiri-konya/",
+  "caseFile": {
+    "district": "Meram",
+    "brand": "Profilo",
+    "device": "Buzdolabı",
+    "complaint": "Buzdolabından ses geliyor",
+    "finding": "Defrost sistemi arızasına bağlı buzlanma",
+    "action": "Cihazın yaklaşık 24 saat kapalı tutularak buzun tamamen eritilmesi önerildi; sorun çözüldü"
+  },
+  "brandPath": "/profilo-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Meram’daki müşterimiz, Profilo buzdolabından gelen sesten şikâyet ederek bize ulaştı. İncelemede sesin kaynağının, defrost sistemindeki arıza nedeniyle cihazın içinde biriken buz olduğunu tespit ettik."
+    },
+    {
+      "type": "h2",
+      "text": "Biriken buz neden ses yapar?"
+    },
+    {
+      "type": "p",
+      "text": "Defrost sistemi, soğutucu yüzeylerde oluşan buzu belirli aralıklarla eriterek temizler. Sistem bu görevi yapamadığında buz katman katman büyür. No-frost modellerde büyüyen buz, soğuk havayı dolaba dağıtan fanın pervanesine değmeye başlayabilir; bu durumda buzdolabından tıkırtı, sürtünme ya da uğultu sesi gelir."
+    },
+    {
+      "type": "h2",
+      "text": "Önerimiz: buzu tamamen eritmek"
+    },
+    {
+      "type": "p",
+      "text": "Bu cihazda müşterimize, buzdolabını yaklaşık 24 saat kapalı tutarak biriken buzun tamamen erimesini sağlamasını önerdik. Buz eridikten sonra cihaz yeniden çalıştırıldı ve sorun çözüldü; herhangi bir parça değiştirilmedi."
+    },
+    {
+      "type": "h2",
+      "text": "Buz çözme işlemi adım adım"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Gıdaları boşaltın",
+          "text": "Dolaptaki ve dondurucudaki gıdaları çıkarın; dondurulmuş ürünleri serin bir yerde, mümkünse soğutucu çantada bekletin."
+        },
+        {
+          "title": "Fişi çekin",
+          "text": "Buzdolabını yalnızca ayar düğmesinden kapatmakla yetinmeyin; fişini prizden çekin."
+        },
+        {
+          "title": "Kapakları açık bırakın",
+          "text": "Dolap ve dondurucu kapaklarını açık bırakın. Eriyen suyun yere yayılmaması için alta ve rafların önüne havlu serin, ıslanan havluları değiştirin."
+        },
+        {
+          "title": "Süreyi kısaltmayın",
+          "text": "Buzun tamamen erimesi için yaklaşık 24 saat bekleyin. Arka panelin içindeki görünmeyen bölümde de buz olabileceğinden, görünen buz erimiş olsa bile süreyi kısaltmayın."
+        },
+        {
+          "title": "Kurulayıp çalıştırın",
+          "text": "İç yüzeyleri kurulayın, cihazı çalıştırın ve iç sıcaklık düştükten sonra gıdaları yerleştirin."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Buz çözerken yapılmaması gerekenler"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Buzu bıçak, tornavida gibi sivri aletlerle kazımayın; soğutucu yüzey delinebilir.",
+        "Saç kurutma makinesi veya ısıtıcıyla erimeyi hızlandırmaya çalışmayın; plastik parçalar şekil değiştirebilir.",
+        "Dolabın içine kaynar su dökmeyin."
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Buz çözme, birikmiş buzu temizler. Buzlanma kısa süre içinde yeniden başlarsa bu kez defrost sisteminin kendisinin incelenmesi gerekir."
+    }
+  ]
+}

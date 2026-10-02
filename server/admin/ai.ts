@@ -195,7 +195,7 @@ YASAKLAR:
 - Örnek yazılardaki cümleleri kopyalama; örnekler yalnızca üslup ve yapı içindir, içlerindeki ayrıntılar bu vakaya ait değildir.
 
 YAZI KALIBI (blocks):
-1. Giriş paragrafı: ilçeden gelen talep, şikâyet ve bu belirtide önce elenen basit ihtimaller.
+1. Giriş paragrafı: ilçeden gelen talep, şikâyet ve bu belirtide önce elenen basit ihtimaller. İlk cümle bir ustanın anlatacağı gibi doğal olsun; müşteriyi, markayı ve cihazı birlikte an. Örnek kalıp: "Selçuklu ilçesinden arayan müşterimizin [marka] [cihaz] cihazının [şikâyet] yönündeki talebi üzerine adrese ulaştık." Tutanak dili kullanma ("… ilçesinden gelen çamaşır makinesinin su almadığı yönündeki talep üzerine" gibi müşterisiz, markasız cümle kurma). Örnek yazılar farklı başlasa da bu kalıbı esas al; müşteri hakkında başka ayrıntı ekleme.
 2. "Tespit: …" ara başlığı ve tespit ile yapılan işlemi anlatan paragraf (yalnızca girdideki bilgiyle).
 3. "… ne işe yarar?" ara başlığı ve parçanın görevini anlatan genel paragraf.
 4. Kullanıcıya dönük ara başlık ve bir "steps" ya da "list" bloğu (servis çağırmadan önce güvenle bakılabilecekler).

@@ -191,7 +191,7 @@ function blogPostHtml(post: BlogPost) {
   const url = `${siteUrl}${post.slug}`;
   const share = blogShareLinks(url, post.title);
   const caseFile = post.caseFile ? `<dl><dt>Bölge</dt><dd>${esc(post.caseFile.district)}</dd><dt>Cihaz</dt><dd>${esc(post.caseFile.brand)} ${esc(post.caseFile.device.toLocaleLowerCase("tr-TR"))}</dd><dt>Şikâyet</dt><dd>${esc(post.caseFile.complaint)}</dd><dt>Tespit</dt><dd>${esc(post.caseFile.finding)}</dd><dt>Yapılan işlem</dt><dd>${esc(post.caseFile.action)}</dd></dl>${post.brandPath ? `<p><a href="${post.brandPath}">Konya ${esc(post.caseFile.brand)} servisi</a></p>` : ""}` : "";
-  const sources = post.sources ? `<h2>Kaynaklar</h2><ul>${post.sources.map(source => `<li><a href="${source.url}" rel="nofollow">${esc(source.label)}</a></li>`).join("")}</ul>` : "";
+  const sources = post.sources ? `<h2>Kaynaklar</h2><ul>${post.sources.map(source => `<li><a href="${esc(source.url)}" rel="nofollow">${esc(source.label)}</a></li>`).join("")}</ul>` : "";
   return `<nav aria-label="İçerik yolu"><a href="/">Ana Sayfa</a> › <a href="/blog/">Blog</a> › ${esc(post.category)}</nav>${blogMetaHtml(post)}<article>${caseFile}${post.blocks.map(blogBlockHtml).join("")}${sources}<p>Paylaşın: <a href="${share.whatsapp}">WhatsApp</a> · <a href="${share.facebook}">Facebook</a> · <a href="${share.x}">X</a></p><p><strong>${esc(BLOG_AUTHOR.name)}</strong> — ${esc(BLOG_AUTHOR.bio)}</p><p><a href="${post.servicePath}">${post.serviceLabel ? `Konya ${esc(post.serviceLabel)}` : post.device === "Genel" ? "Eşli Teknik iletişim" : `Konya ${esc(post.device)} servisi`}</a></p></article>`;
 }
 
@@ -258,24 +258,26 @@ const template = fs.readFileSync(indexPath, "utf8");
 // İç kullanım (h1, breadcrumb, Service adı) için routes'taki sade başlık korunur.
 const documentTitles: Record<string, string> = Object.fromEntries(brands.map(([slug, name]) => [`/${slug}-servisi-konya/`, brandSeo[name]?.title]).filter(([, value]) => value));
 
+// Değiştirilen metin her zaman işlev olarak verilir: düz metin verilirse başlık/açıklamadaki `$'`, `$&` gibi kalıplar
+// String.replace tarafından yorumlanır ve sayfa bozulur (ör. "100$'a").
 for (const [route, [title, description]] of Object.entries(routes)) {
   const url = `${siteUrl}${route}`;
   const documentTitle = documentTitles[route] ?? title;
   let html = template;
-  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(documentTitle)}</title>`);
-  html = html.replace(/<meta name="description" content="[^"]*"\s*\/>/, `<meta name="description" content="${esc(description)}" />`);
-  html = html.replace(/<meta property="og:title" content="[^"]*"\s*\/>/, `<meta property="og:title" content="${esc(documentTitle)}" />`);
-  html = html.replace(/<meta property="og:description" content="[^"]*"\s*\/>/, `<meta property="og:description" content="${esc(description)}" />`);
-  html = html.replace(/<meta name="twitter:title" content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${esc(documentTitle)}" />`);
-  html = html.replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${esc(description)}" />`);
-  html = html.replace(/<link rel="canonical" href="[^"]*"\s*\/>/, `<link rel="canonical" href="${url}" />`);
-  html = html.replace(/<meta property="og:image" content="[^"]*"\s*\/>/, `<meta property="og:image" content="${siteUrl}/favicon.png?v=share-logo-1" />`);
-  html = html.replace(/<meta name="twitter:image" content="[^"]*"\s*\/>/, `<meta name="twitter:image" content="${siteUrl}/favicon.png?v=share-logo-1" />`);
-  html = html.replace(/<meta property="og:url" content="[^"]*"\s*\/>/, `<meta property="og:url" content="${url}" />`);
-  if (route.startsWith("/blog/") && route !== "/blog/") html = html.replace('<meta property="og:type" content="website" />', '<meta property="og:type" content="article" />');
-  if (!html.includes('property="og:url"')) html = html.replace("</head>", `<meta property="og:url" content="${url}" />\n  </head>`);
-  html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">${jsonLd(title, description, url, route)}</script>`);
-  html = html.replace('<div id="root"></div>', `<div id="root">${staticContent(title, description, route)}</div>`);
+  html = html.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${esc(documentTitle)}</title>`);
+  html = html.replace(/<meta name="description" content="[^"]*"\s*\/>/, () => `<meta name="description" content="${esc(description)}" />`);
+  html = html.replace(/<meta property="og:title" content="[^"]*"\s*\/>/, () => `<meta property="og:title" content="${esc(documentTitle)}" />`);
+  html = html.replace(/<meta property="og:description" content="[^"]*"\s*\/>/, () => `<meta property="og:description" content="${esc(description)}" />`);
+  html = html.replace(/<meta name="twitter:title" content="[^"]*"\s*\/>/, () => `<meta name="twitter:title" content="${esc(documentTitle)}" />`);
+  html = html.replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, () => `<meta name="twitter:description" content="${esc(description)}" />`);
+  html = html.replace(/<link rel="canonical" href="[^"]*"\s*\/>/, () => `<link rel="canonical" href="${url}" />`);
+  html = html.replace(/<meta property="og:image" content="[^"]*"\s*\/>/, () => `<meta property="og:image" content="${siteUrl}/favicon.png?v=share-logo-1" />`);
+  html = html.replace(/<meta name="twitter:image" content="[^"]*"\s*\/>/, () => `<meta name="twitter:image" content="${siteUrl}/favicon.png?v=share-logo-1" />`);
+  html = html.replace(/<meta property="og:url" content="[^"]*"\s*\/>/, () => `<meta property="og:url" content="${url}" />`);
+  if (route.startsWith("/blog/") && route !== "/blog/") html = html.replace('<meta property="og:type" content="website" />', () => '<meta property="og:type" content="article" />');
+  if (!html.includes('property="og:url"')) html = html.replace("</head>", () => `<meta property="og:url" content="${url}" />\n  </head>`);
+  html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, () => `<script type="application/ld+json">${jsonLd(title, description, url, route)}</script>`);
+  html = html.replace('<div id="root"></div>', () => `<div id="root">${staticContent(title, description, route)}</div>`);
   // Ana sayfa görseli yalnızca ana sayfada kullanılır; diğer sayfalarda önceden indirilmesi boşuna veri ve süre harcar.
   if (route !== "/") html = html.replace(/\s*<link rel="preload" as="image" href="\/esli-teknik-konya-hero-background\.webp"[^>]*\/>/g, "");
 

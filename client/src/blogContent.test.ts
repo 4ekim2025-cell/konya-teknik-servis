@@ -109,6 +109,9 @@ describe("yazı şeması kuralları", () => {
     expect(errorsOf(sample({ sources: [{ label: "English source", url: "https://example.com/a" }] })).join("\n")).toContain("Türkçe olmalı");
     expect(errorsOf(sample({ sources: [{ label: "Kaynak şeysi", url: "https://www.fda.gov/x" }] })).join("\n")).toContain("Yabancı kurum");
     expect(errorsOf(sample({ sources: [{ label: "Kaynak şeysi", url: "bağlantı değil" }] })).join("\n")).toContain("geçerli bir bağlantı");
+    for (const url of ['https://ornek.com.tr/"><img src=x onerror=alert(1)>', "https://ornek.com.tr/a b", "https://ornek.com.tr/'x", "https://ornek.com.tr/<b>"]) {
+      expect(errorsOf(sample({ sources: [{ label: "Kaynak şeysi", url }] })).join("\n"), url).toContain("tırnak, <, > ya da boşluk içeremez");
+    }
   });
 
   it("blokları denetler: bilinmeyen tür, boş metin, boş liste, fazladan alan", () => {

@@ -25,6 +25,8 @@ export const BLOG_FORBIDDEN_TEXT = /MEDAŞ|tazminat|hakem heyeti|mahkeme|₺|\bT
 export const BLOG_AUTHORIZED_SERVICE_CLAIM = /yetkili servisiyiz|yetkili servisi olarak/i;
 /** Yabancı kamu/kurum kaynakları kabul edilmez. */
 export const BLOG_FOREIGN_SOURCE_URL = /\.gov\/|fda\.|cdc\.|usda\./i;
+/** Kaynak adresi HTML özniteliğine yazılır; öznitelikten çıkabilecek karakterler adreste kabul edilmez. */
+export const BLOG_UNSAFE_URL_CHARS = /["'<>`\\\s]/;
 const TURKISH_LETTER = /[çğıöşüÇĞİÖŞÜ]/;
 
 export const USTA_CATEGORY: BlogCategory = "Ustanın Defterinden";
@@ -80,6 +82,7 @@ export const blogSourceSchema = z
     url: z
       .string()
       .refine(isHttpUrl, "Kaynak adresi geçerli bir bağlantı olmalı")
+      .refine(value => !BLOG_UNSAFE_URL_CHARS.test(value), "Kaynak adresi tırnak, <, > ya da boşluk içeremez")
       .refine(value => !BLOG_FOREIGN_SOURCE_URL.test(value), "Yabancı kurum kaynağı kullanılamaz"),
   })
   .strict();

@@ -11,7 +11,7 @@ Plan tarihi: 2026-10-02. Proje sahibi: Esad Eşli.
 | 1 | İçeriği koddan ayırma | Tamamlandı (main'de) |
 | 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Tamamlandı (main'de, canlıda); güvenlik incelemesi bulguları PR #6–#9 ile düzeltildi |
 | 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Tamamlandı (main'de, canlıda; PR #10–#13). Gerçek Gemini ile panelden denendi, proje sahibi 2026-10-02'de onayladı |
-| 4 | Fotoğraflar (Vercel Blob) | Kod hazır, PR açık (önizlemede gerçek Blob ile denenmeli). Blob store (esli-blog-foto, OIDC ile bağlı), `@vercel/blob` ve `BLOG_IMAGE_HOST` tamam; kalan: yeniden dağıtım + önizlemede gerçek yükleme denemesi |
+| 4 | Fotoğraflar (Vercel Blob) | Tamamlandı (main'de, canlıda; PR #15–#17). Fotoğraflı yazılar panelden yayınlandı; PageSpeed karşılaştırması 2026-10-05'te yapıldı (aşağıda) |
 | 5 | Google İşletme (API yok / API var) | Bekliyor |
 | 6 | Zamanlama ve istatistik | Bekliyor |
 
@@ -168,3 +168,4 @@ Not: API kodu onay gelene kadar gerçek hesapla sınanamaz; belgeye göre yazıl
 - Ziyaretçi sayfası: kapak `fetchpriority="high"` (+ `<head>` önyüklemesi), gövde fotoğrafları `loading="lazy"`, tüm `<img>`'lerde `width`/`height`, `srcset` 800/1600. Blog listesinde küçük resim yoktur.
 - Yalnızca kapaklı yazıda `og:image`/`twitter:image`/`twitter:card` ve BlogPosting `image` değişir; diğer tüm sayfaların HTML'i değişmez (aşağıdaki karşılaştırma).
 - Doğrulama yöntemi: `scripts/prerender.ts` değişiklikten önceki ve sonraki kodla, Vite çıktısı yerine `client/index.html` şablonuyla çalıştırılıp `dist/public` ağaçları `diff -r` ile karşılaştırıldı (66 rota + diğer dosyalar: birebir aynı). Fotoğraflı deneme yazısında yalnızca o sayfanın dosyası değişti.
+- **Kabul ölçütü ölçümü (2026-10-05, PageSpeed mobil, proje sahibinin çalıştırdığı tek ölçüm):** kapaklı yazı (`/blog/arcelik-su-sebili-sicak-su-muslugu-kirildi/`, 573×573 kapak) performans 76, FCP 3,6 sn, LCP 4,2 sn, TBT 0 ms, CLS 0, Speed Index 4,7 sn, SEO 100. Fotoğrafsız yazı (`/blog/beko-camasir-makinesi-su-almiyor-basinc-anahtari/`) performans 79, FCP 3,6 sn, LCP 4,1 sn, TBT 0 ms, CLS 0, Speed Index 3,6 sn, SEO 100. Fark 3 puan ve neredeyse tamamı Speed Index'ten; LCP ve CLS aynı düzeyde. Tek ölçümde birkaç puanlık oynama olağandır; ölçüt ("belirgin düşmez") karşılandı sayıldı.

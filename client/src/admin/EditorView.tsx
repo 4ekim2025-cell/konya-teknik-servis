@@ -7,8 +7,8 @@ import { api, ApiError, type HistoryEntry, type PostItem, type PostsResponse } f
 import { ImageFields, ImagePicker } from "./ImagePicker";
 import { nextOrder, todayInIstanbul } from "@shared/blog-publish";
 import {
-  applyDeviceAndBrand, BLOCK_LABELS, checklist, EDITOR_SECTION_LABELS, emptyBlock, errorsBySection, hasWrittenText, imageCount, insertAt, isPublished, moveItem, newPost, removeAt, replaceAt, setCaseFile, setCategory, slugFor, splitDistrict, TEXT_BLOCK_TYPES, toPayload,
-  type BlogBlockInput, type EditorSection, type TextBlockType,
+  applyDeviceAndBrand, BLOCK_LABELS, checklist, emptyBlock, errorsBySection, hasWrittenText, imageCount, insertAt, isPublished, moveItem, newPost, removeAt, replaceAt, setCaseFile, setCategory, slugFor, splitDistrict, TEXT_BLOCK_TYPES, toPayload,
+  type BlogBlockInput, type TextBlockType,
 } from "./editorModel";
 
 const Preview = lazy(() => import("./Preview"));
@@ -29,36 +29,47 @@ function Field({ label, hint, count, help, children }: { label: string; hint?: s
 
 /** Kategori kartlarındaki tek satırlık açıklamalar (yalnızca panelde görünür). */
 const CATEGORY_HELP: Record<string, string> = {
-  "Ustanın Defterinden": "Sahada yaptığınız gerçek bir iş. Servis kaydı ister; yapay zeka taslak yazabilir.",
-  "Bakım Rehberi": "Bir cihazın bakımı evde nasıl yapılır.",
-  "Karar Rehberi": "Tamir mi, yenisi mi: nasıl karar verilir.",
-  "Tüketici Rehberi": "Servis sürecinde bilinmesi gerekenler.",
+  "Ustanın Defterinden": "Sahada yaptığınız gerçek bir iş",
+  "Bakım Rehberi": "Bakım evde nasıl yapılır",
+  "Karar Rehberi": "Tamir mi, yenisi mi",
+  "Tüketici Rehberi": "Servis sürecinde bilinmesi gerekenler",
 };
 
-type SectionId = EditorSection | "ai" | "history";
+type GroupId = "type" | "record" | "article" | "sources" | "history";
 
 /**
- * Editörün numaralı bölümü: başlığa tıklayınca açılır/kapanır, sağında durumu yazar ("Tamam", "2 eksik", "İsteğe bağlı").
- * Eksikler sayfanın altında değil, ait oldukları bölümün başında listelenir.
+ * Editörün numaralı grubu. Ana gruplar SABİTTİR (açılıp kapanmaz); yalnızca nadiren gereken ekler (`collapsible`) kapalı başlar.
+ * Başlığın sağında durum yazar ("Tamam", "2 eksik", "İsteğe bağlı").
  */
-function Section({ id, step, title, hint, issues = [], optional, filled, open, onToggle, children }: { id: SectionId; step: number; title: string; hint?: string; issues?: string[]; optional?: boolean; filled?: boolean; open: boolean; onToggle: (id: SectionId) => void; children: ReactNode }) {
-  const done = issues.length === 0 && (!optional || Boolean(filled));
-  const state = issues.length ? "is-todo" : done ? "is-done" : "is-optional";
+function Section({ id, step, title, hint, missing = 0, optional, filled, collapsible, open = true, onToggle, children }: { id: GroupId; step: number | string; title: string; hint?: string; missing?: number; optional?: boolean; filled?: boolean; collapsible?: boolean; open?: boolean; onToggle?: (id: GroupId) => void; children: ReactNode }) {
+  const done = missing === 0 && (!optional || Boolean(filled));
+  const state = missing ? "is-todo" : done ? "is-done" : "is-optional";
+  const head = (
+    <>
+      <span className="admin-step-no" aria-hidden="true">{done && typeof step === "number" ? "✓" : step}</span>
+      <span className="admin-section-title"><strong>{title}</strong>{hint && <small>{hint}</small>}</span>
+      <span className="admin-chip">{missing ? `${missing} eksik` : done ? "Tamam" : "İsteğe bağlı"}</span>
+      {collapsible && <span className="admin-chevron" aria-hidden="true">{open ? "▾" : "▸"}</span>}
+    </>
+  );
   return (
-    <section className={`admin-section ${state} ${open ? "is-open" : ""}`} id={`admin-sec-${id}`}>
-      <button type="button" className="admin-section-head" aria-expanded={open} aria-controls={`admin-sec-body-${id}`} onClick={() => onToggle(id)}>
-        <span className="admin-step-no" aria-hidden="true">{done ? "✓" : step}</span>
-        <span className="admin-section-title"><strong>{title}</strong>{hint && <small>{hint}</small>}</span>
-        <span className="admin-chip">{issues.length ? `${issues.length} eksik` : done ? "Tamam" : "İsteğe bağlı"}</span>
-        <span className="admin-chevron" aria-hidden="true">{open ? "▾" : "▸"}</span>
-      </button>
-      {open && (
-        <div className="admin-section-body" id={`admin-sec-body-${id}`}>
-          {issues.length > 0 && <ul className="admin-missing" aria-label="Bu bölümde eksikler">{issues.map(line => <li key={line}>{line}</li>)}</ul>}
-          {children}
-        </div>
-      )}
+    <section className={`admin-section ${state}`} id={`admin-sec-${id}`}>
+      {collapsible
+        ? <button type="button" className="admin-section-head is-button" aria-expanded={open} onClick={() => onToggle?.(id)}>{head}</button>
+        : <div className="admin-section-head">{head}</div>}
+      {open && <div className="admin-section-body">{children}</div>}
     </section>
+  );
+}
+
+/** Grup içindeki alt başlık ve o alt bölümün eksikleri (eksikler sayfanın altında değil, ait oldukları yerde listelenir). */
+function Part({ id, title, hint, issues = [], children }: { id?: string; title: string; hint?: string; issues?: string[]; children: ReactNode }) {
+  return (
+    <div className="admin-part" id={id}>
+      <h3 className="admin-part-title">{title}{hint && <small> {hint}</small>}</h3>
+      {issues.length > 0 && <ul className="admin-missing" aria-label={`${title}: eksikler`}>{issues.map(line => <li key={line}>{line}</li>)}</ul>}
+      {children}
+    </div>
   );
 }
 
@@ -119,8 +130,8 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
   const [pendingTexts, setPendingTexts] = useState<{ googleBusiness: string; instagram: string } | null>(null);
   const [packageItem, setPackageItem] = useState<PostItem | null>(null);
   const dragFrom = useRef<number | null>(null);
-  // Açık bölümler: zorunlu bölümler açık başlar; boş "Kaynaklar" ve "Önceki sürümler" kapalıdır.
-  const [open, setOpen] = useState<Record<string, boolean>>(() => ({ type: true, case: true, ai: !item, intro: true, cover: true, body: true, sources: Boolean(item?.post.sources?.length), history: false }));
+  // Ana gruplar sabittir; yalnızca nadiren gereken ekler ("Kaynaklar", "Önceki sürümler") açılıp kapanır ve kapalı başlar.
+  const [open, setOpen] = useState<Record<string, boolean>>(() => ({ sources: Boolean(item?.post.sources?.length), history: false }));
   const [editSlug, setEditSlug] = useState(false);
 
   const stored = origin ? data.items.find(entry => entry.post.slug === origin.slug)?.post : undefined;
@@ -200,7 +211,7 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
     setSlugEdited(Boolean(origin));
     setErrors([]);
     setMessage("Yapay zeka taslağı dolduruldu. Henüz kaydedilmedi; okuyup düzelttikten sonra kaydedin.");
-    setOpen(current => ({ ...current, intro: true, body: true }));
+    window.requestAnimationFrame(() => document.getElementById("admin-sec-article")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
   const hasContent = hasWrittenText(post);
 
@@ -210,34 +221,37 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
   const photoBlock = !BLOG_IMAGE_HOST ? "Fotoğraf yükleme henüz açılmadı (Blob store adresi shared/blog-images.ts içinde ayarlı değil)." : photos >= BLOG_IMAGE_LIMIT_PER_POST ? `Bir yazıda en çok ${BLOG_IMAGE_LIMIT_PER_POST} fotoğraf olur.` : undefined;
   const sources = post.sources ?? [];
 
-  const toggle = (id: SectionId) => setOpen(current => ({ ...current, [id]: !current[id] }));
-  /** Bölümü açar ve oraya kaydırır (üstteki eksik düğmeleri ve sağdaki liste bunu kullanır). */
-  const jump = (id: SectionId) => {
+  const toggle = (id: GroupId) => setOpen(current => ({ ...current, [id]: !current[id] }));
+  /** Gruba kaydırır (üstteki eksik düğmeleri ve sağdaki liste bunu kullanır); kapalı ek ise açar. */
+  const jump = (id: GroupId) => {
     setOpen(current => ({ ...current, [id]: true }));
     window.requestAnimationFrame(() => document.getElementById(`admin-sec-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
   const place = splitDistrict(post.caseFile?.district);
   const showAi = isUsta && !published;
-  // Ekrandaki bölümler ve sıra numaraları (servis kaydı ve yapay zeka yalnızca "Ustanın Defterinden" yazısında görünür).
-  const visible: SectionId[] = ["type", ...(isUsta ? (["case"] as SectionId[]) : []), ...(showAi ? (["ai"] as SectionId[]) : []), "intro", "cover", "body", "sources"];
-  const step = (id: SectionId) => visible.indexOf(id) + 1;
-  const todo = visible.filter((id): id is EditorSection => id !== "ai" && id !== "history" && issues[id].length > 0);
+  // Gruplar: 1 tür ve cihaz · 2 servis kaydı (yalnızca usta yazısı; yapay zeka taslağı bu kaydın devamıdır) · sonra yazının kendisi · ekler.
+  const groups: { id: GroupId; label: string; missing: number; optional?: boolean; empty?: boolean }[] = [
+    { id: "type", label: "Yazı türü ve cihaz", missing: issues.type.length },
+    ...(isUsta ? [{ id: "record" as GroupId, label: "Servis kaydı", missing: issues.case.length }] : []),
+    { id: "article", label: "Yazı", missing: issues.intro.length + issues.cover.length + issues.body.length },
+    { id: "sources", label: "Kaynaklar", missing: issues.sources.length, optional: true, empty: sources.length === 0 },
+  ];
+  const step = (id: GroupId) => groups.findIndex(group => group.id === id) + 1;
+  const missingOf = (id: GroupId) => groups.find(group => group.id === id)?.missing ?? 0;
+  const todo = groups.filter(group => group.missing > 0);
   const status = origin ? (published ? "Yayında" : "Taslak") : "Yeni";
 
   const readiness = (
     <div className="admin-card admin-ready">
       <h3>{sheet.canPublish ? "Yayına hazır" : "Yayına hazırlık"}</h3>
       <ol className="admin-ready-list">
-        {visible.filter((id): id is EditorSection => id !== "ai" && id !== "history").map(id => {
-          const empty = (id === "cover" && !post.cover) || (id === "sources" && sources.length === 0);
-          return (
-            <li key={id} className={issues[id].length ? "is-todo" : empty ? "is-optional" : "is-done"}>
-              <button type="button" className="admin-link" onClick={() => jump(id)}>{EDITOR_SECTION_LABELS[id]}</button>
-              <span>{issues[id].length ? `${issues[id].length} eksik` : empty ? "isteğe bağlı" : "✓"}</span>
-            </li>
-          );
-        })}
+        {groups.map(group => (
+          <li key={group.id} className={group.missing ? "is-todo" : group.empty ? "is-optional" : "is-done"}>
+            <button type="button" className="admin-link" onClick={() => jump(group.id)}>{group.label}</button>
+            <span>{group.missing ? `${group.missing} eksik` : group.empty ? "isteğe bağlı" : "✓"}</span>
+          </li>
+        ))}
       </ol>
       <p className="admin-muted">{sheet.canPublish ? "Zorunlu alanlar tamam; kaydedebilir ya da yayınlayabilirsiniz." : "Eksikler tamamlanınca “Taslak kaydet” ve “Yayınla” düğmeleri açılır."}</p>
       {hasContent && (
@@ -269,7 +283,7 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
         {todo.length > 0 && (
           <p className="admin-editbar-note" role="status">
             Kaydetmek için tamamlayın:{" "}
-            {todo.map(id => <button type="button" key={id} className="admin-todo" onClick={() => jump(id)}>{EDITOR_SECTION_LABELS[id]} · {issues[id].length}</button>)}
+            {todo.map(group => <button type="button" key={group.id} className="admin-todo" onClick={() => jump(group.id)}>{group.label} · {group.missing} eksik</button>)}
           </p>
         )}
       </div>
@@ -280,8 +294,9 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
 
       <div className={`admin-editor-grid ${showPreview ? "has-preview" : "has-rail"}`}>
         <div className="admin-form">
-          <Section id="type" step={step("type")} title="Yazı türü ve cihaz" hint="Ne tür bir yazı, hangi cihaz hakkında?" issues={issues.type} open={open.type} onToggle={toggle}>
-            <div className="admin-choices" role="radiogroup" aria-label="Kategori">
+          <Section id="type" step={step("type")} title="Yazı türü ve cihaz" hint="Ne tür bir yazı, hangi cihaz hakkında?" missing={missingOf("type")}>
+            {issues.type.length > 0 && <ul className="admin-missing">{issues.type.map(line => <li key={line}>{line}</li>)}</ul>}
+            <div className="admin-choices" role="radiogroup" aria-label="Yazı türü">
               {blogCategories.map(category => (
                 <label key={category} className={`admin-choice ${post.category === category ? "is-selected" : ""}`}>
                   <input type="radio" name="admin-category" checked={post.category === category} onChange={() => setPost(setCategory(post, category))} />
@@ -289,7 +304,7 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
                 </label>
               ))}
             </div>
-            <div className="admin-cols">
+            <div className="admin-device-row">
               <Field label="Cihaz">
                 <select value={post.device} onChange={event => setPost(applyDeviceAndBrand(post, { device: event.target.value }))}>
                   {BLOG_DEVICES.map(option => <option key={option.device}>{option.device}</option>)}
@@ -302,13 +317,14 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
                   </select>
                 </Field>
               )}
+              <p className="admin-help">Yazının sonundaki servis düğmesi otomatik bağlanır: <code>{post.servicePath}</code>{post.brandPath && <> · marka sayfası <code>{post.brandPath}</code></>}</p>
             </div>
-            <p className="admin-help">Yazının sonundaki servis düğmesi otomatik bağlanır: <code>{post.servicePath}</code>{post.serviceLabel && <> (“{post.serviceLabel}”)</>}{post.brandPath && <> · marka sayfası <code>{post.brandPath}</code></>}</p>
             {!device && <p className="admin-error">Bu cihaz listede yok; kaydetmeden önce listeden seçin.</p>}
           </Section>
 
           {isUsta && (
-            <Section id="case" step={step("case")} title="Servis kaydı" hint="Yalnızca gerçek iş: ne şikâyet geldi, ne bulundu, ne yapıldı" issues={issues.case} open={open.case} onToggle={toggle}>
+            <Section id="record" step={step("record")} title="Servis kaydı" hint="Yalnızca gerçek iş: nerede, hangi cihaz, ne şikâyet geldi, ne bulundu, ne yapıldı" missing={missingOf("record")}>
+              {issues.case.length > 0 && <ul className="admin-missing">{issues.case.map(line => <li key={line}>{line}</li>)}</ul>}
               <div className="admin-cols">
                 <Field label="İlçe">
                   <select value={place.district} onChange={event => setPost(setCaseFile(post, { district: event.target.value ? (place.neighborhood ? `${event.target.value} · ${place.neighborhood}` : event.target.value) : "" }))}>
@@ -330,81 +346,88 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
                   <datalist id="admin-small-appliances">{SMALL_APPLIANCE_SUGGESTIONS.map(name => <option key={name} value={name} />)}</datalist>
                 </Field>
               </div>
-              <Field label="Şikâyet" help="Müşteri ne dedi?"><textarea rows={2} value={post.caseFile?.complaint ?? ""} onChange={event => setPost(setCaseFile(post, { complaint: event.target.value }))} placeholder="Makine su almıyor" /></Field>
-              <Field label="Tespit" help="Arızanın nedeni neydi?"><textarea rows={2} value={post.caseFile?.finding ?? ""} onChange={event => setPost(setCaseFile(post, { finding: event.target.value }))} placeholder="Basınç anahtarı arızalı" /></Field>
-              <Field label="Yapılan işlem" help="Ne yapıldı, ne değişti?"><textarea rows={2} value={post.caseFile?.action ?? ""} onChange={event => setPost(setCaseFile(post, { action: event.target.value }))} placeholder="Basınç anahtarı değiştirildi" /></Field>
-            </Section>
-          )}
-
-          {showAi && (
-            <Section id="ai" step={step("ai")} title="Yapay zeka ile yazdır" hint="Servis kaydından başlık ve metin taslağı; isterseniz atlayıp kendiniz yazın" optional filled={hasContent} open={open.ai} onToggle={toggle}>
-              <Suspense fallback={<p className="admin-muted">Yükleniyor…</p>}>
-                <AiDraftBox post={post} existing={data.items.filter(entry => entry.post.slug !== origin?.slug).map(entry => ({ slug: entry.post.slug, order: entry.post.order }))} hasContent={hasContent} onDraft={fillFromAi} onTexts={setPendingTexts} />
-              </Suspense>
-            </Section>
-          )}
-
-          <Section id="intro" step={step("intro")} title="Başlık ve tanıtım" hint="Google’da ve yazının başında görünen metinler" issues={issues.intro} open={open.intro} onToggle={toggle}>
-            <Field label="Başlık" count={{ value: post.title.length, max: 70 }}><input value={post.title} onChange={event => setTitle(event.target.value)} /></Field>
-            <Field label="Açıklama" hint="(arama sonucu)" count={{ value: post.description.length, max: BLOG_DESCRIPTION_MAX }} help="Google’da başlığın altında görünür. 90–160 karakter önerilir; başka yazının açıklamasıyla aynı olamaz.">
-              <textarea rows={3} value={post.description} onChange={event => patch({ description: event.target.value })} />
-            </Field>
-            <Field label="Özet" help="Yazının en başında görünen kısa giriş; açıklamayı kelimesi kelimesine tekrar etmesin."><textarea rows={2} value={post.excerpt} onChange={event => patch({ excerpt: event.target.value })} /></Field>
-            <div className="admin-address">
-              <span>Sayfa adresi: <code>{post.slug || "başlık yazılınca oluşur"}</code></span>
-              {slugLocked ? <small>Yayında olduğu için değiştirilemez.</small> : <button type="button" className="admin-link" onClick={() => setEditSlug(value => !value)}>{editSlug ? "Gizle" : "Elle değiştir"}</button>}
-            </div>
-            {editSlug && !slugLocked && (
-              <Field label="Sayfa adresi" help="Normalde başlıktan otomatik üretilir. Yayınlandıktan sonra değiştirilemez.">
-                <input value={post.slug} onChange={event => { setSlugEdited(true); patch({ slug: event.target.value }); }} placeholder="/blog/ornek-yazi-adresi/" />
-              </Field>
-            )}
-          </Section>
-
-          <Section id="cover" step={step("cover")} title="Kapak fotoğrafı" hint="Yazının üstünde ve paylaşım önizlemesinde görünür" issues={issues.cover} optional filled={Boolean(post.cover)} open={open.cover} onToggle={toggle}>
-            {post.cover ? (
-              <>
-                <ImageFields image={post.cover} onAlt={alt => patch({ cover: { ...post.cover!, alt } })} />
-                <div className="admin-inline"><button type="button" className="admin-btn admin-btn-danger" onClick={() => { const { cover: _removed, ...rest } = post; setPost(rest); }}>Kapağı kaldır</button></div>
-              </>
-            ) : (
-              <ImagePicker label="+ Kapak fotoğrafı seç" disabled={photoBlock} onUploaded={cover => patch({ cover })} />
-            )}
-            <p className="admin-help">Kapaksız yazıların paylaşım görseli logodur. Fotoğraflar tarayıcıda küçültülür, konum bilgisi silinir ({photos}/{BLOG_IMAGE_LIMIT_PER_POST}).</p>
-          </Section>
-
-          <Section id="body" step={step("body")} title="Yazı metni" hint="Paragraf, ara başlık, liste, adımlar, not ve fotoğraf blokları" issues={issues.body} open={open.body} onToggle={toggle}>
-            {post.blocks.map((block, index) => (
-              <div
-                className="admin-block"
-                key={index}
-                draggable
-                onDragStart={() => { dragFrom.current = index; }}
-                onDragOver={event => event.preventDefault()}
-                onDrop={() => { if (dragFrom.current !== null) patch({ blocks: moveItem(post.blocks, dragFrom.current, index) }); dragFrom.current = null; }}
-              >
-                <div className="admin-block-head">
-                  <span className="admin-handle" title="Sürükleyerek taşıyın" aria-hidden="true">⠿</span>
-                  <strong>{index + 1}. {BLOCK_LABELS[block.type]}</strong>
-                  <span className="admin-spacer" />
-                  <button type="button" className="admin-btn admin-btn-icon" disabled={index === 0} onClick={() => patch({ blocks: moveItem(post.blocks, index, index - 1) })} aria-label="Yukarı taşı" title="Yukarı taşı">↑</button>
-                  <button type="button" className="admin-btn admin-btn-icon" disabled={index === post.blocks.length - 1} onClick={() => patch({ blocks: moveItem(post.blocks, index, index + 1) })} aria-label="Aşağı taşı" title="Aşağı taşı">↓</button>
-                  <button type="button" className="admin-btn admin-btn-danger" disabled={post.blocks.length === 1} onClick={() => patch({ blocks: removeAt(post.blocks, index) })} aria-label="Bloğu sil">Sil</button>
+              <div className="admin-cols admin-cols-3">
+                <Field label="Şikâyet" help="Müşteri ne dedi?"><textarea rows={3} value={post.caseFile?.complaint ?? ""} onChange={event => setPost(setCaseFile(post, { complaint: event.target.value }))} placeholder="Makine su almıyor" /></Field>
+                <Field label="Tespit" help="Arızanın nedeni neydi?"><textarea rows={3} value={post.caseFile?.finding ?? ""} onChange={event => setPost(setCaseFile(post, { finding: event.target.value }))} placeholder="Basınç anahtarı arızalı" /></Field>
+                <Field label="Yapılan işlem" help="Ne yapıldı, ne değişti?"><textarea rows={3} value={post.caseFile?.action ?? ""} onChange={event => setPost(setCaseFile(post, { action: event.target.value }))} placeholder="Basınç anahtarı değiştirildi" /></Field>
+              </div>
+              {showAi && (
+                <div className="admin-ai-panel">
+                  <h3 className="admin-part-title">Bu kayıttan yazıyı yapay zeka yazsın <small>(isteğe bağlı — isterseniz atlayıp aşağıda kendiniz yazın)</small></h3>
+                  <Suspense fallback={<p className="admin-muted">Yükleniyor…</p>}>
+                    <AiDraftBox post={post} existing={data.items.filter(entry => entry.post.slug !== origin?.slug).map(entry => ({ slug: entry.post.slug, order: entry.post.order }))} hasContent={hasContent} onDraft={fillFromAi} onTexts={setPendingTexts} />
+                  </Suspense>
                 </div>
-                <BlockEditor block={block} onChange={next => setBlock(index, next)} />
-                <button type="button" className="admin-link admin-insert" onClick={() => patch({ blocks: insertAt(post.blocks, index + 1, emptyBlock("p")) })}>+ araya paragraf ekle</button>
+              )}
+            </Section>
+          )}
+
+          <Section id="article" step={step("article")} title="Yazı" hint="Okuyucunun göreceği her şey: başlık, kapak fotoğrafı ve metin" missing={missingOf("article")}>
+            <Part title="Başlık ve tanıtım" hint="— Google’da ve yazının başında görünür" issues={issues.intro}>
+              <Field label="Başlık" count={{ value: post.title.length, max: 70 }}><input value={post.title} onChange={event => setTitle(event.target.value)} /></Field>
+              <div className="admin-cols admin-cols-2">
+                <Field label="Açıklama" hint="(arama sonucu)" count={{ value: post.description.length, max: BLOG_DESCRIPTION_MAX }} help="Google’da başlığın altında görünür. 90–160 karakter önerilir.">
+                  <textarea rows={4} value={post.description} onChange={event => patch({ description: event.target.value })} />
+                </Field>
+                <Field label="Özet" help="Yazının en başındaki kısa giriş; açıklamayı aynen tekrar etmesin."><textarea rows={4} value={post.excerpt} onChange={event => patch({ excerpt: event.target.value })} /></Field>
               </div>
-            ))}
-            <div className="admin-addbar">
-              <strong>Sona blok ekle</strong>
-              <div className="admin-inline admin-wrap">
-                {TEXT_BLOCK_TYPES.map(type => <button type="button" key={type} className="admin-btn" onClick={() => addBlock(type)}>+ {BLOCK_LABELS[type]}</button>)}
-                <ImagePicker label="+ Fotoğraf" disabled={photoBlock} onUploaded={image => setPost(current => ({ ...current, blocks: [...current.blocks, { type: "image", ...image }] }))} />
+              <div className="admin-address">
+                <span>Sayfa adresi: <code>{post.slug || "başlık yazılınca oluşur"}</code></span>
+                {slugLocked ? <small>Yayında olduğu için değiştirilemez.</small> : <button type="button" className="admin-link" onClick={() => setEditSlug(value => !value)}>{editSlug ? "Gizle" : "Elle değiştir"}</button>}
               </div>
-            </div>
+              {editSlug && !slugLocked && (
+                <Field label="Sayfa adresi" help="Normalde başlıktan otomatik üretilir. Yayınlandıktan sonra değiştirilemez.">
+                  <input value={post.slug} onChange={event => { setSlugEdited(true); patch({ slug: event.target.value }); }} placeholder="/blog/ornek-yazi-adresi/" />
+                </Field>
+              )}
+            </Part>
+
+            <Part title="Kapak fotoğrafı" hint="(isteğe bağlı) — yazının üstünde ve paylaşım önizlemesinde görünür" issues={issues.cover}>
+              {post.cover ? (
+                <>
+                  <ImageFields image={post.cover} onAlt={alt => patch({ cover: { ...post.cover!, alt } })} />
+                  <div className="admin-inline"><button type="button" className="admin-btn admin-btn-danger" onClick={() => { const { cover: _removed, ...rest } = post; setPost(rest); }}>Kapağı kaldır</button></div>
+                </>
+              ) : (
+                <ImagePicker label="+ Kapak fotoğrafı seç" disabled={photoBlock} onUploaded={cover => patch({ cover })} />
+              )}
+              <p className="admin-help">Kapaksız yazıların paylaşım görseli logodur. Fotoğraflar tarayıcıda küçültülür, konum bilgisi silinir ({photos}/{BLOG_IMAGE_LIMIT_PER_POST}).</p>
+            </Part>
+
+            <Part title="Metin" hint="— paragraf, ara başlık, liste, adımlar, not ve fotoğraf blokları" issues={issues.body}>
+              {post.blocks.map((block, index) => (
+                <div
+                  className="admin-block"
+                  key={index}
+                  draggable
+                  onDragStart={() => { dragFrom.current = index; }}
+                  onDragOver={event => event.preventDefault()}
+                  onDrop={() => { if (dragFrom.current !== null) patch({ blocks: moveItem(post.blocks, dragFrom.current, index) }); dragFrom.current = null; }}
+                >
+                  <div className="admin-block-head">
+                    <span className="admin-handle" title="Sürükleyerek taşıyın" aria-hidden="true">⠿</span>
+                    <strong>{index + 1}. {BLOCK_LABELS[block.type]}</strong>
+                    <span className="admin-spacer" />
+                    <button type="button" className="admin-btn admin-btn-icon" disabled={index === 0} onClick={() => patch({ blocks: moveItem(post.blocks, index, index - 1) })} aria-label="Yukarı taşı" title="Yukarı taşı">↑</button>
+                    <button type="button" className="admin-btn admin-btn-icon" disabled={index === post.blocks.length - 1} onClick={() => patch({ blocks: moveItem(post.blocks, index, index + 1) })} aria-label="Aşağı taşı" title="Aşağı taşı">↓</button>
+                    <button type="button" className="admin-btn admin-btn-danger" disabled={post.blocks.length === 1} onClick={() => patch({ blocks: removeAt(post.blocks, index) })} aria-label="Bloğu sil">Sil</button>
+                  </div>
+                  <BlockEditor block={block} onChange={next => setBlock(index, next)} />
+                  <button type="button" className="admin-link admin-insert" onClick={() => patch({ blocks: insertAt(post.blocks, index + 1, emptyBlock("p")) })}>+ araya paragraf ekle</button>
+                </div>
+              ))}
+              <div className="admin-addbar">
+                <strong>Sona blok ekle</strong>
+                <div className="admin-inline admin-wrap">
+                  {TEXT_BLOCK_TYPES.map(type => <button type="button" key={type} className="admin-btn" onClick={() => addBlock(type)}>+ {BLOCK_LABELS[type]}</button>)}
+                  <ImagePicker label="+ Fotoğraf" disabled={photoBlock} onUploaded={image => setPost(current => ({ ...current, blocks: [...current.blocks, { type: "image", ...image }] }))} />
+                </div>
+              </div>
+            </Part>
           </Section>
 
-          <Section id="sources" step={step("sources")} title="Kaynaklar" hint="Yalnızca Türkçe kaynak; çoğu yazıda gerekmez" issues={issues.sources} optional filled={sources.length > 0} open={open.sources} onToggle={toggle}>
+          <Section id="sources" step="+" title="Kaynaklar" hint="Yalnızca Türkçe kaynak; çoğu yazıda gerekmez" missing={missingOf("sources")} optional filled={sources.length > 0} collapsible open={Boolean(open.sources)} onToggle={toggle}>
+            {issues.sources.length > 0 && <ul className="admin-missing">{issues.sources.map(line => <li key={line}>{line}</li>)}</ul>}
             {sources.map((source, index) => (
               <div className="admin-inline" key={index}>
                 <input value={source.label} placeholder="Kaynak adı" onChange={event => patch({ sources: replaceAt(sources, index, { ...source, label: event.target.value }) })} />
@@ -416,25 +439,16 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
           </Section>
 
           {origin && (
-            <section className={`admin-section is-optional ${open.history ? "is-open" : ""}`} id="admin-sec-history">
-              <button type="button" className="admin-section-head" aria-expanded={open.history} onClick={() => { toggle("history"); if (!history) void loadHistory(); }}>
-                <span className="admin-step-no" aria-hidden="true">↺</span>
-                <span className="admin-section-title"><strong>Önceki sürümler</strong><small>Yanlış kaydedilen yazıyı eski hâline döndürmek için</small></span>
-                <span className="admin-chevron" aria-hidden="true">{open.history ? "▾" : "▸"}</span>
-              </button>
-              {open.history && (
-                <div className="admin-section-body">
-                  {!history ? <p className="admin-muted">Geçmiş yükleniyor…</p> : (
-                    <ul className="admin-history">
-                      {history.map(entry => (
-                        <li key={entry.sha}><span>{new Date(entry.date).toLocaleString("tr-TR")} · {entry.message}</span><button type="button" className="admin-btn" onClick={() => restore(entry)}>Bu sürümü yükle</button></li>
-                      ))}
-                      {history.length === 0 && <li className="admin-muted">Geçmiş bulunamadı.</li>}
-                    </ul>
-                  )}
-                </div>
-              )}
-            </section>
+            <Section id="history" step="↺" title="Önceki sürümler" hint="Yanlış kaydedilen yazıyı eski hâline döndürmek için" optional collapsible open={Boolean(open.history)} onToggle={id => { toggle(id); if (!history) void loadHistory(); }}>
+            {!history ? <p className="admin-muted">Geçmiş yükleniyor…</p> : (
+              <ul className="admin-history">
+                {history.map(entry => (
+                  <li key={entry.sha}><span>{new Date(entry.date).toLocaleString("tr-TR")} · {entry.message}</span><button type="button" className="admin-btn" onClick={() => restore(entry)}>Bu sürümü yükle</button></li>
+                ))}
+                {history.length === 0 && <li className="admin-muted">Geçmiş bulunamadı.</li>}
+              </ul>
+            )}
+            </Section>
           )}
 
           {showPreview && readiness}

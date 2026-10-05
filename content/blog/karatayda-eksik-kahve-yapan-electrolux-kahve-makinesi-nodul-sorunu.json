@@ -1,0 +1,72 @@
+{
+  "slug": "/blog/karatayda-eksik-kahve-yapan-electrolux-kahve-makinesi-nodul-sorunu/",
+  "order": 220,
+  "category": "Ustanın Defterinden",
+  "title": "Karatay’da eksik kahve yapan Electrolux kahve makinesi: nodül sorunu",
+  "description": "Karatay’da kahveyi eksik yapan Electrolux kahve makinesinde tıkanan su nodüllerini temizledik. Kahve makinesi nodül tıkanıklığı ve çözümü.",
+  "excerpt": "Kahve makinesi kahveyi her zamankinden daha az ve eksik hazırlıyordu. Yaptığımız kontrolde su nodüllerinin tıkandığını belirledik ve temizleyerek sorunu çözdük.",
+  "cover": {
+    "src": "https://eyh1wbvuvczprro4.public.blob.vercel-storage.com/blog/dd7b5eaf82d929b2fd9c5834fcbdc277-1600.webp",
+    "alt": "kahve makinesi nodül temizlenmesi",
+    "width": 1600,
+    "height": 1067
+  },
+  "published": "2026-10-05",
+  "updated": "2026-10-05",
+  "device": "Küçük Ev Aletleri",
+  "servicePath": "/electrolux-servisi-konya/",
+  "serviceLabel": "Electrolux servisi",
+  "caseFile": {
+    "district": "Karatay",
+    "brand": "Electrolux",
+    "device": "kahve makinesi",
+    "complaint": "kahveyi eksik yapıyor",
+    "finding": "su nodülleri tıkanmış",
+    "action": "nodüller açıldı"
+  },
+  "brandPath": "/electrolux-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Karatay ilçesinden Electrolux marka kahve makinesinin kahveyi eksik yapıyor yönünde şikâyet aldık. Adrese ulaştık. Bu tür durumlarda öncelikle cihazın su haznesinde yeterli su olup olmadığı, hazne valfinin düzgün çalışıp çalışmadığı ve kireçlenme durumu gibi basit ihtimaller gözden geçirilir."
+    },
+    {
+      "type": "h2",
+      "text": "Tespit: Su nodüllerinin tıkanması"
+    },
+    {
+      "type": "p",
+      "text": "Yaptığımız detaylı incelemede, kahve makinesinin su nodüllerinin tıkandığını tespit ettik. Tıkanıklık nedeniyle su akışı engelleniyor ve makine kahveyi eksik hazırlıyordu. Tıkanan nodülleri dikkatlice açarak temizledik. İşlem sonrasında makine normal su akışına kavuştu ve kahveyi tam ölçüsünde yapmaya başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Su nodülleri ne işe yarar?"
+    },
+    {
+      "type": "p",
+      "text": "Kahve makinelerinde su nodülleri, sıcak suyun kahve haznesine eşit ve doğru basınçla dağıtılmasını sağlar. Bu küçük kanallar tıkandığında suyun geçişi zorlaşır veya tamamen durur. Sonuç olarak, kahve haznesine yeterli su ulaşamaz ve makine kahveyi eksik ya da çok yavaş hazırlar."
+    },
+    {
+      "type": "h2",
+      "text": "Kahve makinesinde su akış sorunlarını önlemek için"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Cihazınızda her zaman temiz ve filtrelenmiş su kullanmaya özen gösterin. Sert sular nodüllerin daha hızlı tıkanmasına neden olur.",
+        "Kullanım sıklığınıza göre üreticinin önerdiği aralıklarla kireç çözme işlemlerini aksatmadan uygulayın.",
+        "Su haznesinin yerine tam olarak oturduğundan ve hazne filtresinin temiz olduğundan emin olun.",
+        "Kahve haznesini ve fıskiye bölgesini düzenli olarak nemli bir bezle silerek kahve kalıntılarının birikmesini önleyin."
+      ]
+    },
+    {
+      "type": "p",
+      "text": "Cihazın dış temizliği ve kireç çözme işlemleri kullanıcı tarafından güvenle yapılabilir. Ancak nodül tıkanıklığı gibi iç aksam müdahaleleri ve parça temizliği uzmanlık gerektirir. Yanlış bir müdahale cihazın diğer hassas parçalarına zarar verebilir."
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Kahve makinelerinde eksik kahve verme veya yavaş akış sorunları genellikle kireç ve tortu birikmesinden kaynaklanır. Cihazı bu şekilde zorlayarak çalıştırmaya devam etmek pompanın aşırı ısınmasına yol açabilir. Bu nedenle akışta bir azalma fark ettiğinizde bakımı geciktirmemelisiniz."
+    }
+  ]
+}

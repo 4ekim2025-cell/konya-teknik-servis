@@ -1336,3 +1336,6 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-figure{margin:26px 0}
 .blog-figure img{display:block;width:100%;height:auto;border-radius:16px;background:#eef3f2}
 .blog-post-cover{margin:0 0 28px}
+.blog-post-cover img{aspect-ratio:16/9;max-height:420px;object-fit:cover}
+.blog-figure:not(.blog-post-cover) img{max-height:520px;object-fit:contain}
+@media(max-width:860px){.blog-post-cover img{aspect-ratio:16/10;max-height:260px}.blog-figure:not(.blog-post-cover) img{max-height:420px}}

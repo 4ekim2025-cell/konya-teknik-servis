@@ -11,7 +11,10 @@ export type PostItem = { post: BlogPostInput; hash: string };
 export type Redirect = { from: string; to: string; date: string };
 export type PostsResponse = { head: string; branch: string; repo: string; items: PostItem[]; problems: { file: string; errors: string[] }[]; redirects: Redirect[] };
 export type SaveResponse = { noChange: true } | { noChange: false; commit: string; slug: string; status: "draft" | "published"; warnings: string[]; siteAffecting: boolean };
-export type DeleteResponse = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean };
+export type DeleteResponse = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean; imagesDeleted?: number; imagesNote?: "kept_preview" | "not_configured" | "failed" };
+export type ImageUploadResponse = { src: string; width: number; height: number; remaining: number };
+export type ImageUsage = { storageBytes: number; limitBytes: number; imageCount: number; referencedImages: number; unreferencedImages: number; unreferencedBytes: number; truncated: boolean; graceHours: number; contentProblems: number; canCleanup: boolean };
+export type ImageCleanupResponse = { deletedFiles: number; freedBytes: number; remainingImages: number };
 export type HistoryEntry = { sha: string; message: string; date: string; author: string };
 export type BuildRow = { sha: string; message: string; date: string; state: "success" | "pending" | "failure" | "unknown"; description: string; url?: string; skipped: boolean };
 export type AiDraftResponse = { post: BlogPostInput; googleBusiness: string; instagram: string; provider: string; attempts: number; remaining: number };
@@ -43,6 +46,14 @@ async function call<T>(action: string, { method = "GET", query = {}, body }: Opt
   return data as T;
 }
 
+/** Blob'u base64 metne çevirir (JSON gövdesinde gider). Büyük diziler için parça parça. */
+async function toBase64(blob: Blob): Promise<string> {
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+  let binary = "";
+  for (let index = 0; index < bytes.length; index += 0x8000) binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+  return btoa(binary);
+}
+
 export const api = {
   session: () => call<Session>("session"),
   login: (password: string) => call<{ ok: true }>("login", { method: "POST", body: { password } }),
@@ -55,4 +66,9 @@ export const api = {
   builds: () => call<{ rows: BuildRow[] }>("builds"),
   /** Yapay zeka taslağı: yalnızca editöre dolacak metni döndürür; hiçbir şey kaydetmez. */
   aiDraft: (input: AiCaseInput) => call<AiDraftResponse>("ai-draft", { method: "POST", body: { input } }),
+  /** Tarayıcıda küçültülmüş iki WebP sürümünü yükler; adı ve adresi sunucu belirler. */
+  uploadImage: async (large: Blob, small: Blob) => call<ImageUploadResponse>("image-upload", { method: "POST", body: { large: await toBase64(large), small: await toBase64(small) } }),
+  /** Blob kullanımı (her çağrı gelişmiş işlem harcar; yalnızca düğmeyle). */
+  imageUsage: () => call<ImageUsage>("image-usage"),
+  imageCleanup: () => call<ImageCleanupResponse>("image-cleanup", { method: "POST", body: { confirm: true } }),
 };

@@ -10,6 +10,7 @@ import { brandSeo } from "../client/src/brandSeo";
 import { ADMIN_ROUTE, renderAdminShell } from "../shared/admin-shell";
 import { redirectPageHtml } from "../shared/blog-redirects";
 import { loadRedirects } from "./build-content";
+import { blogImageHtml, withCoverHead } from "../shared/blog-image-html";
 import { BLOG_AUTHOR, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
 
 const root = process.cwd();
@@ -125,7 +126,7 @@ function jsonLd(title: string, description: string, url: string, route: string) 
   if (route === "/blog/") {
     graph.push({ "@type": "Blog", "@id": `${url}#blog`, name: "Eşli Teknik Blog", description, inLanguage: "tr-TR", publisher: { "@id": `${siteUrl}/#business` }, blogPost: blogPosts.map(post => ({ "@type": "BlogPosting", headline: post.title, url: `${siteUrl}${post.slug}`, datePublished: post.published, dateModified: post.updated, author: { "@type": "Person", name: BLOG_AUTHOR.name } })) });
   } else if (blogPost) {
-    graph.push({ "@type": "BlogPosting", "@id": `${url}#article`, headline: blogPost.title, description: blogPost.description, articleSection: blogPost.category, image: `${siteUrl}/esli-teknik-konya-hero-background.webp`, datePublished: blogPost.published, dateModified: blogPost.updated, inLanguage: "tr-TR", mainEntityOfPage: { "@id": `${url}#webpage` }, isPartOf: { "@id": `${siteUrl}/blog/#blog` }, author: { "@type": "Person", name: BLOG_AUTHOR.name, jobTitle: "Teknik servis ustası", worksFor: { "@id": `${siteUrl}/#business` } }, publisher: { "@id": `${siteUrl}/#business` } });
+    graph.push({ "@type": "BlogPosting", "@id": `${url}#article`, headline: blogPost.title, description: blogPost.description, articleSection: blogPost.category, image: blogPost.cover ? blogPost.cover.src : `${siteUrl}/esli-teknik-konya-hero-background.webp`, datePublished: blogPost.published, dateModified: blogPost.updated, inLanguage: "tr-TR", mainEntityOfPage: { "@id": `${url}#webpage` }, isPartOf: { "@id": `${siteUrl}/blog/#blog` }, author: { "@type": "Person", name: BLOG_AUTHOR.name, jobTitle: "Teknik servis ustası", worksFor: { "@id": `${siteUrl}/#business` } }, publisher: { "@id": `${siteUrl}/#business` } });
   }
 
   if (route === "/sss/") {
@@ -167,6 +168,7 @@ function faultsHtml(deviceName: string) {
 }
 
 function blogBlockHtml(block: BlogBlock) {
+  if (block.type === "image") return blogImageHtml(block, false);
   if (block.type === "h2") return `<h2>${esc(block.text)}</h2>`;
   if (block.type === "p") return `<p>${esc(block.text)}</p>`;
   if (block.type === "list") return `<ul>${block.items.map(item => `<li>${esc(item)}</li>`).join("")}</ul>`;
@@ -193,7 +195,7 @@ function blogPostHtml(post: BlogPost) {
   const share = blogShareLinks(url, post.title);
   const caseFile = post.caseFile ? `<dl><dt>Bölge</dt><dd>${esc(post.caseFile.district)}</dd><dt>Cihaz</dt><dd>${esc(post.caseFile.brand)} ${esc(post.caseFile.device.toLocaleLowerCase("tr-TR"))}</dd><dt>Şikâyet</dt><dd>${esc(post.caseFile.complaint)}</dd><dt>Tespit</dt><dd>${esc(post.caseFile.finding)}</dd><dt>Yapılan işlem</dt><dd>${esc(post.caseFile.action)}</dd></dl>${post.brandPath ? `<p><a href="${post.brandPath}">Konya ${esc(post.caseFile.brand)} servisi</a></p>` : ""}` : "";
   const sources = post.sources ? `<h2>Kaynaklar</h2><ul>${post.sources.map(source => `<li><a href="${esc(source.url)}" rel="nofollow">${esc(source.label)}</a></li>`).join("")}</ul>` : "";
-  return `<nav aria-label="İçerik yolu"><a href="/">Ana Sayfa</a> › <a href="/blog/">Blog</a> › ${esc(post.category)}</nav>${blogMetaHtml(post)}<article>${caseFile}${post.blocks.map(blogBlockHtml).join("")}${sources}<p>Paylaşın: <a href="${share.whatsapp}">WhatsApp</a> · <a href="${share.facebook}">Facebook</a> · <a href="${share.x}">X</a></p><p><strong>${esc(BLOG_AUTHOR.name)}</strong> — ${esc(BLOG_AUTHOR.bio)}</p><p><a href="${post.servicePath}">${post.serviceLabel ? `Konya ${esc(post.serviceLabel)}` : post.device === "Genel" ? "Eşli Teknik iletişim" : `Konya ${esc(post.device)} servisi`}</a></p></article>`;
+  return `<nav aria-label="İçerik yolu"><a href="/">Ana Sayfa</a> › <a href="/blog/">Blog</a> › ${esc(post.category)}</nav>${blogMetaHtml(post)}<article>${post.cover ? blogImageHtml(post.cover, true) : ""}${caseFile}${post.blocks.map(blogBlockHtml).join("")}${sources}<p>Paylaşın: <a href="${share.whatsapp}">WhatsApp</a> · <a href="${share.facebook}">Facebook</a> · <a href="${share.x}">X</a></p><p><strong>${esc(BLOG_AUTHOR.name)}</strong> — ${esc(BLOG_AUTHOR.bio)}</p><p><a href="${post.servicePath}">${post.serviceLabel ? `Konya ${esc(post.serviceLabel)}` : post.device === "Genel" ? "Eşli Teknik iletişim" : `Konya ${esc(post.device)} servisi`}</a></p></article>`;
 }
 
 function deviceBlogLinksHtml(deviceName: string) {
@@ -275,12 +277,15 @@ for (const [route, [title, description]] of Object.entries(routes)) {
   html = html.replace(/<meta property="og:image" content="[^"]*"\s*\/>/, () => `<meta property="og:image" content="${siteUrl}/favicon.png?v=share-logo-1" />`);
   html = html.replace(/<meta name="twitter:image" content="[^"]*"\s*\/>/, () => `<meta name="twitter:image" content="${siteUrl}/favicon.png?v=share-logo-1" />`);
   html = html.replace(/<meta property="og:url" content="[^"]*"\s*\/>/, () => `<meta property="og:url" content="${url}" />`);
+  // Yalnızca kapak fotoğrafı olan yazılarda paylaşım görseli ve önyükleme değişir; diğer tüm sayfaların başlığı eskisiyle birebir aynı kalır.
+  const cover = blogPosts.find(post => post.slug === route)?.cover;
+  if (cover) html = withCoverHead(html, cover);
   if (route.startsWith("/blog/") && route !== "/blog/") html = html.replace('<meta property="og:type" content="website" />', () => '<meta property="og:type" content="article" />');
   if (!html.includes('property="og:url"')) html = html.replace("</head>", () => `<meta property="og:url" content="${url}" />\n  </head>`);
   html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, () => `<script type="application/ld+json">${jsonLd(title, description, url, route)}</script>`);
   html = html.replace('<div id="root"></div>', () => `<div id="root">${staticContent(title, description, route)}</div>`);
   // Ana sayfa görseli yalnızca ana sayfada kullanılır; diğer sayfalarda önceden indirilmesi boşuna veri ve süre harcar.
-  if (route !== "/") html = html.replace(/\s*<link rel="preload" as="image" href="\/esli-teknik-konya-hero-background\.webp"[^>]*\/>/g, "");
+  if (route !== "/") html = html.replace(/\s*<link rel="preload" as="image" href="\/esli-teknik-konya-hero-background\.webp"[^>]*\/>/g, () => "");
 
   const targetDir = route === "/" ? outputDir : path.join(outputDir, route.replace(/^\//, "").replace(/\/$/, ""));
   fs.mkdirSync(targetDir, { recursive: true });

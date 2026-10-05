@@ -1236,7 +1236,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-post-hero .blog-meta svg{color:#f2a16c}
 .blog-post-article>h2{margin:34px 0 12px;color:var(--brand-teal);font-size:clamp(23px,2.4vw,30px);letter-spacing:-.04em;line-height:1.15}
 .blog-post-article>p{margin:0 0 16px;color:#4f5650;font-size:16px;line-height:1.85}
-.blog-post-article>p:first-child,.blog-case-file+p{font-size:17px;color:#3f4741}
+.blog-post-article>p:first-child,.blog-post-cover+p,.blog-case-file+p{font-size:17px;color:#3f4741}
 .blog-list{display:grid;gap:10px;margin:4px 0 20px;padding:0;list-style:none}
 .blog-list li{display:flex;gap:10px;align-items:flex-start;color:#4f5650;font-size:15.5px;line-height:1.7}
 .blog-list svg{flex:0 0 auto;margin-top:4px;color:#a12519}
@@ -1332,3 +1332,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .prerender-fallback h2{font:800 22px/1.3 Manrope,sans-serif;margin:28px 0 10px}
 .prerender-fallback a{color:#055564;text-decoration:underline}
 .prerender-reload{margin-top:24px;min-height:42px;padding:0 20px;border:0;border-radius:999px;background:#055564;color:#fff;font:800 14px Manrope,sans-serif;cursor:pointer}
+/* Blog fotoğrafları: en-boy oranı width/height özniteliklerinden gelir (kayma olmaz); yer tutucu renk yüklenirken görünür. */
+.blog-figure{margin:26px 0}
+.blog-figure img{display:block;width:100%;height:auto;border-radius:16px;background:#eef3f2}
+.blog-post-cover{margin:0 0 28px}

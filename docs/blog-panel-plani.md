@@ -11,7 +11,7 @@ Plan tarihi: 2026-10-02. Proje sahibi: Esad Eşli.
 | 1 | İçeriği koddan ayırma | Tamamlandı (main'de) |
 | 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Tamamlandı (main'de, canlıda); güvenlik incelemesi bulguları PR #6–#9 ile düzeltildi |
 | 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Tamamlandı (main'de, canlıda; PR #10–#13). Gerçek Gemini ile panelden denendi, proje sahibi 2026-10-02'de onayladı |
-| 4 | Fotoğraflar (Vercel Blob) | Bekliyor |
+| 4 | Fotoğraflar (Vercel Blob) | Kod hazır, PR açık (önizlemede gerçek Blob ile denenmeli). Blob store (esli-blog-foto, OIDC ile bağlı), `@vercel/blob` ve `BLOG_IMAGE_HOST` tamam; kalan: yeniden dağıtım + önizlemede gerçek yükleme denemesi |
 | 5 | Google İşletme (API yok / API var) | Bekliyor |
 | 6 | Zamanlama ve istatistik | Bekliyor |
 
@@ -120,7 +120,7 @@ Vercel Blob Hobby kotası (aylık): 1 GB depolama, 10 GB veri aktarımı, 2.000 
 Kapsam:
 - Yazı modeline `cover` ve `image` bloğu ekle (adres, alt metin zorunlu, genişlik/yükseklik).
 - Tarayıcıda yükleme öncesi küçültme ve WebP'ye çevirme (1600 px ve 800 px); EXIF ve konum verisi silinir.
-- Blob'a istemci yüklemesi (public store). Silinen yazının fotoğrafları Blob'dan da silinir.
+- Blob'a yükleme (public store). **Karar: sunucu üzerinden yükleme** (`image-upload` eylemi). Resmî istemci yüklemesi (`handleUpload`) oturum/CSRF denetimsiz bir `onUploadCompleted` webhook'u ve uzun ömürlü anahtar ister; "oturumsuz kimse yükleme izni alamamalı" kuralı için sunucu yolu seçildi (tarayıcıda küçültülmüş iki dosya ≈ 700 KB, gövde sınırı yalnızca oturumlu `image-upload` için 1280 KB). Silinen yazının fotoğrafları Blob'dan da silinir (yalnızca canlı `main` panelinde: önizleme ve canlı aynı store'u paylaşır).
 - Kapak fotoğrafı BlogPosting şemasına ve `og:image`'e girer. Fotoğrafsız yazılar bugünkü görseli kullanmaya devam eder.
 - Yazı sayfasında ve prerender HTML'inde fotoğraf görünümü (`loading="lazy"`, boyutlar belirtilmiş).
 - Panelde Blob kullanım göstergesi.
@@ -157,3 +157,13 @@ Not: API kodu onay gelene kadar gerçek hesapla sınanamaz; belgeye göre yazıl
 - Her aşama yeni sohbette, ayrı branch ve PR ile yapılır. Varsayılan model Sonnet; 1. aşamanın çıktı karşılaştırması ve 2. aşamanın giriş/GitHub yazım kodu Opus ile bağımsız incelenir.
 - Doğrulama ekran görüntüsüyle değil test, build ve dosya karşılaştırmasıyla yapılır.
 - Aşama bitince bu dosyadaki durum tablosunu ve `CLAUDE.md`'yi güncelle.
+
+### Aşama 4 uygulama notları
+
+- Yazı modeli: `cover` (isteğe bağlı) ve `{ type: "image", src, alt, width, height }` bloğu; en çok 10 fotoğraf/yazı. `src` yalnızca `shared/blog-images.ts` → `BLOG_IMAGE_HOST` alanından ve `blog/<32 hex>-1600.webp` kalıbında olabilir (şema denetler; alan boşken hiçbir adres geçmez). 800 px sürümün adresi türetilir.
+- Sunucu denetimi (`server/admin/images.ts`): yalnızca WebP; RIFF yapısı baştan sona okunur, EXIF/XMP/ICCP/animasyon parçası ya da bayrağı olan dosya reddedilir; ölçüler dosyadan okunur; dosya adını sunucu üretir.
+- Yapay zeka taslağı fotoğraf üretemez: AI çıktı şeması yalnızca metin blokları kabul eder, `cover` alanı yoktur (`.strict()`).
+- Silme/temizlik (`imageStore.ts`): yalnızca panelin yazdığı ad kalıbına uyan dosyalara dokunur; temizlik içerik hatasızken, 24 saatten eski ve hiçbir yazıda (taslak dahil) kullanılmayan fotoğraflar için, bir seferde en çok 40 dosya.
+- Ziyaretçi sayfası: kapak `fetchpriority="high"` (+ `<head>` önyüklemesi), gövde fotoğrafları `loading="lazy"`, tüm `<img>`'lerde `width`/`height`, `srcset` 800/1600. Blog listesinde küçük resim yoktur.
+- Yalnızca kapaklı yazıda `og:image`/`twitter:image`/`twitter:card` ve BlogPosting `image` değişir; diğer tüm sayfaların HTML'i değişmez (aşağıdaki karşılaştırma).
+- Doğrulama yöntemi: `scripts/prerender.ts` değişiklikten önceki ve sonraki kodla, Vite çıktısı yerine `client/index.html` şablonuyla çalıştırılıp `dist/public` ağaçları `diff -r` ile karşılaştırıldı (66 rota + diğer dosyalar: birebir aynı). Fotoğraflı deneme yazısında yalnızca o sayfanın dosyası değişti.

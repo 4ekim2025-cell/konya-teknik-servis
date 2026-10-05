@@ -2,11 +2,13 @@ import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } 
 import { blogCategories } from "@shared/blog-meta";
 import { BLOG_BRANDS, BLOG_DEVICES, BLOG_DISTRICTS, GENERAL_DEVICE, GENERAL_SERVICE_PATHS, SMALL_APPLIANCE_DEVICE, SMALL_APPLIANCE_SUGGESTIONS } from "@shared/blog-taxonomy";
 import { BLOG_DESCRIPTION_MAX, USTA_CATEGORY, type BlogPostInput } from "@shared/blog-schema";
+import { BLOG_IMAGE_HOST, BLOG_IMAGE_LIMIT_PER_POST } from "@shared/blog-images";
 import { api, ApiError, type HistoryEntry, type PostItem, type PostsResponse } from "./api";
+import { ImageFields, ImagePicker } from "./ImagePicker";
 import { nextOrder, todayInIstanbul } from "@shared/blog-publish";
 import {
-  applyDeviceAndBrand, BLOCK_LABELS, blockingSummary, checklist, emptyBlock, insertAt, isPublished, moveItem, newPost, removeAt, replaceAt, setCaseFile, setCategory, slugFor, toPayload,
-  type BlockType, type BlogBlockInput,
+  applyDeviceAndBrand, BLOCK_LABELS, blockingSummary, checklist, emptyBlock, imageCount, insertAt, isPublished, moveItem, newPost, removeAt, replaceAt, setCaseFile, setCategory, slugFor, TEXT_BLOCK_TYPES, toPayload,
+  type BlogBlockInput, type TextBlockType,
 } from "./editorModel";
 
 const Preview = lazy(() => import("./Preview"));
@@ -48,6 +50,8 @@ function BlockEditor({ block, onChange }: { block: BlogBlockInput; onChange: (ne
           <button type="button" className="admin-btn" onClick={() => onChange({ ...block, items: [...block.items, { title: "", text: "" }] })}>+ Adım</button>
         </div>
       );
+    case "image":
+      return <ImageFields image={block} onAlt={alt => onChange({ ...block, alt })} />;
     case "note":
       return (
         <div className="admin-sub">
@@ -134,9 +138,12 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
     setErrors([]);
     setMessage("Yapay zeka taslağı editöre dolduruldu. Henüz kaydedilmedi; okuyup düzelttikten sonra kaydedin.");
   };
-  const hasContent = Boolean(post.title.trim() || post.description.trim() || post.blocks.some(block => JSON.stringify(block) !== JSON.stringify(emptyBlock(block.type))));
+  const hasContent = Boolean(post.title.trim() || post.description.trim() || post.cover || post.blocks.some(block => block.type === "image" || JSON.stringify(block) !== JSON.stringify(emptyBlock(block.type))));
 
-  const addBlock = (type: BlockType) => patch({ blocks: [...post.blocks, emptyBlock(type)] });
+  const addBlock = (type: TextBlockType) => patch({ blocks: [...post.blocks, emptyBlock(type)] });
+  const photos = imageCount(post);
+  // Fotoğraf yüklemesi: alan (BLOG_IMAGE_HOST) ayarlanmadıysa ya da yazı sınıra ulaştıysa kapalıdır; nedeni düğmenin yanında yazar.
+  const photoBlock = !BLOG_IMAGE_HOST ? "Fotoğraf yükleme henüz açılmadı (Blob store adresi shared/blog-images.ts içinde ayarlı değil)." : photos >= BLOG_IMAGE_LIMIT_PER_POST ? `Bir yazıda en çok ${BLOG_IMAGE_LIMIT_PER_POST} fotoğraf olur.` : undefined;
   const sources = post.sources ?? [];
 
   return (
@@ -174,6 +181,19 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
           </Field>
           <p className={`admin-counter ${post.description.length > BLOG_DESCRIPTION_MAX ? "is-over" : ""}`}>{post.description.length} / {BLOG_DESCRIPTION_MAX} karakter</p>
           <Field label="Özet (yazı başında görünür)"><textarea rows={2} value={post.excerpt} onChange={event => patch({ excerpt: event.target.value })} /></Field>
+
+          <fieldset className="admin-box">
+            <legend>Kapak fotoğrafı (isteğe bağlı)</legend>
+            {post.cover ? (
+              <>
+                <ImageFields image={post.cover} onAlt={alt => patch({ cover: { ...post.cover!, alt } })} />
+                <div className="admin-inline"><button type="button" className="admin-btn admin-btn-danger" onClick={() => { const { cover: _removed, ...rest } = post; setPost(rest); }}>Kapağı kaldır</button></div>
+              </>
+            ) : (
+              <ImagePicker label="+ Kapak fotoğrafı seç" disabled={photoBlock} onUploaded={cover => patch({ cover })} />
+            )}
+            <p className="admin-muted">Kapak sayfanın üstünde görünür ve paylaşım önizlemesinde (WhatsApp, Facebook) kullanılır; kapaksız yazıların paylaşım görseli logodur. Fotoğraflar tarayıcıda küçültülür, konum bilgisi silinir ({photos}/{BLOG_IMAGE_LIMIT_PER_POST}).</p>
+          </fieldset>
 
           <fieldset className="admin-box">
             <legend>Cihaz ve servis bağlantısı</legend>
@@ -248,7 +268,8 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
               </div>
             ))}
             <div className="admin-inline admin-wrap">
-              {(Object.keys(BLOCK_LABELS) as BlockType[]).map(type => <button type="button" key={type} className="admin-btn" onClick={() => addBlock(type)}>+ {BLOCK_LABELS[type]}</button>)}
+              {TEXT_BLOCK_TYPES.map(type => <button type="button" key={type} className="admin-btn" onClick={() => addBlock(type)}>+ {BLOCK_LABELS[type]}</button>)}
+              <ImagePicker label="+ Fotoğraf" disabled={photoBlock} onUploaded={image => setPost(current => ({ ...current, blocks: [...current.blocks, { type: "image", ...image }] }))} />
             </div>
           </fieldset>
 

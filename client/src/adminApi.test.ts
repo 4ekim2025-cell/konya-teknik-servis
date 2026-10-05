@@ -337,7 +337,7 @@ describe("giriş akışı (/api/admin?action=login)", () => {
 });
 
 describe("kabul ölçütü: oturumsuz hiçbir /api/admin/ isteği veri döndürmez ya da yazmaz", () => {
-  const actions = ["posts", "save", "delete", "history", "version", "builds", "ai-draft", "bilinmeyen-eylem", ""];
+  const actions = ["posts", "save", "delete", "history", "version", "builds", "ai-draft", "image-upload", "image-usage", "image-cleanup", "bilinmeyen-eylem", ""];
 
   it("her eylem ve her yöntem 401 verir; GitHub'a tek istek bile gitmez", async () => {
     const kit = await setup();

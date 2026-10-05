@@ -12,13 +12,21 @@
 import { createHash } from "node:crypto";
 import { CONTENT_DIR, GENERATED_PATH, LLMS_PATH, SITEMAP_PATH, renderGeneratedFiles } from "../../shared/blog-build.js";
 import { BLOG_SLUGS_LINKED_FROM_CODE } from "../../shared/blog-protected.js";
+import { BLOG_IMAGE_HOST, postImageIds } from "../../shared/blog-images.js";
 import { prepareSave, serializePost, todayInIstanbul, type SaveRequest } from "../../shared/blog-publish.js";
 import { REDIRECTS_PATH, parseRedirects, removeRedirectFrom, renderRedirectsFile, upsertRedirect, type BlogRedirect } from "../../shared/blog-redirects.js";
 import { BLOG_SLUG_PATTERN, blogFileName, validateBlogCollection, validateBlogPost, type BlogPostInput } from "../../shared/blog-schema.js";
 import { GithubError, mapLimit, type BuildStatus, type CommitChange, type GithubClient, type HistoryEntry } from "./github.js";
+import { ImageStoreError, type ImageStore } from "./imageStore.js";
 
 /** Commit mesajına konan işaret: `vercel.json` → `ignoreCommand` bu işareti görünce derlemeyi atlar (yalnızca siteyi değiştirmeyen taslak commit'leri). */
 export const SKIP_BUILD_MARKER = "[panel-taslak]";
+
+/**
+ * Fotoğraf SİLME yalnızca canlı (main) dalındaki panelde yapılır. Önizleme (Preview) ortamı canlıyla AYNI Blob store'u kullanır;
+ * önizleme dalı eski olabilir, oradan yapılan silme ya da "kullanılmayanları temizle" canlı sitenin fotoğrafını silerdi.
+ */
+export const PRODUCTION_BRANCH = "main";
 
 export class AdminError extends Error {
   constructor(public status: number, public code: string, message: string, public errors?: string[]) {
@@ -33,7 +41,8 @@ type Snapshot = { head: string; items: PostItem[]; posts: BlogPostInput[]; redir
 
 export type SaveBody = SaveRequest & { baseHash?: string };
 export type SaveOutcome = { noChange: true } | { noChange: false; commit: string; slug: string; status: "draft" | "published"; warnings: string[]; siteAffecting: boolean };
-export type DeleteOutcome = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean };
+/** `imagesNote`: fotoğraflar silinmediyse nedeni (silinen yazı fotoğraf taşımıyorsa alan hiç yoktur). */
+export type DeleteOutcome = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean; imagesDeleted?: number; imagesNote?: "kept_preview" | "not_configured" | "failed" };
 export type BuildRow = BuildStatus & { skipped: boolean };
 
 /** Commit mesajına giren başlık: tek satır; köşeli ayraçlar yuvarlağa çevrilir ki başlıktaki "[panel-taslak]", "[skip ci]" gibi ifadeler derlemeyi atlatmasın. */
@@ -41,8 +50,9 @@ const oneLine = (value: string) => value.replace(/\s+/g, " ").replace(/\[/g, "("
 const postPath = (slug: string) => `${CONTENT_DIR}/${blogFileName(slug)}`;
 export const hashPost = (post: BlogPostInput) => createHash("sha1").update(serializePost(post)).digest("hex").slice(0, 16);
 
-export function createAdminService(deps: { github: GithubClient; now?: () => Date }) {
+export function createAdminService(deps: { github: GithubClient; now?: () => Date; images?: ImageStore; /** Fotoğraf adreslerinin geçebileceği alan; yoksa shared/blog-images.ts → BLOG_IMAGE_HOST. Testlerde verilir. */ imageHost?: string }) {
   const { github } = deps;
+  const imageHost = deps.imageHost ?? BLOG_IMAGE_HOST;
   const today = () => todayInIstanbul(deps.now?.() ?? new Date());
   let cache: Snapshot | undefined;
 
@@ -62,7 +72,7 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
         problems.push({ file: name, errors: ["Geçerli JSON değil"] });
         continue;
       }
-      const result = validateBlogPost(data);
+      const result = validateBlogPost(data, imageHost);
       if (!result.ok) problems.push({ file: name, errors: result.errors });
       else if (blogFileName(result.post.slug) !== name) problems.push({ file: name, errors: [`Dosya adı adresle uyuşmuyor, "${blogFileName(result.post.slug)}" olmalı`] });
       else items.push({ post: result.post, hash: hashPost(result.post) });
@@ -144,7 +154,7 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
           if (loaded && loaded.hash !== body.baseHash) throw new AdminError(409, "stale", "Bu yazı başka bir yerde değiştirilmiş; sayfayı yenileyip tekrar deneyin");
         }
 
-        const prepared = prepareSave(body, snap.posts, today());
+        const prepared = prepareSave(body, snap.posts, today(), imageHost);
         if (!prepared.ok) throw new AdminError(prepared.status, prepared.status === 409 ? "conflict" : "validation_failed", prepared.errors[0], prepared.errors);
         if (prepared.noChange) return { noChange: true as const };
 
@@ -206,8 +216,54 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
         const message = `content: ${published ? "yazı silindi" : "taslak silindi"} — ${oneLine(post.title)}${siteAffecting ? "" : ` ${SKIP_BUILD_MARKER}`}\n\nAdres: ${post.slug}${redirect ? `\nYönlendirme: ${redirect.to}` : "\nYönlendirme: yok (adres 404 verir)"}\nKaynak: yönetim paneli`;
         const commit = await github.commit({ upserts, deletes: [postPath(post.slug)] }, message, head);
         cache = undefined;
-        return { commit, slug: post.slug, wasPublished: published, ...(redirect ? { redirectedTo: redirect.to } : {}) };
+
+        // Fotoğraflar commit BAŞARILI olduktan sonra silinir (commit düşerse fotoğraflar yerinde kalır). Silinemezse yazı yine de silinmiştir;
+        // kalanlar "Kullanımı göster → kullanılmayanları temizle" ile alınır.
+        const keep = new Set(remaining.flatMap(item => [...postImageIds(item)]));
+        const ids = [...postImageIds(post)].filter(id => !keep.has(id));
+        let images: Pick<DeleteOutcome, "imagesDeleted" | "imagesNote"> = {};
+        if (ids.length) {
+          if (github.config.branch !== PRODUCTION_BRANCH) images = { imagesNote: "kept_preview" };
+          else if (!deps.images) images = { imagesNote: "not_configured" };
+          else {
+            try {
+              images = { imagesDeleted: await deps.images.removeImages(ids) };
+            } catch {
+              images = { imagesNote: "failed" };
+            }
+          }
+        }
+        return { commit, slug: post.slug, wasPublished: published, ...(redirect ? { redirectedTo: redirect.to } : {}), ...images };
       });
+    },
+
+    /**
+     * Fotoğraf depolama kullanımı. `list()` her çağrıda gelişmiş işlem harcar; yalnızca düğmeyle çağrılır.
+     * Yazı dosyalarından biri okunamıyorsa (`contentProblems`) onun fotoğrafları "kullanılmıyor" görünebilir; temizlik bu durumda reddedilir.
+     */
+    async imageUsage() {
+      if (!deps.images) throw new AdminError(503, "blob_not_configured", "Fotoğraf deposu (Vercel Blob) tanımlı değil.");
+      const head = await github.headSha();
+      const snap = await snapshot(head);
+      const referenced = new Set(snap.posts.flatMap(post => [...postImageIds(post)]));
+      return { ...(await deps.images.usage(referenced)), contentProblems: snap.problems.length, canCleanup: github.config.branch === PRODUCTION_BRANCH };
+    },
+
+    /** Hiçbir yazının kullanmadığı (ve son 24 saatte yüklenmemiş) fotoğrafları siler. Yalnızca canlı (main) dalda ve içerik hatasız iken. */
+    async imageCleanup(input: { confirm?: boolean }) {
+      if (!deps.images) throw new AdminError(503, "blob_not_configured", "Fotoğraf deposu (Vercel Blob) tanımlı değil.");
+      if (input.confirm !== true) throw new AdminError(400, "confirm_required", "Temizlik için onay gerekli");
+      if (github.config.branch !== PRODUCTION_BRANCH) throw new AdminError(422, "cleanup_production_only", "Fotoğraf temizliği yalnızca canlı (main) panelde yapılır; önizleme ortamı canlıyla aynı depoyu kullanır ve canlı fotoğrafı silebilirdi.");
+      const head = await github.headSha();
+      const snap = await snapshot(head);
+      assertWritable(snap);
+      const referenced = new Set(snap.posts.flatMap(post => [...postImageIds(post)]));
+      try {
+        return await deps.images.cleanup(referenced);
+      } catch (error) {
+        if (error instanceof ImageStoreError) throw new AdminError(error.status, error.code, error.message);
+        throw error;
+      }
     },
 
     /** Yazının dosya geçmişi (silinmiş yazılar için de çalışır). */
@@ -228,7 +284,7 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
       } catch {
         throw new AdminError(422, "version_invalid", "Bu sürüm geçerli JSON değil");
       }
-      const result = validateBlogPost(data);
+      const result = validateBlogPost(data, imageHost);
       if (!result.ok) throw new AdminError(422, "version_invalid", "Bu sürüm bugünkü kurallara uymuyor; yüklenemez", result.errors);
       return result.post;
     },

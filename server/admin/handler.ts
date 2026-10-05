@@ -5,7 +5,10 @@
  *  - `session` ve `login` dışındaki HİÇBİR eylem geçerli oturum çerezi olmadan çalışmaz: veri döndürmez, GitHub'a dokunmaz.
  *  - Yazan her istek JSON olmalı, `X-Admin-Request: 1` başlığı taşımalı ve (varsa) Origin başlığı sitenin kendisi olmalıdır.
  *  - Yanıtlar `noindex` başlığı taşır ve önbelleğe alınmaz. Hata yanıtları gizli anahtar ya da GitHub gövdesi içermez.
- *  - Gizli değerler yalnızca ortam değişkenlerindedir: ADMIN_PASSWORD_HASH, ADMIN_SESSION_SECRET, GITHUB_CONTENT_TOKEN, GEMINI_API_KEY, GROQ_API_KEY.
+ *  - Gizli değerler yalnızca ortam değişkenlerindedir: ADMIN_PASSWORD_HASH, ADMIN_SESSION_SECRET, GITHUB_CONTENT_TOKEN, GEMINI_API_KEY, GROQ_API_KEY,
+ *    BLOB_READ_WRITE_TOKEN (Vercel Blob; kimlik bilgisini SDK ortamdan kendisi okur).
+ *  - Fotoğraf eylemleri (`image-upload`, `image-usage`, `image-cleanup`) aynı oturum, CSRF ve istek sınırından geçer; yeni fonksiyon açılmaz.
+ *    Yüklenen dosya güvenilmez girdidir (server/admin/images.ts); dosya adını sunucu üretir. Silme ve temizlik yalnızca canlı (main) dalda çalışır.
  *  - `ai-draft` (yapay zeka taslağı) hiçbir şey kaydetmez: GitHub'a dokunmaz, yalnızca editöre dolacak taslağı döndürür. Aynı oturum,
  *    CSRF ve istek sınırından geçer; ayrıca günlük kullanım sınırı vardır. Model çıktısı kurallardan geçmezse taslak dönmez.
  */
@@ -15,6 +18,10 @@ import { GithubError, createGithubClient, readGithubConfig, type GithubClient } 
 import { AdminError, createAdminService, type AdminService, type SaveBody } from "./service.js";
 import { AiError, AiRejectedError, DailyQuota, aiDailyLimit, createAiProviders, generateAiDraft } from "./ai.js";
 import { validateAiCaseInput } from "../../shared/blog-ai.js";
+import { BLOG_IMAGE_HOST } from "../../shared/blog-images.js";
+import { BlobError, blobConfigured, createBlobClient, type BlobClient } from "./blob.js";
+import { ImageStoreError, createImageStore, type ImageStore } from "./imageStore.js";
+import { checkUpload } from "./images.js";
 
 export type AdminEnv = Record<string, string | undefined>;
 type HeaderValue = string | string[] | undefined;
@@ -45,12 +52,19 @@ export type AdminDeps = {
   aiFetchImpl?: typeof fetch;
   /** Yapay zeka taslağının günlük kullanım sayacı; verilmezse örnek ömrü boyunca paylaşılan sayaç kullanılır. */
   aiQuota?: DailyQuota;
+  /** Blob istemcisi (testlerde bellek içi taklit); yoksa ortam değişkenlerinden kurulur. */
+  blob?: BlobClient;
+  /** Fotoğraf adreslerinin geçebileceği alan; yoksa shared/blog-images.ts → BLOG_IMAGE_HOST. Testlerde verilir. */
+  imageHost?: string;
+  /** Fotoğraf yüklemenin günlük sayacı (Hobby Blob kotasını korur); verilmezse paylaşılan sayaç kullanılır. */
+  imageQuota?: DailyQuota;
 };
 
 const FAILED_LOGIN_DELAY_MS = 800;
 /** Ortak sayaç eşiği aşılınca parola sınanmadan önce eklenen bekleme: eşikte 2 sn, eşiğin üç katında 5 sn. */
 const GLOBAL_SLOWDOWN_MS = [2000, 5000] as const;
 const MAX_PASSWORD_LENGTH = 200;
+const DEFAULT_IMAGE_DAILY_LIMIT = 20;
 const header = (req: AdminHttpRequest, name: string): string | undefined => {
   const value = req.headers[name];
   return Array.isArray(value) ? value[0] : value;
@@ -83,19 +97,37 @@ const shared = {
   globalGuard: new LoginGuard({ maxFailures: 30, windowMs: 15 * 60 * 1000, lockMs: 15 * 60 * 1000 }),
   limiter: new RateLimiter(120, 60 * 1000),
   aiQuota: new DailyQuota(),
+  imageQuota: new DailyQuota(),
+  images: undefined as ImageStore | undefined,
   service: undefined as { key: string; value: AdminService } | undefined,
 };
+
+const imageHostFor = (deps: AdminDeps): string => deps.imageHost ?? BLOG_IMAGE_HOST;
+
+/** Günlük fotoğraf yükleme sınırı (BLOB_DAILY_UPLOAD_LIMIT, 1–200; varsayılan 20). Her fotoğraf iki gelişmiş işlemdir; Hobby kotası ayda 2.000. */
+function imageDailyLimit(env: AdminEnv): number {
+  const value = Number.parseInt(env.BLOB_DAILY_UPLOAD_LIMIT ?? "", 10);
+  return Number.isFinite(value) && value >= 1 && value <= 200 ? value : DEFAULT_IMAGE_DAILY_LIMIT;
+}
+
+function imagesFor(deps: AdminDeps): ImageStore | undefined {
+  if (deps.blob) return createImageStore(deps.blob, imageHostFor(deps), { sleep: deps.sleep, now: deps.now });
+  if (!blobConfigured(deps.env)) return undefined;
+  shared.images ??= createImageStore(createBlobClient(), imageHostFor(deps));
+  return shared.images;
+}
 
 function serviceFor(deps: AdminDeps): AdminService | undefined {
   if (deps.service) return deps.service;
   const config = readGithubConfig(deps.env);
   if (!config) return undefined;
   // Test için verilen `fetchImpl` önbelleğe alınmaz: her çağrı kendi taklit deposuyla çalışır.
-  if (deps.fetchImpl) return createAdminService({ github: createGithubClient(config, deps.fetchImpl) });
+  const images = imagesFor(deps);
+  if (deps.fetchImpl) return createAdminService({ github: createGithubClient(config, deps.fetchImpl), ...(images ? { images } : {}), ...(deps.imageHost !== undefined ? { imageHost: deps.imageHost } : {}) });
   const key = `${config.owner}/${config.repo}@${config.branch}:${config.token.slice(-6)}`;
   if (shared.service?.key !== key) {
     const github: GithubClient = createGithubClient(config, deps.fetchImpl);
-    shared.service = { key, value: createAdminService({ github }) };
+    shared.service = { key, value: createAdminService({ github, ...(images ? { images } : {}) }) };
   }
   return shared.service.value;
 }
@@ -124,6 +156,14 @@ function describeGithubError(error: GithubError): AdminHttpResponse {
   if (error.kind === "rate") return fail(503, "github_rate_limited", "GitHub istek sınırına ulaşıldı; birkaç dakika sonra tekrar deneyin.");
   if (error.kind === "notfound") return fail(502, "github_not_found", "Depo ya da dal bulunamadı. GITHUB_REPO ve GITHUB_BRANCH ayarlarını kontrol edin.");
   return fail(502, "github_unavailable", "GitHub'a şu an ulaşılamıyor; birazdan tekrar deneyin.");
+}
+
+function describeBlobError(error: BlobError): AdminHttpResponse {
+  if (error.kind === "auth") return fail(502, "blob_auth_failed", "Fotoğraf deposuna (Vercel Blob) erişim reddedildi. Store'un bu projeye Production ve Preview ortamları için bağlı olduğunu kontrol edin.");
+  if (error.kind === "quota") return fail(503, "blob_unavailable_quota", "Fotoğraf deposu kullanılamıyor: Hobby kotası aşılmış ya da store askıda olabilir (kota aşılırsa Blob 30 gün kapanır). Vercel → Storage ekranına bakın.");
+  if (error.kind === "rate") return fail(503, "blob_rate_limited", "Fotoğraf deposu istek sınırına ulaştı; birkaç saniye sonra tekrar deneyin.");
+  if (error.kind === "exists") return fail(409, "blob_conflict", "Fotoğraf adı çakıştı; yüklemeyi tekrar deneyin.");
+  return fail(502, "blob_unavailable", "Fotoğraf deposuna şu an ulaşılamıyor; birazdan tekrar deneyin.");
 }
 
 function describeAiError(error: AiError): AdminHttpResponse {
@@ -248,6 +288,33 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
         if (!service) return fail(503, "github_not_configured", "GitHub anahtarı (GITHUB_CONTENT_TOKEN) tanımlı değil.");
         return reply(200, { rows: await service.builds() });
       }
+      case "image-upload": {
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        const images = imagesFor(deps);
+        if (!images) return fail(503, "blob_not_configured", "Fotoğraf deposu (Vercel Blob) tanımlı değil. Kurulum adımları docs/blog-paneli-kurulum.md dosyasındadır.");
+        if (!imageHostFor(deps)) return fail(503, "image_host_not_configured", "Fotoğraf alanı ayarlanmamış (shared/blog-images.ts → BLOG_IMAGE_HOST).");
+        // Dosya güvenilmez girdidir: tür, boyut ve ölçüler dosyanın kendisinden okunur; geçersiz istek günlük sınırdan düşmez.
+        const checked = checkUpload({ large: body.large, small: body.small });
+        if (!checked.ok) return fail(422, "image_invalid", checked.error);
+        const limit = imageDailyLimit(env);
+        const quota = (deps.imageQuota ?? shared.imageQuota).take(limit);
+        if (!quota.allowed) return fail(429, "image_daily_limit", `Bugünkü fotoğraf yükleme sınırına (${limit}) ulaşıldı; yarın tekrar deneyin. Sınır, Vercel Blob Hobby kotasını (ayda 2.000 işlem) korur.`);
+        const stored = await images.upload(checked.upload);
+        return reply(200, { src: stored.src, width: stored.width, height: stored.height, remaining: quota.remaining });
+      }
+      case "image-usage": {
+        const wrong = needs("GET");
+        if (wrong) return wrong;
+        if (!service) return fail(503, "github_not_configured", "GitHub anahtarı (GITHUB_CONTENT_TOKEN) tanımlı değil.");
+        return reply(200, await service.imageUsage());
+      }
+      case "image-cleanup": {
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        if (!service) return fail(503, "github_not_configured", "GitHub anahtarı (GITHUB_CONTENT_TOKEN) tanımlı değil.");
+        return reply(200, await service.imageCleanup({ confirm: body.confirm === true }));
+      }
       case "ai-draft": {
         const wrong = needs("POST");
         if (wrong) return wrong;
@@ -270,6 +337,8 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
       console.error("admin: yapay zeka hatası", error.provider, error.kind, error.status);
       return describeAiError(error);
     }
+    if (error instanceof ImageStoreError) return fail(error.status, error.code, error.message);
+    if (error instanceof BlobError) return describeBlobError(error);
     if (error instanceof AdminError) return fail(error.status, error.code, error.message, error.errors ? { errors: error.errors } : undefined);
     if (error instanceof GithubError) return describeGithubError(error);
     console.error("admin: beklenmeyen hata", error instanceof Error ? error.name : "bilinmiyor");
@@ -278,6 +347,8 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
 }
 
 const MAX_BODY_BYTES = 512 * 1024;
+/** Fotoğraf yükleme: iki WebP (en çok 500 KB + 200 KB) base64 olarak ≈ 940 KB eder. Yalnızca OTURUMLU `image-upload` isteğinde geçerlidir. */
+const IMAGE_BODY_MAX_BYTES = 1280 * 1024;
 
 /**
  * İstemci IP'si. İletilen IP başlıklarına yalnızca Vercel'de güvenilir (Vercel bu başlıkları kendisi yazar); başka ortamda
@@ -292,12 +363,12 @@ export function clientIp(req: Pick<IncomingMessage, "headers" | "socket">, trust
   return forwarded || req.socket.remoteAddress || "unknown";
 }
 
-async function readJsonBody(req: IncomingMessage): Promise<Pick<AdminHttpRequest, "body" | "bodyError">> {
+async function readJsonBody(req: IncomingMessage, maxBytes: number = MAX_BODY_BYTES): Promise<Pick<AdminHttpRequest, "body" | "bodyError">> {
   const chunks: Buffer[] = [];
   let size = 0;
   for await (const chunk of req) {
     size += (chunk as Buffer).length;
-    if (size > MAX_BODY_BYTES) return { bodyError: "too_large" };
+    if (size > maxBytes) return { bodyError: "too_large" };
     chunks.push(chunk as Buffer);
   }
   if (size === 0) return {};
@@ -314,7 +385,13 @@ export async function adminHandler(req: IncomingMessage, res: ServerResponse, ov
   let result: AdminHttpResponse;
   try {
     const method = (req.method ?? "GET").toUpperCase();
-    const parsed = method === "GET" || method === "HEAD" ? {} : await readJsonBody(req);
+    let maxBytes = MAX_BODY_BYTES;
+    if (method === "POST" && new URL(req.url ?? "/", "http://panel.local").searchParams.get("action") === "image-upload") {
+      // Büyük gövde yalnızca geçerli oturumla kabul edilir; oturumsuz istek diğer eylemlerle aynı sınıra tabidir.
+      const key = sessionSigningKey(deps.env.ADMIN_SESSION_SECRET, deps.env.ADMIN_PASSWORD_HASH);
+      if (verifySessionToken(readCookie(req.headers.cookie, SESSION_COOKIE), key, deps.now())) maxBytes = IMAGE_BODY_MAX_BYTES;
+    }
+    const parsed = method === "GET" || method === "HEAD" ? {} : await readJsonBody(req, maxBytes);
     result = await handleAdminRequest({ method, url: req.url ?? "/api/admin", headers: req.headers, ip: clientIp(req, Boolean(deps.env.VERCEL)), ...parsed }, deps);
   } catch {
     result = fail(500, "internal_error", "Beklenmeyen bir hata oluştu.");

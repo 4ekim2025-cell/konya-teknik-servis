@@ -21,9 +21,10 @@ export type PreparedSave =
   | { ok: true; noChange: true; post: BlogPostInput }
   | { ok: true; noChange: false; post: BlogPostInput; previous?: BlogPostInput; isNew: boolean; becamePublished: boolean; renamedFrom?: string; warnings: string[] };
 
-const TOP_ORDER = ["slug", "order", "status", "category", "title", "description", "excerpt", "published", "updated", "device", "servicePath", "serviceLabel", "caseFile", "brandPath", "blocks", "sources"];
+const TOP_ORDER = ["slug", "order", "status", "category", "title", "description", "excerpt", "cover", "published", "updated", "device", "servicePath", "serviceLabel", "caseFile", "brandPath", "blocks", "sources"];
 const CASE_ORDER = ["district", "brand", "device", "complaint", "finding", "action"];
-const BLOCK_ORDER: Record<string, string[]> = { p: ["type", "text"], h2: ["type", "text"], list: ["type", "items"], steps: ["type", "items"], note: ["type", "title", "text"] };
+const IMAGE_ORDER = ["src", "alt", "width", "height"];
+const BLOCK_ORDER: Record<string, string[]> = { p: ["type", "text"], h2: ["type", "text"], list: ["type", "items"], steps: ["type", "items"], note: ["type", "title", "text"], image: ["type", ...IMAGE_ORDER] };
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 
@@ -45,7 +46,8 @@ function trimDeep(value: unknown): unknown {
 /** Yazıyı dosyaya yazılacak kararlı biçime getirir: sabit anahtar sırası, kırpılmış metinler, boş isteğe bağlı alanlar atılır. */
 export function canonicalizePost(raw: Record<string, unknown>): Record<string, unknown> {
   const post = trimDeep(raw) as Record<string, unknown>;
-  for (const key of ["brandPath", "serviceLabel", "caseFile"]) if (post[key] === "" || post[key] === null) delete post[key];
+  for (const key of ["brandPath", "serviceLabel", "caseFile", "cover"]) if (post[key] === "" || post[key] === null) delete post[key];
+  if (isRecord(post.cover)) post.cover = orderKeys(post.cover, IMAGE_ORDER);
   if (Array.isArray(post.sources) && post.sources.length === 0) delete post.sources;
   if (isRecord(post.caseFile)) post.caseFile = orderKeys(post.caseFile, CASE_ORDER);
   if (Array.isArray(post.blocks)) {
@@ -116,9 +118,9 @@ const comparable = (post: Record<string, unknown>) => JSON.stringify(canonicaliz
 
 /**
  * Kaydetme isteğini doğrular ve dosyaya yazılacak yazıyı üretir. Saf fonksiyondur (ağ ve disk kullanmaz).
- * `existing`: depodaki tüm yazılar (taslaklar dahil). `today`: YYYY-AA-GG.
+ * `existing`: depodaki tüm yazılar (taslaklar dahil). `today`: YYYY-AA-GG. `imageHost`: fotoğraf adreslerinin geçebileceği alan (yoksa varsayılan).
  */
-export function prepareSave(request: SaveRequest, existing: BlogPostInput[], today: string): PreparedSave {
+export function prepareSave(request: SaveRequest, existing: BlogPostInput[], today: string, imageHost?: string): PreparedSave {
   if (!isRecord(request.post)) return { ok: false, status: 400, errors: ["Yazı verisi geçersiz"] };
   if (request.mode !== "draft" && request.mode !== "publish") return { ok: false, status: 400, errors: ["Kayıt türü taslak ya da yayın olmalı"] };
   const raw = request.post;
@@ -153,7 +155,7 @@ export function prepareSave(request: SaveRequest, existing: BlogPostInput[], tod
   if (becamePublished || !previous) candidateRaw.published = today;
 
   const candidate = canonicalizePost(candidateRaw);
-  const validation = validateBlogPost(candidate);
+  const validation = validateBlogPost(candidate, imageHost);
   if (!validation.ok) return { ok: false, status: 422, errors: validation.errors };
 
   const others = existing.filter(post => post.slug !== (previous?.slug ?? raw.slug));

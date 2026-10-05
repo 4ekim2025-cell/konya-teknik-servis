@@ -14,7 +14,7 @@
  * Blob store'un herkese açık alanı, ör. "abc123xyz.public.blob.vercel-storage.com". Bu bir sır DEĞİLDİR (her fotoğraf adresinde görünür).
  * Store Vercel'de oluşturulduktan sonra buraya yazılır. Boşken şema hiçbir fotoğraf adresini kabul etmez (güvenli varsayılan).
  */
-export const BLOG_IMAGE_HOST = "";
+export const BLOG_IMAGE_HOST = "eyh1wbvuvczprro4.public.blob.vercel-storage.com";
 
 export const BLOG_IMAGE_PREFIX = "blog/";
 export const BLOG_IMAGE_LARGE = 1600;

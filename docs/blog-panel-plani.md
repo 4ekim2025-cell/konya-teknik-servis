@@ -11,7 +11,7 @@ Plan tarihi: 2026-10-02. Proje sahibi: Esad Eşli.
 | 1 | İçeriği koddan ayırma | Tamamlandı (main'de) |
 | 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Tamamlandı (main'de, canlıda); güvenlik incelemesi bulguları PR #6–#9 ile düzeltildi |
 | 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Tamamlandı (main'de, canlıda; PR #10–#13). Gerçek Gemini ile panelden denendi, proje sahibi 2026-10-02'de onayladı |
-| 4 | Fotoğraflar (Vercel Blob) | Kod hazır, PR açık (önizlemede gerçek Blob ile denenmeli). Merge öncesi gerekenler: Blob store oluşturma, `pnpm add @vercel/blob` (kilit dosyası), `BLOG_IMAGE_HOST` |
+| 4 | Fotoğraflar (Vercel Blob) | Kod hazır, PR açık (önizlemede gerçek Blob ile denenmeli). Blob store (esli-blog-foto, OIDC ile bağlı), `@vercel/blob` ve `BLOG_IMAGE_HOST` tamam; kalan: yeniden dağıtım + önizlemede gerçek yükleme denemesi |
 | 5 | Google İşletme (API yok / API var) | Bekliyor |
 | 6 | Zamanlama ve istatistik | Bekliyor |
 

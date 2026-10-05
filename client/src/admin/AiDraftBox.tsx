@@ -14,6 +14,8 @@ type Props = {
   hasContent: boolean;
   /** Denetimden geçen taslak editöre doldurulur. Kaydetme ve yayın editörün kendi düğmeleriyle yapılır. */
   onDraft: (post: BlogPostInput) => void;
+  /** Üretilen (ve elle düzeltilen) iki sosyal metin: editör bunları taslakla birlikte paylaşım paketine kaydeder. */
+  onTexts?: (texts: { googleBusiness: string; instagram: string }) => void;
 };
 
 type Form = { topic: string; district: string; neighborhood: string; brand: string; device: string; deviceName: string; complaint: string; finding: string; action: string; note: string };
@@ -35,7 +37,7 @@ export function toAiInput(form: Form): unknown {
 }
 
 /** Vaka girdi formu → yapay zeka taslağı. Hiçbir şey kaydetmez; sonuç editöre taslak olarak dolar. */
-export default function AiDraftBox({ existing, canGenerate, hasContent, onDraft }: Props) {
+export default function AiDraftBox({ existing, canGenerate, hasContent, onDraft, onTexts }: Props) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Form>(EMPTY);
   const [overwrite, setOverwrite] = useState(false);
@@ -63,9 +65,11 @@ export default function AiDraftBox({ existing, canGenerate, hasContent, onDraft 
         return;
       }
       onDraft(placed.draft.post);
-      setTexts({ googleBusiness: placed.draft.googleBusiness, instagram: placed.draft.instagram });
+      const generated = { googleBusiness: placed.draft.googleBusiness, instagram: placed.draft.instagram };
+      setTexts(generated);
+      onTexts?.(generated);
       setOverwrite(false);
-      setInfo(`Taslak editöre dolduruldu; henüz kaydedilmedi. Okuyup düzeltin, sonra “Taslak kaydet” ya da “Yayınla” düğmesini kullanın. Bugün kalan hak: ${response.remaining}.`);
+      setInfo(`Taslak editöre dolduruldu; henüz kaydedilmedi. Okuyup düzeltin, sonra “Taslak kaydet” ya da “Yayınla” düğmesini kullanın; paylaşım metinleri de birlikte kaydedilir. Bugün kalan hak: ${response.remaining}.`);
     } catch (failure) {
       if (failure instanceof ApiError) setErrors(failure.errors?.length ? [failure.message, ...failure.errors] : [failure.message]);
       else setErrors(["Beklenmeyen bir hata oluştu."]);
@@ -79,17 +83,20 @@ export default function AiDraftBox({ existing, canGenerate, hasContent, onDraft 
     try { await navigator.clipboard.writeText(texts[key]); setCopied(key); } catch { setCopied(""); }
   };
 
+  const change = (next: { googleBusiness: string; instagram: string }) => { setCopied(""); setTexts(next); onTexts?.(next); };
+
   const socialTexts = texts && (
     <div className="admin-ai-texts">
-      <p className="admin-muted">Bu iki metin kaydedilmez; sayfadan ayrılmadan önce kopyalayın. Paylaşmadan önce okuyun ve düzeltin.</p>
-      <Field label="Google İşletme metni" hint={`${texts.googleBusiness.length}/${AI_GOOGLE_BUSINESS_MAX}`}><textarea rows={7} value={texts.googleBusiness} onChange={event => { setCopied(""); setTexts({ ...texts, googleBusiness: event.target.value }); }} /></Field>
+      <p className="admin-muted">Bu iki metin yazıyı kaydettiğinizde (Taslak kaydet / Yayınla) paylaşım paketine de kaydedilir; yayından sonra Yazılar → Paylaşım’dan açılır. Paylaşmadan önce okuyun ve düzeltin.</p>
+      <Field label="Google İşletme metni" hint={`${texts.googleBusiness.length}/${AI_GOOGLE_BUSINESS_MAX}`}><textarea rows={7} value={texts.googleBusiness} onChange={event => change({ ...texts, googleBusiness: event.target.value })} /></Field>
       <button type="button" className="admin-btn" onClick={() => copy("googleBusiness")}>{copied === "googleBusiness" ? "Kopyalandı" : "Google İşletme metnini kopyala"}</button>
-      <Field label="Instagram metni" hint={`${texts.instagram.length}/${AI_INSTAGRAM_MAX}`}><textarea rows={9} value={texts.instagram} onChange={event => { setCopied(""); setTexts({ ...texts, instagram: event.target.value }); }} /></Field>
+      <Field label="Instagram metni" hint={`${texts.instagram.length}/${AI_INSTAGRAM_MAX}`}><textarea rows={9} value={texts.instagram} onChange={event => change({ ...texts, instagram: event.target.value })} /></Field>
       <button type="button" className="admin-btn" onClick={() => copy("instagram")}>{copied === "instagram" ? "Kopyalandı" : "Instagram metnini kopyala"}</button>
     </div>
   );
 
-  if (!canGenerate) return texts ? <fieldset className="admin-box admin-ai"><legend>Paylaşım metinleri</legend>{socialTexts}</fieldset> : null;
+  // Yayındaki yazıda yeni taslak üretilmez; metinler paylaşım paketindedir (editör "Paylaşım paketi" düğmesini gösterir).
+  if (!canGenerate) return null;
 
   if (!open) {
     return (

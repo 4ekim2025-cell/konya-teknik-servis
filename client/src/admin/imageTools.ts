@@ -59,3 +59,41 @@ export async function prepareImage(file: File): Promise<PreparedImage> {
     bitmap.close();
   }
 }
+
+/**
+ * Yayındaki bir fotoğrafı JPEG olarak indirir (Google İşletme ve Instagram'a yüklemek için; panel fotoğrafları WebP'dir ve bu
+ * hizmetlerin yükleme ekranları WebP'yi her zaman kabul etmez). Dönüştürme tarayıcıda yapılır; dosya hiçbir yere gönderilmez.
+ * Dönüştürülemezse (ağ, CORS, tarayıcı) `false` döner ve çağıran asıl bağlantıyı açar.
+ */
+export async function downloadAsJpeg(src: string, fileName: string): Promise<boolean> {
+  try {
+    const response = await fetch(src);
+    if (!response.ok) return false;
+    const bitmap = await createImageBitmap(await response.blob());
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+      const context = canvas.getContext("2d");
+      if (!context) return false;
+      context.fillStyle = "#ffffff";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(bitmap, 0, 0);
+      const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, "image/jpeg", 0.92));
+      if (!blob || blob.type !== "image/jpeg") return false;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+      return true;
+    } finally {
+      bitmap.close();
+    }
+  } catch {
+    return false;
+  }
+}

@@ -46,9 +46,10 @@ describe("panel: arama motoru kuralları", () => {
   });
 
   it("sır değişkenleri VITE_ önekiyle kullanılmaz", () => {
-    for (const file of [".env.example", "server/admin/handler.ts", "server/admin/github.ts", "server/admin/ai.ts"]) expect(read(file), file).not.toMatch(/VITE_(ADMIN|GITHUB|GEMINI|GROQ|AI)/);
+    for (const file of [".env.example", "server/admin/handler.ts", "server/admin/github.ts", "server/admin/ai.ts", "server/admin/google.ts", "shared/blog-social.ts"]) expect(read(file), file).not.toMatch(/VITE_(ADMIN|GITHUB|GEMINI|GROQ|AI|GOOGLE)/);
     expect(read(".env.example")).toContain("ADMIN_PASSWORD_HASH=");
     expect(read(".env.example")).toContain("GITHUB_CONTENT_TOKEN=");
+    for (const name of ["GOOGLE_CLIENT_ID=", "GOOGLE_CLIENT_SECRET=", "GOOGLE_REFRESH_TOKEN="]) expect(read(".env.example")).toContain(name);
   });
 });
 
@@ -89,6 +90,31 @@ describe("vercel-ignore-build.sh", () => {
       expect(run(dir, undefined)).toBe(1);
     } finally {
       rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("[panel-paylasim] commit'i yalnızca content/social ve content/settings.json değiştiyse build'i atlar; site dosyası ya da yönlendirme varsa atlamaz", () => {
+    const SHARE = "content: paylaşım paketi kaydedildi — Deneme [panel-paylasim]";
+    const social = repoWith(["shared/x.ts", "content/social/a.json", "content/settings.json", "content/blog/a.json"]);
+    try {
+      expect(run(social.dir, SHARE)).toBe(0);
+      expect(run(social.dir, SHARE, social.shas[0])).toBe(0);
+      expect(run(social.dir, "content: paylaşım paketi kaydedildi — Deneme")).toBe(1);
+    } finally {
+      rmSync(social.dir, { recursive: true, force: true });
+    }
+    const site = repoWith(["content/social/a.json", "shared/x.ts", "content/social/b.json"]);
+    try {
+      expect(run(site.dir, SHARE, site.shas[0])).toBe(1);
+      expect(run(site.dir, SHARE, site.shas[1])).toBe(0);
+    } finally {
+      rmSync(site.dir, { recursive: true, force: true });
+    }
+    const redirects = repoWith(["shared/x.ts", "content/redirects.json", "content/social/a.json"]);
+    try {
+      expect(run(redirects.dir, SHARE, redirects.shas[0])).toBe(1);
+    } finally {
+      rmSync(redirects.dir, { recursive: true, force: true });
     }
   });
 

@@ -5,7 +5,7 @@ import { api, ApiError, type PostItem, type PostsResponse } from "./api";
 import { filterItems, isPublished, newestFirst, type ListFilter } from "./editorModel";
 import DeleteDialog from "./DeleteDialog";
 
-export default function PostsView({ data, onEdit, onNew, onChanged, notify }: { data: PostsResponse; onEdit: (item: PostItem) => void; onNew: () => void; onChanged: () => Promise<void>; notify: (message: string) => void }) {
+export default function PostsView({ data, onEdit, onPackage, onNew, onChanged, notify }: { data: PostsResponse; onEdit: (item: PostItem) => void; onPackage: (item: PostItem) => void; onNew: () => void; onChanged: () => Promise<void>; notify: (message: string) => void }) {
   const [filter, setFilter] = useState<ListFilter>({ query: "", category: "", status: "" });
   const [deleting, setDeleting] = useState<PostItem | null>(null);
   const [busySlug, setBusySlug] = useState("");
@@ -59,6 +59,7 @@ export default function PostsView({ data, onEdit, onNew, onChanged, notify }: { 
                 <td><span className={`admin-badge ${isPublished(item.post) ? "is-live" : "is-draft"}`}>{isPublished(item.post) ? "Yayında" : "Taslak"}</span></td>
                 <td className="admin-row-actions">
                   <button className="admin-btn" onClick={() => onEdit(item)}>Düzenle</button>
+                  <button className="admin-btn" onClick={() => onPackage(item)} title="Google İşletme ve Instagram paylaşım paketi">Paylaşım</button>
                   <button className="admin-btn admin-btn-danger" disabled={busySlug === item.post.slug} onClick={() => remove(item)}>Sil</button>
                 </td>
               </tr>

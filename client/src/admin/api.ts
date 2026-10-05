@@ -1,5 +1,6 @@
 import type { BlogPostInput } from "@shared/blog-schema";
 import type { AiCaseInput } from "@shared/blog-ai";
+import type { GoogleButton, PanelSettings, SocialChannel, SocialRecord } from "@shared/blog-social";
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string, message: string, public errors?: string[]) {
@@ -11,13 +12,16 @@ export type PostItem = { post: BlogPostInput; hash: string };
 export type Redirect = { from: string; to: string; date: string };
 export type PostsResponse = { head: string; branch: string; repo: string; items: PostItem[]; problems: { file: string; errors: string[] }[]; redirects: Redirect[] };
 export type SaveResponse = { noChange: true } | { noChange: false; commit: string; slug: string; status: "draft" | "published"; warnings: string[]; siteAffecting: boolean };
-export type DeleteResponse = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean; imagesDeleted?: number; imagesNote?: "kept_preview" | "not_configured" | "failed" };
+export type DeleteResponse = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean; imagesDeleted?: number; imagesNote?: "kept_preview" | "not_configured" | "failed"; /** Google'da paylaşılmış yazı silindiyse: "switched" düğme "Hemen ara"ya çevrildi, "manual" elle çevrilmeli, "failed" otomatik çevrilemedi. */ google?: "switched" | "manual" | "failed" };
 export type ImageUploadResponse = { src: string; width: number; height: number; remaining: number };
 export type ImageUsage = { storageBytes: number; limitBytes: number; imageCount: number; referencedImages: number; unreferencedImages: number; unreferencedBytes: number; truncated: boolean; graceHours: number; contentProblems: number; canCleanup: boolean };
 export type ImageCleanupResponse = { deletedFiles: number; freedBytes: number; remainingImages: number };
 export type HistoryEntry = { sha: string; message: string; date: string; author: string };
 export type BuildRow = { sha: string; message: string; date: string; state: "success" | "pending" | "failure" | "unknown"; description: string; url?: string; skipped: boolean };
 export type AiDraftResponse = { post: BlogPostInput; googleBusiness: string; instagram: string; provider: string; attempts: number; remaining: number };
+export type SocialResponse = { record: SocialRecord | null; problem?: string; published: boolean };
+export type SettingsResponse = { settings: PanelSettings; problem?: string; googleConfigured: boolean };
+export type SocialSaveResponse = { noChange: boolean; record: SocialRecord };
 export type Session = { configured: boolean; authenticated: boolean };
 
 type Options = { method?: "GET" | "POST"; query?: Record<string, string>; body?: unknown };
@@ -70,5 +74,15 @@ export const api = {
   uploadImage: async (large: Blob, small: Blob) => call<ImageUploadResponse>("image-upload", { method: "POST", body: { large: await toBase64(large), small: await toBase64(small) } }),
   /** Blob kullanımı (her çağrı gelişmiş işlem harcar; yalnızca düğmeyle). */
   imageUsage: () => call<ImageUsage>("image-usage"),
+  /** Paylaşım paketi (Google İşletme + Instagram metni, düğme türü, "paylaşıldı" durumu). Site dosyalarına dokunmaz, build açmaz. */
+  social: (slug: string) => call<SocialResponse>("social-get", { query: { slug } }),
+  saveSocial: (body: { slug: string; googleBusiness: string; instagram: string; button: GoogleButton }) => call<SocialSaveResponse>("social-save", { method: "POST", body }),
+  markShared: (body: { slug: string; channel: SocialChannel; shared: boolean }) => call<SocialSaveResponse>("social-mark", { method: "POST", body }),
+  /** "API var" yolunda Google'a paylaşım gönderir; sonuç kayda işlenir. */
+  googleShare: (slug: string) => call<{ ok: true; record: SocialRecord }>("google-share", { method: "POST", body: { slug } }),
+  settings: () => call<SettingsResponse>("settings"),
+  saveSettings: (settings: PanelSettings) => call<{ noChange: boolean; settings: PanelSettings; googleConfigured: boolean }>("settings-save", { method: "POST", body: { settings } }),
+  /** Bağlantıyı sına: yalnızca okur, hiçbir şey paylaşmaz. */
+  googleTest: () => call<{ ok: true }>("google-test", { method: "POST" }),
   imageCleanup: () => call<ImageCleanupResponse>("image-cleanup", { method: "POST", body: { confirm: true } }),
 };

@@ -90,6 +90,40 @@ Bilinmesi gerekenler:
 - "Kullanımı göster" Blob'dan gelişmiş işlem harcar; yalnızca gerektiğinde basın. Dashboard'da Blob'a göz atmak da işlem sayılır.
 - Yazıdan çıkardığınız ya da yüklenip kaydedilmeyen fotoğraf Blob'da kalır; Genel bakış → Fotoğraf depolama → "Kullanılmayanları temizle" ile alınır (son 24 saatte yüklenenlere dokunmaz).
 
+## 3d. Google İşletme paylaşım paketi ve API (aşama 5)
+
+**"API yok" (varsayılan) için kurulum gerekmez.** Yazıyı yayınlayınca editörde "Paylaşım paketini aç" düğmesi çıkar (Yazılar listesinde de her satırda "Paylaşım" düğmesi vardır). Pakette Google İşletme metni, düğme türü (Daha fazla bilgi / Hemen ara), takip etiketli bağlantı, fotoğraflar (JPEG olarak iner), Instagram metni ve iki "paylaşıldı" kutusu bulunur. Paket `content/social/<adres>.json` dosyasında, ayarlar `content/settings.json` dosyasında durur; kaydetmek siteyi yeniden derletmez (commit mesajındaki `[panel-paylasim]` işareti) ve hiçbiri siteye, sitemap'e, `llms.txt`'ye ya da şemaya girmez.
+
+Takip etiketleri yalnızca pakette kullanılır: Google için `utm_source=google&utm_medium=organic&utm_campaign=gbp-post`, Instagram için `utm_source=instagram&utm_medium=social&utm_campaign=blog-paylasim`.
+
+### "API var" için (Google erişim onayından sonra)
+
+Kod yazıldı ve bellek içi taklitle sınandı; **gerçek bir Google hesabıyla hiç denenmedi.** Aşağıdaki adımlar Google'ın resmî belgesine göre yazıldı. Vercel ekranına (2026-10-05) bakıldı; Google Cloud ekranlarına bakılamadı, düğme adları farklı çıkabilir.
+
+1. **Erişim başvurusu (sizde):** Google, İşletme Profili API'si için profilin en az 60 gündür doğrulanmış ve aktif olmasını ve bir web sitesi bulunmasını ister. Başvuru Google'ın "Business Profile APIs" erişim formuyla yapılır. Onaylanınca Cloud Console → API'ler ve Hizmetler → Business Profile API → Kotalar ekranında dakikalık kota 0'dan 300'e çıkar; **kota 0 iken tüm çağrılar 403 verir** (panelde "Google erişimi reddetti" iletisi).
+2. **Cloud projesinde API'leri etkinleştirme:** Google belgesinin saydığı yedi İşletme Profili API'sini aynı projede etkinleştirin (Business Profile API ve ona bağlı hesap/konum yönetimi API'leri). Hangilerinin gerektiği belgede listelidir; eksik biri 403 verir.
+3. **OAuth istemcisi:** Kimlik Bilgileri → "OAuth istemci kimliği" (uygulama türü: Web uygulaması) oluşturun. Oluşan **istemci kimliği** ve **istemci sırrı** `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` olur. OAuth onay ekranını **"Üretimde" (In production)** durumuna alın; "Test" durumunda yenileme belirteci 7 günde sona erer.
+4. **Yenileme belirteci (bir kez):** panelde Google girişi akışı yoktur. Belirteci bir kez siz alırsınız: Google OAuth Playground'da (ayarlardan "Use your own OAuth credentials" ile 3. adımdaki istemciyi girin; yönlendirme adresini istemciye ekleyin) kapsam olarak `https://www.googleapis.com/auth/business.manage` seçip yetkilendirin, çıkan **refresh token** `GOOGLE_REFRESH_TOKEN` olur. Bu yöntem denenmedi; belirteç alınamazsa ya da kısa sürede geçersizleşirse bana bildirin, akışı düzeltiriz.
+5. **Hesap ve konum kimliği:** panelin Ayarlar sekmesine yalnızca rakamlar yazılır (`accounts/` ve `locations/` sonrası). Kimlikler Business Profile API'sinin hesap ve konum listeleme çağrılarından ya da Google'ın API belgesindeki "Try it" aracından okunur.
+6. **Vercel ortam değişkenleri:** Vercel → `esli3/konya-teknik-servis` → Settings → Environment Variables → "Add Environment Variable" ile üç değişkeni ekleyin. **Yalnızca Production** seçin (mevcut `GITHUB_CONTENT_TOKEN` ve `GEMINI_API_KEY` de öyle; Preview'a eklenirse her önizleme dağıtımı profilinizde herkese açık paylaşım yapabilir) ve "Sensitive" olarak işaretleyin:
+
+| Ad | Değer | Ortam |
+|---|---|---|
+| `GOOGLE_CLIENT_ID` | 3. adımdaki istemci kimliği | Production |
+| `GOOGLE_CLIENT_SECRET` | 3. adımdaki istemci sırrı | Production |
+| `GOOGLE_REFRESH_TOKEN` | 4. adımdaki yenileme belirteci | Production |
+
+   Değerleri bana yazmayın; yalnızca Vercel'e girin. Ekledikten sonra yeniden dağıtım (redeploy) gerekir. Üçü birlikte dolu değilse API yolu kapalı kalır, panelin geri kalanı etkilenmez.
+7. **Panelde açma:** Ayarlar → "API var" → hesap ve konum kimliği → "Ayarları kaydet" → **"Bağlantıyı sına"** (yalnızca okur, hiçbir şey paylaşmaz). Yeşil sonuç gelince bir yazının paketinden "Google'da paylaş (API)" düğmesi çıkar; gönderi ancak onay sorusuna "Evet" derseniz gider.
+
+### API ile davranış
+
+- Paylaşım tek düğmeyle ve onayla gider; aynı yazı ikinci kez gönderilmez ("paylaşıldı" otomatik işaretlenir, API ile yapılan işaret elle kaldırılamaz). Günde en çok 40 Google çağrısı yapılır.
+- "Daha fazla bilgi" gönderisinde takip etiketli bağlantı, "Hemen ara" gönderisinde bağlantı yoktur (Google CALL düğmesinde adres kabul etmez).
+- **Kapak fotoğrafı:** Ayarlarda "kapak fotoğrafını ekle" kutusu varsayılan **kapalıdır**. Google belgesi JPG/PNG sayar, panel fotoğrafları WebP'dir; denenmedi. Gönderi fotoğrafsız gider; fotoğrafı elle ekleyebilirsiniz. Kutuyu açıp Google reddederse ("Google isteği kabul etmedi") kapatın.
+- **Yazı silinince:** Google'da API ile paylaşılmış bir yazı silinirse panel paylaşımın düğmesini otomatik "Hemen ara"ya çevirir ve silme iletisinde bildirir. Çevrilemezse ya da paylaşım elle yapılmışsa ileti profilde elle çevirmenizi söyler.
+- Google'da paylaşılıp kaydı yazılamayan nadir durumda panel açık uyarı verir; tekrar paylaşmayın, "Google'da paylaşıldı" kutusunu elle işaretleyin.
+
 ## 4. Önizlemede deneme (canlıya geçmeden)
 
 Önizleme ortamında panel, önizlemenin kendi dalına yazar; `main` etkilenmez. Önizleme linki Vercel girişi ister. Deneme listesi:
@@ -106,6 +140,8 @@ Bilinmesi gerekenler:
 - **Derleme durumu**: Yayın durumu sekmesi, Vercel'in GitHub commit durumu olarak bildirdiği sonucu okur. Vercel durum bildirmiyorsa satır "Bilinmiyor" görünür.
 - **`/api/admin` adresi**: `trailingSlash: true` ayarıyla birlikte fonksiyonun `/api/admin?action=...` biçiminde çalıştığı önizlemede görülmelidir (Instagram uç noktası aynı biçimde çalışıyor).
 
+- **Google İşletme API'si (aşama 5)**: `server/admin/google.ts` yalnızca belgeye göre yazıldı, gerçek hesapla denenmedi. Özellikle şunlar teyit edilmelidir: yenileme belirtecinin elle alınması, `localPosts.create` gövdesi, "Hemen ara" düğmesinin `PATCH ?updateMask=callToAction` ile çevrilmesi ve WebP kapak fotoğrafının kabulü. Bunlar ilk gerçek denemede hata verirse yalnızca bu dosya ve ayar anahtarı etkilenir; "API yok" yolu çalışmaya devam eder.
+- **Paylaşım paketi commit'inde build atlama**: `[panel-paylasim]` işareti de `[panel-taslak]` gibi çalışır; son yayından beri `content/blog`, `content/social` ve `content/settings.json` dışında dosya değiştiyse build yapılır.
 - **Fotoğraf yükleme (aşama 4)**: Blob SDK'sının (`@vercel/blob`) çağrı biçimi (`put`, `del`, `list`, hata sınıfı adları) bu depoda gerçek hesapla denenmedi; önizlemede bir fotoğraf yükleyip silerek teyit edin. Canvas'ın WebP üretmesi tarayıcıya bağlıdır (Chrome, Edge, Firefox çalışır; Safari'de denenmedi).
 
 ## Sorun giderme
@@ -117,6 +153,10 @@ Bilinmesi gerekenler:
 - "GitHub anahtarı geçersiz": anahtarın süresi bitmiş ya da bu depoda Contents: Read and write izni yok.
 - Başka biri/başka yerden commit yapıldıysa kaydetme "başka yerde değişti" uyarısı verir; listeyi yenileyip tekrar deneyin.
 - Yanlış yayınlanan yazı: yazıyı açın → "Önceki sürümler" → eski sürümü yükleyin → yeniden yayınlayın. Yazıyı silmek yerine bunu tercih edin; silinen yazının adresi 404 verir (yönlendirme seçilmediyse).
+- "Google anahtarları tanımlı değil": üç `GOOGLE_*` değişkeninden biri eksik ya da eklendikten sonra yeniden dağıtım yapılmadı.
+- "Google anahtarları reddedildi": yenileme belirteci iptal edilmiş ya da süresi dolmuş (OAuth onay ekranı "Test" durumundaysa 7 günde dolar) ya da istemci kimliği/sırrı yanlış. Neden, Vercel → Logs içinde `admin: google hatası <işlem> <durum kodu>` satırından okunur.
+- "Google erişimi reddetti" (403): API başvurusu onaylanmamış (kota 0), İşletme Profili API'leri projede etkin değil ya da hesabın bu konumu yönetme yetkisi yok.
+- "Google isteği kabul etmedi" (400): metin, düğme ya da fotoğraf kuralı; Ayarlar'da kapak fotoğrafı kutusunu kapatıp deneyin.
 - "Fotoğraf deposu tanımlı değil": Blob store bu projeye bağlı değil ya da bağlandıktan sonra yeniden dağıtım yapılmadı.
 - "Fotoğraf alanı ayarlanmamış": `shared/blog-images.ts` → `BLOG_IMAGE_HOST` boş ya da store adresiyle uyuşmuyor ("alan uyuşmuyor" hatasında yüklenen dosyalar otomatik silinir).
 - "Fotoğraf reddedildi: konum/üst veri taşıyor": dosya panel dışında üretilmiş; panelden seçerek yükleyin.

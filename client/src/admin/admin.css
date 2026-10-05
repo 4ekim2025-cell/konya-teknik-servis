@@ -80,3 +80,10 @@
 .admin-image{display:grid;gap:8px}.admin-image img{display:block;max-width:100%;max-height:220px;width:auto;height:auto;border-radius:8px;background:#eee;object-fit:contain}
 .admin-gauge{height:12px;border-radius:99px;background:#e6e2da;overflow:hidden;margin:8px 0}.admin-gauge span{display:block;height:100%;background:#2e7d32}
 .admin-gauge.is-warn span{background:#c98a00}.admin-gauge.is-bad span{background:#a4160a}
+/* Paylaşım paketi ve ayarlar (aşama 5) */
+.admin-photos{list-style:none;margin:0 0 8px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.admin-photos li{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #d6d2ca;border-radius:10px;padding:8px}
+.admin-photos img{display:block;width:96px;height:auto;max-height:96px;object-fit:cover;border-radius:6px;background:#eee}
+.admin-error-inline{color:#a4160a;font-size:13px}
+.admin-social .admin-field input[readonly]{background:#f6f4ef}
+.admin-settings h2{margin:0 0 12px}

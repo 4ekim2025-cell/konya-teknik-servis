@@ -12,7 +12,7 @@ Plan tarihi: 2026-10-02. Proje sahibi: Esad Eşli.
 | 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Tamamlandı (main'de, canlıda); güvenlik incelemesi bulguları PR #6–#9 ile düzeltildi |
 | 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Tamamlandı (main'de, canlıda; PR #10–#13). Gerçek Gemini ile panelden denendi, proje sahibi 2026-10-02'de onayladı |
 | 4 | Fotoğraflar (Vercel Blob) | Tamamlandı (main'de, canlıda; PR #15–#17). Fotoğraflı yazılar panelden yayınlandı; PageSpeed karşılaştırması 2026-10-05'te yapıldı (aşağıda) |
-| 5 | Google İşletme (API yok / API var) | Bekliyor |
+| 5 | Google İşletme (API yok / API var) | Kod tamam, PR açık (sınama yalnızca bellek içi taklitle). "API yok" yolu kullanıma hazır; "API var" kodu yazıldı ama gerçek Google hesabıyla **denenmedi** (API erişimi onaylanınca bağlanacak: `docs/blog-paneli-kurulum.md` bölüm 3d) |
 | 6 | Zamanlama ve istatistik | Bekliyor |
 
 ## Amaç
@@ -111,7 +111,7 @@ Nasıl kuruldu (2026-10-02):
 - **Yedek model (PR #11):** canlıdaki ilk denemede Gemini yaklaşık 1 saniyede sunucu hatası döndü. Artık 5xx'te aynı model bir kez daha, sonra `gemini-3.5-flash` ve `gemini-3.5-flash-lite` denenir; 404'te doğrudan yedeğe geçilir; anahtar (401/403) ve kota (429) hatasında model değiştirilmez. Günlüğe sağlayıcının HTTP durum kodu yazılır.
 - **Giriş kalıbı (PR #12–#13, proje sahibinin kararı):** yazı şu iki cümleyle başlar: "[ilçe] ilçesinden [marka] marka [cihaz]ının [şikâyet] yönünde şikâyet aldık. Adrese ulaştık." Talebin nasıl geldiği (arama, mesaj) ve müşteri ayrıntısı yazılmaz. Kalıp `server/admin/ai.ts` içindeki yönergededir.
 - **Açık kalan doğrulama:** geliştirme ortamında npm erişimi olmadığı için `pnpm check` ve `pnpm test` bu aşamada çalıştırılamadı (Vercel build'leri geçti). Bir sonraki aşamaya başlarken çalıştırılmalı; `blogPosts.test.ts` içindeki prerender testi (`scripts/prerender.ts`, `html.replace(..., "")` satırı) bu aşamadan bağımsız olarak kırmızıdır.
-- Sosyal metinler şimdilik kaydedilmez (kopyalanır); kalıcı "paylaşım paketi" 5. aşamadadır.
+- Sosyal metinler bu aşamada kaydedilmiyordu (kopyalanıyordu); 5. aşamada kalıcı paylaşım paketine kaydedilir.
 
 ## Aşama 4 — Fotoğraflar
 
@@ -169,3 +169,17 @@ Not: API kodu onay gelene kadar gerçek hesapla sınanamaz; belgeye göre yazıl
 - Yalnızca kapaklı yazıda `og:image`/`twitter:image`/`twitter:card` ve BlogPosting `image` değişir; diğer tüm sayfaların HTML'i değişmez (aşağıdaki karşılaştırma).
 - Doğrulama yöntemi: `scripts/prerender.ts` değişiklikten önceki ve sonraki kodla, Vite çıktısı yerine `client/index.html` şablonuyla çalıştırılıp `dist/public` ağaçları `diff -r` ile karşılaştırıldı (66 rota + diğer dosyalar: birebir aynı). Fotoğraflı deneme yazısında yalnızca o sayfanın dosyası değişti.
 - **Kabul ölçütü ölçümü (2026-10-05, PageSpeed mobil, proje sahibinin çalıştırdığı tek ölçüm):** kapaklı yazı (`/blog/arcelik-su-sebili-sicak-su-muslugu-kirildi/`, 573×573 kapak) performans 76, FCP 3,6 sn, LCP 4,2 sn, TBT 0 ms, CLS 0, Speed Index 4,7 sn, SEO 100. Fotoğrafsız yazı (`/blog/beko-camasir-makinesi-su-almiyor-basinc-anahtari/`) performans 79, FCP 3,6 sn, LCP 4,1 sn, TBT 0 ms, CLS 0, Speed Index 3,6 sn, SEO 100. Fark 3 puan ve neredeyse tamamı Speed Index'ten; LCP ve CLS aynı düzeyde. Tek ölçümde birkaç puanlık oynama olağandır; ölçüt ("belirgin düşmez") karşılandı sayıldı.
+
+### Aşama 5 uygulama notları
+
+- **Karar (2026-10-05, proje sahibi):** "API var" kodu da yazıldı; yalnızca Google'a bağlanmak kalır. Onay gelince çıkan hata o zaman düzeltilir.
+- **Saklama:** paket `content/social/<adres>.json` (`shared/blog-social.ts`: Google metni ≤ 1500, Instagram metni ≤ 2200, düğme `LEARN_MORE`/`CALL`, `shared` = hangi kanalda ne zaman paylaşıldı, API ile paylaşıldıysa gönderi adı), ayarlar `content/settings.json` (varsayılan `google.mode: "none"`). Yazı JSON'una, `blog-schema.ts`'e ve üretilen dosyalara dokunulmadı; `scripts/build-content.ts` yalnızca `content/blog` ve `content/redirects.json` okur. GitHub anahtarının izni değişmedi (`content/` zaten yazılabilir).
+- **Build atlama:** paket/ayar commit'leri `[panel-paylasim]` işaretini taşır; `scripts/vercel-ignore-build.sh` işaretli commit'te son yayından beri `content/blog`, `content/social`, `content/settings.json` dışında dosya değişmediyse build'i atlar. `content/redirects.json` ve üretilen dosyalar yine build'i zorlar (`panelWiring.test.ts` sınar).
+- **Metin kuralları:** sosyal metinlerde fiyat, hukuk, yetkili servis iddiası, kontrol karakteri, bağlantı/`@` yasaktır (`socialRecordSchema`); yapay zeka çıktısı zaten `findUngroundedDetails`'ten geçer. Yapay zeka metinleri artık editördeki "Taslak kaydet / Yayınla" ile birlikte pakete yazılır (ayrı, siteyi derletmeyen commit); taslak yeniden adlandırılırsa dosya aynı commit'te taşınır, yazı silinirse aynı commit'te silinir.
+- **Eylemler** (yeni fonksiyon yok; hepsi `/api/admin` içinde, oturum + CSRF + istek sınırı): `settings`, `settings-save`, `social-get`, `social-save`, `social-mark`, `google-test`, `google-share`. Google çağrıları günde 40 ile sınırlıdır; aynı yazının çift gönderimi bellek içi kilit, `already_shared` denetimi ve kayıtla engellenir.
+- **Google istemcisi** (`server/admin/google.ts`): yalnızca `fetch`; OAuth yenileme belirteci akışı; ortam değişkenleri `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN` (yalnızca Production önerilir). Hata iletileri Google gövdesini ve anahtarları taşımaz; günlüğe yalnızca işlem adı ve HTTP durumu yazılır. `GOOGLE_POST_NAME` kalıbı URL'ye girmeden gönderi adını doğrular.
+- **Belgeden doğrulananlar (2026-10-05):** erişim 60 gün + web sitesi şartına bağlı, başvuru formla; kota 0 = onaysız; `POST /v4/accounts/{a}/locations/{l}/localPosts`; düğme türleri BOOK/ORDER/SHOP/LEARN_MORE/SIGN_UP/CALL ve CALL'da `url` boş olmalı; `media.sourceUrl`; `PATCH …?updateMask=callToAction`; kapsam `business.manage`; sandbox yok.
+- **Denenmeyenler (ilk gerçek denemede teyit edilecek):** yenileme belirtecinin OAuth Playground ile alınması, CALL'a çevirmenin PATCH ile çalışması, WebP kapak fotoğrafının kabulü (bu yüzden "fotoğraf ekle" varsayılan kapalı), gönderi `name` biçimi.
+- **Fotoğraflar:** pakette her fotoğraf tarayıcıda JPEG'e çevrilip indirilir (canvas); çevrilemezse asıl adres yeni sekmede açılır.
+- **Görünürlük kanıtı:** yazı verisi, şema ve prerender/build kodu değişmedi; ziyaretçi tarafı dosyaların yeni modüllere bağlanmadığı testle sınanır (`adminSocial.test.ts`). `dist/public` karşılaştırması PR açıklamasındadır.
+- **Doğrulama sınırı:** bu ortamda pnpm kurulamadı; yeni ve mevcut testler yerel taklit (zod/vitest) ile çalıştırıldı, `pnpm check`/`pnpm build` Vercel önizleme build'ine bırakıldı.

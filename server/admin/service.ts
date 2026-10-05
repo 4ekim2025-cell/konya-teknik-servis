@@ -17,6 +17,7 @@ import { prepareSave, serializePost, todayInIstanbul, type SaveRequest } from ".
 import { REDIRECTS_PATH, parseRedirects, removeRedirectFrom, renderRedirectsFile, upsertRedirect, type BlogRedirect } from "../../shared/blog-redirects.js";
 import { BLOG_SLUG_PATTERN, blogFileName, validateBlogCollection, validateBlogPost, type BlogPostInput } from "../../shared/blog-schema.js";
 import { GithubError, mapLimit, type BuildStatus, type CommitChange, type GithubClient, type HistoryEntry } from "./github.js";
+import { DEFAULT_SETTINGS, SETTINGS_PATH, SOCIAL_SKIP_MARKER, emptySocialRecord, parseSocialFile, serializeSettings, serializeSocial, socialPath, validateSettings, validateSocialRecord, GOOGLE_POST_NAME, type PanelSettings, type SocialChannel, type SocialRecord } from "../../shared/blog-social.js";
 import { ImageStoreError, type ImageStore } from "./imageStore.js";
 
 /** Commit mesajına konan işaret: `vercel.json` → `ignoreCommand` bu işareti görünce derlemeyi atlar (yalnızca siteyi değiştirmeyen taslak commit'leri). */
@@ -42,7 +43,10 @@ type Snapshot = { head: string; items: PostItem[]; posts: BlogPostInput[]; redir
 export type SaveBody = SaveRequest & { baseHash?: string };
 export type SaveOutcome = { noChange: true } | { noChange: false; commit: string; slug: string; status: "draft" | "published"; warnings: string[]; siteAffecting: boolean };
 /** `imagesNote`: fotoğraflar silinmediyse nedeni (silinen yazı fotoğraf taşımıyorsa alan hiç yoktur). */
-export type DeleteOutcome = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean; imagesDeleted?: number; imagesNote?: "kept_preview" | "not_configured" | "failed" };
+export type DeleteOutcome = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean; imagesDeleted?: number; imagesNote?: "kept_preview" | "not_configured" | "failed"; /** Silinen yazının paylaşım paketi (varsa); işleyici Google düğmesini buna göre çevirir, istemciye gönderilmez. */ removedSocial?: SocialRecord };
+export type SocialView = { record: SocialRecord | null; /** Dosya var ama okunamadı/kurallara uymuyor: panel boş paket gösterir, kaydedince dosya yeniden yazılır. */ problem?: string; published: boolean };
+export type SettingsView = { settings: PanelSettings; problem?: string };
+export type ShareContext = { post: BlogPostInput; record: SocialRecord; settings: PanelSettings };
 export type BuildRow = BuildStatus & { skipped: boolean };
 
 /** Commit mesajına giren başlık: tek satır; köşeli ayraçlar yuvarlağa çevrilir ki başlıktaki "[panel-taslak]", "[skip ci]" gibi ifadeler derlemeyi atlatmasın. */
@@ -134,6 +138,48 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
     }
   };
 
+  const requireSlug = (slug: unknown): string => {
+    if (typeof slug !== "string" || !BLOG_SLUG_PATTERN.test(slug)) throw new AdminError(400, "bad_request", "Adres geçersiz");
+    return slug;
+  };
+  const findPost = (snap: Snapshot, slug: string): BlogPostInput => {
+    const post = snap.posts.find(item => item.slug === slug);
+    if (!post) throw new AdminError(404, "not_found", "Yazı bulunamadı; silinmiş olabilir");
+    return post;
+  };
+  const socialMessage = (verb: string, title: string, slug: string) => `content: ${verb} — ${oneLine(title)} ${SOCIAL_SKIP_MARKER}\n\nAdres: ${slug}\nKaynak: yönetim paneli`;
+
+  /** Paylaşım paketi dosyası: yoksa `record: null`; var ama okunamıyorsa `problem` (panel boş paket gösterir, kaydedince dosya yeniden yazılır). */
+  async function readSocial(slug: string, ref: string): Promise<{ record: SocialRecord | null; problem?: string }> {
+    const text = await github.readFile(socialPath(slug), ref);
+    if (text === null) return { record: null };
+    const parsed = parseSocialFile(text, slug);
+    return parsed.ok ? { record: parsed.record } : { record: null, problem: parsed.errors.join("; ") };
+  }
+
+  /** Ayar dosyası: yoksa ya da bozuksa güvenli varsayılan ("API yok"); bozuksa nedeni `problem` olarak bildirilir. */
+  async function readSettings(ref: string): Promise<SettingsView> {
+    const text = await github.readFile(SETTINGS_PATH, ref);
+    if (text === null) return { settings: DEFAULT_SETTINGS };
+    let data: unknown;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      return { settings: DEFAULT_SETTINGS, problem: `${SETTINGS_PATH}: geçerli JSON değil` };
+    }
+    const checked = validateSettings(data);
+    return checked.ok ? { settings: checked.settings } : { settings: DEFAULT_SETTINGS, problem: checked.errors.join("; ") };
+  }
+
+  /** Taslak yeniden adlandırılırsa paylaşım paketi yeni adrese taşınır (aynı commit'te). Okunamayan paket olduğu yerde bırakılır. */
+  async function movedSocial(head: string, from: string, to: string): Promise<{ upsert: { path: string; content: string }; remove: string } | undefined> {
+    const text = await github.readFile(socialPath(from), head);
+    if (text === null) return undefined;
+    const parsed = parseSocialFile(text, from);
+    if (!parsed.ok) return undefined;
+    return { upsert: { path: socialPath(to), content: serializeSocial({ ...parsed.record, slug: to }) }, remove: socialPath(from) };
+  }
+
   return {
     /** Tüm yazılar + içerik sorunları + dal bilgisi. */
     async listPosts() {
@@ -164,6 +210,13 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
 
         const upserts: CommitChange["upserts"] = [{ path: postPath(prepared.post.slug), content: serializePost(prepared.post) }];
         const deletes = prepared.renamedFrom ? [postPath(prepared.renamedFrom)] : [];
+        if (prepared.renamedFrom) {
+          const moved = await movedSocial(head, prepared.renamedFrom, prepared.post.slug);
+          if (moved) {
+            upserts.push(moved.upsert);
+            deletes.push(moved.remove);
+          }
+        }
 
         const generated = await generatedChanges(head, all);
         upserts.push(...generated.upserts);
@@ -212,9 +265,15 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
         upserts.push(...generated.upserts);
         if (redirect) upserts.push({ path: REDIRECTS_PATH, content: renderRedirectsFile(upsertRedirect(snap.redirects, redirect)) });
 
+        // Yazının paylaşım paketi (varsa) aynı commit'te silinir; Google'daki düğmeyi çevirmek için kaydı işleyiciye döndürürüz.
+        const socialText = await github.readFile(socialPath(post.slug), head);
+        const socialParsed = socialText === null ? undefined : parseSocialFile(socialText, post.slug);
+        const removedSocial = socialParsed?.ok ? socialParsed.record : undefined;
+        const deletes = [postPath(post.slug), ...(socialText !== null ? [socialPath(post.slug)] : [])];
+
         const siteAffecting = generated.changed || Boolean(redirect);
         const message = `content: ${published ? "yazı silindi" : "taslak silindi"} — ${oneLine(post.title)}${siteAffecting ? "" : ` ${SKIP_BUILD_MARKER}`}\n\nAdres: ${post.slug}${redirect ? `\nYönlendirme: ${redirect.to}` : "\nYönlendirme: yok (adres 404 verir)"}\nKaynak: yönetim paneli`;
-        const commit = await github.commit({ upserts, deletes: [postPath(post.slug)] }, message, head);
+        const commit = await github.commit({ upserts, deletes }, message, head);
         cache = undefined;
 
         // Fotoğraflar commit BAŞARILI olduktan sonra silinir (commit düşerse fotoğraflar yerinde kalır). Silinemezse yazı yine de silinmiştir;
@@ -233,7 +292,7 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
             }
           }
         }
-        return { commit, slug: post.slug, wasPublished: published, ...(redirect ? { redirectedTo: redirect.to } : {}), ...images };
+        return { commit, slug: post.slug, wasPublished: published, ...(redirect ? { redirectedTo: redirect.to } : {}), ...images, ...(removedSocial ? { removedSocial } : {}) };
       });
     },
 
@@ -266,6 +325,103 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
       }
     },
 
+    /** Panel ayarları (yoksa "API yok"). */
+    async settings(): Promise<SettingsView> {
+      return readSettings(await github.headSha());
+    },
+
+    /** Ayarları `content/settings.json` dosyasına yazar. Sır içermez (Google anahtarları ortam değişkenindedir); site dosyalarına dokunmaz. */
+    async saveSettings(input: unknown): Promise<{ noChange: boolean; settings: PanelSettings }> {
+      const checked = validateSettings(input);
+      if (!checked.ok) throw new AdminError(422, "validation_failed", checked.errors[0], checked.errors);
+      return withRetry(async () => {
+        const head = await github.headSha();
+        const current = await readSettings(head);
+        const content = serializeSettings(checked.settings);
+        if (!current.problem && serializeSettings(current.settings) === content) return { noChange: true, settings: current.settings };
+        await github.commit({ upserts: [{ path: SETTINGS_PATH, content }], deletes: [] }, `content: panel ayarları güncellendi ${SOCIAL_SKIP_MARKER}\n\nKaynak: yönetim paneli`, head);
+        return { noChange: false, settings: checked.settings };
+      });
+    },
+
+    /** Bir yazının paylaşım paketi (taslak için de çalışır: yapay zeka metinleri taslakken kaydedilir). */
+    async social(slugInput: unknown): Promise<SocialView> {
+      const slug = requireSlug(slugInput);
+      const head = await github.headSha();
+      const post = findPost(await snapshot(head), slug);
+      return { ...(await readSocial(slug, head)), published: post.status !== "draft" };
+    },
+
+    /** Sosyal metinleri ve düğme türünü kaydeder; "paylaşıldı" durumu korunur. Yazı dosyasına ve üretilen dosyalara dokunmaz. */
+    async saveSocial(input: { slug: unknown; googleBusiness: unknown; instagram: unknown; button: unknown }): Promise<{ noChange: boolean; record: SocialRecord }> {
+      const slug = requireSlug(input.slug);
+      return withRetry(async () => {
+        const head = await github.headSha();
+        const post = findPost(await snapshot(head), slug);
+        const existing = (await readSocial(slug, head)).record;
+        const checked = validateSocialRecord({ slug, googleBusiness: input.googleBusiness, instagram: input.instagram, button: input.button, shared: existing?.shared ?? {}, updated: existing?.updated ?? today() });
+        if (!checked.ok) throw new AdminError(422, "validation_failed", checked.errors[0], checked.errors);
+        if (existing && serializeSocial(checked.record) === serializeSocial(existing)) return { noChange: true, record: existing };
+        const record: SocialRecord = { ...checked.record, updated: today() };
+        await github.commit({ upserts: [{ path: socialPath(slug), content: serializeSocial(record) }], deletes: [] }, socialMessage("paylaşım metni güncellendi", post.title, slug), head);
+        return { noChange: false, record };
+      });
+    },
+
+    /** "Paylaşıldı" kutusu (elle). Yalnızca yayındaki yazı işaretlenir; API ile yapılmış Google paylaşımının işareti elle kaldırılamaz (gönderi adı kaybolurdu). */
+    async markShared(input: { slug: unknown; channel: unknown; shared: unknown }): Promise<{ noChange: boolean; record: SocialRecord }> {
+      const slug = requireSlug(input.slug);
+      if (input.channel !== "google" && input.channel !== "instagram") throw new AdminError(400, "bad_request", "Kanal google ya da instagram olmalı");
+      if (typeof input.shared !== "boolean") throw new AdminError(400, "bad_request", "shared true ya da false olmalı");
+      const channel: SocialChannel = input.channel;
+      return withRetry(async () => {
+        const head = await github.headSha();
+        const post = findPost(await snapshot(head), slug);
+        if (post.status === "draft") throw new AdminError(422, "not_published", "Yazı henüz yayında değil; paylaşıldı olarak işaretlenemez.");
+        const existing = (await readSocial(slug, head)).record ?? emptySocialRecord(slug, today());
+        const shared = { ...existing.shared };
+        if (input.shared) {
+          if (shared[channel]) return { noChange: true, record: existing };
+          if (channel === "google") shared.google = { at: today(), via: "manual" };
+          else shared.instagram = { at: today() };
+        } else {
+          if (!shared[channel]) return { noChange: true, record: existing };
+          if (channel === "google" && shared.google?.via === "api") throw new AdminError(422, "api_shared", "Bu paylaşım API ile yapıldı; işaret elle kaldırılamaz.");
+          delete shared[channel];
+        }
+        const record: SocialRecord = { ...existing, shared, updated: today() };
+        await github.commit({ upserts: [{ path: socialPath(slug), content: serializeSocial(record) }], deletes: [] }, socialMessage(`${channel === "google" ? "Google" : "Instagram"} paylaşım durumu güncellendi`, post.title, slug), head);
+        return { noChange: false, record };
+      });
+    },
+
+    /** Google'a paylaşmadan önce: yazı yayında, Google metni kayıtlı ve daha önce paylaşılmamış olmalı. Hiçbir şey yazmaz. */
+    async shareContext(slugInput: unknown): Promise<ShareContext> {
+      const slug = requireSlug(slugInput);
+      const head = await github.headSha();
+      const post = findPost(await snapshot(head), slug);
+      if (post.status === "draft") throw new AdminError(422, "not_published", "Yazı henüz yayında değil; Google'a paylaşılamaz.");
+      const { record } = await readSocial(slug, head);
+      if (!record || !record.googleBusiness) throw new AdminError(422, "no_text", "Önce Google İşletme metnini kaydedin.");
+      if (record.shared.google) throw new AdminError(409, "already_shared", "Bu yazı Google'da zaten paylaşıldı olarak işaretli.");
+      return { post, record, settings: (await readSettings(head)).settings };
+    },
+
+    /** API ile yapılan Google paylaşımını kaydeder (gönderi adıyla; yazı silinince düğmeyi çevirmek için gerekir). */
+    async recordGoogleShare(input: { slug: string; postName: string }): Promise<SocialRecord> {
+      const slug = requireSlug(input.slug);
+      if (!GOOGLE_POST_NAME.test(input.postName)) throw new AdminError(400, "bad_request", "Google gönderi adı geçersiz");
+      return withRetry(async () => {
+        const head = await github.headSha();
+        const post = findPost(await snapshot(head), slug);
+        const existing = (await readSocial(slug, head)).record;
+        if (!existing) throw new AdminError(422, "no_text", "Paylaşım paketi bulunamadı.");
+        const record: SocialRecord = { ...existing, shared: { ...existing.shared, google: { at: today(), via: "api", postName: input.postName } }, updated: today() };
+        await github.commit({ upserts: [{ path: socialPath(slug), content: serializeSocial(record) }], deletes: [] }, socialMessage("Google paylaşımı kaydedildi", post.title, slug), head);
+        return record;
+      });
+    },
+
     /** Yazının dosya geçmişi (silinmiş yazılar için de çalışır). */
     async history(slug: string): Promise<HistoryEntry[]> {
       if (typeof slug !== "string" || !BLOG_SLUG_PATTERN.test(slug)) throw new AdminError(400, "bad_request", "Adres geçersiz");
@@ -292,7 +448,7 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
     /** Son commit'ler ve Vercel derleme durumları. Taslak commit'leri "atlandı" olarak işaretlenir. */
     async builds(): Promise<BuildRow[]> {
       const rows = await github.builds(6);
-      return rows.map(row => ({ ...row, skipped: row.message.includes(SKIP_BUILD_MARKER) }));
+      return rows.map(row => ({ ...row, skipped: row.message.includes(SKIP_BUILD_MARKER) || row.message.includes(SOCIAL_SKIP_MARKER) }));
     },
   };
 }

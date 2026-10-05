@@ -6,9 +6,12 @@
  *  - Yazan her istek JSON olmalı, `X-Admin-Request: 1` başlığı taşımalı ve (varsa) Origin başlığı sitenin kendisi olmalıdır.
  *  - Yanıtlar `noindex` başlığı taşır ve önbelleğe alınmaz. Hata yanıtları gizli anahtar ya da GitHub gövdesi içermez.
  *  - Gizli değerler yalnızca ortam değişkenlerindedir: ADMIN_PASSWORD_HASH, ADMIN_SESSION_SECRET, GITHUB_CONTENT_TOKEN, GEMINI_API_KEY, GROQ_API_KEY,
- *    BLOB_READ_WRITE_TOKEN (Vercel Blob; kimlik bilgisini SDK ortamdan kendisi okur).
+ *    BLOB_READ_WRITE_TOKEN (Vercel Blob; kimlik bilgisini SDK ortamdan kendisi okur), GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN.
  *  - Fotoğraf eylemleri (`image-upload`, `image-usage`, `image-cleanup`) aynı oturum, CSRF ve istek sınırından geçer; yeni fonksiyon açılmaz.
  *    Yüklenen dosya güvenilmez girdidir (server/admin/images.ts); dosya adını sunucu üretir. Silme ve temizlik yalnızca canlı (main) dalda çalışır.
+ *  - Paylaşım paketi ve Google eylemleri (`settings`, `settings-save`, `social-get`, `social-save`, `social-mark`, `google-test`, `google-share`) aynı oturum,
+ *    CSRF ve istek sınırından geçer; yeni fonksiyon açılmaz. Paket ve ayarlar yalnızca `content/` altına yazılır (GitHub anahtarının mevcut izni).
+ *    Google anahtarları (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN) yalnızca ortam değişkenidir; yanıta ve günlüğe yazılmaz.
  *  - `ai-draft` (yapay zeka taslağı) hiçbir şey kaydetmez: GitHub'a dokunmaz, yalnızca editöre dolacak taslağı döndürür. Aynı oturum,
  *    CSRF ve istek sınırından geçer; ayrıca günlük kullanım sınırı vardır. Model çıktısı kurallardan geçmezse taslak dönmez.
  */
@@ -22,6 +25,8 @@ import { BLOG_IMAGE_HOST } from "../../shared/blog-images.js";
 import { BlobError, blobConfigured, createBlobClient, type BlobClient } from "./blob.js";
 import { ImageStoreError, createImageStore, type ImageStore } from "./imageStore.js";
 import { checkUpload } from "./images.js";
+import { GoogleError, createGoogleClient, readGoogleCredentials, type GoogleClient } from "./google.js";
+import { buildGoogleLocalPost, type SocialRecord } from "../../shared/blog-social.js";
 
 export type AdminEnv = Record<string, string | undefined>;
 type HeaderValue = string | string[] | undefined;
@@ -56,6 +61,10 @@ export type AdminDeps = {
   blob?: BlobClient;
   /** Fotoğraf adreslerinin geçebileceği alan; yoksa shared/blog-images.ts → BLOG_IMAGE_HOST. Testlerde verilir. */
   imageHost?: string;
+  /** Google İşletme API'sine giden `fetch` (testlerde bellek içi taklit). */
+  googleFetchImpl?: typeof fetch;
+  /** Google API çağrılarının günlük sayacı; verilmezse paylaşılan sayaç kullanılır. */
+  googleQuota?: DailyQuota;
   /** Fotoğraf yüklemenin günlük sayacı (Hobby Blob kotasını korur); verilmezse paylaşılan sayaç kullanılır. */
   imageQuota?: DailyQuota;
 };
@@ -65,6 +74,8 @@ const FAILED_LOGIN_DELAY_MS = 800;
 const GLOBAL_SLOWDOWN_MS = [2000, 5000] as const;
 const MAX_PASSWORD_LENGTH = 200;
 const DEFAULT_IMAGE_DAILY_LIMIT = 20;
+/** Google İşletme API'sine günde en çok bu kadar çağrı (bağlantıyı sına + paylaşım); yanlışlıkla döngü ya da art arda tıklamaya karşı. */
+const GOOGLE_DAILY_LIMIT = 40;
 const header = (req: AdminHttpRequest, name: string): string | undefined => {
   const value = req.headers[name];
   return Array.isArray(value) ? value[0] : value;
@@ -98,6 +109,9 @@ const shared = {
   limiter: new RateLimiter(120, 60 * 1000),
   aiQuota: new DailyQuota(),
   imageQuota: new DailyQuota(),
+  googleQuota: new DailyQuota(),
+  /** Paylaşımı süren yazılar: aynı yazının iki kez art arda Google'a gönderilmesini (çift tıklama) engeller. */
+  googleSharing: new Set<string>(),
   images: undefined as ImageStore | undefined,
   service: undefined as { key: string; value: AdminService } | undefined,
 };
@@ -164,6 +178,33 @@ function describeBlobError(error: BlobError): AdminHttpResponse {
   if (error.kind === "rate") return fail(503, "blob_rate_limited", "Fotoğraf deposu istek sınırına ulaştı; birkaç saniye sonra tekrar deneyin.");
   if (error.kind === "exists") return fail(409, "blob_conflict", "Fotoğraf adı çakıştı; yüklemeyi tekrar deneyin.");
   return fail(502, "blob_unavailable", "Fotoğraf deposuna şu an ulaşılamıyor; birazdan tekrar deneyin.");
+}
+
+function describeGoogleError(error: GoogleError): AdminHttpResponse {
+  if (error.kind === "auth") return fail(502, "google_auth_failed", "Google anahtarları reddedildi. Vercel'deki GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET ve GOOGLE_REFRESH_TOKEN değerlerini kontrol edin (yenileme belirteci iptal edilmiş ya da süresi dolmuş olabilir).");
+  if (error.kind === "forbidden") return fail(502, "google_forbidden", "Google erişimi reddetti: İşletme Profili API'si projede etkin değil, erişim başvurusu henüz onaylanmadı (kota 0) ya da hesabın bu konumu yönetme yetkisi yok.");
+  if (error.kind === "notfound") return fail(502, "google_not_found", "Google hesabı, konumu ya da paylaşımı bulamadı. Ayarlardaki hesap ve konum kimliklerini kontrol edin.");
+  if (error.kind === "rate") return fail(503, "google_rate_limited", "Google istek sınırına ulaşıldı; birkaç dakika sonra tekrar deneyin.");
+  if (error.kind === "invalid") return fail(422, "google_rejected", "Google isteği kabul etmedi (metin, düğme ya da fotoğraf kurallara uymuyor olabilir). Fotoğraf gönderimi açıksa Ayarlar'dan kapatıp tekrar deneyin; ya da paylaşımı elle yapın.");
+  return fail(502, "google_unavailable", "Google'a şu an ulaşılamıyor; birazdan tekrar deneyin ya da paylaşımı elle yapın.");
+}
+
+/** Silinen yazının Google paylaşımı için ne yapıldığı: "switched" düğme "Hemen ara"ya çevrildi; "manual" elle çevrilmeli; "failed" otomatik çevrilemedi. */
+type GoogleAfterDelete = "switched" | "manual" | "failed";
+
+/** Yazı silindikten SONRA çalışır ve asla hata fırlatmaz: yazı zaten silinmiştir; Google tarafı başarısızsa durum bildirilir. */
+async function googleAfterDelete(service: AdminService, social: SocialRecord | undefined, google: () => GoogleClient | undefined): Promise<GoogleAfterDelete | undefined> {
+  const shared = social?.shared.google;
+  if (!shared) return undefined;
+  if (shared.via !== "api" || !shared.postName) return "manual";
+  try {
+    const client = google();
+    if (!client || (await service.settings()).settings.google.mode !== "api") return "manual";
+    await client.switchToCall(shared.postName);
+    return "switched";
+  } catch {
+    return "failed";
+  }
 }
 
 function describeAiError(error: AiError): AdminHttpResponse {
@@ -236,6 +277,11 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
   if (req.bodyError === "invalid_json") return fail(400, "bad_json", "İstek gövdesi geçerli JSON değil.");
 
   const service = serviceFor(deps);
+  // Google anahtarları yalnızca ortam değişkenindedir; eksikse API yolu kapalıdır (panelin geri kalanı etkilenmez).
+  const googleCredentials = readGoogleCredentials(env);
+  const google = (): GoogleClient | undefined => (googleCredentials ? createGoogleClient(googleCredentials, deps.googleFetchImpl, deps.now) : undefined);
+  const needGithub = () => fail(503, "github_not_configured", "GitHub anahtarı (GITHUB_CONTENT_TOKEN) tanımlı değil.");
+  const needGoogle = () => fail(503, "google_not_configured", "Google anahtarları tanımlı değil (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN). Kurulum adımları docs/blog-paneli-kurulum.md dosyasındadır.");
   const needs = (expected: "GET" | "POST") => (method === expected ? undefined : fail(405, "method_not_allowed", `Bu eylem ${expected} ister.`, undefined, { Allow: expected }));
   const body = isRecord(req.body) ? req.body : {};
 
@@ -264,11 +310,15 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
         const wrong = needs("POST");
         if (wrong) return wrong;
         if (!service) return fail(503, "github_not_configured", "GitHub anahtarı (GITHUB_CONTENT_TOKEN) tanımlı değil.");
-        return reply(200, await service.remove({
+        const outcome = await service.remove({
           slug: body.slug as string,
           confirm: body.confirm === true,
           ...(typeof body.redirectTo === "string" && body.redirectTo ? { redirectTo: body.redirectTo } : {}),
-        }));
+        });
+        // Yazı silindi; Google'da paylaşılmışsa düğme "Hemen ara"ya çevrilir (API yoluyla paylaşıldıysa otomatik, değilse elle yapılacağı bildirilir).
+        const { removedSocial, ...rest } = outcome;
+        const googleState = await googleAfterDelete(service, removedSocial, google);
+        return reply(200, { ...rest, ...(googleState ? { google: googleState } : {}) });
       }
       case "history": {
         const wrong = needs("GET");
@@ -315,6 +365,79 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
         if (!service) return fail(503, "github_not_configured", "GitHub anahtarı (GITHUB_CONTENT_TOKEN) tanımlı değil.");
         return reply(200, await service.imageCleanup({ confirm: body.confirm === true }));
       }
+      case "settings": {
+        const wrong = needs("GET");
+        if (wrong) return wrong;
+        if (!service) return needGithub();
+        const view = await service.settings();
+        return reply(200, { settings: view.settings, ...(view.problem ? { problem: view.problem } : {}), googleConfigured: Boolean(googleCredentials) });
+      }
+      case "settings-save": {
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        if (!service) return needGithub();
+        const saved = await service.saveSettings(body.settings);
+        return reply(200, { ...saved, googleConfigured: Boolean(googleCredentials) });
+      }
+      case "social-get": {
+        const wrong = needs("GET");
+        if (wrong) return wrong;
+        if (!service) return needGithub();
+        return reply(200, await service.social(url.searchParams.get("slug")));
+      }
+      case "social-save": {
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        if (!service) return needGithub();
+        return reply(200, await service.saveSocial({ slug: body.slug, googleBusiness: body.googleBusiness, instagram: body.instagram, button: body.button }));
+      }
+      case "social-mark": {
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        if (!service) return needGithub();
+        return reply(200, await service.markShared({ slug: body.slug, channel: body.channel, shared: body.shared }));
+      }
+      case "google-test": {
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        if (!service) return needGithub();
+        const client = google();
+        if (!client) return needGoogle();
+        const { accountId, locationId } = (await service.settings()).settings.google;
+        if (!accountId || !locationId) return fail(422, "google_ids_missing", "Önce hesap ve konum kimliğini yazıp ayarları kaydedin.");
+        const quota = (deps.googleQuota ?? shared.googleQuota).take(GOOGLE_DAILY_LIMIT);
+        if (!quota.allowed) return fail(429, "google_daily_limit", `Bugünkü Google çağrı sınırına (${GOOGLE_DAILY_LIMIT}) ulaşıldı; yarın tekrar deneyin.`);
+        await client.test(accountId, locationId);
+        return reply(200, { ok: true });
+      }
+      case "google-share": {
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        if (!service) return needGithub();
+        const client = google();
+        if (!client) return needGoogle();
+        const context = await service.shareContext(body.slug);
+        const { mode, accountId, locationId, sendPhoto } = context.settings.google;
+        if (mode !== "api" || !accountId || !locationId) return fail(422, "google_api_off", "Ayarlarda “API var” seçili değil ya da hesap/konum kimliği eksik. Paylaşımı elle yapıp “paylaşıldı” kutusunu işaretleyin.");
+        const key = context.post.slug;
+        const sharing = shared.googleSharing;
+        if (sharing.has(key)) return fail(409, "share_in_progress", "Bu yazı şu an Google'a gönderiliyor; birkaç saniye bekleyin.");
+        const quota = (deps.googleQuota ?? shared.googleQuota).take(GOOGLE_DAILY_LIMIT);
+        if (!quota.allowed) return fail(429, "google_daily_limit", `Bugünkü Google çağrı sınırına (${GOOGLE_DAILY_LIMIT}) ulaşıldı; yarın tekrar deneyin.`);
+        sharing.add(key);
+        try {
+          const created = await client.createPost(accountId, locationId, buildGoogleLocalPost(context.post, context.record, sendPhoto));
+          try {
+            return reply(200, { ok: true, record: await service.recordGoogleShare({ slug: key, postName: created.name }) });
+          } catch {
+            // Paylaşım Google'da yapıldı ama kaydı yazılamadı: tekrar paylaşılmasın diye açık uyarı verilir.
+            console.error("admin: google paylaşımı yapıldı ama kaydedilemedi");
+            return fail(502, "google_share_not_recorded", "Google'da paylaşıldı, ancak kayıt yazılamadı. Paylaşım paketinde “Google'da paylaşıldı” kutusunu elle işaretleyin; tekrar paylaşmayın.", { postName: created.name });
+          }
+        } finally {
+          sharing.delete(key);
+        }
+      }
       case "ai-draft": {
         const wrong = needs("POST");
         if (wrong) return wrong;
@@ -337,6 +460,7 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
       console.error("admin: yapay zeka hatası", error.provider, error.kind, error.status);
       return describeAiError(error);
     }
+    if (error instanceof GoogleError) return describeGoogleError(error);
     if (error instanceof ImageStoreError) return fail(error.status, error.code, error.message);
     if (error instanceof BlobError) return describeBlobError(error);
     if (error instanceof AdminError) return fail(error.status, error.code, error.message, error.errors ? { errors: error.errors } : undefined);

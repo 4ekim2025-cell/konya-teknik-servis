@@ -888,8 +888,14 @@ export const blogPostsData: BlogPost[] = [
     "title": "Meram’da kırılan Arçelik su sebili musluğu: musluk, rakor ve o-ring değişti",
     "description": "Meram’da sıcak su musluğu kırılan Arçelik su sebilinde musluk, rakor ve o-ring değişimini ve musluk kırıldığında ilk yapılacakları anlatıyoruz.",
     "excerpt": "Sebilin sıcak su musluğu parça olarak tamamen kırılmıştı. Musluk, musluğu sebile bağlayan rakor ve sızdırmazlığı sağlayan o-ring birlikte yenilendi.",
+    "cover": {
+      "src": "https://eyh1wbvuvczprro4.public.blob.vercel-storage.com/blog/1f81188f8ead38db0fc266d8155dba83-1600.webp",
+      "alt": "arçelik su sebili musluk tamiri",
+      "width": 573,
+      "height": 573
+    },
     "published": "2026-10-01",
-    "updated": "2026-10-01",
+    "updated": "2026-10-05",
     "device": "Su sebili",
     "servicePath": "/su-sebili-tamiri-konya/",
     "caseFile": {

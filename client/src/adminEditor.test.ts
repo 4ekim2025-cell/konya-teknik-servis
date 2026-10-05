@@ -142,6 +142,17 @@ describe("editör bölümleri", () => {
     expect(css).toContain(".admin-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))");
   });
 
+  it("yapay zeka ile yazdırma en üsttedir: yeni yazı usta yazısı olarak açılır, kayıt grubu tür grubundan önce gelir", () => {
+    const editor = readFileSync(resolve(import.meta.dirname, "admin/EditorView.tsx"), "utf8");
+    expect(editor).toContain("setCategory(newPost(today, nextOrder(data.items.map(entry => entry.post))), USTA_CATEGORY)");
+    expect(editor.indexOf('<Section id="record"')).toBeLessThan(editor.indexOf('<Section id="type"'));
+    expect(editor.indexOf('<Section id="type"')).toBeLessThan(editor.indexOf('<Section id="article"'));
+    expect(editor).toContain("onTexts={setPendingTexts}>{recordFields}</AiDraftBox>");
+    const box = readFileSync(resolve(import.meta.dirname, "admin/AiDraftBox.tsx"), "utf8");
+    expect(box.indexOf('label="Konu"')).toBeLessThan(box.lastIndexOf("{children}"));
+    expect(box.lastIndexOf("{children}")).toBeLessThan(box.indexOf('label="Serbest not"'));
+  });
+
   it("editör bölümlü düzeni kullanır; kaydet düğmeleri üst çubukta kalır", () => {
     const editor = readFileSync(resolve(import.meta.dirname, "admin/EditorView.tsx"), "utf8");
     for (const text of ['className="admin-editbar"', '<Section id="type"', '<Section id="record"', '<Section id="article"', '<Section id="sources"', '<Part title="Başlık ve tanıtım"', '<Part title="Metin"', "errorsBySection(sheet.errors)", "Kaydetmek için tamamlayın"]) expect(editor, text).toContain(text);

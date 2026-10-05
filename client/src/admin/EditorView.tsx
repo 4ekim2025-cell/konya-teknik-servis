@@ -117,7 +117,8 @@ function BlockEditor({ block, onChange }: { block: BlogBlockInput; onChange: (ne
 
 export default function EditorView({ data, item, reload, onClose, onPackage, notify }: Props) {
   const today = todayInIstanbul();
-  const [post, setPost] = useState<BlogPostInput>(() => item?.post ?? newPost(today, nextOrder(data.items.map(entry => entry.post))));
+  // Yeni yazı "Ustanın Defterinden" olarak açılır: en sık kullanılan yol servis kaydından yapay zeka taslağıdır (proje sahibinin kararı).
+  const [post, setPost] = useState<BlogPostInput>(() => item?.post ?? setCategory(newPost(today, nextOrder(data.items.map(entry => entry.post))), USTA_CATEGORY));
   // Düzenlenen yazının yüklendiği adres ve sürüm özeti; kaydetme sırasında "başka yerde değişti mi" denetimi için sunucuya gider.
   const [origin, setOrigin] = useState<{ slug: string; hash: string } | undefined>(item ? { slug: item.post.slug, hash: item.hash } : undefined);
   const [slugEdited, setSlugEdited] = useState(Boolean(item));
@@ -230,10 +231,11 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
 
   const place = splitDistrict(post.caseFile?.district);
   const showAi = isUsta && !published;
-  // Gruplar: 1 tür ve cihaz · 2 servis kaydı (yalnızca usta yazısı; yapay zeka taslağı bu kaydın devamıdır) · sonra yazının kendisi · ekler.
+  const typeGroup = { id: "type" as GroupId, label: isUsta ? "Yazı türü" : "Yazı türü ve cihaz", missing: issues.type.length };
   const groups: { id: GroupId; label: string; missing: number; optional?: boolean; empty?: boolean }[] = [
-    { id: "type", label: "Yazı türü ve cihaz", missing: issues.type.length },
-    ...(isUsta ? [{ id: "record" as GroupId, label: "Servis kaydı", missing: issues.case.length }] : []),
+    // Usta yazısında servis kaydı ve yapay zeka taslağı EN ÜSTTEDİR; cihaz da orada seçilir. Diğer türlerde ilk grup tür ve cihazdır.
+    ...(isUsta ? [{ id: "record" as GroupId, label: showAi ? "Yapay zeka ile yazdır" : "Servis kaydı", missing: issues.case.length }] : []),
+    typeGroup,
     { id: "article", label: "Yazı", missing: issues.intro.length + issues.cover.length + issues.body.length },
     { id: "sources", label: "Kaynaklar", missing: issues.sources.length, optional: true, empty: sources.length === 0 },
   ];
@@ -241,6 +243,43 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
   const missingOf = (id: GroupId) => groups.find(group => group.id === id)?.missing ?? 0;
   const todo = groups.filter(group => group.missing > 0);
   const status = origin ? (published ? "Yayında" : "Taslak") : "Yeni";
+
+  // Servis kaydı alanları (cihaz dahil). Yapay zeka açıkken "Konu"nun altında, kapalıyken (yayındaki yazı) tek başına gösterilir.
+  const recordFields = (
+    <>
+              <div className="admin-cols admin-cols-5">
+                <Field label="Cihaz">
+                  <select value={post.device} onChange={event => setPost(applyDeviceAndBrand(post, { device: event.target.value }))}>
+                    {BLOG_DEVICES.map(option => <option key={option.device}>{option.device}</option>)}
+                  </select>
+                </Field>
+                <Field label="İlçe">
+                  <select value={place.district} onChange={event => setPost(setCaseFile(post, { district: event.target.value ? (place.neighborhood ? `${event.target.value} · ${place.neighborhood}` : event.target.value) : "" }))}>
+                    <option value="">Seçin</option>
+                    {BLOG_DISTRICTS.map(name => <option key={name}>{name}</option>)}
+                  </select>
+                </Field>
+                <Field label="Mahalle" hint="(isteğe bağlı)">
+                  <input value={place.neighborhood} disabled={!place.district} placeholder={place.district ? "" : "Önce ilçe seçin"} onChange={event => setPost(setCaseFile(post, { district: event.target.value.trim() ? `${place.district} · ${event.target.value}` : place.district }))} />
+                </Field>
+                <Field label="Marka">
+                  <select value={post.caseFile?.brand ?? ""} onChange={event => setPost(setCaseFile(post, { brand: event.target.value }))}>
+                    <option value="">Seçin</option>
+                    {BLOG_BRANDS.map(brand => <option key={brand.slug}>{brand.name}</option>)}
+                  </select>
+                </Field>
+                <Field label="Cihaz adı" hint={post.device === SMALL_APPLIANCE_DEVICE ? "— örn. Airfryer" : "(kayıtta görünen)"}>
+                  <input list="admin-small-appliances" value={post.caseFile?.device ?? ""} onChange={event => setPost(setCaseFile(post, { device: event.target.value }))} />
+                  <datalist id="admin-small-appliances">{SMALL_APPLIANCE_SUGGESTIONS.map(name => <option key={name} value={name} />)}</datalist>
+                </Field>
+              </div>
+              <div className="admin-cols admin-cols-3">
+                <Field label="Şikâyet" help="Müşteri ne dedi?"><textarea rows={3} value={post.caseFile?.complaint ?? ""} onChange={event => setPost(setCaseFile(post, { complaint: event.target.value }))} placeholder="Makine su almıyor" /></Field>
+                <Field label="Tespit" help="Arızanın nedeni neydi?"><textarea rows={3} value={post.caseFile?.finding ?? ""} onChange={event => setPost(setCaseFile(post, { finding: event.target.value }))} placeholder="Basınç anahtarı arızalı" /></Field>
+                <Field label="Yapılan işlem" help="Ne yapıldı, ne değişti?"><textarea rows={3} value={post.caseFile?.action ?? ""} onChange={event => setPost(setCaseFile(post, { action: event.target.value }))} placeholder="Basınç anahtarı değiştirildi" /></Field>
+              </div>
+    </>
+  );
 
   const readiness = (
     <div className="admin-card admin-ready">
@@ -294,7 +333,18 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
 
       <div className={`admin-editor-grid ${showPreview ? "has-preview" : "has-rail"}`}>
         <div className="admin-form">
-          <Section id="type" step={step("type")} title="Yazı türü ve cihaz" hint="Ne tür bir yazı, hangi cihaz hakkında?" missing={missingOf("type")}>
+          {isUsta && (
+            <Section id="record" step={step("record")} title={showAi ? "Yapay zeka ile yazdır" : "Servis kaydı"} hint={showAi ? "Servis kaydını yazın, yazıyı yapay zeka hazırlasın (isterseniz atlayıp aşağıda kendiniz yazın)" : "Yalnızca gerçek iş: nerede, hangi cihaz, ne şikâyet geldi, ne bulundu, ne yapıldı"} missing={missingOf("record")}>
+              {issues.case.length > 0 && <ul className="admin-missing">{issues.case.map(line => <li key={line}>{line}</li>)}</ul>}
+              {showAi ? (
+                <Suspense fallback={<p className="admin-muted">Yükleniyor…</p>}>
+                  <AiDraftBox post={post} existing={data.items.filter(entry => entry.post.slug !== origin?.slug).map(entry => ({ slug: entry.post.slug, order: entry.post.order }))} hasContent={hasContent} onDraft={fillFromAi} onTexts={setPendingTexts}>{recordFields}</AiDraftBox>
+                </Suspense>
+              ) : recordFields}
+            </Section>
+          )}
+
+          <Section id="type" step={step("type")} title={isUsta ? "Yazı türü" : "Yazı türü ve cihaz"} hint={isUsta ? "Servis işi dışında bir rehber yazacaksanız buradan değiştirin" : "Ne tür bir yazı, hangi cihaz hakkında?"} missing={missingOf("type")}>
             {issues.type.length > 0 && <ul className="admin-missing">{issues.type.map(line => <li key={line}>{line}</li>)}</ul>}
             <div className="admin-choices" role="radiogroup" aria-label="Yazı türü">
               {blogCategories.map(category => (
@@ -304,12 +354,14 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
                 </label>
               ))}
             </div>
-            <div className="admin-device-row">
-              <Field label="Cihaz">
-                <select value={post.device} onChange={event => setPost(applyDeviceAndBrand(post, { device: event.target.value }))}>
-                  {BLOG_DEVICES.map(option => <option key={option.device}>{option.device}</option>)}
-                </select>
-              </Field>
+            <div className={isUsta ? "" : "admin-device-row"}>
+              {!isUsta && (
+                <Field label="Cihaz">
+                  <select value={post.device} onChange={event => setPost(applyDeviceAndBrand(post, { device: event.target.value }))}>
+                    {BLOG_DEVICES.map(option => <option key={option.device}>{option.device}</option>)}
+                  </select>
+                </Field>
+              )}
               {post.device === GENERAL_DEVICE && (
                 <Field label="Servis düğmesi nereye gitsin?">
                   <select value={post.servicePath} onChange={event => setPost(applyDeviceAndBrand(post, { generalPath: event.target.value }))}>
@@ -321,46 +373,6 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
             </div>
             {!device && <p className="admin-error">Bu cihaz listede yok; kaydetmeden önce listeden seçin.</p>}
           </Section>
-
-          {isUsta && (
-            <Section id="record" step={step("record")} title="Servis kaydı" hint="Yalnızca gerçek iş: nerede, hangi cihaz, ne şikâyet geldi, ne bulundu, ne yapıldı" missing={missingOf("record")}>
-              {issues.case.length > 0 && <ul className="admin-missing">{issues.case.map(line => <li key={line}>{line}</li>)}</ul>}
-              <div className="admin-cols">
-                <Field label="İlçe">
-                  <select value={place.district} onChange={event => setPost(setCaseFile(post, { district: event.target.value ? (place.neighborhood ? `${event.target.value} · ${place.neighborhood}` : event.target.value) : "" }))}>
-                    <option value="">Seçin</option>
-                    {BLOG_DISTRICTS.map(name => <option key={name}>{name}</option>)}
-                  </select>
-                </Field>
-                <Field label="Mahalle" hint="(isteğe bağlı)">
-                  <input value={place.neighborhood} disabled={!place.district} placeholder={place.district ? "" : "Önce ilçe seçin"} onChange={event => setPost(setCaseFile(post, { district: event.target.value.trim() ? `${place.district} · ${event.target.value}` : place.district }))} />
-                </Field>
-                <Field label="Marka">
-                  <select value={post.caseFile?.brand ?? ""} onChange={event => setPost(setCaseFile(post, { brand: event.target.value }))}>
-                    <option value="">Seçin</option>
-                    {BLOG_BRANDS.map(brand => <option key={brand.slug}>{brand.name}</option>)}
-                  </select>
-                </Field>
-                <Field label="Cihaz adı" hint={post.device === SMALL_APPLIANCE_DEVICE ? "— örn. Airfryer" : "(kayıtta görünen)"}>
-                  <input list="admin-small-appliances" value={post.caseFile?.device ?? ""} onChange={event => setPost(setCaseFile(post, { device: event.target.value }))} />
-                  <datalist id="admin-small-appliances">{SMALL_APPLIANCE_SUGGESTIONS.map(name => <option key={name} value={name} />)}</datalist>
-                </Field>
-              </div>
-              <div className="admin-cols admin-cols-3">
-                <Field label="Şikâyet" help="Müşteri ne dedi?"><textarea rows={3} value={post.caseFile?.complaint ?? ""} onChange={event => setPost(setCaseFile(post, { complaint: event.target.value }))} placeholder="Makine su almıyor" /></Field>
-                <Field label="Tespit" help="Arızanın nedeni neydi?"><textarea rows={3} value={post.caseFile?.finding ?? ""} onChange={event => setPost(setCaseFile(post, { finding: event.target.value }))} placeholder="Basınç anahtarı arızalı" /></Field>
-                <Field label="Yapılan işlem" help="Ne yapıldı, ne değişti?"><textarea rows={3} value={post.caseFile?.action ?? ""} onChange={event => setPost(setCaseFile(post, { action: event.target.value }))} placeholder="Basınç anahtarı değiştirildi" /></Field>
-              </div>
-              {showAi && (
-                <div className="admin-ai-panel">
-                  <h3 className="admin-part-title">Bu kayıttan yazıyı yapay zeka yazsın <small>(isteğe bağlı — isterseniz atlayıp aşağıda kendiniz yazın)</small></h3>
-                  <Suspense fallback={<p className="admin-muted">Yükleniyor…</p>}>
-                    <AiDraftBox post={post} existing={data.items.filter(entry => entry.post.slug !== origin?.slug).map(entry => ({ slug: entry.post.slug, order: entry.post.order }))} hasContent={hasContent} onDraft={fillFromAi} onTexts={setPendingTexts} />
-                  </Suspense>
-                </div>
-              )}
-            </Section>
-          )}
 
           <Section id="article" step={step("article")} title="Yazı" hint="Okuyucunun göreceği her şey: başlık, kapak fotoğrafı ve metin" missing={missingOf("article")}>
             <Part title="Başlık ve tanıtım" hint="— Google’da ve yazının başında görünür" issues={issues.intro}>

@@ -16,6 +16,8 @@ type Props = {
   onDraft: (post: BlogPostInput) => void;
   /** Üretilen (ve elle düzeltilen) iki sosyal metin: editör bunları taslakla birlikte paylaşım paketine kaydeder. */
   onTexts?: (texts: { googleBusiness: string; instagram: string }) => void;
+  /** Servis kaydı alanları: "Konu"dan sonra, not ve düğmeden önce gösterilir (form tek akış olur: konu → kayıt → yazdır). */
+  children?: ReactNode;
 };
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
@@ -26,7 +28,7 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
  * Servis kaydından yapay zeka taslağı. Hiçbir şey kaydetmez; sonuç editöre taslak olarak dolar.
  * Vaka bilgisi (ilçe, marka, cihaz, şikâyet, tespit, işlem) editörün "Servis kaydı" bölümünden alınır; burada yalnızca konu ve not yazılır.
  */
-export default function AiDraftBox({ post, existing, hasContent, onDraft, onTexts }: Props) {
+export default function AiDraftBox({ post, existing, hasContent, onDraft, onTexts, children }: Props) {
   const [topic, setTopic] = useState("");
   const [note, setNote] = useState("");
   const [overwrite, setOverwrite] = useState(false);
@@ -38,7 +40,7 @@ export default function AiDraftBox({ post, existing, hasContent, onDraft, onText
 
   const checked = validateAiCaseInput(aiInputFromPost(post, { topic, note }));
   // Servis kaydındaki eksikler o bölümün başında tek tek yazar; burada yalnızca neyin beklendiği söylenir.
-  const waiting = checked.ok ? "" : topic.trim() ? "Önce yukarıdaki servis kaydını tamamlayın." : "Önce servis kaydını tamamlayın ve konuyu yazın.";
+  const waiting = checked.ok ? "" : topic.trim() ? "Önce yukarıdaki eksikleri tamamlayın." : "Önce konuyu ve servis kaydını yazın.";
 
   const run = async () => {
     if (!checked.ok) return;
@@ -59,7 +61,7 @@ export default function AiDraftBox({ post, existing, hasContent, onDraft, onText
       setTexts(generated);
       onTexts?.(generated);
       setOverwrite(false);
-      setInfo(`Taslak aşağıdaki bölümlere dolduruldu; henüz kaydedilmedi. Okuyup düzeltin, sonra “Taslak kaydet” ya da “Yayınla” düğmesini kullanın; paylaşım metinleri de birlikte kaydedilir. Bugün kalan hak: ${response.remaining}.`);
+      setInfo(`Taslak aşağıdaki “Yazı” bölümüne dolduruldu; henüz kaydedilmedi. Okuyup düzeltin, sonra “Taslak kaydet” ya da “Yayınla” düğmesini kullanın; paylaşım metinleri de birlikte kaydedilir. Bugün kalan hak: ${response.remaining}.`);
     } catch (failure) {
       if (failure instanceof ApiError) setErrors(failure.errors?.length ? [failure.message, ...failure.errors] : [failure.message]);
       else setErrors(["Beklenmeyen bir hata oluştu."]);
@@ -76,8 +78,9 @@ export default function AiDraftBox({ post, existing, hasContent, onDraft, onText
 
   return (
     <div className="admin-ai">
-      <p className="admin-help">Yukarıdaki servis kaydından başlık, açıklama ve yazı metnini hazırlar. Yalnızca gerçek işi yazın: yapay zeka vaka ayrıntısı ekleyemez, yalnızca genel teknik açıklama yazar. Müşteri adı, telefon, açık adres ve fiyat yazmayın.</p>
+      <p className="admin-help">Yalnızca gerçek işi yazın; başlığı, açıklamayı ve yazı metnini yapay zeka hazırlar. Vaka ayrıntısı ekleyemez, yalnızca genel teknik açıklama yazar. Müşteri adı, telefon, açık adres ve fiyat yazmayın.</p>
       <Field label="Konu" hint="— yazının anlatacağı şey, bir cümle"><input value={topic} onChange={event => setTopic(event.target.value)} placeholder="Su almayan çamaşır makinesinde basınç anahtarı arızası" /></Field>
+      {children}
       <Field label="Serbest not" hint={`(isteğe bağlı) ${note.length}/${AI_NOTE_MAX}`}><textarea rows={3} value={note} onChange={event => setNote(event.target.value)} placeholder="Yazıda geçmesini istediğiniz, sahada gördüğünüz diğer ayrıntılar" /></Field>
 
       {hasContent && (

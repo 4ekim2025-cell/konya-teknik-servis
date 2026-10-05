@@ -54,7 +54,10 @@ describe("fotoğraf HTML'i (prerender ve React ortak kuralları)", () => {
     expect(prerender).toContain("const cover = blogPosts.find(post => post.slug === route)?.cover;\n  if (cover) html = withCoverHead(html, cover);");
     expect(prerender).toContain("image: blogPost.cover ? blogPost.cover.src : `${siteUrl}/esli-teknik-konya-hero-background.webp`");
     const page = read("client/src/pages/ContentPage.tsx");
-    expect(page).toContain("{post.cover&&<BlogImageView image={post.cover} cover/>}");
+    expect(page).toContain("const cover=post.cover&&<BlogImageView image={post.cover} cover/>;");
+    // Kapak yoksa servis kaydı sarmalanmaz: fotoğrafsız yazının görünümü aynı kalır.
+    expect(page).toContain("{cover&&record?<div className={isSideCover(post.cover!)");
+    expect(page).toContain(":<>{record}{cover}</>}");
     expect(page).toContain('if(block.type==="image")return <BlogImageView image={block}/>;');
     expect(page).toContain('{loading:"lazy" as const}');
     expect(page).toContain('{fetchPriority:"high" as const}');
@@ -73,5 +76,16 @@ describe("fotoğraf HTML'i (prerender ve React ortak kuralları)", () => {
   it("fotoğraf alanı ayarlıysa Vercel Blob alan adı kalıbına uyar (yazım hatasına karşı)", () => {
     const host: string = BLOG_IMAGE_HOST;
     if (host !== "") expect(host).toMatch(/^[a-z0-9]+\.public\.blob\.vercel-storage\.com$/);
+  });
+
+  it("kapak kırpılmaz: dikey kapak servis kaydının yanında, yatay kapak altında tam satır", () => {
+    const page = read("client/src/pages/ContentPage.tsx");
+    expect(page).toContain("const isSideCover=(image:BlogImage)=>image.height>=image.width;");
+    const css = read("client/src/index.css");
+    expect(css).not.toMatch(/\.blog-post-cover img\{[^}]*(aspect-ratio|object-fit:cover)/);
+    expect(css).toContain(".blog-post-lead-side{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,36%)");
+    expect(css).toContain("@container blog-article (min-width:620px)");
+    // Sayfa kayması olmasın: kapakta da genişlik ve yükseklik HTML'de kalır.
+    expect(page).toContain("width={image.width} height={image.height}");
   });
 });

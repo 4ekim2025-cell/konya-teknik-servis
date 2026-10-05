@@ -1236,7 +1236,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-post-hero .blog-meta svg{color:#f2a16c}
 .blog-post-article>h2{margin:34px 0 12px;color:var(--brand-teal);font-size:clamp(23px,2.4vw,30px);letter-spacing:-.04em;line-height:1.15}
 .blog-post-article>p{margin:0 0 16px;color:#4f5650;font-size:16px;line-height:1.85}
-.blog-post-article>p:first-child,.blog-post-cover+p,.blog-case-file+p{font-size:17px;color:#3f4741}
+.blog-post-article>p:first-child,.blog-post-cover+p,.blog-case-file+p,.blog-post-lead+p{font-size:17px;color:#3f4741}
 .blog-list{display:grid;gap:10px;margin:4px 0 20px;padding:0;list-style:none}
 .blog-list li{display:flex;gap:10px;align-items:flex-start;color:#4f5650;font-size:15.5px;line-height:1.7}
 .blog-list svg{flex:0 0 auto;margin-top:4px;color:#a12519}
@@ -1336,6 +1336,21 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-figure{margin:26px 0}
 .blog-figure img{display:block;width:100%;height:auto;border-radius:16px;background:#eef3f2}
 .blog-post-cover{margin:0 0 28px}
-.blog-post-cover img{aspect-ratio:16/9;max-height:420px;object-fit:cover}
 .blog-figure:not(.blog-post-cover) img{max-height:520px;object-fit:contain}
-@media(max-width:860px){.blog-post-cover img{aspect-ratio:16/10;max-height:260px}.blog-figure:not(.blog-post-cover) img{max-height:420px}}
+@media(max-width:860px){.blog-figure:not(.blog-post-cover) img{max-height:420px}}
+/* Kapak fotoğrafı kırpılmaz, kendi oranında görünür. Dikey/kare kapak geniş makale sütununda servis kaydının sağında durur (servis kaydı yoksa metin solundan akar); yatay kapak ve dar sütun (telefon, panel önizlemesi) alt alta. */
+.blog-post-article{container:blog-article/inline-size}
+.blog-post-lead{margin:0 0 28px}
+.blog-post-lead .blog-post-cover{margin:0}
+.blog-post-cover-side img{width:auto;max-width:100%;max-height:66vh;max-height:66svh;margin:0 auto;background:none}
+.blog-note{display:flow-root}
+@container blog-article (min-width:620px){
+.blog-post-lead-side{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,36%);gap:22px;align-items:start}
+.blog-post-lead-side .blog-case-file{margin:0}
+.blog-post-lead-side .blog-case-file-head{flex-wrap:wrap}
+.blog-post-lead-side .blog-case-file-head em{margin-left:0}
+.blog-post-lead-side .blog-case-file dl>div{grid-template-columns:96px minmax(0,1fr)}
+.blog-post-cover-side img{width:100%;max-height:none}
+.blog-post-article>.blog-post-cover-side{float:right;width:36%;margin:4px 0 18px 26px}
+.blog-post-article>.blog-sources,.blog-post-article>.blog-share,.blog-post-article>.blog-author,.blog-post-article>.repair-guide-cta{clear:both}
+}

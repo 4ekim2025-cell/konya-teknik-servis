@@ -69,7 +69,7 @@ Eşli Teknik bağımsız bir teknik servis işletmesidir; resmî yetkili servis 
   - [Fırın ısıtmıyor: “atın” denmeden önce bilmeniz gerekenler](https://esliteknik.com/blog/firin-isitmiyor-konya/) (Karar Rehberi)
   - [Sahte “yetkili servis” ilanları: arayan servisin gerçek olup olmadığını nasıl anlarsınız?](https://esliteknik.com/blog/sahte-yetkili-servis-nasil-anlasilir/) (Tüketici Rehberi)
   - [Servis şikâyetlerinin arkasında çoğu zaman belirsizlik var: sormanız gereken altı soru](https://esliteknik.com/blog/beyaz-esya-servisinde-sorulacak-sorular/) (Tüketici Rehberi)
-  - [Karatay’da eksik kahve yapan Electrolux kahve makinesi: nodül sorunu](https://esliteknik.com/blog/karatayda-eksik-kahve-yapan-electrolux-kahve-makinesi-nodul-sorunu/) (Ustanın Defterinden)
+  - [Karatay’da eksik kahve yapan Philips kahve makinesi: nodül sorunu](https://esliteknik.com/blog/karatayda-eksik-kahve-yapan-electrolux-kahve-makinesi-nodul-sorunu/) (Ustanın Defterinden)
 - [Sık Sorulan Sorular](https://esliteknik.com/sss/)
 - [Online Servis Takibi](https://esliteknik.com/online-servis-takibi/)
 - [İletişim](https://esliteknik.com/iletisim/)

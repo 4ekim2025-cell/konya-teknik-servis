@@ -1502,33 +1502,33 @@ export const blogPostsData: BlogPost[] = [
   {
     "slug": "/blog/karatayda-eksik-kahve-yapan-electrolux-kahve-makinesi-nodul-sorunu/",
     "category": "Ustanın Defterinden",
-    "title": "Karatay’da eksik kahve yapan Electrolux kahve makinesi: nodül sorunu",
-    "description": "Karatay’da kahveyi eksik yapan Electrolux kahve makinesinde tıkanan su nodüllerini temizledik. Kahve makinesi nodül tıkanıklığı ve çözümü.",
+    "title": "Karatay’da eksik kahve yapan Philips kahve makinesi: nodül sorunu",
+    "description": "Karatay’da kahveyi eksik yapan Philips kahve makinesinde tıkanan su nodüllerini temizledik. Kahve makinesi nodül tıkanıklığı ve çözümü.",
     "excerpt": "Kahve makinesi kahveyi her zamankinden daha az ve eksik hazırlıyordu. Yaptığımız kontrolde su nodüllerinin tıkandığını belirledik ve temizleyerek sorunu çözdük.",
     "cover": {
-      "src": "https://eyh1wbvuvczprro4.public.blob.vercel-storage.com/blog/dd7b5eaf82d929b2fd9c5834fcbdc277-1600.webp",
-      "alt": "kahve makinesi nodül temizlenmesi",
-      "width": 1600,
-      "height": 1067
+      "src": "https://eyh1wbvuvczprro4.public.blob.vercel-storage.com/blog/2c2b4499f56144dfa2dd34f07591fd3e-1600.webp",
+      "alt": "karatay-philips-kahve-makinesi-tamirat",
+      "width": 768,
+      "height": 1024
     },
     "published": "2026-10-05",
     "updated": "2026-10-05",
     "device": "Küçük Ev Aletleri",
-    "servicePath": "/electrolux-servisi-konya/",
+    "servicePath": "/philips-servisi-konya/",
     "caseFile": {
       "district": "Karatay",
-      "brand": "Electrolux",
+      "brand": "Philips",
       "device": "kahve makinesi",
       "complaint": "kahveyi eksik yapıyor",
       "finding": "su nodülleri tıkanmış",
       "action": "nodüller açıldı"
     },
-    "brandPath": "/electrolux-servisi-konya/",
-    "serviceLabel": "Electrolux servisi",
+    "brandPath": "/philips-servisi-konya/",
+    "serviceLabel": "Philips servisi",
     "blocks": [
       {
         "type": "p",
-        "text": "Karatay ilçesinden Electrolux marka kahve makinesinin kahveyi eksik yapıyor yönünde şikâyet aldık. Adrese ulaştık. Bu tür durumlarda öncelikle cihazın su haznesinde yeterli su olup olmadığı, hazne valfinin düzgün çalışıp çalışmadığı ve kireçlenme durumu gibi basit ihtimaller gözden geçirilir."
+        "text": "Karatay ilçesinden Philips marka kahve makinesinin kahveyi eksik yapıyor yönünde şikâyet aldık. Adrese ulaştık. Bu tür durumlarda öncelikle cihazın su haznesinde yeterli su olup olmadığı, hazne valfinin düzgün çalışıp çalışmadığı ve kireçlenme durumu gibi basit ihtimaller gözden geçirilir."
       },
       {
         "type": "h2",

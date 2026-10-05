@@ -17,7 +17,7 @@ import { prepareSave, serializePost, todayInIstanbul, type SaveRequest } from ".
 import { REDIRECTS_PATH, parseRedirects, removeRedirectFrom, renderRedirectsFile, upsertRedirect, type BlogRedirect } from "../../shared/blog-redirects.js";
 import { BLOG_SLUG_PATTERN, blogFileName, validateBlogCollection, validateBlogPost, type BlogPostInput } from "../../shared/blog-schema.js";
 import { GithubError, mapLimit, type BuildStatus, type CommitChange, type GithubClient, type HistoryEntry } from "./github.js";
-import { DEFAULT_SETTINGS, SETTINGS_PATH, SOCIAL_SKIP_MARKER, emptySocialRecord, parseSocialFile, serializeSettings, serializeSocial, socialPath, validateSettings, validateSocialRecord, GOOGLE_POST_NAME, type PanelSettings, type SocialChannel, type SocialRecord } from "../../shared/blog-social.js";
+import { DEFAULT_SETTINGS, SETTINGS_PATH, SOCIAL_SKIP_MARKER, emptySocialRecord, parseSocialFile, salvageShared, serializeSettings, serializeSocial, socialPath, validateSettings, validateSocialRecord, GOOGLE_POST_NAME, type PanelSettings, type SocialChannel, type SocialRecord } from "../../shared/blog-social.js";
 import { ImageStoreError, type ImageStore } from "./imageStore.js";
 
 /** Commit mesajına konan işaret: `vercel.json` → `ignoreCommand` bu işareti görünce derlemeyi atlar (yalnızca siteyi değiştirmeyen taslak commit'leri). */
@@ -43,7 +43,7 @@ type Snapshot = { head: string; items: PostItem[]; posts: BlogPostInput[]; redir
 export type SaveBody = SaveRequest & { baseHash?: string };
 export type SaveOutcome = { noChange: true } | { noChange: false; commit: string; slug: string; status: "draft" | "published"; warnings: string[]; siteAffecting: boolean };
 /** `imagesNote`: fotoğraflar silinmediyse nedeni (silinen yazı fotoğraf taşımıyorsa alan hiç yoktur). */
-export type DeleteOutcome = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean; imagesDeleted?: number; imagesNote?: "kept_preview" | "not_configured" | "failed"; /** Silinen yazının paylaşım paketi (varsa); işleyici Google düğmesini buna göre çevirir, istemciye gönderilmez. */ removedSocial?: SocialRecord };
+export type DeleteOutcome = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean; imagesDeleted?: number; imagesNote?: "kept_preview" | "not_configured" | "failed"; /** Silinen yazının paylaşım paketi (varsa); işleyici Google düğmesini buna göre çevirir, istemciye gönderilmez. */ removedSocial?: SocialRecord; /** Paket dosyası okunamadı ve içinden Google paylaşımı kurtarılamadı: Google tarafı bilinmiyor, düğme elle kontrol edilmeli. */ socialUnreadable?: boolean };
 export type SocialView = { record: SocialRecord | null; /** Dosya var ama okunamadı/kurallara uymuyor: panel boş paket gösterir, kaydedince dosya yeniden yazılır. */ problem?: string; published: boolean };
 export type SettingsView = { settings: PanelSettings; problem?: string };
 export type ShareContext = { post: BlogPostInput; record: SocialRecord; settings: PanelSettings };
@@ -150,11 +150,12 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
   const socialMessage = (verb: string, title: string, slug: string) => `content: ${verb} — ${oneLine(title)} ${SOCIAL_SKIP_MARKER}\n\nAdres: ${slug}\nKaynak: yönetim paneli`;
 
   /** Paylaşım paketi dosyası: yoksa `record: null`; var ama okunamıyorsa `problem` (panel boş paket gösterir, kaydedince dosya yeniden yazılır). */
-  async function readSocial(slug: string, ref: string): Promise<{ record: SocialRecord | null; problem?: string }> {
+  async function readSocial(slug: string, ref: string): Promise<{ record: SocialRecord | null; problem?: string; salvaged?: SocialRecord["shared"] }> {
     const text = await github.readFile(socialPath(slug), ref);
     if (text === null) return { record: null };
     const parsed = parseSocialFile(text, slug);
-    return parsed.ok ? { record: parsed.record } : { record: null, problem: parsed.errors.join("; ") };
+    // Okunamayan dosyada metinler yeniden yazılabilir, ama "paylaşıldı" bölümü (Google gönderi adı) kurtarılıp korunur.
+    return parsed.ok ? { record: parsed.record } : { record: null, problem: parsed.errors.join("; "), salvaged: salvageShared(text) };
   }
 
   /** Ayar dosyası: yoksa ya da bozuksa güvenli varsayılan ("API yok"); bozuksa nedeni `problem` olarak bildirilir. */
@@ -268,7 +269,14 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
         // Yazının paylaşım paketi (varsa) aynı commit'te silinir; Google'daki düğmeyi çevirmek için kaydı işleyiciye döndürürüz.
         const socialText = await github.readFile(socialPath(post.slug), head);
         const socialParsed = socialText === null ? undefined : parseSocialFile(socialText, post.slug);
-        const removedSocial = socialParsed?.ok ? socialParsed.record : undefined;
+        let removedSocial = socialParsed?.ok ? socialParsed.record : undefined;
+        let socialUnreadable = false;
+        if (socialText !== null && !socialParsed?.ok) {
+          // Paket okunamıyor: içinden Google paylaşımı kurtarılabiliyorsa düğme yine çevrilir, değilse elle kontrol istenir.
+          const shared = salvageShared(socialText);
+          if (shared.google) removedSocial = { ...emptySocialRecord(post.slug, today()), shared };
+          else socialUnreadable = true;
+        }
         const deletes = [postPath(post.slug), ...(socialText !== null ? [socialPath(post.slug)] : [])];
 
         const siteAffecting = generated.changed || Boolean(redirect);
@@ -292,7 +300,7 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
             }
           }
         }
-        return { commit, slug: post.slug, wasPublished: published, ...(redirect ? { redirectedTo: redirect.to } : {}), ...images, ...(removedSocial ? { removedSocial } : {}) };
+        return { commit, slug: post.slug, wasPublished: published, ...(redirect ? { redirectedTo: redirect.to } : {}), ...images, ...(removedSocial ? { removedSocial } : {}), ...(socialUnreadable ? { socialUnreadable } : {}) };
       });
     },
 
@@ -323,6 +331,11 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
         if (error instanceof ImageStoreError) throw new AdminError(error.status, error.code, error.message);
         throw error;
       }
+    },
+
+    /** Google'a yazan eylemler (paylaşım, düğme çevirme) yalnızca canlı (main) dalındaki panelde çalışır; önizleme canlıyla aynı Google profilini paylaşırdı. */
+    isLiveBranch(): boolean {
+      return github.config.branch === PRODUCTION_BRANCH;
     },
 
     /** Panel ayarları (yoksa "API yok"). */
@@ -358,8 +371,9 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
       return withRetry(async () => {
         const head = await github.headSha();
         const post = findPost(await snapshot(head), slug);
-        const existing = (await readSocial(slug, head)).record;
-        const checked = validateSocialRecord({ slug, googleBusiness: input.googleBusiness, instagram: input.instagram, button: input.button, shared: existing?.shared ?? {}, updated: existing?.updated ?? today() });
+        const read = await readSocial(slug, head);
+        const existing = read.record;
+        const checked = validateSocialRecord({ slug, googleBusiness: input.googleBusiness, instagram: input.instagram, button: input.button, shared: existing?.shared ?? read.salvaged ?? {}, updated: existing?.updated ?? today() });
         if (!checked.ok) throw new AdminError(422, "validation_failed", checked.errors[0], checked.errors);
         if (existing && serializeSocial(checked.record) === serializeSocial(existing)) return { noChange: true, record: existing };
         const record: SocialRecord = { ...checked.record, updated: today() };
@@ -378,7 +392,9 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
         const head = await github.headSha();
         const post = findPost(await snapshot(head), slug);
         if (post.status === "draft") throw new AdminError(422, "not_published", "Yazı henüz yayında değil; paylaşıldı olarak işaretlenemez.");
-        const existing = (await readSocial(slug, head)).record ?? emptySocialRecord(slug, today());
+        const read = await readSocial(slug, head);
+        if (read.problem) throw new AdminError(422, "social_unreadable", `Paylaşım dosyası okunamıyor (${read.problem}); işaretleme yapılmadı. Önce metni kaydederek dosyayı yeniden yazın.`);
+        const existing = read.record ?? emptySocialRecord(slug, today());
         const shared = { ...existing.shared };
         if (input.shared) {
           if (shared[channel]) return { noChange: true, record: existing };

@@ -52,8 +52,8 @@ afterEach(() => void (errorLog.length = 0));
 void realError;
 
 type Kit = Awaited<ReturnType<typeof setup>>;
-async function setup(options: { google?: boolean; env?: Record<string, string | undefined>; googleQuota?: DailyQuota } = {}) {
-  const repo = new FakeGithubRepo(realRepoFiles(), TOKEN);
+async function setup(options: { google?: boolean; env?: Record<string, string | undefined>; googleQuota?: DailyQuota; branch?: string } = {}) {
+  const repo = new FakeGithubRepo(realRepoFiles(), TOKEN, options.branch ?? "main");
   const google = new FakeGoogle();
   const clock = { now: Date.parse("2026-10-05T09:00:00Z") };
   const env: Record<string, string | undefined> = {
@@ -61,7 +61,7 @@ async function setup(options: { google?: boolean; env?: Record<string, string | 
     ADMIN_SESSION_SECRET: SECRET,
     GITHUB_CONTENT_TOKEN: TOKEN,
     GITHUB_REPO: "o/r",
-    GITHUB_BRANCH: "main",
+    GITHUB_BRANCH: options.branch ?? "main",
     ...(options.google === false ? {} : google.env()),
     ...options.env,
   };
@@ -276,7 +276,7 @@ describe("Google istemcisi (bellek içi Google taklidiyle)", () => {
     await expect(client.switchToCall("accounts/1/locations/2/localPosts/../../x")).rejects.toMatchObject({ kind: "invalid" });
     expect(fake.requests).toHaveLength(0);
     fake.badCreateName = true;
-    await expect(client.createPost(fake.accountId, fake.locationId, buildGoogleLocalPost({ slug: SLUG }, { googleBusiness: GOOD_GOOGLE, button: "CALL" }, false))).rejects.toMatchObject({ kind: "unavailable" });
+    await expect(client.createPost(fake.accountId, fake.locationId, buildGoogleLocalPost({ slug: SLUG }, { googleBusiness: GOOD_GOOGLE, button: "CALL" }, false))).rejects.toMatchObject({ kind: "uncertain" });
   });
 });
 
@@ -612,11 +612,80 @@ describe("panel API: Google'a paylaş (API var)", () => {
 
   it("Google'da paylaşıldı ama kayıt yazılamazsa tekrar paylaşılmaması için açık uyarı verilir", async () => {
     const { kit, slug } = await ready();
-    kit.repo.failRefUpdates = 2;
+    kit.repo.failRefUpdates = 20;
     const response = await kit.post("google-share", { slug });
     expect([response.status, response.body.error]).toEqual([502, "google_share_not_recorded"]);
     expect(response.body.postName).toBe(kit.google.postName(1));
     expect(kit.google.posts.size).toBe(1);
+  });
+
+  it("kayıt ilk denemede yazılamazsa bir kez daha denenir ve paylaşım kaydedilir", async () => {
+    const { kit, slug } = await ready();
+    kit.repo.failRefUpdates = 2;
+    const response = await kit.post("google-share", { slug });
+    expect(response.status).toBe(200);
+    expect(kit.google.posts.size).toBe(1);
+  });
+
+  it("sonucu belirsiz Google hatasında (zaman aşımı/5xx) tekrar denemeyi önleyen ayrı uyarı verilir; kesin red hatalarında verilmez", async () => {
+    const { kit, slug } = await ready();
+    kit.google.forceApiStatus = 503;
+    const response = await kit.post("google-share", { slug });
+    expect([response.status, response.body.error]).toEqual([502, "google_share_uncertain"]);
+    expect(response.body.message).toContain("OLUŞMUŞ olabilir");
+    expect(JSON.parse(kit.repo.file(socialPath(slug))!).shared).toEqual({});
+    kit.google.forceApiStatus = 400;
+    expect((await kit.post("google-share", { slug })).body.error).toBe("google_rejected");
+    kit.google.forceApiStatus = 403;
+    expect((await kit.post("google-share", { slug })).body.error).toBe("google_forbidden");
+  });
+
+  it("önizleme dalındaki panel Google'a paylaşım yapmaz (canlıyla aynı profil)", async () => {
+    const kit = await setup({ branch: "onizleme-dali" });
+    const slug = kit.target;
+    await kit.post("settings-save", { settings: { google: { mode: "api", accountId: kit.google.accountId, locationId: kit.google.locationId, sendPhoto: false } } });
+    await kit.post("social-save", { slug, googleBusiness: GOOD_GOOGLE, instagram: GOOD_INSTAGRAM, button: "LEARN_MORE" });
+    const response = await kit.post("google-share", { slug });
+    expect([response.status, response.body.error]).toEqual([422, "google_live_only"]);
+    expect(kit.google.posts.size).toBe(0);
+    expect(kit.google.requests.filter(line => line.startsWith("POST mybusiness"))).toHaveLength(0);
+  });
+
+  it("geçersiz adres kilide girmeden reddedilir", async () => {
+    const { kit } = await ready();
+    expect((await kit.post("google-share", { slug: "../x" })).status).toBe(400);
+  });
+});
+
+describe("paylaşım paketi: dayanıklılık ve içerik denetimi", () => {
+  it("bozuk paket dosyasında 'paylaşıldı' bölümü kurtarılır, metin kaydı Google gönderi adını silmez", async () => {
+    const kit = await setup();
+    const shared = { google: { at: "2026-10-04", via: "api", postName: kit.google.postName(7) } };
+    kit.repo.externalCommit({ [socialPath(kit.target)]: JSON.stringify({ slug: kit.target, googleBusiness: "1500 TL", shared }) });
+    const saved = await kit.post("social-save", { slug: kit.target, googleBusiness: GOOD_GOOGLE, instagram: GOOD_INSTAGRAM, button: "LEARN_MORE" });
+    expect(saved.status).toBe(200);
+    expect(JSON.parse(kit.repo.file(socialPath(kit.target))!).shared).toEqual(shared);
+  });
+
+  it("bozuk paket dosyasıyla 'paylaşıldı' işaretlenmez", async () => {
+    const kit = await setup();
+    kit.repo.externalCommit({ [socialPath(kit.target)]: "{bozuk" });
+    const response = await kit.post("social-mark", { slug: kit.target, channel: "instagram", shared: true });
+    expect([response.status, response.body.error]).toEqual([422, "social_unreadable"]);
+  });
+
+  it("API paylaşımı gönderi adı olmadan kaydedilemez", () => {
+    const record = emptySocialRecord(SLUG, "2026-10-05");
+    const bad = validateSocialRecord({ ...record, shared: { google: { at: "2026-10-05", via: "api" } } });
+    expect(bad.ok).toBe(false);
+  });
+
+  it("metin denetimi harf büyüklüğü, görünmez karakter, bitişik fiyat ve kısaltılmış bağlantıyla atlatılamaz", () => {
+    const base = emptySocialRecord(SLUG, "2026-10-05");
+    for (const text of ["Tamir 1500TL", "Tamir 750 lira", "TAZMİNAT hakkı", "taz\u200bminat", "Yazı wa.me/905551234567", "bit.ly/abc", "site.tr adresinde"]) {
+      expect(validateSocialRecord({ ...base, googleBusiness: text }).ok, text).toBe(false);
+    }
+    expect(validateSocialRecord({ ...base, googleBusiness: GOOD_GOOGLE, instagram: GOOD_INSTAGRAM }).ok).toBe(true);
   });
 });
 

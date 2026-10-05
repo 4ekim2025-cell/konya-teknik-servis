@@ -52,7 +52,11 @@ export const socialPath = (slug: string): string => `${SOCIAL_DIR}/${blogFileNam
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const CONTROL = /[\u0000-\u0009\u000b-\u001f\u007f\u2028\u2029]/;
 /** Sosyal metinde bağlantı ve iletişim bilgisi olmaz: bağlantı düğmeden, telefon profilden gelir (yapay zeka denetimiyle aynı kural). */
-const LINK_OR_CONTACT = /(https?:|www\.|\.com|\.net|\.org|@)/i;
+const LINK_OR_CONTACT = /(https?:|www\.|\.com|\.net|\.org|@|wa\.me|bit\.ly|\.tr\b|\.me\b)/i;
+/** Fiyat anlatımı: "1500 TL", "750 lira", "₺500". Ortak yasak ifade kalıbı bitişik yazımı ("1500TL") ve "lira"yı yakalamaz. */
+const PRICE = /(\d\s*(tl|₺|lira)\b|₺\s*\d)/i;
+/** Denetimden önce metin normalleştirilir: görünmez/sıfır genişlikli karakterler atılır, Türkçe büyük-küçük harf kuralıyla küçültülür ("TAZMİNAT"). */
+const normalizeForCheck = (value: string): string => value.normalize("NFKC").replace(/[\u200b-\u200f\u2060\ufeff\u00ad]/g, "").toLocaleLowerCase("tr-TR");
 
 /**
  * Elle düzenlenebilir sosyal metin. Boş olabilir (paket henüz yazılmadıysa); doluysa içerik kurallarına uymalıdır.
@@ -64,9 +68,9 @@ const socialText = (label: string, max: number) =>
     .transform(value => value.trim())
     .refine(value => value.length <= max, `${label} en fazla ${max} karakter olmalı`)
     .refine(value => !CONTROL.test(value), `${label} denetim karakteri içeremez`)
-    .refine(value => !BLOG_FORBIDDEN_TEXT.test(value), `${label}: yasak ifade var (hukuki konu, tazminat ve fiyat yazılmaz)`)
-    .refine(value => !BLOG_AUTHORIZED_SERVICE_CLAIM.test(value), `${label}: yetkili servis iddiası yapılamaz`)
-    .refine(value => !LINK_OR_CONTACT.test(value), `${label}: bağlantı ya da iletişim bilgisi içeremez (bağlantı paketten, telefon profilden gelir)`);
+    .refine(value => !BLOG_FORBIDDEN_TEXT.test(value) && !BLOG_FORBIDDEN_TEXT.test(normalizeForCheck(value)) && !PRICE.test(normalizeForCheck(value)), `${label}: yasak ifade var (hukuki konu, tazminat ve fiyat yazılmaz)`)
+    .refine(value => !BLOG_AUTHORIZED_SERVICE_CLAIM.test(value) && !BLOG_AUTHORIZED_SERVICE_CLAIM.test(normalizeForCheck(value)), `${label}: yetkili servis iddiası yapılamaz`)
+    .refine(value => !LINK_OR_CONTACT.test(normalizeForCheck(value)), `${label}: bağlantı ya da iletişim bilgisi içeremez (bağlantı paketten, telefon profilden gelir)`);
 
 const isoDate = (label: string) => z.string().regex(DATE, `${label} YYYY-AA-GG biçiminde olmalı`).refine(isRealDate, `${label} geçerli bir tarih olmalı`);
 
@@ -78,12 +82,15 @@ const googleShared = z
     at: isoDate("Paylaşım tarihi"),
     via: z.enum(["manual", "api"], { error: "Paylaşım yolu manual ya da api olmalı" }),
     postName: z.string().regex(GOOGLE_POST_NAME, "Google gönderi adı geçersiz").optional(),
-    /** API ile paylaşılan gönderinin düğmesi yazı silinince "Hemen ara"ya çevrildiyse tarih. */
-    switchedToCallAt: isoDate("Düğme değişikliği tarihi").optional(),
   })
-  .strict();
+  .strict()
+  .superRefine((value, ctx) => {
+    if (value.via === "api" && !value.postName) ctx.addIssue({ code: "custom", path: ["postName"], message: "API ile paylaşılan gönderinin adı kayıtlı olmalı" });
+  });
 
 const instagramShared = z.object({ at: isoDate("Paylaşım tarihi") }).strict();
+
+const sharedSchema = z.object({ google: googleShared.optional(), instagram: instagramShared.optional() }).strict();
 
 export const socialRecordSchema = z
   .object({
@@ -91,12 +98,27 @@ export const socialRecordSchema = z
     googleBusiness: socialText("Google İşletme metni", GOOGLE_TEXT_MAX),
     instagram: socialText("Instagram metni", INSTAGRAM_TEXT_MAX),
     button: z.enum(GOOGLE_BUTTONS, { error: "Düğme LEARN_MORE ya da CALL olmalı" }),
-    shared: z.object({ google: googleShared.optional(), instagram: instagramShared.optional() }).strict(),
+    shared: sharedSchema,
     updated: isoDate("Güncelleme tarihi"),
   })
   .strict();
 
 export type SocialRecord = z.infer<typeof socialRecordSchema>;
+
+
+/**
+ * Okunamayan (kurallara uymayan ya da bozuk) paket dosyasından yalnızca "paylaşıldı" bölümünü kurtarır. Metinler yeniden yazılabilir,
+ * ama Google gönderi adı kaybolursa yazı yeniden paylaşılabilir ve silinince düğme çevrilemez; bu yüzden bu bölüm metin kurallarından bağımsız korunur.
+ */
+export function salvageShared(text: string): SocialRecord["shared"] {
+  try {
+    const data = JSON.parse(text) as { shared?: unknown };
+    const parsed = sharedSchema.safeParse(data?.shared);
+    return parsed.success ? parsed.data : {};
+  } catch {
+    return {};
+  }
+}
 
 const SOCIAL_ORDER = ["slug", "googleBusiness", "instagram", "button", "shared", "updated"];
 const GOOGLE_SHARED_ORDER = ["at", "via", "postName", "switchedToCallAt"];

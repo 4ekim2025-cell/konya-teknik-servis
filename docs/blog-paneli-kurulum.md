@@ -122,7 +122,9 @@ Kod yazıldı ve bellek içi taklitle sınandı; **gerçek bir Google hesabıyla
 - "Daha fazla bilgi" gönderisinde takip etiketli bağlantı, "Hemen ara" gönderisinde bağlantı yoktur (Google CALL düğmesinde adres kabul etmez).
 - **Kapak fotoğrafı:** Ayarlarda "kapak fotoğrafını ekle" kutusu varsayılan **kapalıdır**. Google belgesi JPG/PNG sayar, panel fotoğrafları WebP'dir; denenmedi. Gönderi fotoğrafsız gider; fotoğrafı elle ekleyebilirsiniz. Kutuyu açıp Google reddederse ("Google isteği kabul etmedi") kapatın.
 - **Yazı silinince:** Google'da API ile paylaşılmış bir yazı silinirse panel paylaşımın düğmesini otomatik "Hemen ara"ya çevirir ve silme iletisinde bildirir. Çevrilemezse ya da paylaşım elle yapılmışsa ileti profilde elle çevirmenizi söyler.
-- Google'da paylaşılıp kaydı yazılamayan nadir durumda panel açık uyarı verir; tekrar paylaşmayın, "Google'da paylaşıldı" kutusunu elle işaretleyin.
+- **Yalnızca canlı (main) panelde:** "Google'da paylaş" ve silinince düğmeyi çevirme, önizleme dalındaki panelde çalışmaz (önizleme canlıyla aynı Google profilini paylaşırdı). Üç `GOOGLE_*` değişkeni yanlışlıkla Preview'a eklense bile önizleme paneli profile dokunamaz.
+- **Belirsiz sonuçlar:** Google'dan yanıt alınamazsa (zaman aşımı, sunucu hatası) gönderi oluşmuş olabilir. Panel bu durumda "Tekrar göndermeyin, profilinize bakın" der ve düğmeyi kapatır; gönderi oluştuysa "Google'da paylaşıldı" kutusunu elle işaretleyin. Google'da paylaşılıp kaydı yazılamayan nadir durumda da aynısı geçerlidir (kayıt önce bir kez daha denenir).
+- Bozuk bir paket dosyası "paylaşıldı" bilgisini (Google gönderi adı) kaybettirmez: metin kaydedilirken bu bölüm dosyadan kurtarılıp korunur.
 
 ## 4. Önizlemede deneme (canlıya geçmeden)
 

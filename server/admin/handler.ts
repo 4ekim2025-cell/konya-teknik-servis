@@ -27,6 +27,7 @@ import { ImageStoreError, createImageStore, type ImageStore } from "./imageStore
 import { checkUpload } from "./images.js";
 import { GoogleError, createGoogleClient, readGoogleCredentials, type GoogleClient } from "./google.js";
 import { buildGoogleLocalPost, type SocialRecord } from "../../shared/blog-social.js";
+import { BLOG_SLUG_PATTERN } from "../../shared/blog-schema.js";
 
 export type AdminEnv = Record<string, string | undefined>;
 type HeaderValue = string | string[] | undefined;
@@ -186,20 +187,26 @@ function describeGoogleError(error: GoogleError): AdminHttpResponse {
   if (error.kind === "notfound") return fail(502, "google_not_found", "Google hesabı, konumu ya da paylaşımı bulamadı. Ayarlardaki hesap ve konum kimliklerini kontrol edin.");
   if (error.kind === "rate") return fail(503, "google_rate_limited", "Google istek sınırına ulaşıldı; birkaç dakika sonra tekrar deneyin.");
   if (error.kind === "invalid") return fail(422, "google_rejected", "Google isteği kabul etmedi (metin, düğme ya da fotoğraf kurallara uymuyor olabilir). Fotoğraf gönderimi açıksa Ayarlar'dan kapatıp tekrar deneyin; ya da paylaşımı elle yapın.");
+  if (error.kind === "uncertain") return fail(502, "google_share_uncertain", "Google'dan yanıt alınamadı; gönderi Google'da OLUŞMUŞ olabilir. Tekrar göndermeyin: önce İşletme Profili'nizde yeni gönderi var mı bakın. Varsa paylaşım paketinde “Google'da paylaşıldı” kutusunu işaretleyin; yoksa elle paylaşın.");
   return fail(502, "google_unavailable", "Google'a şu an ulaşılamıyor; birazdan tekrar deneyin ya da paylaşımı elle yapın.");
 }
 
 /** Silinen yazının Google paylaşımı için ne yapıldığı: "switched" düğme "Hemen ara"ya çevrildi; "manual" elle çevrilmeli; "failed" otomatik çevrilemedi. */
 type GoogleAfterDelete = "switched" | "manual" | "failed";
 
-/** Yazı silindikten SONRA çalışır ve asla hata fırlatmaz: yazı zaten silinmiştir; Google tarafı başarısızsa durum bildirilir. */
-async function googleAfterDelete(service: AdminService, social: SocialRecord | undefined, google: () => GoogleClient | undefined): Promise<GoogleAfterDelete | undefined> {
-  const shared = social?.shared.google;
-  if (!shared) return undefined;
+/**
+ * Yazı silindikten SONRA çalışır ve asla hata fırlatmaz: yazı zaten silinmiştir; Google tarafı başarısızsa durum bildirilir.
+ * Düğme yalnızca canlı (main) panelde, ayardaki hesap/konuma ait gönderi için çevrilir; önizleme paneli canlı profile dokunmaz.
+ */
+async function googleAfterDelete(service: AdminService, outcome: { removedSocial?: SocialRecord; socialUnreadable?: boolean }, google: () => GoogleClient | undefined): Promise<GoogleAfterDelete | undefined> {
+  const shared = outcome.removedSocial?.shared.google;
+  if (!shared) return outcome.socialUnreadable ? "manual" : undefined;
   if (shared.via !== "api" || !shared.postName) return "manual";
   try {
     const client = google();
-    if (!client || (await service.settings()).settings.google.mode !== "api") return "manual";
+    if (!client || !service.isLiveBranch()) return "manual";
+    const { mode, accountId, locationId } = (await service.settings()).settings.google;
+    if (mode !== "api" || !accountId || !locationId || !shared.postName.startsWith(`accounts/${accountId}/locations/${locationId}/`)) return "manual";
     await client.switchToCall(shared.postName);
     return "switched";
   } catch {
@@ -316,8 +323,8 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
           ...(typeof body.redirectTo === "string" && body.redirectTo ? { redirectTo: body.redirectTo } : {}),
         });
         // Yazı silindi; Google'da paylaşılmışsa düğme "Hemen ara"ya çevrilir (API yoluyla paylaşıldıysa otomatik, değilse elle yapılacağı bildirilir).
-        const { removedSocial, ...rest } = outcome;
-        const googleState = await googleAfterDelete(service, removedSocial, google);
+        const { removedSocial, socialUnreadable, ...rest } = outcome;
+        const googleState = await googleAfterDelete(service, { removedSocial, socialUnreadable }, google);
         return reply(200, { ...rest, ...(googleState ? { google: googleState } : {}) });
       }
       case "history": {
@@ -414,25 +421,31 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
         const wrong = needs("POST");
         if (wrong) return wrong;
         if (!service) return needGithub();
+        if (!service.isLiveBranch()) return fail(422, "google_live_only", "Google'a paylaşım yalnızca canlı (main) panelde yapılır; önizleme paneli canlıyla aynı Google profilini paylaşırdı.");
         const client = google();
         if (!client) return needGoogle();
-        const context = await service.shareContext(body.slug);
-        const { mode, accountId, locationId, sendPhoto } = context.settings.google;
-        if (mode !== "api" || !accountId || !locationId) return fail(422, "google_api_off", "Ayarlarda “API var” seçili değil ya da hesap/konum kimliği eksik. Paylaşımı elle yapıp “paylaşıldı” kutusunu işaretleyin.");
-        const key = context.post.slug;
+        if (typeof body.slug !== "string" || !BLOG_SLUG_PATTERN.test(body.slug)) return fail(400, "bad_request", "Adres geçersiz");
+        const key = body.slug;
         const sharing = shared.googleSharing;
+        // Kilit, "zaten paylaşıldı" denetiminden ÖNCE alınır: önceki gönderim bitip kilidi bıraktığında bu istek güncel kaydı okur ve ikinci gönderimi reddeder.
         if (sharing.has(key)) return fail(409, "share_in_progress", "Bu yazı şu an Google'a gönderiliyor; birkaç saniye bekleyin.");
-        const quota = (deps.googleQuota ?? shared.googleQuota).take(GOOGLE_DAILY_LIMIT);
-        if (!quota.allowed) return fail(429, "google_daily_limit", `Bugünkü Google çağrı sınırına (${GOOGLE_DAILY_LIMIT}) ulaşıldı; yarın tekrar deneyin.`);
         sharing.add(key);
         try {
+          const context = await service.shareContext(key);
+          const { mode, accountId, locationId, sendPhoto } = context.settings.google;
+          if (mode !== "api" || !accountId || !locationId) return fail(422, "google_api_off", "Ayarlarda “API var” seçili değil ya da hesap/konum kimliği eksik. Paylaşımı elle yapıp “paylaşıldı” kutusunu işaretleyin.");
+          const quota = (deps.googleQuota ?? shared.googleQuota).take(GOOGLE_DAILY_LIMIT);
+          if (!quota.allowed) return fail(429, "google_daily_limit", `Bugünkü Google çağrı sınırına (${GOOGLE_DAILY_LIMIT}) ulaşıldı; yarın tekrar deneyin.`);
           const created = await client.createPost(accountId, locationId, buildGoogleLocalPost(context.post, context.record, sendPhoto));
-          try {
-            return reply(200, { ok: true, record: await service.recordGoogleShare({ slug: key, postName: created.name }) });
-          } catch {
-            // Paylaşım Google'da yapıldı ama kaydı yazılamadı: tekrar paylaşılmasın diye açık uyarı verilir.
-            console.error("admin: google paylaşımı yapıldı ama kaydedilemedi");
-            return fail(502, "google_share_not_recorded", "Google'da paylaşıldı, ancak kayıt yazılamadı. Paylaşım paketinde “Google'da paylaşıldı” kutusunu elle işaretleyin; tekrar paylaşmayın.", { postName: created.name });
+          // Gönderi Google'da oluştu; kaydı yazamazsak tekrar paylaşılabilir. Bu yüzden kayıt bir kez daha denenir.
+          for (let attempt = 1; ; attempt++) {
+            try {
+              return reply(200, { ok: true, record: await service.recordGoogleShare({ slug: key, postName: created.name }) });
+            } catch {
+              if (attempt < 2) continue;
+              console.error("admin: google paylaşımı yapıldı ama kaydedilemedi");
+              return fail(502, "google_share_not_recorded", "Google'da paylaşıldı, ancak kayıt yazılamadı. Tekrar paylaşmayın: paylaşım paketinde “Google'da paylaşıldı” kutusunu elle işaretleyin.", { postName: created.name });
+            }
           }
         } finally {
           sharing.delete(key);

@@ -31,9 +31,10 @@ export function readGoogleCredentials(env: GoogleEnv): GoogleCredentials | undef
 /**
  * auth: anahtar/izin reddedildi ya da yenileme belirteci geçersiz; forbidden: API etkin değil ya da erişim onaylanmadı (kota 0);
  * rate: istek sınırı; notfound: hesap/konum/gönderi bulunamadı; invalid: Google isteği kabul etmedi (alan, metin, fotoğraf);
- * unavailable: ağ ya da Google tarafı hatası.
+ * unavailable: ağ ya da Google tarafı hatası (istek hiç işlenmemiş olabilir);
+ * uncertain: paylaşım isteği gitti ama sonucu bilinmiyor (zaman aşımı, 5xx, beklenmeyen yanıt) — gönderi Google'da OLUŞMUŞ olabilir, körlemesine tekrar denenmemeli.
  */
-export type GoogleErrorKind = "auth" | "forbidden" | "rate" | "notfound" | "invalid" | "unavailable";
+export type GoogleErrorKind = "auth" | "forbidden" | "rate" | "notfound" | "invalid" | "unavailable" | "uncertain";
 export class GoogleError extends Error {
   /** `status`: HTTP durum kodu (ağ hatası ya da zaman aşımında 0). Günlüğe yazılır; gizli bilgi içermez. */
   constructor(public kind: GoogleErrorKind, public operation: string, public status = 0) {
@@ -122,11 +123,19 @@ export function createGoogleClient(credentials: GoogleCredentials, fetchImpl: ty
       await call("sına", `${parent(accountId, locationId)}?pageSize=1`, "GET");
     },
 
-    /** Yeni paylaşım (localPosts.create). Dönen `name` biçimi denetlenir; bozuksa paylaşım yapılmış sayılmaz ama kayıt tutulamaz, hata verilir. */
+    /** Yeni paylaşım (localPosts.create). Dönen `name` biçimi denetlenir. Sonucu belirsiz kalan çağrılar `uncertain` olarak ayrılır (gönderi oluşmuş olabilir). */
     async createPost(accountId: string, locationId: string, post: GoogleLocalPost): Promise<GoogleCreated> {
-      const data = (await call("paylaş", parent(accountId, locationId), "POST", post)) as { name?: unknown; state?: unknown };
-      if (typeof data.name !== "string" || !GOOGLE_POST_NAME.test(data.name)) throw new GoogleError("unavailable", "paylaş", 0);
-      return { name: data.name, ...(typeof data.state === "string" ? { state: data.state } : {}) };
+      try {
+        const data = (await call("paylaş", parent(accountId, locationId), "POST", post)) as { name?: unknown; state?: unknown };
+        if (typeof data.name !== "string" || !GOOGLE_POST_NAME.test(data.name)) throw new GoogleError("unavailable", "paylaş", 0);
+        return { name: data.name, ...(typeof data.state === "string" ? { state: data.state } : {}) };
+      } catch (error) {
+        // Kimlik/ayar/kota/geçersiz istek hataları gönderinin oluşmadığını gösterir. Ağ hatası, zaman aşımı, 5xx ve bozuk yanıtta ise
+        // gönderi oluşmuş olabilir; bu durum ayrı bildirilir ki kullanıcı profili kontrol etmeden tekrar paylaşmasın.
+        // (Belirteç alınamaması "token" işleminde kalır: istek Google'a hiç gitmemiştir.)
+        if (error instanceof GoogleError && error.kind === "unavailable" && error.operation === "paylaş") throw new GoogleError("uncertain", "paylaş", error.status);
+        throw error;
+      }
     },
 
     /** Paylaşımın düğmesini "Hemen ara"ya çevirir (yazı silinince bağlantı ölü kalmasın). `url` gönderilmez: CALL için boş olmalıdır. */

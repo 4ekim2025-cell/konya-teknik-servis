@@ -45,6 +45,8 @@ export default function SocialPackage({ post, onClose, notify }: Props) {
   const [errors, setErrors] = useState<string[]>([]);
   const [confirmShare, setConfirmShare] = useState(false);
   const [photoNote, setPhotoNote] = useState("");
+  // Gönderi Google'da oluşmuş olabilir (kayıt yazılamadı ya da yanıt alınamadı): tekrar göndermeyi önlemek için düğme bu oturumda kapanır.
+  const [shareLocked, setShareLocked] = useState(false);
 
   const adopt = (next: SocialRecord | null) => {
     setRecord(next);
@@ -105,7 +107,13 @@ export default function SocialPackage({ post, onClose, notify }: Props) {
   });
 
   const share = () => run("share", async () => {
-    const result = await api.googleShare(post.slug);
+    let result;
+    try {
+      result = await api.googleShare(post.slug);
+    } catch (failure) {
+      if (failure instanceof ApiError && (failure.code === "google_share_not_recorded" || failure.code === "google_share_uncertain")) setShareLocked(true);
+      throw failure;
+    }
     setRecord(current => (current ? { ...current, shared: result.record.shared, updated: result.record.updated } : result.record));
     notify("Google İşletme profilinde paylaşıldı.");
   });
@@ -163,7 +171,8 @@ export default function SocialPackage({ post, onClose, notify }: Props) {
         {apiMode && (
           <div className="admin-sub">
             {!googleConfigured && <p className="admin-note">“API var” seçili ama Google anahtarları Vercel’de tanımlı değil; paylaşımı elle yapın.</p>}
-            {googleConfigured && !googleDone && !confirmShare && <button type="button" className="admin-btn admin-btn-primary" disabled={!published || dirty || !google || Boolean(busy)} onClick={() => setConfirmShare(true)}>Google’da paylaş (API)</button>}
+            {shareLocked && !googleDone && <p className="admin-note">Tekrar göndermeyi önlemek için “Google’da paylaş” kapatıldı. Profilinizi kontrol edin; gönderi oluştuysa yukarıdaki “Google’da paylaşıldı” kutusunu işaretleyin.</p>}
+            {googleConfigured && !googleDone && !confirmShare && !shareLocked && <button type="button" className="admin-btn admin-btn-primary" disabled={!published || dirty || !google || Boolean(busy)} onClick={() => setConfirmShare(true)}>Google’da paylaş (API)</button>}
             {googleConfigured && !googleDone && dirty && <p className="admin-muted">Önce metni kaydedin; API kayıtlı metni gönderir.</p>}
             {confirmShare && (
               <div className="admin-note" role="alertdialog" aria-label="Google paylaşımını onayla">

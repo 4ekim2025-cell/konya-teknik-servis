@@ -14,7 +14,7 @@ import {
 const Preview = lazy(() => import("./Preview"));
 const AiDraftBox = lazy(() => import("./AiDraftBox"));
 
-type Props = { data: PostsResponse; item: PostItem | null; reload: () => Promise<PostsResponse | null>; onClose: () => void; notify: (message: string) => void };
+type Props = { data: PostsResponse; item: PostItem | null; reload: () => Promise<PostsResponse | null>; onClose: () => void; onPackage: (item: PostItem) => void; notify: (message: string) => void };
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return <label className="admin-field"><span>{label}{hint && <small> {hint}</small>}</span>{children}</label>;
@@ -62,7 +62,7 @@ function BlockEditor({ block, onChange }: { block: BlogBlockInput; onChange: (ne
   }
 }
 
-export default function EditorView({ data, item, reload, onClose, notify }: Props) {
+export default function EditorView({ data, item, reload, onClose, onPackage, notify }: Props) {
   const today = todayInIstanbul();
   const [post, setPost] = useState<BlogPostInput>(() => item?.post ?? newPost(today, nextOrder(data.items.map(entry => entry.post))));
   // Düzenlenen yazının yüklendiği adres ve sürüm özeti; kaydetme sırasında "başka yerde değişti mi" denetimi için sunucuya gider.
@@ -73,6 +73,9 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
   const [message, setMessage] = useState("");
   const [history, setHistory] = useState<HistoryEntry[] | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  // Yapay zekanın ürettiği iki sosyal metin: yazı kaydedilirken paylaşım paketine de yazılır (başarısız olursa ekranda kalır, tekrar denenir).
+  const [pendingTexts, setPendingTexts] = useState<{ googleBusiness: string; instagram: string } | null>(null);
+  const [packageItem, setPackageItem] = useState<PostItem | null>(null);
   const dragFrom = useRef<number | null>(null);
 
   const stored = origin ? data.items.find(entry => entry.post.slug === origin.slug)?.post : undefined;
@@ -81,7 +84,7 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
   const sheet = useMemo(() => checklist(post), [post]);
   const isUsta = post.category === USTA_CATEGORY;
   const device = BLOG_DEVICES.find(option => option.device === post.device);
-  const dirty = useMemo(() => !item || JSON.stringify(post) !== JSON.stringify(item.post), [post, item]);
+  const dirty = useMemo(() => !item || JSON.stringify(post) !== JSON.stringify(item.post) || pendingTexts !== null, [post, item, pendingTexts]);
 
   useEffect(() => {
     const guard = (event: BeforeUnloadEvent) => { if (dirty && !busy) event.preventDefault(); };
@@ -100,15 +103,29 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
     try {
       const result = await api.save({ post: toPayload(post), mode, ...(origin ? { previousSlug: origin.slug, baseHash: origin.hash } : {}) });
       const fresh = await reload();
+      const finalSlug = result.noChange ? post.slug : result.slug;
+      let packageNote = "";
+      if (pendingTexts) {
+        // Yazı kaydedildi; sosyal metinler ayrı (siteyi derletmeyen) bir commit'le paylaşım paketine yazılır. Düğme türü varsa korunur.
+        try {
+          const current = await api.social(finalSlug);
+          await api.saveSocial({ slug: finalSlug, googleBusiness: pendingTexts.googleBusiness, instagram: pendingTexts.instagram, button: current.record?.button ?? "LEARN_MORE" });
+          setPendingTexts(null);
+          packageNote = " Paylaşım metinleri de kaydedildi.";
+        } catch (failure) {
+          packageNote = ` Ancak paylaşım metinleri kaydedilemedi (${failure instanceof ApiError ? failure.message : "beklenmeyen hata"}); metinler ekranda duruyor, tekrar kaydedin.`;
+        }
+      }
+      const saved = fresh?.items.find(entry => entry.post.slug === finalSlug);
       if (result.noChange) {
-        setMessage("Değişiklik yok; kaydedilecek bir şey bulunamadı.");
+        setMessage(`Değişiklik yok; kaydedilecek bir şey bulunamadı.${packageNote}`);
       } else {
-        const saved = fresh?.items.find(entry => entry.post.slug === result.slug);
         if (saved) { setOrigin({ slug: saved.post.slug, hash: saved.hash }); setPost(saved.post); }
         setSlugEdited(true);
         const tail = result.status === "published" ? (result.siteAffecting ? "Site birkaç dakika içinde güncellenir (Yayın durumu sekmesinden izleyin)." : "") : "Taslak kaydedildi; sitede görünmez.";
-        setMessage(`${result.status === "published" ? "Yayınlandı." : "Kaydedildi."} ${tail}${result.warnings.length ? ` Uyarılar: ${result.warnings.join("; ")}` : ""}`);
+        setMessage(`${result.status === "published" ? "Yayınlandı." : "Kaydedildi."} ${tail}${result.warnings.length ? ` Uyarılar: ${result.warnings.join("; ")}` : ""}${packageNote}`);
         notify(result.status === "published" ? "Yazı yayınlandı." : "Taslak kaydedildi.");
+        if (result.status === "published" && saved) setPackageItem(saved);
       }
     } catch (failure) {
       if (failure instanceof ApiError) { setErrors(failure.errors?.length ? failure.errors : [failure.message]); }
@@ -153,18 +170,20 @@ export default function EditorView({ data, item, reload, onClose, notify }: Prop
         <strong>{origin ? (published ? "Yayındaki yazıyı düzenle" : "Taslağı düzenle") : "Yeni yazı"}</strong>
         <span className="admin-spacer" />
         <button className="admin-btn" onClick={() => setShowPreview(value => !value)}>{showPreview ? "Önizlemeyi gizle" : "Canlı önizleme"}</button>
+        {published && stored && <button className="admin-btn" onClick={() => onPackage({ post: stored, hash: origin!.hash })} title="Google İşletme ve Instagram paylaşım paketi">Paylaşım paketi</button>}
         {!published && <button className="admin-btn" disabled={busy || !sheet.canPublish} onClick={() => submit("draft")}>Taslak kaydet</button>}
         <button className="admin-btn admin-btn-primary" disabled={busy || !sheet.canPublish} onClick={() => submit("publish")}>{published ? "Güncelle ve yayınla" : "Yayınla"}</button>
       </div>
 
       {!sheet.canPublish && <p className="admin-note" role="status">Kaydetmek için tamamlanması gerekenler: {blockingSummary(sheet.errors)}</p>}
       {message && <p className="admin-ok" role="status">{message}</p>}
+      {packageItem && <p className="admin-note" role="status">Yazı yayında. Google İşletme ve Instagram için paylaşım paketi hazır: <button type="button" className="admin-btn admin-btn-primary" onClick={() => onPackage(packageItem)}>Paylaşım paketini aç</button></p>}
       {errors.length > 0 && <div className="admin-error" role="alert"><strong>Kaydedilemedi:</strong><ul>{errors.map(line => <li key={line}>{line}</li>)}</ul></div>}
 
       <div className={`admin-editor-grid ${showPreview ? "has-preview" : ""}`}>
         <div className="admin-form">
           <Suspense fallback={null}>
-            <AiDraftBox existing={data.items.filter(entry => entry.post.slug !== origin?.slug).map(entry => ({ slug: entry.post.slug, order: entry.post.order }))} canGenerate={!published} hasContent={hasContent} onDraft={fillFromAi} />
+            <AiDraftBox existing={data.items.filter(entry => entry.post.slug !== origin?.slug).map(entry => ({ slug: entry.post.slug, order: entry.post.order }))} canGenerate={!published} hasContent={hasContent} onDraft={fillFromAi} onTexts={setPendingTexts} />
           </Suspense>
           <Field label="Kategori">
             <select value={post.category} onChange={event => setPost(setCategory(post, event.target.value as BlogPostInput["category"]))}>

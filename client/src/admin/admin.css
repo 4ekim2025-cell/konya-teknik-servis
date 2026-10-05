@@ -98,14 +98,15 @@
 .admin-todo{border:1px solid #f1d2b8;background:#fff6ee;color:#8a3d06;border-radius:99px;padding:3px 10px;font:600 12px inherit;cursor:pointer}
 .admin-todo:hover{background:#ffe9d6}
 .admin-editor-grid.has-rail{grid-template-columns:minmax(0,1fr) 290px;align-items:start}
-.admin-editor-grid.has-rail .admin-form{max-width:860px;width:100%;justify-self:center}
+.admin-editor-grid.has-rail .admin-form{max-width:940px;width:100%;justify-self:center}
 .admin-rail{position:sticky;top:96px}
 .admin-section{background:#fff;border:1px solid #d6d2ca;border-radius:12px;margin:0 0 12px;scroll-margin-top:110px}
 .admin-section.is-todo{border-left:4px solid #e08a3c}
 .admin-section.is-done{border-left:4px solid #5aa65f}
 .admin-section.is-optional{border-left:4px solid #d6d2ca}
-.admin-section-head{display:flex;gap:10px;align-items:center;width:100%;padding:12px 14px;border:0;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:12px}
-.admin-section-head:hover{background:#faf9f6}
+.admin-section-head{display:flex;gap:10px;align-items:center;width:100%;padding:12px 14px;border:0;background:none;font:inherit;color:inherit;text-align:left;border-radius:12px}
+.admin-section-head.is-button{cursor:pointer}
+.admin-section-head.is-button:hover{background:#faf9f6}
 .admin-section-head:focus-visible,.admin-todo:focus-visible,.admin-choice:focus-within{outline:2px solid #c85a18;outline-offset:2px}
 .admin-step-no{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#efece6;color:#3d3a35;font-weight:700;font-size:14px}
 .admin-section.is-done .admin-step-no{background:#e1f2e3;color:#1b5e20}
@@ -126,8 +127,8 @@
 .admin-field-help,.admin-help{font-size:13px;font-weight:400;color:#68645e}
 .admin-help{margin:0 0 12px}
 .admin-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 12px}
-.admin-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-bottom:14px}
-.admin-choice{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid #d6d2ca;border-radius:10px;cursor:pointer;background:#fff}
+.admin-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.admin-choice{display:flex;gap:8px;align-items:flex-start;padding:10px;min-width:0;border:1px solid #d6d2ca;border-radius:10px;cursor:pointer;background:#fff}
 .admin-choice:hover{background:#faf9f6}
 .admin-choice.is-selected{border-color:#c85a18;background:#fff6ee;box-shadow:inset 0 0 0 1px #c85a18}
 .admin-shell .admin-choice input{width:auto;margin-top:3px;accent-color:#c85a18}
@@ -151,5 +152,20 @@
 .admin-advice{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:13px}
 .admin-advice .is-good{color:#1b5e20}.admin-advice .is-warn{color:#8a5a00}
 .admin-ai{background:none}
+.admin-choice strong{font-size:15px;line-height:1.25}
+.admin-device-row{display:grid;grid-template-columns:minmax(200px,300px) minmax(0,1fr);gap:0 16px;align-items:end}
+.admin-device-row .admin-field{margin-bottom:0}
+.admin-device-row .admin-help{margin:0 0 9px}
+.admin-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.admin-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.admin-part{padding:14px 0 4px;border-top:1px solid #e6e2da;margin-top:14px}
+.admin-section-body>.admin-part:first-child{border-top:0;padding-top:0}
+.admin-part-title{margin:0 0 10px;font-size:15px;font-weight:700}
+.admin-part-title small{font-weight:400;font-size:13px;color:#68645e}
+.admin-part .admin-missing{margin-top:0}
+.admin-ai-panel{margin-top:6px;padding:14px;border:1px solid #f1d2b8;border-radius:10px;background:#fffaf5}
+.admin-ai-panel .admin-part-title{color:#8a3d06}
+@media(max-width:900px){.admin-choices{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-cols-3,.admin-cols-2,.admin-device-row{grid-template-columns:1fr}.admin-device-row .admin-help{margin-top:8px}}
+@media(max-width:480px){.admin-choices{grid-template-columns:1fr}}
 @media(max-width:1100px){.admin-editor-grid.has-rail{grid-template-columns:1fr}.admin-rail{position:static}}
 @media(max-width:640px){.admin-editbar-title{flex-basis:100%;order:-1}.admin-editbar .admin-spacer{display:none}.admin-editbar-row .admin-btn{flex:1 1 auto}.admin-section-title small{display:none}.admin-section-head{padding:12px 10px}.admin-section-body{padding:4px 10px 12px}}

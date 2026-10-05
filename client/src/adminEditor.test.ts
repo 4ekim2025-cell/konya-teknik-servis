@@ -133,8 +133,17 @@ describe("editör bölümleri", () => {
     expect(hasWrittenText({ ...empty, title: "Başlık" })).toBe(true);
   });
 
+  it("ana gruplar sabittir (açılıp kapanmaz); yalnızca ekler açılır, yazı türü kutuları tek sırada durur", () => {
+    const editor = readFileSync(resolve(import.meta.dirname, "admin/EditorView.tsx"), "utf8");
+    const openers = editor.split("\n").filter(line => line.includes("<Section id=") && / collapsible /.test(line));
+    expect(openers.map(line => /id="([a-z]+)"/.exec(line)![1]).sort()).toEqual(["history", "sources"]);
+    expect(editor.split("\n").filter(line => line.includes("<Section id=")).length).toBe(5);
+    const css = readFileSync(resolve(import.meta.dirname, "admin/admin.css"), "utf8");
+    expect(css).toContain(".admin-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))");
+  });
+
   it("editör bölümlü düzeni kullanır; kaydet düğmeleri üst çubukta kalır", () => {
     const editor = readFileSync(resolve(import.meta.dirname, "admin/EditorView.tsx"), "utf8");
-    for (const text of ['className="admin-editbar"', '<Section id="type"', '<Section id="case"', '<Section id="ai"', '<Section id="intro"', '<Section id="cover"', '<Section id="body"', '<Section id="sources"', "errorsBySection(sheet.errors)", "Kaydetmek için tamamlayın"]) expect(editor, text).toContain(text);
+    for (const text of ['className="admin-editbar"', '<Section id="type"', '<Section id="record"', '<Section id="article"', '<Section id="sources"', '<Part title="Başlık ve tanıtım"', '<Part title="Metin"', "errorsBySection(sheet.errors)", "Kaydetmek için tamamlayın"]) expect(editor, text).toContain(text);
   });
 });

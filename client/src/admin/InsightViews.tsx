@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { computeOverview } from "@shared/blog-overview";
 import { api, ApiError, type BuildRow, type PostsResponse } from "./api";
+import { ImageUsageCard } from "./ImageUsageCard";
 
 function Rows({ title, rows }: { title: string; rows: { name: string; count: number }[] }) {
   return (
@@ -35,6 +36,7 @@ export function OverviewView({ data }: { data: PostsResponse }) {
           </>
         )}
       </div>
+      <ImageUsageCard />
     </section>
   );
 }

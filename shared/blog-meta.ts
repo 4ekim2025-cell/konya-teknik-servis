@@ -10,12 +10,15 @@
  */
 
 export type BlogCategory = "Ustanın Defterinden" | "Bakım Rehberi" | "Karar Rehberi" | "Tüketici Rehberi";
+/** Blog fotoğrafı (shared/blog-images.ts kurallarıyla): 1600 sürümünün adresi, zorunlu alt metin ve boyutu. */
+export type BlogImage = { src: string; alt: string; width: number; height: number };
 export type BlogBlock =
   | { type: "p"; text: string }
   | { type: "h2"; text: string }
   | { type: "list"; items: string[] }
   | { type: "steps"; items: { title: string; text: string }[] }
-  | { type: "note"; title: string; text: string };
+  | { type: "note"; title: string; text: string }
+  | ({ type: "image" } & BlogImage);
 export type BlogCaseFile = { district: string; brand: string; device: string; complaint: string; finding: string; action: string };
 export type BlogSource = { label: string; url: string };
 export type BlogPost = {
@@ -24,6 +27,8 @@ export type BlogPost = {
   title: string;
   description: string;
   excerpt: string;
+  /** İsteğe bağlı kapak fotoğrafı; yoksa sayfa bugünkü görünümünü ve paylaşım görselini korur. */
+  cover?: BlogImage;
   published: string;
   updated: string;
   device: string;
@@ -46,7 +51,7 @@ export const BLOG_AUTHOR = {
 export const blogCategories: BlogCategory[] = ["Ustanın Defterinden", "Bakım Rehberi", "Karar Rehberi", "Tüketici Rehberi"];
 
 export function blogWordCount(post: BlogPost): number {
-  const text = post.blocks.map(block => block.type === "p" || block.type === "h2" ? block.text : block.type === "list" ? block.items.join(" ") : block.type === "steps" ? block.items.map(item => `${item.title} ${item.text}`).join(" ") : `${block.title} ${block.text}`).join(" ");
+  const text = post.blocks.map(block => block.type === "image" ? "" : block.type === "p" || block.type === "h2" ? block.text : block.type === "list" ? block.items.join(" ") : block.type === "steps" ? block.items.map(item => `${item.title} ${item.text}`).join(" ") : `${block.title} ${block.text}`).join(" ");
   return text.split(/\s+/).filter(Boolean).length;
 }
 

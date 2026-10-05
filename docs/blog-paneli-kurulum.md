@@ -62,6 +62,34 @@ Bilinmesi gerekenler:
 - Girdide olmayan sayı, başka marka/ilçe, tarih, kişi, adres, fiyat, vaat ya da bağlantı içeren çıktı editöre aktarılmaz; "içerik kurallarından geçmedi" uyarısı çıkar. Tekrar deneyin ya da eksik bilgiyi "Serbest not"a yazın.
 - Günlük sınır sunucu örneği başına sayılır; kesin tavan Google'ın ücretsiz kotasıdır (faturalandırma kapalıyken aşımda ücret oluşmaz, istek reddedilir).
 
+## 3c. Fotoğraflar — Vercel Blob (isteğe bağlı, aşama 4)
+
+Fotoğraf yüklemek için Vercel'de bir Blob deposu (store) gerekir. Oluşturmazsanız panelin geri kalanı aynen çalışır; fotoğraf düğmeleri "henüz açılmadı" der. **Fotoğraflar depoya (GitHub) konmaz, Blob'da durur.**
+
+Hobby kotası (aylık): 1 GB depolama, 10 GB veri aktarımı, 2.000 gelişmiş işlem, 10.000 basit işlem. Kota aşılırsa Blob 30 gün kapanır (ücret kesilmez, fotoğraflar görünmez olur). Bu yüzden: bir yazıda en çok 10 fotoğraf, günde en çok 20 yükleme (her yükleme 2 gelişmiş işlemdir), fotoğraflar 1600 px / ≈500 KB'a küçültülür ve Genel bakış sekmesinde kullanım göstergesi vardır.
+
+Adım adım (Vercel panelinde, yalnızca siz yaparsınız):
+
+1. Vercel → `esli3` ekibi → `konya-teknik-servis` projesi → **Storage** sekmesi → **Create Database/Store** → **Blob**.
+2. Erişim: **Public** seçin (herkese açık; blog fotoğrafları zaten herkese açıktır). Public/Private ve bölge sonradan değiştirilemez. Bölge olarak Türkiye'ye yakın bir Avrupa bölgesi (örn. Frankfurt) seçin.
+3. Projeye bağlayın (**Connect Project**) ve ortam olarak **Production** ile **Preview**'u işaretleyin. Vercel değişkenleri kendisi ekler: `BLOB_READ_WRITE_TOKEN` (ve ürün sürümüne göre `BLOB_STORE_ID`, `VERCEL_OIDC_TOKEN`, `BLOB_WEBHOOK_PUBLIC_KEY`). Bunları elle girmeyin, `VITE_` öneki kullanmayın, kimseyle paylaşmayın.
+4. Store sayfasında deponun **herkese açık adresi**ni (`<kimlik>.public.blob.vercel-storage.com`) not edin; bu adres bir sır değildir (her fotoğraf adresinde görünür). **`shared/blog-images.ts` içindeki `BLOG_IMAGE_HOST` sabitine yazılması gerekir** (bunu geliştirici yapar; adres yazılana kadar şema hiçbir fotoğraf adresini kabul etmez, yani yanlış yere işaret eden fotoğraf eklenemez).
+5. Yeniden dağıtın.
+
+Önizleme ve canlı **aynı** Blob deposunu paylaşır. Bu yüzden önizleme panelinde yazı silmek fotoğrafı silmez, "kullanılmayanları temizle" de çalışmaz; ikisi yalnızca canlı (`main`) panelde çalışır. Önizlemede yüklenen ama yayınlanmayan fotoğraflar Blob'da kalır; canlı panelden temizlenir.
+
+| Ad | Değer |
+|---|---|
+| `BLOB_DAILY_UPLOAD_LIMIT` | (isteğe bağlı) günlük fotoğraf yükleme sınırı, 1–200, varsayılan 20 |
+
+Bilinmesi gerekenler:
+
+- Fotoğraf tarayıcıda küçültülür ve yeniden kodlanır; EXIF (konum, cihaz, tarih) bu sırada silinir. Sunucu ayrıca konum/üst veri taşıyan, WebP olmayan ya da animasyonlu dosyayı reddeder.
+- Alt metin zorunludur (ekran okuyucu ve görsel arama için).
+- Kapak fotoğrafı yazının üstünde görünür ve paylaşım önizlemesinde (`og:image`) kullanılır. Kapaksız yazılar bugünkü logoyu kullanmaya devam eder.
+- "Kullanımı göster" Blob'dan gelişmiş işlem harcar; yalnızca gerektiğinde basın. Dashboard'da Blob'a göz atmak da işlem sayılır.
+- Yazıdan çıkardığınız ya da yüklenip kaydedilmeyen fotoğraf Blob'da kalır; Genel bakış → Fotoğraf depolama → "Kullanılmayanları temizle" ile alınır (son 24 saatte yüklenenlere dokunmaz).
+
 ## 4. Önizlemede deneme (canlıya geçmeden)
 
 Önizleme ortamında panel, önizlemenin kendi dalına yazar; `main` etkilenmez. Önizleme linki Vercel girişi ister. Deneme listesi:
@@ -78,6 +106,8 @@ Bilinmesi gerekenler:
 - **Derleme durumu**: Yayın durumu sekmesi, Vercel'in GitHub commit durumu olarak bildirdiği sonucu okur. Vercel durum bildirmiyorsa satır "Bilinmiyor" görünür.
 - **`/api/admin` adresi**: `trailingSlash: true` ayarıyla birlikte fonksiyonun `/api/admin?action=...` biçiminde çalıştığı önizlemede görülmelidir (Instagram uç noktası aynı biçimde çalışıyor).
 
+- **Fotoğraf yükleme (aşama 4)**: Blob SDK'sının (`@vercel/blob`) çağrı biçimi (`put`, `del`, `list`, hata sınıfı adları) bu depoda gerçek hesapla denenmedi; önizlemede bir fotoğraf yükleyip silerek teyit edin. Canvas'ın WebP üretmesi tarayıcıya bağlıdır (Chrome, Edge, Firefox çalışır; Safari'de denenmedi).
+
 ## Sorun giderme
 
 - "Panel henüz kurulmadı": `ADMIN_PASSWORD_HASH` ya da `ADMIN_SESSION_SECRET` (en az 32 karakter) eksik.
@@ -87,3 +117,7 @@ Bilinmesi gerekenler:
 - "GitHub anahtarı geçersiz": anahtarın süresi bitmiş ya da bu depoda Contents: Read and write izni yok.
 - Başka biri/başka yerden commit yapıldıysa kaydetme "başka yerde değişti" uyarısı verir; listeyi yenileyip tekrar deneyin.
 - Yanlış yayınlanan yazı: yazıyı açın → "Önceki sürümler" → eski sürümü yükleyin → yeniden yayınlayın. Yazıyı silmek yerine bunu tercih edin; silinen yazının adresi 404 verir (yönlendirme seçilmediyse).
+- "Fotoğraf deposu tanımlı değil": Blob store bu projeye bağlı değil ya da bağlandıktan sonra yeniden dağıtım yapılmadı.
+- "Fotoğraf alanı ayarlanmamış": `shared/blog-images.ts` → `BLOG_IMAGE_HOST` boş ya da store adresiyle uyuşmuyor ("alan uyuşmuyor" hatasında yüklenen dosyalar otomatik silinir).
+- "Fotoğraf reddedildi: konum/üst veri taşıyor": dosya panel dışında üretilmiş; panelden seçerek yükleyin.
+- "Fotoğraf deposu kullanılamıyor (kota)": Hobby kotası dolmuş olabilir; Vercel → Storage ekranına bakın, kullanılmayanları temizleyin.

@@ -75,3 +75,8 @@
 .admin-ai-check input{width:auto;margin-top:3px}
 .admin-ai-texts{margin-top:14px;padding-top:12px;border-top:1px solid #e6e2da}
 .admin-ai-texts .admin-btn{margin-bottom:14px}
+/* Fotoğraflar (aşama 4) */
+.admin-picker{margin:0 0 8px}.admin-picker .admin-error{margin-top:6px}
+.admin-image{display:grid;gap:8px}.admin-image img{display:block;max-width:100%;max-height:220px;width:auto;height:auto;border-radius:8px;background:#eee;object-fit:contain}
+.admin-gauge{height:12px;border-radius:99px;background:#e6e2da;overflow:hidden;margin:8px 0}.admin-gauge span{display:block;height:100%;background:#2e7d32}
+.admin-gauge.is-warn span{background:#c98a00}.admin-gauge.is-bad span{background:#a4160a}

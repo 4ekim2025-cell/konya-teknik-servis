@@ -1,4 +1,5 @@
 /** Panel editörünün saf (React'siz) mantığı: blok işlemleri, otomatik alanlar, filtre. Testler: client/src/adminEditor.test.ts */
+import { collectPostImages } from "@shared/blog-images";
 import { advisoryChecks, slugFromTitle, type AdvisoryCheck } from "@shared/blog-publish";
 import { USTA_CATEGORY, validateBlogPost, type BlogPostInput } from "@shared/blog-schema";
 import { defaultCaseDeviceName, derivedServiceFields, deviceOption, GENERAL_DEVICE, SMALL_APPLIANCE_DEVICE } from "@shared/blog-taxonomy";
@@ -6,9 +7,12 @@ import { defaultCaseDeviceName, derivedServiceFields, deviceOption, GENERAL_DEVI
 export type BlogBlockInput = BlogPostInput["blocks"][number];
 export type BlockType = BlogBlockInput["type"];
 
-export const BLOCK_LABELS: Record<BlockType, string> = { p: "Paragraf", h2: "Ara başlık", list: "Liste", steps: "Adımlar", note: "Ustanın notu" };
+export const BLOCK_LABELS: Record<BlockType, string> = { p: "Paragraf", h2: "Ara başlık", list: "Liste", steps: "Adımlar", note: "Ustanın notu", image: "Fotoğraf" };
+/** Elle boş eklenebilen bloklar; fotoğraf bloğu yalnızca yükleme sonrası oluşur (adresi sunucu verir). */
+export type TextBlockType = Exclude<BlockType, "image">;
+export const TEXT_BLOCK_TYPES = (Object.keys(BLOCK_LABELS) as BlockType[]).filter((type): type is TextBlockType => type !== "image");
 
-export function emptyBlock(type: BlockType): BlogBlockInput {
+export function emptyBlock(type: TextBlockType): BlogBlockInput {
   switch (type) {
     case "p": return { type: "p", text: "" };
     case "h2": return { type: "h2", text: "" };
@@ -17,6 +21,9 @@ export function emptyBlock(type: BlockType): BlogBlockInput {
     case "note": return { type: "note", title: "Ustanın notu", text: "" };
   }
 }
+
+/** Yazıdaki fotoğraf sayısı (kapak dahil). */
+export const imageCount = (post: Pick<BlogPostInput, "cover" | "blocks">): number => collectPostImages(post).length;
 
 export function newPost(today: string, order: number): BlogPostInput {
   return {

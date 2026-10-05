@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { applyDeviceAndBrand, blockingSummary, checklist, emptyBlock, filterItems, insertAt, newestFirst, moveItem, newPost, removeAt, setCaseFile, setCategory, slugFor, toPayload } from "./admin/editorModel";
+import { aiInputFromPost, errorSection, errorsBySection, hasWrittenText, splitDistrict, applyDeviceAndBrand, blockingSummary, checklist, emptyBlock, filterItems, insertAt, newestFirst, moveItem, newPost, removeAt, setCaseFile, setCategory, slugFor, toPayload } from "./admin/editorModel";
 
 const longText = "Kelime ".repeat(160).trim();
 const valid = () => ({
@@ -91,5 +91,50 @@ describe("editör modeli", () => {
     expect(filterItems(items, { query: "", category: "Karar Rehberi", status: "" })).toHaveLength(1);
     expect(filterItems(items, { query: "", category: "", status: "draft" })).toHaveLength(1);
     expect(filterItems(items, { query: "", category: "", status: "published" })).toHaveLength(1);
+  });
+});
+
+describe("editör bölümleri", () => {
+  it("eksikler ait olduğu bölüme dağılır; tekrar eden satırlar elenir ve blok numarası yazılır", () => {
+    const grouped = errorsBySection(checklist(setCategory(newPost("2026-10-05", 300), "Ustanın Defterinden")).errors);
+    expect(grouped.intro).toEqual(["Başlık boş olamaz", "Açıklama boş olamaz", "Özet boş olamaz"]);
+    expect(grouped.case).toEqual(["İlçe boş olamaz", "Marka boş olamaz", "Şikâyet boş olamaz", "Tespit boş olamaz", "Yapılan işlem boş olamaz"]);
+    expect(grouped.body).toEqual(["1. blok: Paragraf boş olamaz"]);
+    expect(grouped.type).toEqual([]);
+  });
+
+  it("hiçbir hata gizlenmez: başlık doluyken adres hatası, tanınmayan alan da bir bölümde görünür", () => {
+    expect(errorsBySection(["slug: Adres /blog/kucuk-harf-ve-tire/ biçiminde olmalı"]).intro).toHaveLength(1);
+    expect(errorsBySection(["brandPath: Marka sayfası zorunlu"]).case).toHaveLength(1);
+    expect(errorSection("bilinmeyen: x")).toBe("type");
+    expect(errorSection("cover.alt: Alt metin boş olamaz")).toBe("cover");
+    expect(errorSection("sources.0.label: x")).toBe("sources");
+    const all = checklist(setCategory(newPost("2026-10-05", 300), "Ustanın Defterinden")).errors;
+    expect(Object.values(errorsBySection(all)).flat().length).toBeGreaterThan(0);
+    for (const line of ["title: a", "device: b", "blocks.2.text: c"]) expect(Object.values(errorsBySection([line])).flat()).toHaveLength(1);
+  });
+
+  it("yapay zeka girdisi servis kaydından kurulur; aynı bilgi ikinci kez sorulmaz", () => {
+    expect(splitDistrict("Meram · Yaka")).toEqual({ district: "Meram", neighborhood: "Yaka" });
+    expect(splitDistrict("Karatay")).toEqual({ district: "Karatay", neighborhood: "" });
+    expect(splitDistrict(undefined)).toEqual({ district: "", neighborhood: "" });
+    const post = { device: "Çamaşır Makinesi", caseFile: { district: "Meram · Yaka", brand: "Beko", device: "Çamaşır makinesi", complaint: "Su almıyor", finding: "Basınç anahtarı arızalı", action: "Değiştirildi" } };
+    expect(aiInputFromPost(post, { topic: "Konu", note: " " })).toEqual({ topic: "Konu", district: "Meram", neighborhood: "Yaka", brand: "Beko", device: "Çamaşır Makinesi", complaint: "Su almıyor", finding: "Basınç anahtarı arızalı", action: "Değiştirildi" });
+    expect(aiInputFromPost({ device: "Küçük Ev Aletleri", caseFile: { ...post.caseFile, device: "Airfryer" } }, { topic: "K", note: "not" })).toMatchObject({ deviceName: "Airfryer", note: "not" });
+    const box = readFileSync(resolve(import.meta.dirname, "admin/AiDraftBox.tsx"), "utf8");
+    expect(box).toContain("aiInputFromPost(post");
+    expect(box).not.toContain("BLOG_DISTRICTS");
+  });
+
+  it("üzerine yazma onayı yalnızca yazılmış metin varken istenir (servis kaydı girdidir)", () => {
+    const empty = newPost("2026-10-05", 300);
+    expect(hasWrittenText(empty)).toBe(false);
+    expect(hasWrittenText(setCaseFile(setCategory(empty, "Ustanın Defterinden"), { complaint: "Su almıyor" }))).toBe(false);
+    expect(hasWrittenText({ ...empty, title: "Başlık" })).toBe(true);
+  });
+
+  it("editör bölümlü düzeni kullanır; kaydet düğmeleri üst çubukta kalır", () => {
+    const editor = readFileSync(resolve(import.meta.dirname, "admin/EditorView.tsx"), "utf8");
+    for (const text of ['className="admin-editbar"', '<Section id="type"', '<Section id="case"', '<Section id="ai"', '<Section id="intro"', '<Section id="cover"', '<Section id="body"', '<Section id="sources"', "errorsBySection(sheet.errors)", "Kaydetmek için tamamlayın"]) expect(editor, text).toContain(text);
   });
 });

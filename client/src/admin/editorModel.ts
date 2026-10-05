@@ -2,7 +2,7 @@
 import { collectPostImages } from "@shared/blog-images";
 import { advisoryChecks, slugFromTitle, type AdvisoryCheck } from "@shared/blog-publish";
 import { USTA_CATEGORY, validateBlogPost, type BlogPostInput } from "@shared/blog-schema";
-import { defaultCaseDeviceName, derivedServiceFields, deviceOption, GENERAL_DEVICE, SMALL_APPLIANCE_DEVICE } from "@shared/blog-taxonomy";
+import { BLOG_DISTRICTS, defaultCaseDeviceName, derivedServiceFields, deviceOption, GENERAL_DEVICE, SMALL_APPLIANCE_DEVICE } from "@shared/blog-taxonomy";
 
 export type BlogBlockInput = BlogPostInput["blocks"][number];
 export type BlockType = BlogBlockInput["type"];
@@ -124,3 +124,83 @@ export function newestFirst<T extends { post: BlogPostInput }>(items: readonly T
 }
 
 export const isPublished = (post: { status?: string }): boolean => post.status !== "draft";
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Editör bölümleri: eksikler sayfanın altındaki tek listede değil, ait olduğu bölümün başında gösterilir.
+
+/** Editör ekranındaki bölümler (sıra ekrandaki sıradır). */
+export const EDITOR_SECTIONS = ["type", "case", "intro", "cover", "body", "sources"] as const;
+export type EditorSection = (typeof EDITOR_SECTIONS)[number];
+export const EDITOR_SECTION_LABELS: Record<EditorSection, string> = { type: "Yazı türü ve cihaz", case: "Servis kaydı", intro: "Başlık ve tanıtım", cover: "Kapak fotoğrafı", body: "Yazı metni", sources: "Kaynaklar" };
+
+/** Şema hatasının alan yolundan ("caseFile.brand: …") ait olduğu bölüm. Tanınmayan yol "Yazı türü ve cihaz" bölümüne düşer ki hiçbir hata gizli kalmasın. */
+export function errorSection(line: string): EditorSection {
+  const path = /^([A-Za-z0-9_.]+): /.exec(line)?.[1] ?? "";
+  const root = path.split(".")[0];
+  if (root === "caseFile" || root === "brandPath") return "case";
+  if (root === "title" || root === "slug" || root === "description" || root === "excerpt") return "intro";
+  if (root === "cover") return "cover";
+  if (root === "blocks") return "body";
+  if (root === "sources") return "sources";
+  return "type";
+}
+
+const BLOCK_PATH = /^blocks\.(\d+)\b/;
+
+/**
+ * Hataları bölümlere dağıtır ve okunur hâle getirir: alan yolu atılır, blok hatasına sıra numarası eklenir ("3. blok: …"),
+ * aynı eksiğin tekrarı olan satırlar elenir (başlık boşken adres hatası; marka seçilmemişken marka sayfası hatası; alanlar tek tek
+ * sayılmışken genel "servis kaydı zorunlu" satırı). Hiçbir bölüm, başka satırı kalmadan hatasını yitirmez.
+ */
+export function errorsBySection(errors: readonly string[]): Record<EditorSection, string[]> {
+  const has = (prefix: string) => errors.some(line => line.startsWith(prefix));
+  const grouped = Object.fromEntries(EDITOR_SECTIONS.map(id => [id, [] as string[]])) as Record<EditorSection, string[]>;
+  let slugSeen = false;
+  for (const line of errors) {
+    if (line.startsWith("slug: ")) {
+      if (has("title: ") || slugSeen) continue;
+      slugSeen = true;
+    }
+    if (line.startsWith("brandPath: ") && has("caseFile.brand: ")) continue;
+    if (line.startsWith("caseFile: ") && has("caseFile.")) continue;
+    const block = BLOCK_PATH.exec(line);
+    const text = line.replace(/^[A-Za-z0-9_.]+: /, "");
+    const message = block ? `${Number(block[1]) + 1}. blok: ${text}` : text;
+    const list = grouped[errorSection(line)];
+    if (!list.includes(message)) list.push(message);
+  }
+  return grouped;
+}
+
+/** Yapay zeka taslağının üzerine yazacağı metin var mı (başlık, açıklama, özet, kapak dışı bloklar)? Servis kaydı sayılmaz: o girdidir. */
+export function hasWrittenText(post: Pick<BlogPostInput, "title" | "description" | "excerpt" | "blocks">): boolean {
+  return Boolean(post.title.trim() || post.description.trim() || post.excerpt.trim() || post.blocks.some(block => block.type === "image" || JSON.stringify(block) !== JSON.stringify(emptyBlock(block.type))));
+}
+
+/** Servis kaydındaki "İlçe · Mahalle" metnini ayırır. */
+export function splitDistrict(value: string | undefined): { district: string; neighborhood: string } {
+  const text = value ?? "";
+  const district = BLOG_DISTRICTS.find(name => text.startsWith(name)) ?? "";
+  return { district, neighborhood: district ? text.slice(district.length).replace(/^\s*·\s*/, "").trim() : "" };
+}
+
+/**
+ * Yapay zeka girdisi editördeki servis kaydından kurulur: ilçe, marka, cihaz, şikâyet, tespit ve işlem ikinci kez yazılmaz.
+ * Yalnızca konu ve serbest not ayrıca sorulur. Doğrulama ortak şemayla (`validateAiCaseInput`, sunucuyla aynı) yapılır.
+ */
+export function aiInputFromPost(post: Pick<BlogPostInput, "device" | "caseFile">, extra: { topic: string; note: string }): unknown {
+  const file = post.caseFile;
+  const { district, neighborhood } = splitDistrict(file?.district);
+  return {
+    topic: extra.topic,
+    district,
+    ...(neighborhood ? { neighborhood } : {}),
+    brand: file?.brand ?? "",
+    device: post.device,
+    ...(post.device === SMALL_APPLIANCE_DEVICE && file?.device.trim() ? { deviceName: file.device } : {}),
+    complaint: file?.complaint ?? "",
+    finding: file?.finding ?? "",
+    action: file?.action ?? "",
+    ...(extra.note.trim() ? { note: extra.note } : {}),
+  };
+}

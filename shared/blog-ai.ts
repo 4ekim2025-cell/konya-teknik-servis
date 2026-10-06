@@ -328,8 +328,8 @@ const BLAME_PHRASES = /(kullanıcı hatası|kullanım hatası|yanlış kullanım
 export const STYLE_REPORT_LIMIT = 2;
 export const STYLE_SEMICOLON_LIMIT = 1;
 
-/** Yazı metnindeki üslup sorunları; boş dizi = sorun yok. Yalnızca blok metinlerine bakar (başlık, açıklama ve sosyal metinler ayrı türdür). */
-export function findStyleProblems(blocks: AiDraftOutput["blocks"]): string[] {
+/** Yazı metnindeki üslup sorunları; boş dizi = sorun yok. Yalnızca metin bloklarına bakar (fotoğraf bloğu, başlık, açıklama ve sosyal metinler sayılmaz). */
+export function findStyleProblems(blocks: BlogPostInput["blocks"]): string[] {
   const text = lower(blocks.flatMap(block => (block.type === "p" ? [block.text] : block.type === "list" ? block.items : block.type === "steps" ? block.items.map(item => item.text) : block.type === "note" ? [block.text] : [])).join("\n"));
   const errors: string[] = [];
   const report = [...new Set(text.match(REPORT_PHRASES) ?? [])];

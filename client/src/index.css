@@ -1226,7 +1226,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .blog-grid .blog-card{grid-template-columns:1fr;gap:14px}
 .blog-author{display:grid;grid-template-columns:54px minmax(0,1fr);gap:15px;padding:24px 22px;border:1px solid #e5ded4;border-radius:18px;background:#fff;box-shadow:0 14px 34px rgba(5,85,100,.075)}
-.blog-author-avatar{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#055564;color:#fcf5db;font:900 17px Manrope,sans-serif;letter-spacing:.04em}
+.blog-author-avatar{display:block;width:54px;height:54px;border-radius:50%;background:#fff;object-fit:cover;object-position:center top;border:2px solid #055564}
 .blog-author small{display:block;color:#a12519;font:800 10px Manrope,sans-serif;letter-spacing:.12em}
 .blog-author strong{display:block;margin-top:3px;color:#055564;font:800 18px Manrope,sans-serif;letter-spacing:-.03em}
 .blog-author em{display:block;margin-top:2px;color:#6b706a;font-size:12.5px;font-style:normal}

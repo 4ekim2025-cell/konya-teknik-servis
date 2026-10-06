@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { BLOG_AUTHOR, blogCategories, blogPosts, blogShareLinks } from "../../shared/blog-posts";
@@ -83,6 +83,14 @@ describe("blog yazıları", () => {
     expect(page).toContain("<BlogAuthor/>");
     expect(prerender).toContain("blogPostHtml(blogPost)");
     expect(prerender).toContain('"@type": "BlogPosting"');
+  });
+
+  it("yazar kutusunda baş harfler yerine daire içinde yazarın fotoğrafı durur", () => {
+    expect(BLOG_AUTHOR.photo).toBe("/esad-esli-yazar.png");
+    expect(existsSync(resolve(import.meta.dirname, "../public", BLOG_AUTHOR.photo.slice(1)))).toBe(true);
+    expect(page).toContain('<img className="blog-author-avatar" src={BLOG_AUTHOR.photo} width={50} height={51} alt={BLOG_AUTHOR.name} loading="lazy" decoding="async"/>');
+    expect(page).not.toContain('aria-hidden="true">EE</span>');
+    expect(readFileSync(resolve(import.meta.dirname, "index.css"), "utf8")).toContain(".blog-author-avatar{display:block;width:54px;height:54px;border-radius:50%;");
   });
 
   it("site geneli bilgilendirme notu tüm sayfaların alt bilgisindedir; sayfa içeriğinde ayrıca tekrar etmez", () => {

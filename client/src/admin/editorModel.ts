@@ -204,3 +204,20 @@ export function aiInputFromPost(post: Pick<BlogPostInput, "device" | "caseFile">
     ...(extra.note.trim() ? { note: extra.note } : {}),
   };
 }
+
+/** "Olası nedenler" isteğinin girdisi: yalnızca konu (belirti), marka ve cihaz. İlçe ve mahalle modele gitmez. */
+export function aiSuggestInputFromPost(post: Pick<BlogPostInput, "device" | "caseFile">, topic: string): unknown {
+  const file = post.caseFile;
+  return { topic, brand: file?.brand ?? "", device: post.device, ...(post.device === SMALL_APPLIANCE_DEVICE && file?.device.trim() ? { deviceName: file.device } : {}) };
+}
+
+/**
+ * Servis kaydı hataları (yapay zeka akışında): neden henüz seçilmediyse "Şikâyet / Tespit / Yapılan işlem boş" satırları tek satıra iner;
+ * çünkü bu üç alan seçimle dolar ve seçimden önce ekranda görünmez.
+ */
+export function collapseCaseIssues(issues: readonly string[], detailsVisible: boolean): string[] {
+  if (detailsVisible) return [...issues];
+  const hidden = ["Şikâyet boş olamaz", "Tespit boş olamaz", "Yapılan işlem boş olamaz"];
+  const rest = issues.filter(line => !hidden.includes(line));
+  return rest.length === issues.length ? rest : [...rest, "Arıza nedeni seçilmedi (olası nedenleri getirip sahada yaptığınızı seçin ya da kendiniz yazın)"];
+}

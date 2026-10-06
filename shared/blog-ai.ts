@@ -8,6 +8,9 @@
  *  - Model çıktısı güvenilmez girdidir: bilinmeyen alan (slug, adres, kaynak…) taşıyan, `blog-schema.ts` şemasından geçmeyen ya da
  *    girdide olmayan vaka ayrıntısı (rakam, başka marka/ilçe, tarih, kişi, adres, söz/vaat) içeren çıktı editöre dolmaz.
  *  - Bu dosya hiçbir şeyi kaydetmez ve yayınlamaz; çıktı yalnızca editöre taslak olarak dolar.
+ *  - "Olası nedenler" (öneri) adımı vaka bilgisi ÜRETMEZ: model bu arıza için genel bilgiden olası neden/çözüm seçenekleri sunar,
+ *    proje sahibi sahada gerçekten yapılanı seçer (tek seçenek çıksa da seçmek zorundadır) ya da kendisi yazar. Seçilen satırlar
+ *    servis kaydına dolar ve ancak o zaman vaka bilgisi sayılır. Seçenekler kendiliğinden yazıya dönüşmez.
  */
 import { z } from "zod";
 import { slugFromTitle } from "./blog-publish.js";
@@ -217,4 +220,99 @@ export function placeAiDraft(input: AiCaseInput, draft: unknown, existing: { slu
   let slug = rebuilt.draft.post.slug;
   for (let n = 2; taken.has(slug); n++) slug = rebuilt.draft.post.slug.replace(/\/$/, `-${n}/`);
   return { ok: true, draft: { ...rebuilt.draft, post: { ...rebuilt.draft.post, slug } } };
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Olası nedenler (öneri): arıza konusundan seçenek listesi. Seçimi proje sahibi yapar; seçilmeyen hiçbir şey yazıya girmez.
+
+/** Editörde en çok bu kadar seçenek gösterilir. */
+export const AI_SUGGESTION_LIMIT = 5;
+
+export const aiSuggestInputSchema = z
+  .object({
+    topic: oneLine("Konu", 160),
+    brand: z.string({ error: "Marka zorunlu" }).refine(value => BLOG_BRANDS.some(brand => brand.name === value), "Marka listeden seçilmeli"),
+    device: z.string({ error: "Cihaz zorunlu" }).refine(value => AI_CASE_DEVICES.includes(value), "Cihaz listeden seçilmeli"),
+    deviceName: z.string().transform(value => value.trim()).refine(value => value.length <= 60 && !BLOG_CONTROL_CHARS.test(value), "Cihaz adı tek satır ve en fazla 60 karakter olmalı").optional(),
+  })
+  .strict()
+  .superRefine((input, ctx) => {
+    if (input.device === SMALL_APPLIANCE_DEVICE && !input.deviceName) ctx.addIssue({ code: "custom", path: ["deviceName"], message: "Küçük ev aletinde cihaz adı zorunlu (ör. Airfryer)" });
+    const text = JSON.stringify(input);
+    const forbidden = text.match(BLOG_FORBIDDEN_TEXT);
+    if (forbidden) ctx.addIssue({ code: "custom", path: [], message: `Girdide yasak ifade var: "${forbidden[0]}" (hukuki konu, tazminat ve fiyat yazılmaz)` });
+    const claim = text.match(BLOG_AUTHORIZED_SERVICE_CLAIM);
+    if (claim) ctx.addIssue({ code: "custom", path: [], message: `Yetkili servis iddiası yapılamaz: "${claim[0]}"` });
+  });
+
+export type AiSuggestInput = z.infer<typeof aiSuggestInputSchema>;
+export type AiSuggestion = { finding: string; action: string };
+export type AiSuggestions = { complaint: string; options: AiSuggestion[] };
+export type AiSuggestCheck = { ok: true; suggestions: AiSuggestions } | { ok: false; errors: string[] };
+
+export function validateAiSuggestInput(data: unknown): { ok: true; input: AiSuggestInput } | { ok: false; errors: string[] } {
+  const result = aiSuggestInputSchema.safeParse(data);
+  return result.success ? { ok: true, input: result.data } : { ok: false, errors: issues(result.error, "girdi") };
+}
+
+/** Modelin öneri çıktısı: tek şikâyet cümlesi ve neden/çözüm çiftleri. `.strict()`: başka alan gelirse reddedilir. */
+export const aiSuggestOutputSchema = z
+  .object({
+    complaint: z.string({ error: "Şikâyet zorunlu" }),
+    options: z.array(z.object({ finding: z.string({ error: "Tespit zorunlu" }), action: z.string({ error: "Yapılan işlem zorunlu" }) }).strict()).min(1, "En az bir seçenek gerekli").max(12, "Çok fazla seçenek"),
+  })
+  .strict();
+
+const SUGGESTION_LINE_MAX = 200;
+
+/**
+ * Tek satırlık öneri metninin sorunları; boş dizi = kullanılabilir. Seçenek seçilince servis kaydına ve oradan yazıya gireceği için
+ * yazıyla aynı yasaklara uyar: rakam (konuda geçmiyorsa), başka marka, tarih/kişi/adres/söz, bağlantı, fiyat, hukuk, yetkili servis iddiası.
+ */
+function suggestionLineProblems(input: AiSuggestInput, label: string, value: string): string[] {
+  const text = value.trim();
+  const errors: string[] = [];
+  if (!text) return [`${label} boş`];
+  if (text.length > SUGGESTION_LINE_MAX) errors.push(`${label} en fazla ${SUGGESTION_LINE_MAX} karakter olmalı`);
+  if (BLOG_CONTROL_CHARS.test(text)) errors.push(`${label} tek satır olmalı`);
+  const source = [input.topic, input.brand, input.device, input.deviceName].filter(Boolean).join("\n");
+  const known = new Set(source.match(/\d+/g) ?? []);
+  const invented = [...new Set(text.match(/\d+/g) ?? [])].filter(number => !known.has(number));
+  if (invented.length) errors.push(`${label}: girdide olmayan sayı (${invented.slice(0, 4).join(", ")})`);
+  for (const district of BLOG_DISTRICTS) if (word(district).test(text) && !word(district).test(source)) errors.push(`${label}: ilçe yazılamaz (${district})`);
+  for (const brand of BLOG_BRANDS) if (brand.name !== input.brand && new RegExp(`${word(brand.name).source}(?!${LETTER})`, "u").test(text) && !source.includes(brand.name)) errors.push(`${label}: girdide olmayan marka (${brand.name})`);
+  const textLower = lower(text);
+  const sourceLower = lower(source);
+  for (const { label: kind, pattern } of UNGROUNDED_PATTERNS) {
+    const found = textLower.match(pattern);
+    if (found && !sourceLower.includes(found[0])) errors.push(`${label}: girdide olmayan ayrıntı (${kind}): "${found[0]}"`);
+  }
+  if (BLOG_FORBIDDEN_TEXT.test(text)) errors.push(`${label}: yasak ifade (hukuki konu, tazminat ve fiyat yazılmaz)`);
+  if (BLOG_AUTHORIZED_SERVICE_CLAIM.test(text)) errors.push(`${label}: yetkili servis iddiası yapılamaz`);
+  return errors;
+}
+
+/**
+ * Model çıktısını (ham JSON değeri) doğrular. Şikâyet cümlesi kurala uymazsa çıktı reddedilir; kurala uymayan ya da yinelenen
+ * seçenekler tek tek ATILIR, kalanlar (en çok `AI_SUGGESTION_LIMIT`) döner. Hiç seçenek kalmazsa çıktı reddedilir.
+ */
+export function buildAiSuggestions(input: AiSuggestInput, raw: unknown): AiSuggestCheck {
+  const parsed = aiSuggestOutputSchema.safeParse(raw);
+  if (!parsed.success) return { ok: false, errors: issues(parsed.error, "çıktı") };
+  const complaint = parsed.data.complaint.trim();
+  const complaintProblems = suggestionLineProblems(input, "Şikâyet", complaint);
+  if (complaintProblems.length) return { ok: false, errors: complaintProblems };
+  const options: AiSuggestion[] = [];
+  const dropped: string[] = [];
+  const seen = new Set<string>();
+  for (const option of parsed.data.options) {
+    const finding = option.finding.trim();
+    const action = option.action.trim();
+    const problems = [...suggestionLineProblems(input, "Tespit", finding), ...suggestionLineProblems(input, "Yapılan işlem", action)];
+    const key = lower(finding);
+    if (problems.length) dropped.push(...problems);
+    else if (!seen.has(key) && options.length < AI_SUGGESTION_LIMIT) { seen.add(key); options.push({ finding, action }); }
+  }
+  if (!options.length) return { ok: false, errors: dropped.length ? dropped : ["Kullanılabilir seçenek yok"] };
+  return { ok: true, suggestions: { complaint, options } };
 }

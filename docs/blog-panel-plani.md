@@ -184,3 +184,10 @@ Not: API kodu onay gelene kadar gerçek hesapla sınanamaz; belgeye göre yazıl
 - **Fotoğraflar:** pakette her fotoğraf tarayıcıda JPEG'e çevrilip indirilir (canvas); çevrilemezse asıl adres yeni sekmede açılır.
 - **Görünürlük kanıtı:** yazı verisi, şema ve prerender/build kodu değişmedi; ziyaretçi tarafı dosyaların yeni modüllere bağlanmadığı testle sınanır (`adminSocial.test.ts`). `dist/public` karşılaştırması PR açıklamasındadır.
 - **Doğrulama sınırı:** bu ortamda pnpm kurulamadı; yeni ve mevcut testler yerel taklit (zod/vitest) ile çalıştırıldı, `pnpm check`/`pnpm build` Vercel önizleme build'ine bırakıldı.
+
+### Olası nedenler (2026-10-06, proje sahibinin kararı)
+
+- **İstek:** servis kaydında şikâyet, tespit ve işlemi elle yazmak yerine yapay zekanın arızaya göre çözümü yazması; birden fazla çözüm varsa seçim kutusu.
+- **Karar:** model çözümü kendiliğinden yazmaz. "Ustanın Defterinden" yazıları gerçek iş olarak yayınlandığı için model yalnızca olası neden/çözüm seçenekleri sunar; sahada yapılanı proje sahibi seçer (tek seçenek çıksa da) ya da kendisi yazar. Seçim servis kaydına dolar ve düzeltilebilir; yazı bu kayda göre yazılır ("girilmemiş ayrıntı" denetimi aynen çalışır).
+- **Uygulama:** yeni eylem `ai-suggest` (yeni fonksiyon yok; oturum, CSRF, istek sınırı, ortak günlük hak). `shared/blog-ai.ts` → `aiSuggestInputSchema`, `buildAiSuggestions` (kurala uymayan seçenek atılır, en çok 5); `server/admin/ai.ts` → `SUGGEST_RULES`, `generateAiSuggestions`; arayüz `AiDraftBox.tsx`.
+- **Sınırlar:** canlı internet araması yok (modelin kendi bilgisi); seçenekler genel bilgidir, o cihazda ne olduğunu bilemez. Bir yazı iki hak harcar (`AI_DAILY_LIMIT` varsayılan 20 → günde yaklaşık 10 yazı). Gerçek Gemini ile denenmedi; testler bellek içi taklitledir.

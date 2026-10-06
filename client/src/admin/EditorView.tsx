@@ -7,7 +7,7 @@ import { api, ApiError, type HistoryEntry, type PostItem, type PostsResponse } f
 import { ImageFields, ImagePicker } from "./ImagePicker";
 import { nextOrder, todayInIstanbul } from "@shared/blog-publish";
 import {
-  applyDeviceAndBrand, BLOCK_LABELS, checklist, emptyBlock, errorsBySection, hasWrittenText, imageCount, insertAt, isPublished, moveItem, newPost, removeAt, replaceAt, setCaseFile, setCategory, slugFor, splitDistrict, TEXT_BLOCK_TYPES, toPayload,
+  applyDeviceAndBrand, BLOCK_LABELS, checklist, collapseCaseIssues, emptyBlock, errorsBySection, hasWrittenText, imageCount, insertAt, isPublished, moveItem, newPost, removeAt, replaceAt, setCaseFile, setCategory, slugFor, splitDistrict, TEXT_BLOCK_TYPES, toPayload,
   type BlogBlockInput, type TextBlockType,
 } from "./editorModel";
 
@@ -231,10 +231,12 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
 
   const place = splitDistrict(post.caseFile?.district);
   const showAi = isUsta && !published;
+  const detailsFilled = Boolean(post.caseFile?.complaint.trim() || post.caseFile?.finding.trim() || post.caseFile?.action.trim());
+  const caseIssues = collapseCaseIssues(issues.case, !showAi || detailsFilled);
   const typeGroup = { id: "type" as GroupId, label: isUsta ? "Yazı türü" : "Yazı türü ve cihaz", missing: issues.type.length };
   const groups: { id: GroupId; label: string; missing: number; optional?: boolean; empty?: boolean }[] = [
     // Usta yazısında servis kaydı ve yapay zeka taslağı EN ÜSTTEDİR; cihaz da orada seçilir. Diğer türlerde ilk grup tür ve cihazdır.
-    ...(isUsta ? [{ id: "record" as GroupId, label: showAi ? "Yapay zeka ile yazdır" : "Servis kaydı", missing: issues.case.length }] : []),
+    ...(isUsta ? [{ id: "record" as GroupId, label: showAi ? "Yapay zeka ile yazdır" : "Servis kaydı", missing: caseIssues.length }] : []),
     typeGroup,
     { id: "article", label: "Yazı", missing: issues.intro.length + issues.cover.length + issues.body.length },
     { id: "sources", label: "Kaynaklar", missing: issues.sources.length, optional: true, empty: sources.length === 0 },
@@ -273,12 +275,15 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
                   <datalist id="admin-small-appliances">{SMALL_APPLIANCE_SUGGESTIONS.map(name => <option key={name} value={name} />)}</datalist>
                 </Field>
               </div>
+    </>
+  );
+  // Şikâyet, tespit ve yapılan işlem: yapay zeka akışında neden seçilince görünür ve seçimle dolar; yayındaki yazıda her zaman görünür.
+  const recordDetails = (
               <div className="admin-cols admin-cols-3">
                 <Field label="Şikâyet" help="Müşteri ne dedi?"><textarea rows={3} value={post.caseFile?.complaint ?? ""} onChange={event => setPost(setCaseFile(post, { complaint: event.target.value }))} placeholder="Makine su almıyor" /></Field>
                 <Field label="Tespit" help="Arızanın nedeni neydi?"><textarea rows={3} value={post.caseFile?.finding ?? ""} onChange={event => setPost(setCaseFile(post, { finding: event.target.value }))} placeholder="Basınç anahtarı arızalı" /></Field>
                 <Field label="Yapılan işlem" help="Ne yapıldı, ne değişti?"><textarea rows={3} value={post.caseFile?.action ?? ""} onChange={event => setPost(setCaseFile(post, { action: event.target.value }))} placeholder="Basınç anahtarı değiştirildi" /></Field>
               </div>
-    </>
   );
 
   const readiness = (
@@ -334,13 +339,13 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
       <div className={`admin-editor-grid ${showPreview ? "has-preview" : "has-rail"}`}>
         <div className="admin-form">
           {isUsta && (
-            <Section id="record" step={step("record")} title={showAi ? "Yapay zeka ile yazdır" : "Servis kaydı"} hint={showAi ? "Servis kaydını yazın, yazıyı yapay zeka hazırlasın (isterseniz atlayıp aşağıda kendiniz yazın)" : "Yalnızca gerçek iş: nerede, hangi cihaz, ne şikâyet geldi, ne bulundu, ne yapıldı"} missing={missingOf("record")}>
-              {issues.case.length > 0 && <ul className="admin-missing">{issues.case.map(line => <li key={line}>{line}</li>)}</ul>}
+            <Section id="record" step={step("record")} title={showAi ? "Yapay zeka ile yazdır" : "Servis kaydı"} hint={showAi ? "Arızayı yazın, olası nedenlerden sahada yaptığınızı seçin, yazıyı yapay zeka hazırlasın" : "Yalnızca gerçek iş: nerede, hangi cihaz, ne şikâyet geldi, ne bulundu, ne yapıldı"} missing={missingOf("record")}>
+              {caseIssues.length > 0 && <ul className="admin-missing">{caseIssues.map(line => <li key={line}>{line}</li>)}</ul>}
               {showAi ? (
                 <Suspense fallback={<p className="admin-muted">Yükleniyor…</p>}>
-                  <AiDraftBox post={post} existing={data.items.filter(entry => entry.post.slug !== origin?.slug).map(entry => ({ slug: entry.post.slug, order: entry.post.order }))} hasContent={hasContent} onDraft={fillFromAi} onTexts={setPendingTexts}>{recordFields}</AiDraftBox>
+                  <AiDraftBox post={post} existing={data.items.filter(entry => entry.post.slug !== origin?.slug).map(entry => ({ slug: entry.post.slug, order: entry.post.order }))} hasContent={hasContent} onDraft={fillFromAi} onTexts={setPendingTexts} details={recordDetails} onChoose={fields => setPost(current => setCaseFile(current, fields))}>{recordFields}</AiDraftBox>
                 </Suspense>
-              ) : recordFields}
+              ) : <>{recordFields}{recordDetails}</>}
             </Section>
           )}
 

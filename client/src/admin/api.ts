@@ -1,5 +1,5 @@
 import type { BlogPostInput } from "@shared/blog-schema";
-import type { AiCaseInput } from "@shared/blog-ai";
+import type { AiCaseInput, AiSuggestInput, AiSuggestion } from "@shared/blog-ai";
 import type { GoogleButton, PanelSettings, SocialChannel, SocialRecord } from "@shared/blog-social";
 
 export class ApiError extends Error {
@@ -22,6 +22,7 @@ export type AiDraftResponse = { post: BlogPostInput; googleBusiness: string; ins
 export type SocialResponse = { record: SocialRecord | null; problem?: string; published: boolean };
 export type SettingsResponse = { settings: PanelSettings; problem?: string; googleConfigured: boolean };
 export type SocialSaveResponse = { noChange: boolean; record: SocialRecord };
+export type AiSuggestResponse = { complaint: string; options: AiSuggestion[]; remaining: number };
 export type Session = { configured: boolean; authenticated: boolean };
 
 type Options = { method?: "GET" | "POST"; query?: Record<string, string>; body?: unknown };
@@ -69,6 +70,8 @@ export const api = {
   version: (slug: string, sha: string) => call<{ post: BlogPostInput }>("version", { query: { slug, sha } }),
   builds: () => call<{ rows: BuildRow[] }>("builds"),
   /** Yapay zeka taslağı: yalnızca editöre dolacak metni döndürür; hiçbir şey kaydetmez. */
+  /** Arıza için olası neden/çözüm seçenekleri. Hiçbir şey kaydetmez; seçimi kullanıcı yapar. */
+  aiSuggest: (input: AiSuggestInput) => call<AiSuggestResponse>("ai-suggest", { method: "POST", body: { input } }),
   aiDraft: (input: AiCaseInput) => call<AiDraftResponse>("ai-draft", { method: "POST", body: { input } }),
   /** Tarayıcıda küçültülmüş iki WebP sürümünü yükler; adı ve adresi sunucu belirler. */
   uploadImage: async (large: Blob, small: Blob) => call<ImageUploadResponse>("image-upload", { method: "POST", body: { large: await toBase64(large), small: await toBase64(small) } }),

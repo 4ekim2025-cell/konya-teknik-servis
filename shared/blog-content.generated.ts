@@ -1506,7 +1506,7 @@ export const blogPostsData: BlogPost[] = [
     ]
   },
   {
-    "slug": "/blog/karatayda-eksik-kahve-yapan-electrolux-kahve-makinesi-nodul-sorunu/",
+    "slug": "/blog/karatayda-eksik-kahve-yapan-philips-kahve-makinesi-nodul-sorunu/",
     "category": "Ustanın Defterinden",
     "title": "Karatay’da eksik kahve yapan Philips kahve makinesi: nodül sorunu",
     "description": "Karatay’da kahveyi eksik yapan Philips kahve makinesinde tıkanan su nodüllerini temizledik. Kahve makinesi nodül tıkanıklığı ve çözümü.",

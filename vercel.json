@@ -5,6 +5,13 @@
   "buildCommand": "pnpm build",
   "outputDirectory": "dist/public",
   "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/blog/karatayda-eksik-kahve-yapan-electrolux-kahve-makinesi-nodul-sorunu/",
+      "destination": "/blog/karatayda-eksik-kahve-yapan-philips-kahve-makinesi-nodul-sorunu/",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

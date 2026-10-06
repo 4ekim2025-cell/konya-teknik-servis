@@ -67,7 +67,7 @@ content/blog/*.json     # Blog yazıları: yazı başına bir dosya (dosya adı 
 scripts/build-content.ts  # Build'in ilk adımı: yazıları doğrular, sıralar, sitemap/llms.txt blog bölümünü ve üretilen veri dosyasını yazar
 scripts/prerender.ts    # Build sonrası her rota için başlık/açıklama/canonical/JSON-LD ve statik içerik yazar
 server/, api/           # Instagram akışı (/api/instagram-feed) ve blog paneli API'si (/api/admin → server/admin/)
-docs/                   # Vercel rehberi, SEO denetimleri, geliştirme notları
+docs/                   # Vercel rehberi, SEO denetimleri, geliştirme notları; devir-notu.md: projeyi ilk kez gören araç/kişi için özet (hesaplar, durum, açık işler değişince güncelle)
 ```
 
 ## Önemli kurallar

@@ -44,6 +44,8 @@ export type BlogPost = {
 
 export const BLOG_AUTHOR = {
   name: "Esad Eşli",
+  // Yazar kutusundaki daire fotoğraf (proje sahibinin yüklediği fotoğraf). Dosya client/public altındadır.
+  photo: "/esad-esli-yazar.png",
   role: "Teknik servis ustası, Eşli Teknik",
   bio: "Esad Eşli, Eşli Teknik’in teknik servis ustasıdır. Bu yazılar, Karatay, Meram ve Selçuklu’da sahada karşılaştığı arızalardan ve müşterilerin en sık sorduğu sorulardan yola çıkarak hazırlanır.",
 };

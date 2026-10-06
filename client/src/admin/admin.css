@@ -178,3 +178,14 @@
 .admin-options legend small{display:block;font-weight:400;font-size:13px;color:#68645e}
 .admin-options .admin-help{margin:0}
 .admin-details{margin-bottom:6px}
+/* Alan etiketleri: alanın nerede görüneceği */
+.admin-where{display:inline-flex;flex-wrap:wrap;gap:4px;margin-left:6px;vertical-align:middle}
+.admin-tag{display:inline-block;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700;line-height:1.5;white-space:nowrap;background:#efece6;color:#55514b}
+.admin-tag.is-blog{background:#e1f2e3;color:#1b5e20}
+.admin-tag.is-search{background:#e3edfb;color:#174a8c}
+.admin-tag.is-gbp{background:#fde8d6;color:#8a3d06}
+.admin-tag.is-instagram{background:#f6e3f3;color:#7a1f6b}
+.admin-tag.is-share{background:#e6f1f2;color:#155e63}
+.admin-tag.is-ai{background:#efece6;color:#55514b}
+.admin-where-legend{margin:0 0 12px;font-size:13px;color:#68645e}
+.admin-where-legend .admin-where{margin-left:2px}

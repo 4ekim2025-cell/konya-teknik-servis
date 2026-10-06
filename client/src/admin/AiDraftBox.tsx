@@ -4,6 +4,7 @@ import { todayInIstanbul } from "@shared/blog-publish";
 import type { BlogPostInput } from "@shared/blog-schema";
 import { api, ApiError } from "./api";
 import { aiInputFromPost, aiSuggestInputFromPost } from "./editorModel";
+import { Where, type Place } from "./Where";
 
 type Props = {
   /** Editördeki cihaz ve servis kaydı: yapay zeka girdisi buradan okunur, aynı bilgi ikinci kez sorulmaz. */
@@ -24,8 +25,8 @@ type Props = {
   onChoose: (fields: { complaint: string; finding: string; action: string }) => void;
 };
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
-  return <label className="admin-field"><span>{label}{hint && <small> {hint}</small>}</span>{children}</label>;
+function Field({ label, hint, where, children }: { label: string; hint?: string; where?: Place[]; children: ReactNode }) {
+  return <label className="admin-field"><span className="admin-field-label">{label}{where && <Where places={where} />}{hint && <small> {hint}</small>}</span>{children}</label>;
 }
 
 /**
@@ -118,7 +119,7 @@ export default function AiDraftBox({ post, existing, hasContent, onDraft, onText
   return (
     <div className="admin-ai">
       <p className="admin-help">Arızayı yazın, yapay zeka olası nedenleri listelesin; sahada gerçekten yaptığınızı seçin, yazıyı o seçime göre hazırlasın. Müşteri adı, telefon, açık adres ve fiyat yazmayın.</p>
-      <Field label="Arıza / konu" hint="— bir cümle"><input value={topic} onChange={event => setTopic(event.target.value)} placeholder="Temiz yıkamayan bulaşık makinesi" /></Field>
+      <Field label="Arıza / konu" where={["ai"]} hint="— bir cümle; yapay zeka buna göre yazar"><input value={topic} onChange={event => setTopic(event.target.value)} placeholder="Temiz yıkamayan bulaşık makinesi" /></Field>
       {children}
 
       <div className="admin-suggest">
@@ -153,7 +154,7 @@ export default function AiDraftBox({ post, existing, hasContent, onDraft, onText
         </div>
       )}
 
-      <Field label="Serbest not" hint={`(isteğe bağlı) ${note.length}/${AI_NOTE_MAX}`}><textarea rows={3} value={note} onChange={event => setNote(event.target.value)} placeholder="Yazıda geçmesini istediğiniz, sahada gördüğünüz diğer ayrıntılar" /></Field>
+      <Field label="Serbest not" where={["ai"]} hint={`(isteğe bağlı) ${note.length}/${AI_NOTE_MAX}`}><textarea rows={3} value={note} onChange={event => setNote(event.target.value)} placeholder="Yazıda geçmesini istediğiniz, sahada gördüğünüz diğer ayrıntılar" /></Field>
 
       {hasContent && (
         <label className="admin-check"><input type="checkbox" checked={overwrite} onChange={event => setOverwrite(event.target.checked)} /><span>Aşağıdaki mevcut başlık, açıklama, özet ve yazı metninin yerine taslak gelsin</span></label>
@@ -168,9 +169,9 @@ export default function AiDraftBox({ post, existing, hasContent, onDraft, onText
       {texts && (
         <div className="admin-ai-texts">
           <p className="admin-help">Paylaşım metinleri de hazırlandı. Yazıyı kaydettiğinizde (Taslak kaydet / Yayınla) paylaşım paketine kaydedilir; yayından sonra Yazılar → Paylaşım’dan açılır. Paylaşmadan önce okuyun ve düzeltin.</p>
-          <Field label="Google İşletme metni" hint={`${texts.googleBusiness.length}/${AI_GOOGLE_BUSINESS_MAX}`}><textarea rows={7} value={texts.googleBusiness} onChange={event => change({ ...texts, googleBusiness: event.target.value })} /></Field>
+          <Field label="Google İşletme metni" where={["gbp"]} hint={`${texts.googleBusiness.length}/${AI_GOOGLE_BUSINESS_MAX}`}><textarea rows={7} value={texts.googleBusiness} onChange={event => change({ ...texts, googleBusiness: event.target.value })} /></Field>
           <button type="button" className="admin-btn" onClick={() => copy("googleBusiness")}>{copied === "googleBusiness" ? "Kopyalandı" : "Google İşletme metnini kopyala"}</button>
-          <Field label="Instagram metni" hint={`${texts.instagram.length}/${AI_INSTAGRAM_MAX}`}><textarea rows={9} value={texts.instagram} onChange={event => change({ ...texts, instagram: event.target.value })} /></Field>
+          <Field label="Instagram metni" where={["instagram"]} hint={`${texts.instagram.length}/${AI_INSTAGRAM_MAX}`}><textarea rows={9} value={texts.instagram} onChange={event => change({ ...texts, instagram: event.target.value })} /></Field>
           <button type="button" className="admin-btn" onClick={() => copy("instagram")}>{copied === "instagram" ? "Kopyalandı" : "Instagram metnini kopyala"}</button>
         </div>
       )}

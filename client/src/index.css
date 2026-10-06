@@ -1354,10 +1354,9 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-post-article>.blog-post-cover-side{float:right;width:36%;margin:4px 0 18px 26px}
 .blog-post-article>.blog-sources,.blog-post-article>.blog-share,.blog-post-article>.blog-author,.blog-post-article>.repair-guide-cta{clear:both}
 }
-/* Site geneli bilgilendirme notu: blog giriş sayfasının en altında, iki sütunun altında tam genişlikte */
-.blog-disclaimer{grid-column:1/-1;margin:14px 0 0;padding:18px 20px;border:1px solid #e3d9c4;border-left:4px solid #055564;border-radius:0 14px 14px 0;background:#fbf8ee}
-.blog-disclaimer strong{display:block;color:#055564;font:800 11px Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase}
-.blog-disclaimer p{margin:7px 0 0;color:#4f5650;font-size:14.5px;line-height:1.7}
+/* Site geneli bilgilendirme notu: tüm sayfaların alt bilgisinde, bağlantıların altında küçük puntoyla */
+.footer-disclaimer{max-width:980px;margin:0;padding:0 0 20px;color:#a3a9a5;font-size:12px;line-height:1.65}
+.footer-disclaimer strong{color:#c9cdca;font-weight:700}
 /* Blog kartı küçük resmi (proje sahibinin kararı): kapak fotoğrafı olan yazıda fotoğraf kartın SAĞINDA, başlık ve özetin yanında durur.
    Kartın geri kalanı (ikon, kategori satırı, dolgu) fotoğrafsız kartla aynıdır. Fotoğraf sabit oranda kırpılır (yalnızca kartta; yazı sayfasındaki kapak kırpılmaz). */
 .blog-grid .blog-card{grid-template-rows:auto 1fr;align-content:start}

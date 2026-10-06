@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { BLOG_AUTHOR, BLOG_DISCLAIMER, blogCategories, blogPosts, blogShareLinks } from "../../shared/blog-posts";
+import { BLOG_AUTHOR, blogCategories, blogPosts, blogShareLinks } from "../../shared/blog-posts";
+import { SITE_DISCLAIMER } from "../../shared/site-disclaimer";
 import { validateBlogPost } from "../../shared/blog-schema";
 
 const projectRoot = resolve(import.meta.dirname, "..", "..");
@@ -84,19 +85,22 @@ describe("blog yazıları", () => {
     expect(prerender).toContain('"@type": "BlogPosting"');
   });
 
-  it("site geneli bilgilendirme notu blog giriş sayfasının en altındadır; yazı sayfalarına ayrı ayrı konmaz", () => {
-    for (const phrase of ["Bu site genelinde bulunan tüm bilgiler genel geçer bilgilerdir", "Tavsiye niteliği taşımaz", "cihaza müdahale etmeyin", "yetkili servisten veya yetkin bir özel servisten uzman desteği alın"]) expect(BLOG_DISCLAIMER.text).toContain(phrase);
-    expect(BLOG_DISCLAIMER.text).not.toMatch(/yetkili servisiyiz|yetkili servisi olarak|Eşli Teknik yetkili/i);
-    // Sayfa: not yalnızca blog listesinde (Blog bileşeni), yazı düzeninde (BlogArticleLayout) değil.
-    expect(page.match(/className="blog-disclaimer"/g)).toHaveLength(1);
-    const list = page.slice(page.indexOf("function Blog(){"));
-    expect(list).toContain('</aside><aside className="blog-disclaimer" role="note"');
-    expect(list).toContain("{BLOG_DISCLAIMER.text}</p></aside></section></Simple></div>}");
-    expect(page.slice(page.indexOf("export function BlogArticleLayout"), page.indexOf("function Blog(){"))).not.toContain("blog-disclaimer");
-    // Prerender: not blog listesinin sonunda, yazı sayfasının HTML'inde yok.
-    const index = prerender.slice(prerender.indexOf("function blogIndexHtml()"), prerender.indexOf("function blogPostHtml("));
-    expect(index).toContain("${esc(BLOG_DISCLAIMER.text)}</p></aside>`;");
-    expect(prerender.slice(prerender.indexOf("function blogPostHtml("), prerender.indexOf("function deviceBlogLinksHtml("))).not.toContain("BLOG_DISCLAIMER");
-    expect(readFileSync(resolve(import.meta.dirname, "index.css"), "utf8")).toContain(".blog-disclaimer{grid-column:1/-1;");
+  it("site geneli bilgilendirme notu tüm sayfaların alt bilgisindedir; sayfa içeriğinde ayrıca tekrar etmez", () => {
+    for (const phrase of ["Bu site genelinde bulunan tüm bilgiler genel geçer bilgilerdir", "Tavsiye niteliği taşımaz", "cihaza müdahale etmeyin", "yetkili servisten veya yetkin bir özel servisten uzman desteği alın"]) expect(SITE_DISCLAIMER.text).toContain(phrase);
+    expect(SITE_DISCLAIMER.text).not.toMatch(/yetkili servisiyiz|yetkili servisi olarak|Eşli Teknik yetkili/i);
+    // React: not alt bilgide (Footer), bağlantılarla telif satırı arasında; tüm sayfalar aynı Footer'ı kullanır.
+    const chrome = readFileSync(resolve(import.meta.dirname, "components/SiteChrome.tsx"), "utf8");
+    expect(chrome).toContain('<p className="footer-disclaimer" role="note"><strong>{SITE_DISCLAIMER.title}:</strong> {SITE_DISCLAIMER.text}</p><div className="footer-bottom">');
+    expect(chrome.match(/SITE_DISCLAIMER\.text/g)).toHaveLength(1);
+    // Sayfa içeriğinde (blog listesi, yazı sayfası) ayrıca yer almaz: aynı bilgi bir sayfada iki kez geçmez.
+    expect(page).not.toContain("DISCLAIMER");
+    expect(page).not.toContain("blog-disclaimer");
+    // Prerender: her rotanın statik içeriğinin en sonunda bir kez; blog listesi ve yazı HTML'ine ayrıca yazılmaz.
+    expect(prerender).toContain("${sections}${staticContact}${staticDisclaimer}</main>`;");
+    expect(prerender.match(/SITE_DISCLAIMER\.text/g)).toHaveLength(1);
+    expect(prerender.slice(prerender.indexOf("function blogIndexHtml()"), prerender.indexOf("function deviceBlogLinksHtml("))).not.toContain("DISCLAIMER");
+    const css = readFileSync(resolve(import.meta.dirname, "index.css"), "utf8");
+    expect(css).toContain(".footer-disclaimer{max-width:980px;margin:0;padding:0 0 20px;color:#a3a9a5;font-size:12px;line-height:1.65}");
+    expect(css).not.toContain(".blog-disclaimer");
   });
 });

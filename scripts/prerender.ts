@@ -8,10 +8,11 @@ import { deviceFaultGuides } from "../shared/device-faults";
 import { brandGuides } from "../shared/brand-guides";
 import { brandSeo } from "../client/src/brandSeo";
 import { ADMIN_ROUTE, renderAdminShell } from "../shared/admin-shell";
+import { SITE_DISCLAIMER } from "../shared/site-disclaimer";
 import { redirectPageHtml } from "../shared/blog-redirects";
 import { loadRedirects } from "./build-content";
 import { blogCardImageHtml, blogImageHtml, withCoverHead } from "../shared/blog-image-html";
-import { BLOG_AUTHOR, BLOG_DISCLAIMER, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
+import { BLOG_AUTHOR, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
 
 const root = process.cwd();
 const outputDir = path.join(root, "dist", "public");
@@ -181,7 +182,7 @@ function blogMetaHtml(post: BlogPost) {
 }
 
 function blogIndexHtml() {
-  return `<p>Konya’da sahada karşılaştığımız gerçek arızalar, bakım rehberleri ve servis sürecinde bilmeniz gerekenler. Yazılar ${esc(BLOG_AUTHOR.name)} tarafından hazırlanır.</p>${blogPosts.map(post => `<article>${post.cover ? blogCardImageHtml(post.cover) : ""}<p>${esc(post.category)}${post.caseFile ? ` · ${esc(post.caseFile.district)} · ${esc(post.caseFile.brand)}` : ""}</p><h2><a href="${post.slug}">${esc(post.title)}</a></h2><p>${esc(post.excerpt)}</p>${blogMetaHtml(post)}</article>`).join("")}<aside aria-label="${esc(BLOG_DISCLAIMER.title)}"><p><strong>${esc(BLOG_DISCLAIMER.title)}:</strong> ${esc(BLOG_DISCLAIMER.text)}</p></aside>`;
+  return `<p>Konya’da sahada karşılaştığımız gerçek arızalar, bakım rehberleri ve servis sürecinde bilmeniz gerekenler. Yazılar ${esc(BLOG_AUTHOR.name)} tarafından hazırlanır.</p>${blogPosts.map(post => `<article>${post.cover ? blogCardImageHtml(post.cover) : ""}<p>${esc(post.category)}${post.caseFile ? ` · ${esc(post.caseFile.district)} · ${esc(post.caseFile.brand)}` : ""}</p><h2><a href="${post.slug}">${esc(post.title)}</a></h2><p>${esc(post.excerpt)}</p>${blogMetaHtml(post)}</article>`).join("")}`;
 }
 
 const legalSectionsByRoute: Record<string, LegalSection[]> = { "/kvkk/": kvkkSections, "/gizlilik-politikasi/": privacySections, "/cerez-politikasi/": cookieSections };
@@ -251,7 +252,9 @@ function staticContent(title: string, description: string, route: string) {
   else if (blogPost) sections = blogPostHtml(blogPost);
   const staticHero = route === "/" ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" srcset="/esli-teknik-konya-hero-background-800.webp 800w, /esli-teknik-konya-hero-background.webp 1600w" sizes="100vw" width="1920" height="1080" alt="Konya Eşli Teknik beyaz eşya servis hizmeti" fetchpriority="high" decoding="async" />` : service ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" srcset="/esli-teknik-konya-hero-background-800.webp 800w, /esli-teknik-konya-hero-background.webp 1600w" sizes="100vw" width="1920" height="1080" alt="${esc(heading)}" loading="lazy" decoding="async" />` : brand ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" srcset="/esli-teknik-konya-hero-background-800.webp 800w, /esli-teknik-konya-hero-background.webp 1600w" sizes="100vw" width="1920" height="1080" alt="${esc(heading)}" loading="lazy" decoding="async" />` : districts[route] ? `<img class="seo-hero-image" src="/esli-teknik-konya-hero-background.webp" srcset="/esli-teknik-konya-hero-background-800.webp 800w, /esli-teknik-konya-hero-background.webp 1600w" sizes="100vw" width="1920" height="1080" alt="${esc(heading)}" loading="lazy" decoding="async" />` : "";
   const staticContact = `<section class="static-business-contact" aria-labelledby="static-business-contact-title"><div><span class="section-kicker">EŞLİ TEKNİK İLETİŞİM</span><h2 id="static-business-contact-title">Konya’da servis desteği için<br/><em>doğrudan ulaşın.</em></h2><p>Karatay, Meram ve Selçuklu başta olmak üzere Konya’da beyaz eşya ve küçük ev aletleri teknik servis desteği sunuyoruz.</p></div><address><p><strong>Adres</strong><br/>Gaziosmanpaşa Mahallesi Menzil Caddesi No:70, Karatay / Konya</p><p><strong>Telefon</strong><br/><a href="tel:+905511858773">0551 185 87 73</a></p><p><strong>Çalışma saatleri</strong><br/>Her gün 08:00–22:00</p><a class="static-business-map" href="${GOOGLE_BUSINESS_URL}">Adresi haritada açın</a></address></section>`;
-  return `<main id="seo-prerender" lang="tr">${staticHero}<h1>${esc(heading)}</h1><p>${esc(description)}</p>${sections}${staticContact}</main>`;
+  // Site geneli bilgilendirme notu: React alt bilgisindeki (Footer) satırın statik karşılığı, her sayfanın en sonunda.
+  const staticDisclaimer = `<aside aria-label="${esc(SITE_DISCLAIMER.title)}"><p><small><strong>${esc(SITE_DISCLAIMER.title)}:</strong> ${esc(SITE_DISCLAIMER.text)}</small></p></aside>`;
+  return `<main id="seo-prerender" lang="tr">${staticHero}<h1>${esc(heading)}</h1><p>${esc(description)}</p>${sections}${staticContact}${staticDisclaimer}</main>`;
 }
 
 if (!fs.existsSync(indexPath)) throw new Error(`Build output not found: ${indexPath}`);

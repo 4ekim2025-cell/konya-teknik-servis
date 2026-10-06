@@ -12,8 +12,10 @@ Plan tarihi: 2026-10-02. Proje sahibi: Esad Eşli.
 | 2 | Panel (giriş, liste, editör, ekle/düzenle/sil, özet) | Tamamlandı (main'de, canlıda); güvenlik incelemesi bulguları PR #6–#9 ile düzeltildi |
 | 3 | Yapay zeka taslağı, Google İşletme ve Instagram metinleri | Tamamlandı (main'de, canlıda; PR #10–#13). Gerçek Gemini ile panelden denendi, proje sahibi 2026-10-02'de onayladı |
 | 4 | Fotoğraflar (Vercel Blob) | Tamamlandı (main'de, canlıda; PR #15–#17). Fotoğraflı yazılar panelden yayınlandı; PageSpeed karşılaştırması 2026-10-05'te yapıldı (aşağıda) |
-| 5 | Google İşletme (API yok / API var) | Kod tamam, PR açık (sınama yalnızca bellek içi taklitle). "API yok" yolu kullanıma hazır; "API var" kodu yazıldı ama gerçek Google hesabıyla **denenmedi** (API erişimi onaylanınca bağlanacak: `docs/blog-paneli-kurulum.md` bölüm 3d) |
-| 6 | Zamanlama ve istatistik | Bekliyor |
+| 5 | Google İşletme (API yok / API var) | Tamamlandı (main'de, canlıda; PR #19). "API yok" yolu kullanıma hazır; "API var" kodu yazıldı ama gerçek Google hesabıyla **denenmedi** (API erişimi onaylanınca bağlanacak: `docs/blog-paneli-kurulum.md` bölüm 3d) |
+| 6 | Zamanlama ve istatistik | **Yapılmayacak** (proje sahibinin kararı, 2026-10-06: ihtiyaç yok). Yeniden önerme; istenirse proje sahibi açar |
+
+**Panel projesi tamamlandı (2026-10-06).** Açık kalan tek iş, proje sahibi isterse Google İşletme API bağlantısının kurulmasıdır (aşama 5, "API var" yolu).
 
 ## Amaç
 
@@ -139,7 +141,9 @@ Kapsam:
 
 Not: API kodu onay gelene kadar gerçek hesapla sınanamaz; belgeye göre yazılır, ilk gerçek deneme onaydan sonra yapılır.
 
-## Aşama 6 — Zamanlama ve istatistik
+## Aşama 6 — Zamanlama ve istatistik (yapılmayacak)
+
+> Proje sahibinin kararı (2026-10-06): bu aşamaya ihtiyaç yok. Aşağıdaki tasarım yalnızca kayıt için duruyor.
 
 - **Zamanlama:** yazıya ileri tarih verilir. Hobby pakette cron günde bir kez ve yaklaşık bir saat sapmayla çalışır; "şu gün yayınla" desteklenir, saat hassasiyeti yoktur. Günlük cron, tarihi gelen yazı varsa derlemeyi tetikler.
 - **İstatistik:** yazı başına görüntülenme, `whatsapp_click` ve `phone_click` sayıları (GA4 Data API, salt okunur servis hesabı). Sayılar yalnızca çerezi kabul eden ziyaretçileri içerir; eğilim göstergesidir.
@@ -150,7 +154,7 @@ Not: API kodu onay gelene kadar gerçek hesapla sınanamaz; belgeye göre yazıl
 - Aşama 3: Gemini API anahtarı.
 - Aşama 4: Vercel'de Blob store oluşturma onayı.
 - Aşama 5: profil 60 günü doldurunca Google İşletme API başvurusu.
-- Aşama 6: GA4'e salt okunur servis hesabı tanımlama.
+- Aşama 6: yapılmayacak (gerek yok).
 
 ## Çalışma düzeni
 

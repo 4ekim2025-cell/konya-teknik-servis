@@ -127,7 +127,7 @@ Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılm
 - Blog yazısı cihaz sayfasındaki cümleyi tekrar etmez: cihaz sayfası "neden olur, ne kontrol edilir", blog "nasıl yapılır / sahada ne oldu / nasıl karar verilir" sorusunu cevaplar.
 
 ### Blog paneli (`/yonetim/`, `api/admin.ts`)
-- Kurulum ve ortam değişkenleri: `docs/blog-paneli-kurulum.md`. Plan: `docs/blog-panel-plani.md`.
+- Kurulum ve ortam değişkenleri: `docs/blog-paneli-kurulum.md`. Plan: `docs/blog-panel-plani.md`. Panel projesi tamamlandı (aşama 1–5 canlıda); aşama 6 (zamanlama ve istatistik) proje sahibinin kararıyla yapılmayacak (2026-10-06), yeniden önerme.
 - Kod: sunucu `server/admin/` (`auth.ts` giriş/oturum, `github.ts` GitHub yazma, `service.ts` iş kuralları, `handler.ts` HTTP), ortak kurallar `shared/blog-*.ts` (şema, `blog-publish.ts` kaydetme kuralları, `blog-build.ts` üretilen dosyalar, `blog-taxonomy.ts` ilçe/marka/cihaz listeleri, `blog-redirects.ts`), arayüz `client/src/admin/` (App'te lazy ayrı parça).
 - Panel yazıyı **tek commit** olarak `content/` altına ve üretilen üç dosyaya yazar (GitHub anahtarı yazma izni kod tarafında da yalnızca bunlarla sınırlıdır). Taslak commit'i mesajında `[panel-taslak]` taşır; `scripts/vercel-ignore-build.sh` bu commit'lerde, son yayından beri `content/blog/` dışında dosya değişmediyse build'i atlar.
 - Yayındaki yazının adresi (slug) değişmez; yayın taslağa geri çevrilmez. Ana sayfadan sabit bağlantı verilen yazılar (`shared/blog-protected.ts`) panelden silinemez; yeni sabit blog bağlantısı eklersen bu listeye de ekle (test kırılır).

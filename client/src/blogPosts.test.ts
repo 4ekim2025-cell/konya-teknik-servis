@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { BLOG_AUTHOR, blogCategories, blogPosts, blogShareLinks } from "../../shared/blog-posts";
+import { BLOG_AUTHOR, BLOG_DISCLAIMER, blogCategories, blogPosts, blogShareLinks } from "../../shared/blog-posts";
 import { validateBlogPost } from "../../shared/blog-schema";
 
 const projectRoot = resolve(import.meta.dirname, "..", "..");
@@ -82,5 +82,18 @@ describe("blog yazıları", () => {
     expect(page).toContain("<BlogAuthor/>");
     expect(prerender).toContain("blogPostHtml(blogPost)");
     expect(prerender).toContain('"@type": "BlogPosting"');
+  });
+
+  it("her yazının sonunda bilgilendirme notu vardır: sayfa ve prerender aynı metni kullanır, yetkili servis iddiası içermez", () => {
+    for (const phrase of ["tavsiye niteliği taşımaz", "herhangi bir işlem yapmayın", "yetkili servisten ya da bu konuda yetkin bir özel servisten destek alın"]) expect(BLOG_DISCLAIMER.text).toContain(phrase);
+    expect(BLOG_DISCLAIMER.text).not.toMatch(/yetkili servisiyiz|yetkili servisi olarak|Eşli Teknik yetkili/i);
+    expect(page).toContain('<aside className="blog-disclaimer" role="note"');
+    expect(page).toContain("{BLOG_DISCLAIMER.text}");
+    expect(prerender).toContain("${esc(BLOG_DISCLAIMER.text)}");
+    // Not, yazı metninden SONRA ve paylaşım satırından önce durur: ilk ekrandaki özgün içerik değişmez.
+    expect(page.indexOf("blog-disclaimer")).toBeGreaterThan(page.indexOf("post.blocks.map((block,index)=><BlogBlockView"));
+    expect(page.indexOf("blog-disclaimer")).toBeLessThan(page.indexOf("<BlogShare url={url}"));
+    expect(prerender.indexOf("BLOG_DISCLAIMER.text")).toBeGreaterThan(prerender.indexOf("post.blocks.map(blogBlockHtml)"));
+    expect(readFileSync(resolve(import.meta.dirname, "index.css"), "utf8")).toContain(".blog-disclaimer{");
   });
 });

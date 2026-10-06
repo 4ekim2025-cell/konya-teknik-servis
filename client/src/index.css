@@ -1352,5 +1352,9 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-post-lead-side .blog-case-file dl>div{grid-template-columns:96px minmax(0,1fr)}
 .blog-post-cover-side img{width:100%;max-height:none}
 .blog-post-article>.blog-post-cover-side{float:right;width:36%;margin:4px 0 18px 26px}
-.blog-post-article>.blog-sources,.blog-post-article>.blog-share,.blog-post-article>.blog-author,.blog-post-article>.repair-guide-cta{clear:both}
+.blog-post-article>.blog-sources,.blog-post-article>.blog-disclaimer,.blog-post-article>.blog-share,.blog-post-article>.blog-author,.blog-post-article>.repair-guide-cta{clear:both}
 }
+/* Blog yazısı bilgilendirme notu: yazının sonunda, paylaşım düğmelerinden önce */
+.blog-disclaimer{margin:30px 0 26px;padding:18px 20px;border:1px solid #e3d9c4;border-left:4px solid #055564;border-radius:0 14px 14px 0;background:#fbf8ee}
+.blog-disclaimer strong{display:block;color:#055564;font:800 11px Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.blog-disclaimer p{margin:7px 0 0;color:#4f5650;font-size:14.5px;line-height:1.7}

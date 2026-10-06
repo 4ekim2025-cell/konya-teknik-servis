@@ -11,7 +11,7 @@ import { ADMIN_ROUTE, renderAdminShell } from "../shared/admin-shell";
 import { redirectPageHtml } from "../shared/blog-redirects";
 import { loadRedirects } from "./build-content";
 import { blogImageHtml, withCoverHead } from "../shared/blog-image-html";
-import { BLOG_AUTHOR, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
+import { BLOG_AUTHOR, BLOG_DISCLAIMER, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
 
 const root = process.cwd();
 const outputDir = path.join(root, "dist", "public");
@@ -195,7 +195,7 @@ function blogPostHtml(post: BlogPost) {
   const share = blogShareLinks(url, post.title);
   const caseFile = post.caseFile ? `<dl><dt>Bölge</dt><dd>${esc(post.caseFile.district)}</dd><dt>Cihaz</dt><dd>${esc(post.caseFile.brand)} ${esc(post.caseFile.device.toLocaleLowerCase("tr-TR"))}</dd><dt>Şikâyet</dt><dd>${esc(post.caseFile.complaint)}</dd><dt>Tespit</dt><dd>${esc(post.caseFile.finding)}</dd><dt>Yapılan işlem</dt><dd>${esc(post.caseFile.action)}</dd></dl>${post.brandPath ? `<p><a href="${post.brandPath}">Konya ${esc(post.caseFile.brand)} servisi</a></p>` : ""}` : "";
   const sources = post.sources ? `<h2>Kaynaklar</h2><ul>${post.sources.map(source => `<li><a href="${esc(source.url)}" rel="nofollow">${esc(source.label)}</a></li>`).join("")}</ul>` : "";
-  return `<nav aria-label="İçerik yolu"><a href="/">Ana Sayfa</a> › <a href="/blog/">Blog</a> › ${esc(post.category)}</nav>${blogMetaHtml(post)}<article>${post.cover ? blogImageHtml(post.cover, true) : ""}${caseFile}${post.blocks.map(blogBlockHtml).join("")}${sources}<p>Paylaşın: <a href="${share.whatsapp}">WhatsApp</a> · <a href="${share.facebook}">Facebook</a> · <a href="${share.x}">X</a></p><p><strong>${esc(BLOG_AUTHOR.name)}</strong> — ${esc(BLOG_AUTHOR.bio)}</p><p><a href="${post.servicePath}">${post.serviceLabel ? `Konya ${esc(post.serviceLabel)}` : post.device === "Genel" ? "Eşli Teknik iletişim" : `Konya ${esc(post.device)} servisi`}</a></p></article>`;
+  return `<nav aria-label="İçerik yolu"><a href="/">Ana Sayfa</a> › <a href="/blog/">Blog</a> › ${esc(post.category)}</nav>${blogMetaHtml(post)}<article>${post.cover ? blogImageHtml(post.cover, true) : ""}${caseFile}${post.blocks.map(blogBlockHtml).join("")}${sources}<aside aria-label="${esc(BLOG_DISCLAIMER.title)}"><p><strong>${esc(BLOG_DISCLAIMER.title)}:</strong> ${esc(BLOG_DISCLAIMER.text)}</p></aside><p>Paylaşın: <a href="${share.whatsapp}">WhatsApp</a> · <a href="${share.facebook}">Facebook</a> · <a href="${share.x}">X</a></p><p><strong>${esc(BLOG_AUTHOR.name)}</strong> — ${esc(BLOG_AUTHOR.bio)}</p><p><a href="${post.servicePath}">${post.serviceLabel ? `Konya ${esc(post.serviceLabel)}` : post.device === "Genel" ? "Eşli Teknik iletişim" : `Konya ${esc(post.device)} servisi`}</a></p></article>`;
 }
 
 function deviceBlogLinksHtml(deviceName: string) {

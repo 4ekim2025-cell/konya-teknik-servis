@@ -4,7 +4,8 @@
  * gerçek ağ çağrısı olmadan uçtan uca sınanır. Üretim koduna girmez.
  */
 export type FakeAiFacts = { konu: string; ilce: string; marka: string; cihaz: string; sikayet: string; tespit: string; yapilanIslem: string; serbestNot?: string };
-export type FakeAiReply = { text: string } | { status: number } | { draft: (facts: FakeAiFacts) => unknown };
+export type FakeAiSymptom = { belirti: string; marka: string; cihaz: string };
+export type FakeAiReply = { text: string } | { status: number } | { draft: (facts: FakeAiFacts) => unknown } | { suggest: (symptom: FakeAiSymptom) => unknown };
 export type FakeAiRequest = { provider: "gemini" | "groq"; url: string; model: string; authorized: boolean; system: string; user: string };
 
 const lowerFirst = (value: string) => value.charAt(0).toLocaleLowerCase("tr-TR") + value.slice(1);
@@ -36,6 +37,18 @@ export function wellBehavedDraft(facts: FakeAiFacts) {
   };
 }
 
+/** "Kurallara uyan model"in olası nedenler yanıtı: rakamsız, markasız, genel seçenekler. */
+export function wellBehavedSuggestions(symptom: FakeAiSymptom) {
+  return {
+    complaint: `${symptom.cihaz} düzgün çalışmıyor`,
+    options: [
+      { finding: "Filtre ve su yolu artıkla tıkanmış", action: "Filtre ve su yolu sökülüp temizlendi" },
+      { finding: "Pompa motoru zayıflamış", action: "Pompa motoru değiştirildi" },
+      { finding: "Isıtıcı rezistans arızalı", action: "Rezistans değiştirildi" },
+    ],
+  };
+}
+
 export class FakeAi {
   readonly requests: FakeAiRequest[] = [];
   /** Sıradaki yanıtlar; kuyruk boşsa `wellBehavedDraft` döner. Sağlayıcıya özel kuyruk önceliklidir. */
@@ -49,7 +62,10 @@ export class FakeAi {
   }
 
   private answer(provider: "gemini" | "groq", user: string): { text: string } | { status: number } {
-    const next = this.queueFor[provider].shift() ?? this.queue.shift() ?? { draft: wellBehavedDraft };
+    // Olası nedenler isteği <ariza>, taslak isteği <vaka> taşır; kuyruk boşsa isteğin türüne uygun "kurallara uyan" yanıt döner.
+    const symptomText = /<ariza>\n([\s\S]*?)\n<\/ariza>/.exec(user)?.[1];
+    const next = this.queueFor[provider].shift() ?? this.queue.shift() ?? (symptomText ? { suggest: wellBehavedSuggestions } : { draft: wellBehavedDraft });
+    if ("suggest" in next) return { text: JSON.stringify(next.suggest(JSON.parse(symptomText ?? "{}") as FakeAiSymptom)) };
     if ("draft" in next) {
       const facts = JSON.parse(/<vaka>\n([\s\S]*?)\n<\/vaka>/.exec(user)?.[1] ?? "{}") as FakeAiFacts;
       return { text: JSON.stringify(next.draft(facts)) };

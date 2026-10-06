@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { aiInputFromPost, errorSection, errorsBySection, hasWrittenText, splitDistrict, applyDeviceAndBrand, blockingSummary, checklist, emptyBlock, filterItems, insertAt, newestFirst, moveItem, newPost, removeAt, setCaseFile, setCategory, slugFor, toPayload } from "./admin/editorModel";
+import { aiSuggestInputFromPost, collapseCaseIssues, aiInputFromPost, errorSection, errorsBySection, hasWrittenText, splitDistrict, applyDeviceAndBrand, blockingSummary, checklist, emptyBlock, filterItems, insertAt, newestFirst, moveItem, newPost, removeAt, setCaseFile, setCategory, slugFor, toPayload } from "./admin/editorModel";
 
 const longText = "Kelime ".repeat(160).trim();
 const valid = () => ({
@@ -140,6 +140,36 @@ describe("editör bölümleri", () => {
     expect(editor.split("\n").filter(line => line.includes("<Section id=")).length).toBe(5);
     const css = readFileSync(resolve(import.meta.dirname, "admin/admin.css"), "utf8");
     expect(css).toContain(".admin-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))");
+  });
+
+  it("yapay zeka ile yazdırma en üsttedir: yeni yazı usta yazısı olarak açılır, kayıt grubu tür grubundan önce gelir", () => {
+    const editor = readFileSync(resolve(import.meta.dirname, "admin/EditorView.tsx"), "utf8");
+    expect(editor).toContain("setCategory(newPost(today, nextOrder(data.items.map(entry => entry.post))), USTA_CATEGORY)");
+    expect(editor.indexOf('<Section id="record"')).toBeLessThan(editor.indexOf('<Section id="type"'));
+    expect(editor.indexOf('<Section id="type"')).toBeLessThan(editor.indexOf('<Section id="article"'));
+    expect(editor).toContain("{recordFields}</AiDraftBox>");
+    const box = readFileSync(resolve(import.meta.dirname, "admin/AiDraftBox.tsx"), "utf8");
+    expect(box.indexOf('label="Konu"')).toBeLessThan(box.lastIndexOf("{children}"));
+    expect(box.lastIndexOf("{children}")).toBeLessThan(box.indexOf('label="Serbest not"'));
+  });
+
+  it("neden seçme akışı: öneri girdisi yalnızca konu, marka ve cihazdır; seçimden önce üç alanın eksiği tek satıra iner", () => {
+    const post = { device: "Bulaşık Makinesi", caseFile: { district: "Meram · Yaka", brand: "Bosch", device: "Bulaşık makinesi", complaint: "", finding: "", action: "" } };
+    expect(aiSuggestInputFromPost(post, "Temiz yıkamayan bulaşık makinesi")).toEqual({ topic: "Temiz yıkamayan bulaşık makinesi", brand: "Bosch", device: "Bulaşık Makinesi" });
+    const issues = ["İlçe boş olamaz", "Şikâyet boş olamaz", "Tespit boş olamaz", "Yapılan işlem boş olamaz"];
+    expect(collapseCaseIssues(issues, true)).toEqual(issues);
+    const collapsed = collapseCaseIssues(issues, false);
+    expect(collapsed).toHaveLength(2);
+    expect(collapsed[1]).toContain("Arıza nedeni seçilmedi");
+    expect(collapseCaseIssues(["İlçe boş olamaz"], false)).toEqual(["İlçe boş olamaz"]);
+    const box = readFileSync(resolve(import.meta.dirname, "admin/AiDraftBox.tsx"), "utf8");
+    expect(box).toContain("api.aiSuggest(");
+    expect(box).toContain("buildAiSuggestions(suggestInput.input");
+    expect(box).toContain("Sahada gerçekten hangisi oldu?");
+    // Seçenek yalnızca kullanıcı seçince kayda yazılır: onChoose yalnızca choose() içinde çağrılır, öneri gelince kendiliğinden çağrılmaz.
+    expect(box.match(/onChoose\(/g)).toHaveLength(1);
+    expect(box.slice(box.indexOf("const suggest = async"), box.indexOf("const choose ="))).not.toContain("onChoose(");
+    expect(box.slice(box.indexOf("const suggest = async"), box.indexOf("const choose ="))).toContain("setPicked(null)");
   });
 
   it("editör bölümlü düzeni kullanır; kaydet düğmeleri üst çubukta kalır", () => {

@@ -19,8 +19,8 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import { LoginGuard, MIN_SECRET_LENGTH, RateLimiter, ipKey, clearedSessionCookie, createSessionToken, readCookie, SESSION_COOKIE, sessionCookie, sessionSigningKey, verifyPassword, verifySessionToken } from "./auth.js";
 import { GithubError, createGithubClient, readGithubConfig, type GithubClient } from "./github.js";
 import { AdminError, createAdminService, type AdminService, type SaveBody } from "./service.js";
-import { AiError, AiRejectedError, DailyQuota, aiDailyLimit, createAiProviders, generateAiDraft } from "./ai.js";
-import { validateAiCaseInput } from "../../shared/blog-ai.js";
+import { AiError, AiRejectedError, DailyQuota, aiDailyLimit, createAiProviders, generateAiDraft, generateAiSuggestions } from "./ai.js";
+import { validateAiCaseInput, validateAiSuggestInput } from "../../shared/blog-ai.js";
 import { BLOG_IMAGE_HOST } from "../../shared/blog-images.js";
 import { BlobError, blobConfigured, createBlobClient, type BlobClient } from "./blob.js";
 import { ImageStoreError, createImageStore, type ImageStore } from "./imageStore.js";
@@ -463,6 +463,19 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
         if (!quota.allowed) return fail(429, "ai_daily_limit", `Bugünkü yapay zeka taslağı sınırına (${aiDailyLimit(env)}) ulaşıldı; yarın tekrar deneyin ya da yazıyı elle yazın.`);
         const draft = await generateAiDraft(input.input, providers, new Date(deps.now()));
         return reply(200, { post: draft.post, googleBusiness: draft.googleBusiness, instagram: draft.instagram, provider: draft.provider, attempts: draft.attempts, remaining: quota.remaining });
+      }
+      case "ai-suggest": {
+        // Olası nedenler: yalnızca seçenek listesi döner; hiçbir şey kaydedilmez, seçimi proje sahibi editörde yapar. Günlük hak taslakla ortaktır.
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        const providers = createAiProviders(env, deps.aiFetchImpl, deps.aiFetchImpl ? 0 : undefined);
+        if (!providers.length) return fail(503, "ai_not_configured", "Yapay zeka anahtarı (GEMINI_API_KEY) tanımlı değil. Kurulum adımları docs/blog-paneli-kurulum.md dosyasındadır.");
+        const input = validateAiSuggestInput(body.input);
+        if (!input.ok) return fail(422, "validation_failed", input.errors[0], { errors: input.errors });
+        const quota = (deps.aiQuota ?? shared.aiQuota).take(aiDailyLimit(env));
+        if (!quota.allowed) return fail(429, "ai_daily_limit", `Bugünkü yapay zeka sınırına (${aiDailyLimit(env)}) ulaşıldı; yarın tekrar deneyin ya da tespiti ve işlemi kendiniz yazın.`);
+        const suggested = await generateAiSuggestions(input.input, providers);
+        return reply(200, { complaint: suggested.complaint, options: suggested.options, provider: suggested.provider, attempts: suggested.attempts, remaining: quota.remaining });
       }
       default:
         return fail(404, "unknown_action", "Bilinmeyen eylem.");

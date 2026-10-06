@@ -1,15 +1,15 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { AI_CASE_DEVICES, buildAiDraft, findUngroundedDetails, placeAiDraft, validateAiCaseInput, type AiCaseInput } from "../../shared/blog-ai";
+import { AI_SUGGESTION_LIMIT, buildAiSuggestions, validateAiSuggestInput, AI_CASE_DEVICES, buildAiDraft, findUngroundedDetails, placeAiDraft, validateAiCaseInput, type AiCaseInput } from "../../shared/blog-ai";
 import { validateBlogPost } from "../../shared/blog-schema";
 import { BLOG_BRANDS, BLOG_DEVICES } from "../../shared/blog-taxonomy";
-import { DailyQuota, aiDailyLimit, buildAiPrompt, createAiProviders, parseModelJson } from "../../server/admin/ai";
+import { buildAiSuggestPrompt, DailyQuota, aiDailyLimit, buildAiPrompt, createAiProviders, parseModelJson } from "../../server/admin/ai";
 import { LoginGuard, RateLimiter, hashPassword } from "../../server/admin/auth";
 import { createGithubClient, readGithubConfig } from "../../server/admin/github";
 import { handleAdminRequest, type AdminDeps, type AdminHttpRequest, type AdminHttpResponse } from "../../server/admin/handler";
 import { createAdminService } from "../../server/admin/service";
-import { FakeAi, wellBehavedDraft, type FakeAiFacts } from "./adminFakeAi";
+import { FakeAi, wellBehavedDraft, wellBehavedSuggestions, type FakeAiFacts } from "./adminFakeAi";
 import { FakeGithubRepo } from "./adminFakeGithub";
 
 const projectRoot = resolve(import.meta.dirname, "..", "..");
@@ -503,5 +503,101 @@ describe("yapı: tek fonksiyon, sunucuda kalan anahtar, kaydetmeyen akış", () 
     for (const source of ["/yonetim/(.*)", "/api/admin(.*)"]) expect(JSON.stringify(config.headers.find((item: { source: string }) => item.source === source))).toContain("noindex");
     expect(read("client/public/robots.txt")).toContain("Disallow: /api/admin");
     for (const file of ["client/public/sitemap.xml", "client/public/llms.txt", "client/public/robots.txt"]) expect(read(file), file).not.toMatch(/ai-draft|gemini|yapay zeka/i);
+  });
+});
+
+describe("olası nedenler (ai-suggest): model seçenek sunar, seçimi proje sahibi yapar", () => {
+  const SYMPTOM = { topic: "Temiz yıkamayan bulaşık makinesi", brand: "Bosch", device: "Bulaşık Makinesi" };
+  /** Oturum açmış yardımcı: `post(input)` ai-suggest çağırır. */
+  async function ready() {
+    const kit = await setup();
+    const cookie = await kit.login();
+    return { ...kit, cookie, suggest: (input: unknown) => kit.call({ method: "POST", action: "ai-suggest", cookie, body: { input } }) };
+  }
+
+  it("geçerli girdiyle seçenek listesi döner; hiçbir şey kaydedilmez ve günlük haktan düşer", async () => {
+    const kit = await ready();
+    const head = kit.repo.head;
+    const response = await kit.suggest(SYMPTOM);
+    expect(response.status).toBe(200);
+    expect(response.body.options.length).toBeGreaterThanOrEqual(2);
+    expect(typeof response.body.complaint).toBe("string");
+    expect(response.body.remaining).toBe(19);
+    expect(kit.repo.head).toBe(head);
+    expect(kit.ai.requests).toHaveLength(1);
+    expect(kit.ai.requests[0].user).toContain("<ariza>");
+    expect(kit.ai.requests[0].user).not.toMatch(/Karatay|Meram|Selçuklu|mahalle/i);
+  });
+
+  it("oturumsuz 401, GET 405, geçersiz girdi 422 (sağlayıcıya gitmez, haktan düşmez)", async () => {
+    const kit = await ready();
+    expect((await kit.call({ method: "POST", action: "ai-suggest", body: { input: SYMPTOM } })).status).toBe(401);
+    expect((await kit.call({ method: "GET", action: "ai-suggest", cookie: kit.cookie })).status).toBe(405);
+    for (const input of [{ ...SYMPTOM, topic: "" }, { ...SYMPTOM, brand: "Uydurma" }, { ...SYMPTOM, device: "Genel" }, { ...SYMPTOM, topic: "Tamiri 1500 TL tutar mı" }, { ...SYMPTOM, extra: 1 }, { topic: "Kapanıyor", brand: "Philips", device: "Küçük Ev Aletleri" }]) {
+      expect((await kit.suggest(input)).status, JSON.stringify(input)).toBe(422);
+    }
+    expect(kit.ai.requests).toHaveLength(0);
+    expect((await kit.suggest(SYMPTOM)).body.remaining).toBe(19);
+  });
+
+  it("kurala uymayan seçenekler atılır, yinelenenler birleşir, en çok beş seçenek kalır", () => {
+    const input = validateAiSuggestInput(SYMPTOM);
+    if (!input.ok) throw new Error("girdi geçmeli");
+    const good = wellBehavedSuggestions({ belirti: SYMPTOM.topic, marka: SYMPTOM.brand, cihaz: "Bulaşık makinesi" });
+    const check = buildAiSuggestions(input.input, { complaint: good.complaint, options: [
+      ...good.options,
+      { finding: good.options[0].finding.toLocaleUpperCase("tr-TR"), action: "Tekrar" },
+      { finding: "E24 hata kodu veriyor", action: "Kart değiştirildi" },
+      { finding: "Arçelik pompası takılmış", action: "Pompa değiştirildi" },
+      { finding: "Parça ücretsiz değiştirilir", action: "Garantili onarım yapıldı" },
+      { finding: "Tahliye hortumu bükülmüş", action: "Hortum 1500 TL karşılığı değişti" },
+      { finding: "Kapı contası sertleşmiş", action: "Conta değiştirildi" },
+      { finding: "Tuz haznesi boş", action: "Tuz eklendi" },
+      { finding: "Su giriş ventili tıkalı", action: "Ventil temizlendi" },
+    ] });
+    if (!check.ok) throw new Error(check.errors.join("; "));
+    expect(check.suggestions.options).toHaveLength(AI_SUGGESTION_LIMIT);
+    const text = JSON.stringify(check.suggestions);
+    for (const banned of ["E24", "Arçelik", "ücretsiz", "1500", "Tekrar"]) expect(text).not.toContain(banned);
+  });
+
+  it("fazladan alan, bozuk şikâyet ya da hiç geçerli seçenek kalmayan çıktı reddedilir", () => {
+    const input = validateAiSuggestInput(SYMPTOM);
+    if (!input.ok) throw new Error("girdi geçmeli");
+    const good = wellBehavedSuggestions({ belirti: SYMPTOM.topic, marka: SYMPTOM.brand, cihaz: "Bulaşık makinesi" });
+    expect(buildAiSuggestions(input.input, { ...good, slug: "/blog/x/" }).ok).toBe(false);
+    expect(buildAiSuggestions(input.input, { ...good, complaint: "3 gündür yıkamıyor" }).ok).toBe(false);
+    expect(buildAiSuggestions(input.input, { complaint: good.complaint, options: [{ finding: "Bkz. www.ornek.com", action: "Site okundu" }] }).ok).toBe(false);
+    expect(buildAiSuggestions(input.input, { complaint: good.complaint, options: [] }).ok).toBe(false);
+  });
+
+  it("ilk çıktı reddedilirse bir kez daha denenir; yine geçmezse 502 döner ve seçenek gelmez", async () => {
+    const retry = await ready();
+    retry.ai.queue.push({ text: "{bozuk" });
+    const second = await retry.suggest(SYMPTOM);
+    expect(second.status).toBe(200);
+    expect(retry.ai.requests).toHaveLength(2);
+
+    const failing = await ready();
+    failing.ai.queue.push({ suggest: () => ({ complaint: "Yıkamıyor", options: [{ finding: "E24 hatası", action: "Kart değişti" }] }) }, { text: "{}" });
+    const response = await failing.suggest(SYMPTOM);
+    expect([response.status, response.body.error]).toEqual([502, "ai_output_rejected"]);
+    expect(response.body.options).toBeUndefined();
+  });
+
+  it("istem yalnızca belirti, marka ve cihazı taşır; kural olarak rakam, fiyat ve başka marka yasaklanır", () => {
+    const input = validateAiSuggestInput({ topic: "Çalışırken kapanıyor", brand: "Philips", device: "Küçük Ev Aletleri", deviceName: "Airfryer" });
+    if (!input.ok) throw new Error("girdi geçmeli");
+    const prompt = buildAiSuggestPrompt(input.input);
+    expect(JSON.parse(/<ariza>\n([\s\S]*?)\n<\/ariza>/.exec(prompt.user)![1])).toEqual({ belirti: "Çalışırken kapanıyor", marka: "Philips", cihaz: "Airfryer" });
+    for (const rule of ["Hiçbir RAKAM yazma", "Fiyat", "yetkili servis", "seçenek sunuyorsun"]) expect(prompt.system).toContain(rule);
+  });
+
+  it("öneri eylemi de GitHub'a ve servise erişmez; anahtar istemci koduna girmez", () => {
+    const handler = read("server/admin/handler.ts");
+    const slice = handler.slice(handler.indexOf('case "ai-suggest"'), handler.indexOf("default:", handler.indexOf('case "ai-suggest"')));
+    expect(slice).not.toMatch(/service\.|github/i);
+    expect(slice).toContain("validateAiSuggestInput(body.input)");
+    expect(readdirSync(resolve(projectRoot, "api")).filter(name => name.endsWith(".ts"))).toHaveLength(2);
   });
 });

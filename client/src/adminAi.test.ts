@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { AI_SUGGESTION_LIMIT, buildAiSuggestions, validateAiSuggestInput, AI_CASE_DEVICES, buildAiDraft, findUngroundedDetails, placeAiDraft, validateAiCaseInput, type AiCaseInput } from "../../shared/blog-ai";
+import { findStyleProblems, AI_SUGGESTION_LIMIT, buildAiSuggestions, validateAiSuggestInput, AI_CASE_DEVICES, buildAiDraft, findUngroundedDetails, placeAiDraft, validateAiCaseInput, type AiCaseInput } from "../../shared/blog-ai";
 import { validateBlogPost } from "../../shared/blog-schema";
 import { BLOG_BRANDS, BLOG_DEVICES } from "../../shared/blog-taxonomy";
 import { buildAiSuggestPrompt, DailyQuota, aiDailyLimit, buildAiPrompt, createAiProviders, parseModelJson } from "../../server/admin/ai";
@@ -599,5 +599,71 @@ describe("olası nedenler (ai-suggest): model seçenek sunar, seçimi proje sahi
     expect(slice).not.toMatch(/service\.|github/i);
     expect(slice).toContain("validateAiSuggestInput(body.input)");
     expect(readdirSync(resolve(projectRoot, "api")).filter(name => name.endsWith(".ts"))).toHaveLength(2);
+  });
+});
+
+describe("üslup: yazı tutanak gibi değil, ustanın anlattığı gibi okunmalı", () => {
+  const STIFF = "Süpürgenin yeterince çekmeme şikâyetiyle inceleme başlattık. Akla ilk gelen ihtimallerden olan tıkalı hortum, dolu torba ve tıkalı filtreler kontrol edildi; ancak bu kısımlarda bir tıkanıklık görülmedi. Detaylı incelemede motor fan pervanesinin kırıldığı tespit edildi.";
+  const NATURAL = "Süpürge çekmiyor diye çağrıldık. Bu durumda hortum, torba ve filtre ilk kontrol edilmesi gereken yerlerdir. Motoru açınca fan pervanesinin kırıldığını gördük. Pervane kırıkken motor dönse de süpürge hava çekemez.";
+  /** Kurallara uyan taslağın ikinci paragrafını verilen metinle değiştirir (sert kurallar yine geçer). */
+  const withParagraph = (text: string) => spoiled(draft => ({ ...draft, blocks: draft.blocks.map((block, index) => (index === 2 ? { type: "p", text } : block)) }));
+  const stiffBlock = "Kontrol sonunda arıza tespit edildi. Parça kontrol edildi ve değişim gerçekleştirildi.";
+
+  it("rapor dilini, kişiyi hedef alan anlatımı ve noktalı virgül zincirini yakalar; doğal anlatımı geçirir", () => {
+    expect(findStyleProblems([{ type: "p", text: STIFF }])[0]).toContain("Rapor dili");
+    expect(findStyleProblems([{ type: "p", text: NATURAL }])).toEqual([]);
+    expect(findStyleProblems([{ type: "p", text: "Böyle bir şikâyette insan önce hortuma bakar." }])[0]).toContain("Kişiyi hedef alan");
+    expect(findStyleProblems([{ type: "p", text: "Arıza yanlış kullanım yüzünden olmuş." }])[0]).toContain("suçlayan");
+    expect(findStyleProblems([{ type: "p", text: "Baktık; söktük; gördük." }])[0]).toContain("Noktalı virgül");
+    // Genel tespit cümlesindeki "-dir" ve tek bir rapor fiili sorun sayılmaz (yalnızca yığılma yakalanır).
+    expect(findStyleProblems([{ type: "p", text: "Bu durumda filtre ilk kontrol edilmesi gereken yerdir. Filtre kontrol edildi." }])).toEqual([]);
+  });
+
+  it("ilk taslak tutanak gibiyse bir kez yeniden yazdırılır; ikincisi doğalsa uyarısız döner", async () => {
+    const kit = await setup();
+    const cookie = await kit.login();
+    kit.ai.queue.push(withParagraph(stiffBlock));
+    const response = await kit.draft(cookie, CASES.karatayBeko);
+    expect(response.status).toBe(200);
+    expect(response.body.attempts).toBe(2);
+    expect(response.body.styleNotes).toEqual([]);
+    expect(kit.ai.requests[1].user).toContain("Rapor dili");
+    expect(JSON.stringify(response.body.post.blocks)).not.toContain("tespit edildi");
+  });
+
+  it("ikinci taslak da tutanak gibiyse taslak yine döner, üslup uyarısıyla (üslup yüzünden taslak kaybolmaz)", async () => {
+    const kit = await setup();
+    const cookie = await kit.login();
+    kit.ai.queue.push(withParagraph(stiffBlock), withParagraph(stiffBlock));
+    const response = await kit.draft(cookie, CASES.karatayBeko);
+    expect(response.status).toBe(200);
+    expect(response.body.styleNotes.length).toBeGreaterThan(0);
+    expect(kit.ai.requests).toHaveLength(2);
+  });
+
+  it("yeniden yazdırma bozuk çıkarsa ya da sağlayıcı yanıt vermezse ilk (kurallara uyan) taslak döner; sert kurallar gevşemez", async () => {
+    const broken = await setup();
+    const cookie = await broken.login();
+    broken.ai.queue.push(withParagraph(stiffBlock), { text: "{bozuk" });
+    const first = await broken.draft(cookie, CASES.karatayBeko);
+    expect([first.status, first.body.attempts]).toEqual([200, 1]);
+    expect(first.body.styleNotes.length).toBeGreaterThan(0);
+
+    const down = await setup();
+    const cookie2 = await down.login();
+    down.ai.queue.push(withParagraph(stiffBlock), { status: 429 });
+    expect((await down.draft(cookie2, CASES.karatayBeko)).status).toBe(200);
+
+    // Uydurma ayrıntı üslup yolundan sızamaz: iki çıktı da sert kuralı çiğnerse taslak dönmez.
+    const invented = await setup();
+    const cookie3 = await invented.login();
+    const bad = spoiled(draft => ({ ...draft, blocks: draft.blocks.map((block, index) => (index === 2 ? { type: "p", text: "Cihaz 7 yıllıktı." } : block)) }));
+    invented.ai.queue.push(bad, bad);
+    expect((await invented.draft(cookie3, CASES.karatayBeko)).status).toBe(502);
+  });
+
+  it("yönerge üslup kurallarını ve örnek çiftini taşır; giriş kalıbı değişmedi", () => {
+    const system = buildAiPrompt(CASES.karatayBeko).system;
+    for (const rule of ["ÜSLUP", "baktık, söktük, gördük", "Noktalı virgül kullanma", "ilk kontrol edilmesi gereken yerlerdir", "suçlama", "KÖTÜ ÖRNEK", "İYİ ÖRNEK", "marka [cihaz]ının [şikâyet] yönünde şikâyet aldık. Adrese ulaştık."]) expect(system, rule).toContain(rule);
   });
 });

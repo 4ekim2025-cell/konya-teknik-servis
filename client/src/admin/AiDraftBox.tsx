@@ -40,6 +40,7 @@ export default function AiDraftBox({ post, existing, hasContent, onDraft, onText
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [info, setInfo] = useState("");
+  const [styleNotes, setStyleNotes] = useState<string[]>([]);
   const [texts, setTexts] = useState<{ googleBusiness: string; instagram: string } | null>(null);
   const [copied, setCopied] = useState("");
   // Olası nedenler: model yalnızca seçenek sunar; hangisinin sahada yapıldığını kullanıcı seçer (tek seçenek çıksa da).
@@ -101,6 +102,8 @@ export default function AiDraftBox({ post, existing, hasContent, onDraft, onText
       setTexts(generated);
       onTexts?.(generated);
       setOverwrite(false);
+      // Sunucunun üslup uyarısı (tutanak dili kalmışsa): taslak yine dolar, okurken bu cümlelere bakılır.
+      setStyleNotes(Array.isArray(response.styleNotes) ? response.styleNotes.filter(line => typeof line === "string").slice(0, 3) : []);
       setInfo(`Taslak aşağıdaki “Yazı” bölümüne dolduruldu; henüz kaydedilmedi. Okuyup düzeltin, sonra “Taslak kaydet” ya da “Yayınla” düğmesini kullanın; paylaşım metinleri de birlikte kaydedilir. Bugün kalan hak: ${response.remaining}.`);
     } catch (failure) {
       if (failure instanceof ApiError) setErrors(failure.errors?.length ? [failure.message, ...failure.errors] : [failure.message]);
@@ -164,6 +167,7 @@ export default function AiDraftBox({ post, existing, hasContent, onDraft, onText
         {waiting && <span className="admin-muted">{waiting}</span>}
       </div>
       {info && <p className="admin-ok" role="status">{info}</p>}
+      {info && styleNotes.length > 0 && <div className="admin-note" role="status"><strong>Üslup uyarısı:</strong> yazı yer yer tutanak gibi kalmış olabilir; okurken düzeltin.<ul>{styleNotes.map(line => <li key={line}>{line}</li>)}</ul></div>}
       {errors.length > 0 && <div className="admin-error" role="alert"><ul>{errors.map(line => <li key={line}>{line}</li>)}</ul></div>}
 
       {texts && (

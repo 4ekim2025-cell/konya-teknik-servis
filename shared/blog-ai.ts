@@ -316,3 +316,26 @@ export function buildAiSuggestions(input: AiSuggestInput, raw: unknown): AiSugge
   if (!options.length) return { ok: false, errors: dropped.length ? dropped : ["Kullanılabilir seçenek yok"] };
   return { ok: true, suggestions: { complaint, options } };
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Üslup denetimi: yazı tutanak gibi değil, ustanın anlattığı gibi okunmalı. Yumuşak denetimdir: sunucu bir kez yeniden yazdırır,
+// ikinci çıktı da tutmazsa taslak yine döner (uyarıyla). Sert kurallar (uydurma ayrıntı, yasaklar) bundan bağımsızdır.
+
+/** Rapor/tutanak dili: vakayı anlatırken kullanılmaz ("baktık, söktük, gördük" denir). */
+const REPORT_PHRASES = /(tespit edil(di|miş)|kontrol edil(di|miş)|gözlemlen(di|miş)|gerçekleştiril(di|miş)|sağlan(dı|mış)tır|görül(dü|me(di|miş))|görülmüştür|inceleme başlat|detaylı incele|akla ilk gelen|söz konusu|bu nedenle|bu doğrultuda|neticesinde|m[ıiuü]şt[ıiuü]r(?!\p{L}))/gu;
+/** Okuyanı ya da cihaz sahibini hedef alan, suçlayan anlatım. Genel bilgi kişiye yüklenmeden yazılır. */
+const BLAME_PHRASES = /(kullanıcı hatası|kullanım hatası|yanlış kullanım|hatalı kullanım|ihmal|dikkatsiz|özensiz|bakımsız bırak|insan önce|kullanıcılar genellikle|çoğu kişi|müşteri(ler)? genellikle)/gu;
+export const STYLE_REPORT_LIMIT = 2;
+export const STYLE_SEMICOLON_LIMIT = 1;
+
+/** Yazı metnindeki üslup sorunları; boş dizi = sorun yok. Yalnızca metin bloklarına bakar (fotoğraf bloğu, başlık, açıklama ve sosyal metinler sayılmaz). */
+export function findStyleProblems(blocks: BlogPostInput["blocks"]): string[] {
+  const text = lower(blocks.flatMap(block => (block.type === "p" ? [block.text] : block.type === "list" ? block.items : block.type === "steps" ? block.items.map(item => item.text) : block.type === "note" ? [block.text] : [])).join("\n"));
+  const errors: string[] = [];
+  const report = [...new Set(text.match(REPORT_PHRASES) ?? [])];
+  if ((text.match(REPORT_PHRASES) ?? []).length > STYLE_REPORT_LIMIT) errors.push(`Rapor dili kullanılmış (${report.slice(0, 5).map(item => `"${item}"`).join(", ")}). Vakayı ustanın ağzından, "biz" diliyle ve etken fiillerle anlat: "baktık, söktük, gördük, değiştirdik".`);
+  const blame = [...new Set(text.match(BLAME_PHRASES) ?? [])];
+  if (blame.length) errors.push(`Kişiyi hedef alan ya da suçlayan anlatım var (${blame.slice(0, 4).map(item => `"${item}"`).join(", ")}). Genel bilgiyi kişiye yüklemeden yaz: "Bu durumda ilk kontrol edilmesi gereken yerler şunlardır".`);
+  if ((text.match(/;/g) ?? []).length > STYLE_SEMICOLON_LIMIT) errors.push("Noktalı virgülle bağlanmış uzun cümleler var; kısa cümlelere böl.");
+  return errors;
+}

@@ -72,7 +72,9 @@ describe("fotoğraf HTML'i (prerender ve React ortak kuralları)", () => {
     expect(card).toContain("src={blogImageSmallUrl(cover.src)} width={thumb.width} height={thumb.height} alt={cover.alt}");
     expect(card).toContain('{...(featured?{}:{loading:"lazy" as const})}');
     expect(card).not.toMatch(/srcSet|fetchPriority|post\.blocks/);
-    expect(card).toContain("{cover&&thumb?<span className=\"blog-card-media\">");
+    // Fotoğraf kartın sağında, kategori satırından sonra ve başlıktan önce yer alır; ikon ve kartın geri kalanı fotoğrafsız kartla aynıdır.
+    expect(card).toContain("</small>{cover&&thumb&&<span className=\"blog-card-media\">");
+    expect(card.indexOf("blog-card-media")).toBeLessThan(card.indexOf("<h2>{post.title}</h2>"));
     const prerender = read("scripts/prerender.ts");
     const index = prerender.slice(prerender.indexOf("function blogIndexHtml"), prerender.indexOf("function blogPostHtml("));
     expect(index).toContain('${post.cover ? blogCardImageHtml(post.cover) : ""}');
@@ -85,7 +87,7 @@ describe("fotoğraf HTML'i (prerender ve React ortak kuralları)", () => {
     expect(html).toContain('loading="lazy" decoding="async"');
     expect(html).toContain("&quot;sebil&quot;");
     const css = read("client/src/index.css");
-    for (const rule of [".blog-card-media{position:relative;display:block;aspect-ratio:16/10", ".blog-card-media img{display:block;width:100%;height:100%;object-fit:cover}"]) expect(css).toContain(rule);
+    for (const rule of [".blog-card-photo .blog-card-media{grid-column:2;grid-row:2/span 4;", "aspect-ratio:1/1;", ".blog-card-media img{display:block;width:100%;height:100%;object-fit:cover}"]) expect(css).toContain(rule);
   });
 
   it("fotoğraf alanı ayarlıysa Vercel Blob alan adı kalıbına uyar (yazım hatasına karşı)", () => {

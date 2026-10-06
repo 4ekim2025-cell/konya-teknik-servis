@@ -1358,29 +1358,21 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-disclaimer{grid-column:1/-1;margin:14px 0 0;padding:18px 20px;border:1px solid #e3d9c4;border-left:4px solid #055564;border-radius:0 14px 14px 0;background:#fbf8ee}
 .blog-disclaimer strong{display:block;color:#055564;font:800 11px Manrope,sans-serif;letter-spacing:.1em;text-transform:uppercase}
 .blog-disclaimer p{margin:7px 0 0;color:#4f5650;font-size:14.5px;line-height:1.7}
-/* Blog kartı küçük resmi: kapak fotoğrafı olan yazıda kartın üstünde fotoğraf şeridi durur, cihaz ikonu şeridin kenarına rozet olarak iner.
-   Fotoğrafsız kartlar aynı kalır. Fotoğraf sabit oranda kırpılır (yalnızca kartta; yazı sayfasındaki kapak kırpılmaz). */
-.blog-card-photo,.blog-grid .blog-card-photo{grid-template-columns:1fr;gap:0;padding:0;overflow:hidden}
-.blog-card-media{position:relative;display:block;aspect-ratio:16/10;background:#e8f4f2}
-.blog-card-media img{display:block;width:100%;height:100%;object-fit:cover}
-.blog-card-media:after{content:"";position:absolute;inset:auto 0 0;height:38%;background:linear-gradient(180deg,rgba(3,45,53,0) 0%,rgba(3,45,53,.2) 100%);pointer-events:none}
-.blog-card-media .blog-card-icon{position:absolute;z-index:1;left:22px;bottom:-22px;width:46px;height:46px;border-radius:14px;box-shadow:0 0 0 4px #fff,0 10px 20px rgba(5,85,100,.18)}
-.blog-card-photo>div{padding:36px 26px 24px}
-/* Aynı satırda fotoğraflı ve fotoğrafsız kart yan yana gelince boyları eşitlenir: metin üstte kalır, yazar/tarih satırı ve "Yazıyı oku" kartın dibine hizalanır */
+/* Blog kartı küçük resmi (proje sahibinin kararı): kapak fotoğrafı olan yazıda fotoğraf kartın SAĞINDA, başlık ve özetin yanında durur.
+   Kartın geri kalanı (ikon, kategori satırı, dolgu) fotoğrafsız kartla aynıdır. Fotoğraf sabit oranda kırpılır (yalnızca kartta; yazı sayfasındaki kapak kırpılmaz). */
 .blog-grid .blog-card{grid-template-rows:auto 1fr;align-content:start}
 .blog-grid .blog-card>div{display:flex;flex-direction:column;min-width:0}
 .blog-grid .blog-card .blog-meta{margin-top:auto}
-.blog-card-featured.blog-card-photo{grid-template-columns:minmax(0,1fr) minmax(260px,40%);background:#fff}
-.blog-card-featured.blog-card-photo .blog-card-media{order:2;aspect-ratio:auto;min-height:100%}
-.blog-card-featured.blog-card-photo .blog-card-media img{position:absolute;inset:0}
-.blog-card-featured.blog-card-photo .blog-card-media:after{inset:0 auto 0 0;width:30%;height:auto;background:linear-gradient(90deg,rgba(3,45,53,.16) 0%,rgba(3,45,53,0) 100%)}
-.blog-card-featured.blog-card-photo .blog-card-icon{left:-26px;bottom:auto;top:38px;width:52px;height:52px;border-radius:16px;background:#055564;color:#fcf5db}
-.blog-card-featured.blog-card-photo>div{padding:36px 52px 34px 38px}
+.blog-card-photo>div,.blog-grid .blog-card-photo>div{display:grid;grid-template-columns:minmax(0,1fr) clamp(132px,36%,196px);column-gap:20px;align-content:start}
+.blog-card-photo>div>*{grid-column:1}
+.blog-card-photo>div>small.blog-category{grid-column:1/-1}
+.blog-card-photo .blog-card-media{grid-column:2;grid-row:2/span 4;align-self:start;display:block;margin-top:10px;aspect-ratio:1/1;border-radius:16px;overflow:hidden;background:#e8f4f2;box-shadow:0 0 0 1px #e5ded4}
+.blog-card-media img{display:block;width:100%;height:100%;object-fit:cover}
+.blog-card-featured.blog-card-photo>div{grid-template-columns:minmax(0,1fr) clamp(200px,34%,300px);column-gap:30px}
+.blog-card-featured.blog-card-photo .blog-card-media{aspect-ratio:4/3;margin-top:6px;border-radius:18px}
 @media(max-width:860px){
-.blog-card-photo,.blog-card-featured.blog-card-photo{grid-template-columns:1fr;gap:0;padding:0}
-.blog-card-featured.blog-card-photo .blog-card-media{order:0;aspect-ratio:16/10;min-height:0}
-.blog-card-featured.blog-card-photo .blog-card-media img{position:static}
-.blog-card-featured.blog-card-photo .blog-card-media:after{inset:auto 0 0;width:auto;height:38%;background:linear-gradient(180deg,rgba(3,45,53,0) 0%,rgba(3,45,53,.2) 100%)}
-.blog-card-featured.blog-card-photo .blog-card-icon{left:20px;top:auto;bottom:-22px;width:46px;height:46px;border-radius:14px}
-.blog-card-photo>div,.blog-card-featured.blog-card-photo>div{padding:36px 20px 22px}
+/* Telefonda fotoğraf küçülür ve yalnızca başlığın yanında durur; özet ve alt satırlar kartın tam genişliğini kullanır */
+.blog-card-photo>div,.blog-grid .blog-card-photo>div,.blog-card-featured.blog-card-photo>div{grid-template-columns:minmax(0,1fr) 96px;column-gap:14px}
+.blog-card-photo .blog-card-media,.blog-card-featured.blog-card-photo .blog-card-media{grid-row:2;aspect-ratio:1/1;margin-top:9px;border-radius:14px}
+.blog-card-photo>div>p,.blog-card-photo>div>.blog-meta,.blog-card-photo>div>.blog-read{grid-column:1/-1}
 }

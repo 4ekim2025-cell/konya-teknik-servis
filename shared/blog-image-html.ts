@@ -3,7 +3,7 @@
  * Saf metin üretir; prerender bunu kullanır, testler doğrudan sınar. Fotoğrafı olmayan yazı bu işlevlere hiç girmez,
  * bu yüzden onların HTML'i fotoğraf özelliğinden etkilenmez.
  */
-import { BLOG_IMAGE_SIZES, blogImageSmallUrl, blogImageSrcSet, type BlogImageFields } from "./blog-images.js";
+import { BLOG_IMAGE_SIZES, blogImageSmallSize, blogImageSmallUrl, blogImageSrcSet, type BlogImageFields } from "./blog-images.js";
 
 const esc = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -14,6 +14,15 @@ const esc = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;"
 export function blogImageHtml(image: BlogImageFields, cover: boolean): string {
   const loading = cover ? 'fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"';
   return `<figure><img src="${esc(image.src)}" srcset="${esc(blogImageSrcSet(image))}" sizes="${BLOG_IMAGE_SIZES}" width="${image.width}" height="${image.height}" alt="${esc(image.alt)}" ${loading} /></figure>`;
+}
+
+/**
+ * Blog listesindeki kart küçük resmi: yalnızca 800 piksellik sürüm, her zaman `loading="lazy"` (statik HTML'de sayfa çizimini bekletmez).
+ * Kapak fotoğrafı olmayan yazı bu işleve girmez; onların liste satırı değişmez.
+ */
+export function blogCardImageHtml(cover: BlogImageFields): string {
+  const size = blogImageSmallSize(cover);
+  return `<img src="${esc(blogImageSmallUrl(cover.src))}" width="${size.width}" height="${size.height}" alt="${esc(cover.alt)}" loading="lazy" decoding="async" />`;
 }
 
 /** Kapak fotoğraflı yazının paylaşım etiketleri (og:image, twitter:image, boyut, alt) ve en büyük öğenin (LCP) önyüklemesi. */

@@ -462,7 +462,7 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
         const quota = (deps.aiQuota ?? shared.aiQuota).take(aiDailyLimit(env));
         if (!quota.allowed) return fail(429, "ai_daily_limit", `Bugünkü yapay zeka taslağı sınırına (${aiDailyLimit(env)}) ulaşıldı; yarın tekrar deneyin ya da yazıyı elle yazın.`);
         const draft = await generateAiDraft(input.input, providers, new Date(deps.now()));
-        return reply(200, { post: draft.post, googleBusiness: draft.googleBusiness, instagram: draft.instagram, provider: draft.provider, attempts: draft.attempts, remaining: quota.remaining });
+        return reply(200, { post: draft.post, googleBusiness: draft.googleBusiness, instagram: draft.instagram, provider: draft.provider, attempts: draft.attempts, styleNotes: draft.styleNotes, remaining: quota.remaining });
       }
       case "ai-suggest": {
         // Olası nedenler: yalnızca seçenek listesi döner; hiçbir şey kaydedilmez, seçimi proje sahibi editörde yapar. Günlük hak taslakla ortaktır.

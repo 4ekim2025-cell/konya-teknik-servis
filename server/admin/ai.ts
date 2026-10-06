@@ -10,7 +10,7 @@
  *  - Bu modül hiçbir şey kaydetmez: GitHub istemcisine erişimi yoktur.
  */
 import { blogPostsData } from "../../shared/blog-content.generated.js";
-import { buildAiDraft, buildAiSuggestions, caseFileFromInput, type AiCaseInput, type AiDraft, type AiSuggestInput, type AiSuggestions } from "../../shared/blog-ai.js";
+import { buildAiDraft, buildAiSuggestions, findStyleProblems, caseFileFromInput, type AiCaseInput, type AiDraft, type AiSuggestInput, type AiSuggestions } from "../../shared/blog-ai.js";
 import { SMALL_APPLIANCE_DEVICE, defaultCaseDeviceName } from "../../shared/blog-taxonomy.js";
 import { todayInIstanbul } from "../../shared/blog-publish.js";
 import { BLOG_DESCRIPTION_MAX, USTA_CATEGORY } from "../../shared/blog-schema.js";
@@ -196,6 +196,18 @@ YASAKLAR:
 - Klima ve kombi kapsam dışıdır.
 - Örnek yazılardaki cümleleri kopyalama; örnekler yalnızca üslup ve yapı içindir, içlerindeki ayrıntılar bu vakaya ait değildir.
 
+ÜSLUP — yazı tutanak gibi değil, ustanın kendi anlattığı gibi okunmalı:
+- Bu vakada YAPILANI ustanın ağzından, "biz" diliyle ve etken fiillerle anlat: "baktık, söktük, gördük, değiştirdik, denedik". Edilgen rapor fiili kullanma: "tespit edildi", "kontrol edildi", "gözlemlendi", "gerçekleştirildi", "görülmedi", "-mıştır/-miştir".
+- Rapor kalıbı yok: "inceleme başlattık", "detaylı incelemede", "akla ilk gelen ihtimallerden olan", "söz konusu", "bu nedenle", "bu doğrultuda", "neticesinde".
+- Cümleler kısa ve gündelik olsun; uzunlukları birbirinden farklı olsun. Noktalı virgül kullanma; uzun cümleyi ikiye böl.
+- GENEL bilgiyi (bu belirtide nereye bakılır, parça ne işe yarar) kişiyi hedef almadan, genel bir tespit olarak yaz: "Bu durumda hortum, torba ve filtre ilk kontrol edilmesi gereken yerlerdir." Şöyle yazma: "İnsan önce hortuma bakar", "Kullanıcılar genellikle filtreyi temizlemez".
+- Okuyanı ya da cihaz sahibini suçlama: "kullanıcı hatası", "yanlış kullanım", "ihmal", "bakımsız bırakılmış" gibi ifadeler yok. Neden neyse onu sade söyle.
+- Genel bilgiyi bu vakada yapılmış gibi anlatma. <vaka> içinde yazmıyorsa "hortuma, torbaya baktık, sorun yoktu" DEME; bunun yerine genel tespit cümlesi kur.
+
+KÖTÜ ÖRNEK (böyle yazma): "Süpürgenin yeterince çekmeme şikâyetiyle inceleme başlattık. Akla ilk gelen ihtimallerden olan tıkalı hortum, dolu torba ve tıkalı filtreler kontrol edildi; ancak bu kısımlarda bir tıkanıklık görülmedi. Detaylı incelemede motor fan pervanesinin kırıldığı tespit edildi."
+İYİ ÖRNEK (böyle yaz): "Süpürge çekmiyor diye çağrıldık. Bu durumda hortum, torba ve filtre ilk kontrol edilmesi gereken yerlerdir. Motoru açınca fan pervanesinin kırıldığını gördük. Pervane kırıkken motor dönse de süpürge hava çekemez."
+(Bu iki örnek yalnızca üslup içindir; içlerindeki cihaz ve arıza bu vakaya ait DEĞİLDİR, kopyalama.)
+
 YAZI KALIBI (blocks):
 1. Giriş paragrafı: ilçeden gelen şikâyet ve bu belirtide önce elenen basit ihtimaller. Paragraf şu iki kısa cümleyle başlar: "[ilçe] ilçesinden [marka] marka [cihaz]ının [şikâyet] yönünde şikâyet aldık. Adrese ulaştık." Köşeli ayraçların yerine vakadaki ilçe, marka, cihaz ve şikâyet gelir; ekleri Türkçeye uygun çek. Örnek: "Selçuklu ilçesinden Bosch marka çamaşır makinesinin su almadığı yönünde şikâyet aldık. Adrese ulaştık." Örnek yazılar farklı başlasa da bu kalıbı esas al; talebin nasıl geldiği (arama, mesaj) ya da müşteri hakkında ayrıntı ekleme.
 2. "Tespit: …" ara başlığı ve tespit ile yapılan işlemi anlatan paragraf (yalnızca girdideki bilgiyle).
@@ -259,19 +271,40 @@ async function generate(providers: AiProvider[], prompt: AiPrompt): Promise<{ te
   throw last;
 }
 
-export type AiDraftResult = AiDraft & { provider: string; model: string; attempts: number };
+export type AiDraftResult = AiDraft & { provider: string; model: string; attempts: number; /** İkinci denemeden sonra da kalan üslup uyarıları (taslak yine döner; proje sahibi okuyup düzeltir). */ styleNotes: string[] };
 
-/** En çok iki model çağrısı: ilk çıktı kurallardan geçmezse denetim sonucu geri verilip bir kez daha istenir. */
+/**
+ * En çok iki model çağrısı. Sert kurallardan (şema, yasaklar, girilmemiş ayrıntı) geçmeyen çıktı reddedilir ve denetim sonucu geri verilip
+ * bir kez daha istenir. Üslup denetimi yumuşaktır: ilk çıktı kurallara uyuyor ama tutanak gibi yazılmışsa bir kez yeniden yazdırılır;
+ * ikinci çıktı da öyleyse taslak uyarıyla döner (üslup yüzünden taslak hiç dönmemesi, köşeli bir taslaktan daha kötüdür).
+ */
 export async function generateAiDraft(input: AiCaseInput, providers: AiProvider[], now: Date = new Date()): Promise<AiDraftResult> {
   const today = todayInIstanbul(now);
   const prompt = buildAiPrompt(input);
   let reasons: string[] = [];
+  let fallback: AiDraftResult | undefined;
   for (let attempt = 1; attempt <= 2; attempt++) {
     const request = attempt === 1 ? prompt : { system: prompt.system, user: `${prompt.user}\n\nÖnceki çıktın şu nedenlerle reddedildi; aynı hataları yapmadan baştan yaz:\n${reasons.slice(0, 12).map(line => `- ${line}`).join("\n")}` };
-    const { text, provider } = await generate(providers, request);
+    let generated: { text: string; provider: AiProvider };
+    try {
+      generated = await generate(providers, request);
+    } catch (error) {
+      // Yeniden yazdırma yalnızca üslup içindi ve sağlayıcı yanıt vermedi: elde kurallara uyan bir taslak var, o döner.
+      if (fallback) return fallback;
+      throw error;
+    }
+    const { text, provider } = generated;
     const raw = parseModelJson(text);
     const check = raw === undefined ? { ok: false as const, errors: ["Çıktı geçerli bir JSON nesnesi değil"] } : buildAiDraft(input, raw, today);
-    if (check.ok) return { ...check.draft, provider: provider.name, model: provider.model, attempts: attempt };
+    if (check.ok) {
+      const styleNotes = findStyleProblems(check.draft.post.blocks);
+      const result: AiDraftResult = { ...check.draft, provider: provider.name, model: provider.model, attempts: attempt, styleNotes };
+      if (!styleNotes.length || attempt === 2) return result;
+      fallback = result;
+      reasons = styleNotes;
+      continue;
+    }
+    if (fallback) return fallback;
     reasons = check.errors;
   }
   throw new AiRejectedError(reasons);

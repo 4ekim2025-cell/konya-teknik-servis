@@ -1,0 +1,75 @@
+{
+  "slug": "/blog/karatayda-arkasindan-su-akitan-altus-bulasik-makinesi-hortum-degisti/",
+  "order": 230,
+  "category": "Ustanın Defterinden",
+  "title": "Karatay’da arkasından su akıtan Altus bulaşık makinesi: hortum değişti",
+  "description": "Karatay’da arkasından su akıtan Altus bulaşık makinesinde delinen tahliye hortumunu nasıl değiştirdiğimizi anlatıyoruz.",
+  "excerpt": "Bulaşık makinesinin arkasından su geliyordu. Kirli su tahliye hortumunun delindiğini görerek hortumu yeniledik.",
+  "cover": {
+    "src": "https://eyh1wbvuvczprro4.public.blob.vercel-storage.com/blog/4e1d07081eb36c973e50636e5a449d3d-1600.webp",
+    "alt": "konya-karatay-altus-bulasik-makinesi-arkadan-su-akiyor",
+    "width": 484,
+    "height": 540
+  },
+  "published": "2026-10-06",
+  "updated": "2026-10-06",
+  "device": "Bulaşık Makinesi",
+  "servicePath": "/bulasik-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Karatay",
+    "brand": "Altus",
+    "device": "Bulaşık makinesi",
+    "complaint": "Bulaşık makinesinin arkasından su akıyor.",
+    "finding": "Kirli su tahliye hortumu delinmiş veya bağlantı kelepçesi gevşemiş.",
+    "action": "Tahliye hortumu yenisiyle değiştirildi ve kelepçesi sıkıca takıldı."
+  },
+  "brandPath": "/altus-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Karatay ilçesinden Altus marka bulaşık makinesinin arkasından su aktığı yönünde şikâyet aldık. Bulaşık makinelerinin arkasından su sızması durumunda akla ilk olarak temiz su giriş hortumu, tahliye hortumu ve bu hortumların makineye bağlandığı noktalar gelir."
+    },
+    {
+      "type": "h2",
+      "text": "Tespit: delinen tahliye hortumu"
+    },
+    {
+      "type": "p",
+      "text": "Makineyi öne çekip arkasını kontrol ettiğimizde, kirli su tahliye hortumunun delindiğini gördük. Bu durum makine her su boşalttığında arkaya su sızmasına yol açıyordu. Eski hortumu yerinden çıkardık. Yeni tahliye hortumunu takıp bağlantı kelepçesini sıkıca sabitledik. Makineyi çalıştırıp sızdırmazlığı test ettik."
+    },
+    {
+      "type": "h2",
+      "text": "Tahliye hortumu ne işe yarar?"
+    },
+    {
+      "type": "p",
+      "text": "Tahliye hortumu, makinenin içindeki kirli suyun tahliye pompası yardımıyla dışarı atılmasını sağlar. Bu hortum sürekli su basıncına ve sıcaklık değişimlerine maruz kalır. Zamanla yıpranabilir, sertleşebilir veya sürtünme nedeniyle delinebilir."
+    },
+    {
+      "type": "h2",
+      "text": "Su sızıntısı durumunda neler yapılabilir?"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Makineyi kapatın",
+          "text": "Güvenliğiniz için makineyi kapatın ve fişini prizden çekin."
+        },
+        {
+          "title": "Musluğu kapatın",
+          "text": "Makineye giren temiz su musluğunu kapatarak su akışını kesin."
+        },
+        {
+          "title": "Hortumları gözle kontrol edin",
+          "text": "Eğer makineyi güvenle öne çekebiliyorsanız, arkadaki hortumlarda ıslaklık, çatlak veya gevşeme olup olmadığına bakın."
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Bulaşık makinesinin arkasından gelen su sızıntılarını hafife almamak gerekir. Küçük bir sızıntı zamanla mobilyalara veya elektrik aksamına zarar verebilir. Bu gibi durumlarda makineyi durdurup profesyonel destek almak en doğrusudur."
+    }
+  ]
+}

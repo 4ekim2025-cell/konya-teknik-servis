@@ -172,6 +172,15 @@ describe("editör bölümleri", () => {
     expect(box.slice(box.indexOf("const suggest = async"), box.indexOf("const choose ="))).toContain("setPicked(null)");
   });
 
+  it("alan etiketleri her alanın nerede görüneceğini söyler (Blog, Google arama, Google İşletme, Instagram, sitede görünmez)", () => {
+    const where = readFileSync(resolve(import.meta.dirname, "admin/Where.tsx"), "utf8");
+    for (const label of ["Blog", "Google arama", "Google İşletme", "Instagram", "Sitede görünmez"]) expect(where).toContain(`"${label}"`);
+    const editor = readFileSync(resolve(import.meta.dirname, "admin/EditorView.tsx"), "utf8");
+    for (const text of ['label="Başlık" where={["blog", "search"]}', 'label="Açıklama" where={["search"]}', 'label="Özet" where={["blog"]}', 'label="Şikâyet" where={["blog"]}', 'label="Tespit" where={["blog"]}', 'label="Yapılan işlem" where={["blog"]}', "<WhereLegend />"]) expect(editor, text).toContain(text);
+    const box = readFileSync(resolve(import.meta.dirname, "admin/AiDraftBox.tsx"), "utf8");
+    for (const text of ['label="Arıza / konu" where={["ai"]}', 'label="Serbest not" where={["ai"]}', 'label="Google İşletme metni" where={["gbp"]}', 'label="Instagram metni" where={["instagram"]}']) expect(box, text).toContain(text);
+  });
+
   it("editör bölümlü düzeni kullanır; kaydet düğmeleri üst çubukta kalır", () => {
     const editor = readFileSync(resolve(import.meta.dirname, "admin/EditorView.tsx"), "utf8");
     for (const text of ['className="admin-editbar"', '<Section id="type"', '<Section id="record"', '<Section id="article"', '<Section id="sources"', '<Part title="Başlık ve tanıtım"', '<Part title="Metin"', "errorsBySection(sheet.errors)", "Kaydetmek için tamamlayın"]) expect(editor, text).toContain(text);

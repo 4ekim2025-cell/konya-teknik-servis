@@ -5,6 +5,7 @@ import { BLOG_DESCRIPTION_MAX, USTA_CATEGORY, type BlogPostInput } from "@shared
 import { BLOG_IMAGE_HOST, BLOG_IMAGE_LIMIT_PER_POST } from "@shared/blog-images";
 import { api, ApiError, type HistoryEntry, type PostItem, type PostsResponse } from "./api";
 import { ImageFields, ImagePicker } from "./ImagePicker";
+import { Where, WhereLegend, type Place } from "./Where";
 import { nextOrder, todayInIstanbul } from "@shared/blog-publish";
 import {
   applyDeviceAndBrand, BLOCK_LABELS, checklist, collapseCaseIssues, emptyBlock, errorsBySection, hasWrittenText, imageCount, insertAt, isPublished, moveItem, newPost, removeAt, replaceAt, setCaseFile, setCategory, slugFor, splitDistrict, TEXT_BLOCK_TYPES, toPayload,
@@ -16,11 +17,11 @@ const AiDraftBox = lazy(() => import("./AiDraftBox"));
 
 type Props = { data: PostsResponse; item: PostItem | null; reload: () => Promise<PostsResponse | null>; onClose: () => void; onPackage: (item: PostItem) => void; notify: (message: string) => void };
 
-/** Alan etiketi. `count`: karakter sayacı (sınır aşılınca kırmızı); `help`: alanın altında tek satır açıklama. */
-function Field({ label, hint, count, help, children }: { label: string; hint?: string; count?: { value: number; max: number }; help?: string; children: ReactNode }) {
+/** Alan etiketi. `where`: alanın nerede görüneceği (Blog, Google arama…); `count`: karakter sayacı (sınır aşılınca kırmızı); `help`: alanın altında tek satır açıklama. */
+function Field({ label, hint, where, count, help, children }: { label: string; hint?: string; where?: Place[]; count?: { value: number; max: number }; help?: string; children: ReactNode }) {
   return (
     <label className="admin-field">
-      <span className="admin-field-head"><span>{label}{hint && <small> {hint}</small>}</span>{count && <small className={`admin-count ${count.value > count.max ? "is-over" : ""}`}>{count.value}/{count.max}</small>}</span>
+      <span className="admin-field-head"><span className="admin-field-label">{label}{where && <Where places={where} />}{hint && <small> {hint}</small>}</span>{count && <small className={`admin-count ${count.value > count.max ? "is-over" : ""}`}>{count.value}/{count.max}</small>}</span>
       {children}
       {help && <small className="admin-field-help">{help}</small>}
     </label>
@@ -63,10 +64,10 @@ function Section({ id, step, title, hint, missing = 0, optional, filled, collaps
 }
 
 /** Grup içindeki alt başlık ve o alt bölümün eksikleri (eksikler sayfanın altında değil, ait oldukları yerde listelenir). */
-function Part({ id, title, hint, issues = [], children }: { id?: string; title: string; hint?: string; issues?: string[]; children: ReactNode }) {
+function Part({ id, title, hint, where, issues = [], children }: { id?: string; title: string; hint?: string; where?: Place[]; issues?: string[]; children: ReactNode }) {
   return (
     <div className="admin-part" id={id}>
-      <h3 className="admin-part-title">{title}{hint && <small> {hint}</small>}</h3>
+      <h3 className="admin-part-title">{title}{where && <Where places={where} />}{hint && <small> {hint}</small>}</h3>
       {issues.length > 0 && <ul className="admin-missing" aria-label={`${title}: eksikler`}>{issues.map(line => <li key={line}>{line}</li>)}</ul>}
       {children}
     </div>
@@ -238,7 +239,7 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
     // Usta yazısında servis kaydı ve yapay zeka taslağı EN ÜSTTEDİR; cihaz da orada seçilir. Diğer türlerde ilk grup tür ve cihazdır.
     ...(isUsta ? [{ id: "record" as GroupId, label: showAi ? "Yapay zeka ile yazdır" : "Servis kaydı", missing: caseIssues.length }] : []),
     typeGroup,
-    { id: "article", label: "Yazı", missing: issues.intro.length + issues.cover.length + issues.body.length },
+    { id: "article", label: "Blog yazısı", missing: issues.intro.length + issues.cover.length + issues.body.length },
     { id: "sources", label: "Kaynaklar", missing: issues.sources.length, optional: true, empty: sources.length === 0 },
   ];
   const step = (id: GroupId) => groups.findIndex(group => group.id === id) + 1;
@@ -250,27 +251,27 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
   const recordFields = (
     <>
               <div className="admin-cols admin-cols-5">
-                <Field label="Cihaz">
+                <Field label="Cihaz" where={["blog"]}>
                   <select value={post.device} onChange={event => setPost(applyDeviceAndBrand(post, { device: event.target.value }))}>
                     {BLOG_DEVICES.map(option => <option key={option.device}>{option.device}</option>)}
                   </select>
                 </Field>
-                <Field label="İlçe">
+                <Field label="İlçe" where={["blog"]}>
                   <select value={place.district} onChange={event => setPost(setCaseFile(post, { district: event.target.value ? (place.neighborhood ? `${event.target.value} · ${place.neighborhood}` : event.target.value) : "" }))}>
                     <option value="">Seçin</option>
                     {BLOG_DISTRICTS.map(name => <option key={name}>{name}</option>)}
                   </select>
                 </Field>
-                <Field label="Mahalle" hint="(isteğe bağlı)">
+                <Field label="Mahalle" where={["blog"]} hint="(isteğe bağlı)">
                   <input value={place.neighborhood} disabled={!place.district} placeholder={place.district ? "" : "Önce ilçe seçin"} onChange={event => setPost(setCaseFile(post, { district: event.target.value.trim() ? `${place.district} · ${event.target.value}` : place.district }))} />
                 </Field>
-                <Field label="Marka">
+                <Field label="Marka" where={["blog"]}>
                   <select value={post.caseFile?.brand ?? ""} onChange={event => setPost(setCaseFile(post, { brand: event.target.value }))}>
                     <option value="">Seçin</option>
                     {BLOG_BRANDS.map(brand => <option key={brand.slug}>{brand.name}</option>)}
                   </select>
                 </Field>
-                <Field label="Cihaz adı" hint={post.device === SMALL_APPLIANCE_DEVICE ? "— örn. Airfryer" : "(kayıtta görünen)"}>
+                <Field label="Cihaz adı" where={["blog"]} hint={post.device === SMALL_APPLIANCE_DEVICE ? "— örn. Airfryer" : ""}>
                   <input list="admin-small-appliances" value={post.caseFile?.device ?? ""} onChange={event => setPost(setCaseFile(post, { device: event.target.value }))} />
                   <datalist id="admin-small-appliances">{SMALL_APPLIANCE_SUGGESTIONS.map(name => <option key={name} value={name} />)}</datalist>
                 </Field>
@@ -280,9 +281,9 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
   // Şikâyet, tespit ve yapılan işlem: yapay zeka akışında neden seçilince görünür ve seçimle dolar; yayındaki yazıda her zaman görünür.
   const recordDetails = (
               <div className="admin-cols admin-cols-3">
-                <Field label="Şikâyet" help="Müşteri ne dedi?"><textarea rows={3} value={post.caseFile?.complaint ?? ""} onChange={event => setPost(setCaseFile(post, { complaint: event.target.value }))} placeholder="Makine su almıyor" /></Field>
-                <Field label="Tespit" help="Arızanın nedeni neydi?"><textarea rows={3} value={post.caseFile?.finding ?? ""} onChange={event => setPost(setCaseFile(post, { finding: event.target.value }))} placeholder="Basınç anahtarı arızalı" /></Field>
-                <Field label="Yapılan işlem" help="Ne yapıldı, ne değişti?"><textarea rows={3} value={post.caseFile?.action ?? ""} onChange={event => setPost(setCaseFile(post, { action: event.target.value }))} placeholder="Basınç anahtarı değiştirildi" /></Field>
+                <Field label="Şikâyet" where={["blog"]} help="Müşteri ne dedi?"><textarea rows={3} value={post.caseFile?.complaint ?? ""} onChange={event => setPost(setCaseFile(post, { complaint: event.target.value }))} placeholder="Makine su almıyor" /></Field>
+                <Field label="Tespit" where={["blog"]} help="Arızanın nedeni neydi?"><textarea rows={3} value={post.caseFile?.finding ?? ""} onChange={event => setPost(setCaseFile(post, { finding: event.target.value }))} placeholder="Basınç anahtarı arızalı" /></Field>
+                <Field label="Yapılan işlem" where={["blog"]} help="Ne yapıldı, ne değişti?"><textarea rows={3} value={post.caseFile?.action ?? ""} onChange={event => setPost(setCaseFile(post, { action: event.target.value }))} placeholder="Basınç anahtarı değiştirildi" /></Field>
               </div>
   );
 
@@ -338,6 +339,7 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
 
       <div className={`admin-editor-grid ${showPreview ? "has-preview" : "has-rail"}`}>
         <div className="admin-form">
+          <WhereLegend />
           {isUsta && (
             <Section id="record" step={step("record")} title={showAi ? "Yapay zeka ile yazdır" : "Servis kaydı"} hint={showAi ? "Arızayı yazın, olası nedenlerden sahada yaptığınızı seçin, yazıyı yapay zeka hazırlasın" : "Yalnızca gerçek iş: nerede, hangi cihaz, ne şikâyet geldi, ne bulundu, ne yapıldı"} missing={missingOf("record")}>
               {caseIssues.length > 0 && <ul className="admin-missing">{caseIssues.map(line => <li key={line}>{line}</li>)}</ul>}
@@ -361,7 +363,7 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
             </div>
             <div className={isUsta ? "" : "admin-device-row"}>
               {!isUsta && (
-                <Field label="Cihaz">
+                <Field label="Cihaz" where={["blog"]}>
                   <select value={post.device} onChange={event => setPost(applyDeviceAndBrand(post, { device: event.target.value }))}>
                     {BLOG_DEVICES.map(option => <option key={option.device}>{option.device}</option>)}
                   </select>
@@ -379,27 +381,27 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
             {!device && <p className="admin-error">Bu cihaz listede yok; kaydetmeden önce listeden seçin.</p>}
           </Section>
 
-          <Section id="article" step={step("article")} title="Yazı" hint="Okuyucunun göreceği her şey: başlık, kapak fotoğrafı ve metin" missing={missingOf("article")}>
-            <Part title="Başlık ve tanıtım" hint="— Google’da ve yazının başında görünür" issues={issues.intro}>
-              <Field label="Başlık" count={{ value: post.title.length, max: 70 }}><input value={post.title} onChange={event => setTitle(event.target.value)} /></Field>
+          <Section id="article" step={step("article")} title="Blog yazısı" hint="Sitede yayınlanacak yazı: başlık, kapak fotoğrafı ve metin" missing={missingOf("article")}>
+            <Part title="Başlık ve tanıtım" issues={issues.intro}>
+              <Field label="Başlık" where={["blog", "search"]} count={{ value: post.title.length, max: 70 }}><input value={post.title} onChange={event => setTitle(event.target.value)} /></Field>
               <div className="admin-cols admin-cols-2">
-                <Field label="Açıklama" hint="(arama sonucu)" count={{ value: post.description.length, max: BLOG_DESCRIPTION_MAX }} help="Google’da başlığın altında görünür. 90–160 karakter önerilir.">
+                <Field label="Açıklama" where={["search"]} count={{ value: post.description.length, max: BLOG_DESCRIPTION_MAX }} help="Google’da başlığın altında görünür. 90–160 karakter önerilir.">
                   <textarea rows={4} value={post.description} onChange={event => patch({ description: event.target.value })} />
                 </Field>
-                <Field label="Özet" help="Yazının en başındaki kısa giriş; açıklamayı aynen tekrar etmesin."><textarea rows={4} value={post.excerpt} onChange={event => patch({ excerpt: event.target.value })} /></Field>
+                <Field label="Özet" where={["blog"]} help="Yazının en başındaki kısa giriş; açıklamayı aynen tekrar etmesin."><textarea rows={4} value={post.excerpt} onChange={event => patch({ excerpt: event.target.value })} /></Field>
               </div>
               <div className="admin-address">
                 <span>Sayfa adresi: <code>{post.slug || "başlık yazılınca oluşur"}</code></span>
                 {slugLocked ? <small>Yayında olduğu için değiştirilemez.</small> : <button type="button" className="admin-link" onClick={() => setEditSlug(value => !value)}>{editSlug ? "Gizle" : "Elle değiştir"}</button>}
               </div>
               {editSlug && !slugLocked && (
-                <Field label="Sayfa adresi" help="Normalde başlıktan otomatik üretilir. Yayınlandıktan sonra değiştirilemez.">
+                <Field label="Sayfa adresi" where={["blog", "search"]} help="Normalde başlıktan otomatik üretilir. Yayınlandıktan sonra değiştirilemez.">
                   <input value={post.slug} onChange={event => { setSlugEdited(true); patch({ slug: event.target.value }); }} placeholder="/blog/ornek-yazi-adresi/" />
                 </Field>
               )}
             </Part>
 
-            <Part title="Kapak fotoğrafı" hint="(isteğe bağlı) — yazının üstünde ve paylaşım önizlemesinde görünür" issues={issues.cover}>
+            <Part title="Kapak fotoğrafı" where={["blog", "share"]} hint="(isteğe bağlı)" issues={issues.cover}>
               {post.cover ? (
                 <>
                   <ImageFields image={post.cover} onAlt={alt => patch({ cover: { ...post.cover!, alt } })} />
@@ -411,7 +413,7 @@ export default function EditorView({ data, item, reload, onClose, onPackage, not
               <p className="admin-help">Kapaksız yazıların paylaşım görseli logodur. Fotoğraflar tarayıcıda küçültülür, konum bilgisi silinir ({photos}/{BLOG_IMAGE_LIMIT_PER_POST}).</p>
             </Part>
 
-            <Part title="Metin" hint="— paragraf, ara başlık, liste, adımlar, not ve fotoğraf blokları" issues={issues.body}>
+            <Part title="Metin" where={["blog"]} hint="— paragraf, ara başlık, liste, adımlar, not ve fotoğraf blokları" issues={issues.body}>
               {post.blocks.map((block, index) => (
                 <div
                   className="admin-block"

@@ -76,10 +76,10 @@ export function blogShareLinks(url: string, title: string) {
 }
 
 /**
- * Her blog yazısının sonunda görünen bilgilendirme (proje sahibinin kararı, 2026-10-06). React sayfası ve prerender HTML'i aynı metni kullanır.
- * Metin sorumluluk bildirimidir; proje sahibine sormadan değiştirme ya da kaldırma.
+ * Blog giriş sayfasının (/blog/) en altında görünen site geneli bilgilendirme (proje sahibinin metni, 2026-10-06). Yazı sayfalarına ayrı ayrı
+ * konmaz. React sayfası ve prerender HTML'i aynı metni kullanır. Metin sorumluluk bildirimidir; proje sahibine sormadan değiştirme ya da kaldırma.
  */
 export const BLOG_DISCLAIMER = {
   title: "Bilgilendirme",
-  text: "Bu yazı sahada yaşanmış bir servis tecrübesini aktarır; tavsiye niteliği taşımaz. Buradaki bilgileri esas alarak cihazınıza herhangi bir işlem yapmayın. Cihazınızdaki bir sorun için yetkili servisten ya da bu konuda yetkin bir özel servisten destek alın.",
+  text: "Bu site genelinde bulunan tüm bilgiler genel geçer bilgilerdir. Tavsiye niteliği taşımaz. Teknik sorunlar konunun uzmanı tarafından incelenmeli ve analiz edilerek gerekli güvenlik tedbirleri altında çözülmelidir. Bir arıza durumunda cihaza müdahale etmeyin. Cihazınızdaki bir sorun için yetkili servisten veya yetkin bir özel servisten uzman desteği alın.",
 } as const;

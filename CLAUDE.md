@@ -123,7 +123,7 @@ Mevcut dosyaların stilini koru. `App.tsx` ve `ContentPage.tsx` sıkıştırılm
 - İnternetten alınan deneyimler kaynağıyla özetlenir, Eşli Teknik müşterisi gibi sunulmaz, metin kopyalanmaz.
 - **Kaynaklar yalnızca Türkçe olur.** Okuyucu kitlesi Konya'daki ev kullanıcılarıdır; İngilizce veya yabancı dilde kaynak bağlantısı verilmez.
 - **Hukuki konular kapsam dışıdır** (MEDAŞ, tazminat, hakem heyeti, dava vb. yazılmaz). Fiyat yazılmaz.
-- **Bilgilendirme notu** (proje sahibinin kararı, 2026-10-06): her blog yazısının sonunda, paylaşım satırından önce `BLOG_DISCLAIMER` (`shared/blog-meta.ts`) görünür: yazı tecrübe aktarır, tavsiye değildir, okuyucu buna dayanarak işlem yapmamalı, yetkili ya da yetkin özel servisten destek almalıdır. React sayfası ve prerender aynı metni kullanır. Sormadan değiştirme, kaldırma ya da yazının başına taşıma (ilk ekrandaki özgün içerik değişmesin diye sonda durur).
+- **Bilgilendirme notu** (proje sahibinin metni ve kararı, 2026-10-06): site geneli sorumluluk notu `BLOG_DISCLAIMER` (`shared/blog-meta.ts`) yalnızca blog giriş sayfasının (`/blog/`) en altında görünür; yazı sayfalarına ayrı ayrı konmaz. React sayfası ve prerender aynı metni kullanır. Sormadan değiştirme, kaldırma ya da başka sayfalara ekleme.
 - Blog yazısı cihaz sayfasındaki cümleyi tekrar etmez: cihaz sayfası "neden olur, ne kontrol edilir", blog "nasıl yapılır / sahada ne oldu / nasıl karar verilir" sorusunu cevaplar.
 
 ### Blog paneli (`/yonetim/`, `api/admin.ts`)

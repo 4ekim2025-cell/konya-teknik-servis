@@ -84,16 +84,19 @@ describe("blog yazıları", () => {
     expect(prerender).toContain('"@type": "BlogPosting"');
   });
 
-  it("her yazının sonunda bilgilendirme notu vardır: sayfa ve prerender aynı metni kullanır, yetkili servis iddiası içermez", () => {
-    for (const phrase of ["tavsiye niteliği taşımaz", "herhangi bir işlem yapmayın", "yetkili servisten ya da bu konuda yetkin bir özel servisten destek alın"]) expect(BLOG_DISCLAIMER.text).toContain(phrase);
+  it("site geneli bilgilendirme notu blog giriş sayfasının en altındadır; yazı sayfalarına ayrı ayrı konmaz", () => {
+    for (const phrase of ["Bu site genelinde bulunan tüm bilgiler genel geçer bilgilerdir", "Tavsiye niteliği taşımaz", "cihaza müdahale etmeyin", "yetkili servisten veya yetkin bir özel servisten uzman desteği alın"]) expect(BLOG_DISCLAIMER.text).toContain(phrase);
     expect(BLOG_DISCLAIMER.text).not.toMatch(/yetkili servisiyiz|yetkili servisi olarak|Eşli Teknik yetkili/i);
-    expect(page).toContain('<aside className="blog-disclaimer" role="note"');
-    expect(page).toContain("{BLOG_DISCLAIMER.text}");
-    expect(prerender).toContain("${esc(BLOG_DISCLAIMER.text)}");
-    // Not, yazı metninden SONRA ve paylaşım satırından önce durur: ilk ekrandaki özgün içerik değişmez.
-    expect(page.indexOf("blog-disclaimer")).toBeGreaterThan(page.indexOf("post.blocks.map((block,index)=><BlogBlockView"));
-    expect(page.indexOf("blog-disclaimer")).toBeLessThan(page.indexOf("<BlogShare url={url}"));
-    expect(prerender.indexOf("BLOG_DISCLAIMER.text")).toBeGreaterThan(prerender.indexOf("post.blocks.map(blogBlockHtml)"));
-    expect(readFileSync(resolve(import.meta.dirname, "index.css"), "utf8")).toContain(".blog-disclaimer{");
+    // Sayfa: not yalnızca blog listesinde (Blog bileşeni), yazı düzeninde (BlogArticleLayout) değil.
+    expect(page.match(/className="blog-disclaimer"/g)).toHaveLength(1);
+    const list = page.slice(page.indexOf("function Blog(){"));
+    expect(list).toContain('</aside><aside className="blog-disclaimer" role="note"');
+    expect(list).toContain("{BLOG_DISCLAIMER.text}</p></aside></section></Simple></div>}");
+    expect(page.slice(page.indexOf("export function BlogArticleLayout"), page.indexOf("function Blog(){"))).not.toContain("blog-disclaimer");
+    // Prerender: not blog listesinin sonunda, yazı sayfasının HTML'inde yok.
+    const index = prerender.slice(prerender.indexOf("function blogIndexHtml()"), prerender.indexOf("function blogPostHtml("));
+    expect(index).toContain("${esc(BLOG_DISCLAIMER.text)}</p></aside>`;");
+    expect(prerender.slice(prerender.indexOf("function blogPostHtml("), prerender.indexOf("function deviceBlogLinksHtml("))).not.toContain("BLOG_DISCLAIMER");
+    expect(readFileSync(resolve(import.meta.dirname, "index.css"), "utf8")).toContain(".blog-disclaimer{grid-column:1/-1;");
   });
 });

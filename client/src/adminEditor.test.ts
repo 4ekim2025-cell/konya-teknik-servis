@@ -178,6 +178,13 @@ describe("editör bölümleri", () => {
     const editor = readFileSync(resolve(import.meta.dirname, "admin/EditorView.tsx"), "utf8");
     for (const text of ['label="Başlık" where={["blog", "search"]}', 'label="Açıklama" where={["search"]}', 'label="Özet" where={["blog"]}', 'label="Şikâyet" where={["blog"]}', 'label="Tespit" where={["blog"]}', 'label="Yapılan işlem" where={["blog"]}', "<WhereLegend />"]) expect(editor, text).toContain(text);
     const box = readFileSync(resolve(import.meta.dirname, "admin/AiDraftBox.tsx"), "utf8");
+    // Alanın çerçevesi etiketiyle aynı renktedir (ilk etiket).
+    expect(editor).toContain('className={`admin-field ${where?.length ? `is-${where[0]}` : ""}`}');
+    const css = readFileSync(resolve(import.meta.dirname, "admin/admin.css"), "utf8");
+    for (const place of ["blog", "search", "gbp", "instagram", "share", "ai"]) {
+      expect(css, place).toContain(`.admin-tag.is-${place}{border:1px solid var(--place-${place})}`);
+      expect(css, place).toContain(`.admin-shell .is-${place} :is(input,select,textarea){border-color:var(--place-${place})`);
+    }
     for (const text of ['label="Arıza / konu" where={["ai"]}', 'label="Serbest not" where={["ai"]}', 'label="Google İşletme metni" where={["gbp"]}', 'label="Instagram metni" where={["instagram"]}']) expect(box, text).toContain(text);
   });
 

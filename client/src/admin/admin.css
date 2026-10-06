@@ -189,3 +189,17 @@
 .admin-tag.is-ai{background:#efece6;color:#55514b}
 .admin-where-legend{margin:0 0 12px;font-size:13px;color:#68645e}
 .admin-where-legend .admin-where{margin-left:2px}
+/* Alan çerçevesi etiketle aynı renktedir: alanın nerede görüneceği çerçeveden de okunur (birden çok etiket varsa ilki) */
+.admin-shell{--place-blog:#4f9d55;--place-search:#3f7fd1;--place-gbp:#d9822f;--place-instagram:#b8509f;--place-share:#2f8f96;--place-ai:#a39e94}
+.admin-tag.is-blog{border:1px solid var(--place-blog)}.admin-tag.is-search{border:1px solid var(--place-search)}.admin-tag.is-gbp{border:1px solid var(--place-gbp)}
+.admin-tag.is-instagram{border:1px solid var(--place-instagram)}.admin-tag.is-share{border:1px solid var(--place-share)}.admin-tag.is-ai{border:1px solid var(--place-ai)}
+.admin-shell .is-blog :is(input,select,textarea){border-color:var(--place-blog)}
+.admin-shell .is-search :is(input,select,textarea){border-color:var(--place-search)}
+.admin-shell .is-gbp :is(input,select,textarea){border-color:var(--place-gbp)}
+.admin-shell .is-instagram :is(input,select,textarea){border-color:var(--place-instagram)}
+.admin-shell .is-share :is(input,select,textarea){border-color:var(--place-share)}
+.admin-shell .is-ai :is(input,select,textarea){border-color:var(--place-ai);border-style:dashed}
+.admin-shell :is(.is-blog,.is-search,.is-gbp,.is-instagram,.is-share,.is-ai) :is(input,select,textarea){border-width:1.5px}
+/* İç içe durumda en yakın etiket kazanır: "Blog" bölümünün içindeki "Google arama" alanı kendi rengini alır */
+.admin-shell .admin-part .admin-field.is-search :is(input,select,textarea){border-color:var(--place-search)}
+.admin-shell .admin-part .admin-field.is-blog :is(input,select,textarea){border-color:var(--place-blog)}

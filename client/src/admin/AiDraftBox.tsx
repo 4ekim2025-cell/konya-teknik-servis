@@ -26,7 +26,7 @@ type Props = {
 };
 
 function Field({ label, hint, where, children }: { label: string; hint?: string; where?: Place[]; children: ReactNode }) {
-  return <label className="admin-field"><span className="admin-field-label">{label}{where && <Where places={where} />}{hint && <small> {hint}</small>}</span>{children}</label>;
+  return <label className={`admin-field ${where?.length ? `is-${where[0]}` : ""}`}><span className="admin-field-label">{label}{where && <Where places={where} />}{hint && <small> {hint}</small>}</span>{children}</label>;
 }
 
 /**

@@ -11,7 +11,7 @@ import { ADMIN_ROUTE, renderAdminShell } from "../shared/admin-shell";
 import { redirectPageHtml } from "../shared/blog-redirects";
 import { loadRedirects } from "./build-content";
 import { blogImageHtml, withCoverHead } from "../shared/blog-image-html";
-import { BLOG_AUTHOR, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
+import { BLOG_AUTHOR, BLOG_DISCLAIMER, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
 
 const root = process.cwd();
 const outputDir = path.join(root, "dist", "public");
@@ -181,7 +181,7 @@ function blogMetaHtml(post: BlogPost) {
 }
 
 function blogIndexHtml() {
-  return `<p>Konya’da sahada karşılaştığımız gerçek arızalar, bakım rehberleri ve servis sürecinde bilmeniz gerekenler. Yazılar ${esc(BLOG_AUTHOR.name)} tarafından hazırlanır.</p>${blogPosts.map(post => `<article><p>${esc(post.category)}${post.caseFile ? ` · ${esc(post.caseFile.district)} · ${esc(post.caseFile.brand)}` : ""}</p><h2><a href="${post.slug}">${esc(post.title)}</a></h2><p>${esc(post.excerpt)}</p>${blogMetaHtml(post)}</article>`).join("")}`;
+  return `<p>Konya’da sahada karşılaştığımız gerçek arızalar, bakım rehberleri ve servis sürecinde bilmeniz gerekenler. Yazılar ${esc(BLOG_AUTHOR.name)} tarafından hazırlanır.</p>${blogPosts.map(post => `<article><p>${esc(post.category)}${post.caseFile ? ` · ${esc(post.caseFile.district)} · ${esc(post.caseFile.brand)}` : ""}</p><h2><a href="${post.slug}">${esc(post.title)}</a></h2><p>${esc(post.excerpt)}</p>${blogMetaHtml(post)}</article>`).join("")}<aside aria-label="${esc(BLOG_DISCLAIMER.title)}"><p><strong>${esc(BLOG_DISCLAIMER.title)}:</strong> ${esc(BLOG_DISCLAIMER.text)}</p></aside>`;
 }
 
 const legalSectionsByRoute: Record<string, LegalSection[]> = { "/kvkk/": kvkkSections, "/gizlilik-politikasi/": privacySections, "/cerez-politikasi/": cookieSections };

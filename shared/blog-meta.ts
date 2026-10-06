@@ -74,3 +74,12 @@ export function blogShareLinks(url: string, title: string) {
     x: `https://x.com/intent/post?text=${t}&url=${u}`,
   };
 }
+
+/**
+ * Blog giriş sayfasının (/blog/) en altında görünen site geneli bilgilendirme (proje sahibinin metni, 2026-10-06). Yazı sayfalarına ayrı ayrı
+ * konmaz. React sayfası ve prerender HTML'i aynı metni kullanır. Metin sorumluluk bildirimidir; proje sahibine sormadan değiştirme ya da kaldırma.
+ */
+export const BLOG_DISCLAIMER = {
+  title: "Bilgilendirme",
+  text: "Bu site genelinde bulunan tüm bilgiler genel geçer bilgilerdir. Tavsiye niteliği taşımaz. Teknik sorunlar konunun uzmanı tarafından incelenmeli ve analiz edilerek gerekli güvenlik tedbirleri altında çözülmelidir. Bir arıza durumunda cihaza müdahale etmeyin. Cihazınızdaki bir sorun için yetkili servisten veya yetkin bir özel servisten uzman desteği alın.",
+} as const;

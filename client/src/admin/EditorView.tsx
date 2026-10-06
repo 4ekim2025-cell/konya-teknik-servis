@@ -20,7 +20,7 @@ type Props = { data: PostsResponse; item: PostItem | null; reload: () => Promise
 /** Alan etiketi. `where`: alanın nerede görüneceği (Blog, Google arama…); `count`: karakter sayacı (sınır aşılınca kırmızı); `help`: alanın altında tek satır açıklama. */
 function Field({ label, hint, where, count, help, children }: { label: string; hint?: string; where?: Place[]; count?: { value: number; max: number }; help?: string; children: ReactNode }) {
   return (
-    <label className="admin-field">
+    <label className={`admin-field ${where?.length ? `is-${where[0]}` : ""}`}>
       <span className="admin-field-head"><span className="admin-field-label">{label}{where && <Where places={where} />}{hint && <small> {hint}</small>}</span>{count && <small className={`admin-count ${count.value > count.max ? "is-over" : ""}`}>{count.value}/{count.max}</small>}</span>
       {children}
       {help && <small className="admin-field-help">{help}</small>}
@@ -66,7 +66,7 @@ function Section({ id, step, title, hint, missing = 0, optional, filled, collaps
 /** Grup içindeki alt başlık ve o alt bölümün eksikleri (eksikler sayfanın altında değil, ait oldukları yerde listelenir). */
 function Part({ id, title, hint, where, issues = [], children }: { id?: string; title: string; hint?: string; where?: Place[]; issues?: string[]; children: ReactNode }) {
   return (
-    <div className="admin-part" id={id}>
+    <div className={`admin-part ${where?.length ? `is-${where[0]}` : ""}`} id={id}>
       <h3 className="admin-part-title">{title}{where && <Where places={where} />}{hint && <small> {hint}</small>}</h3>
       {issues.length > 0 && <ul className="admin-missing" aria-label={`${title}: eksikler`}>{issues.map(line => <li key={line}>{line}</li>)}</ul>}
       {children}

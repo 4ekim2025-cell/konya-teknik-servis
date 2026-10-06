@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { blogImageHtml, withCoverHead } from "../../shared/blog-image-html";
+import { blogImageHtml, withCoverHead, blogCardImageHtml } from "../../shared/blog-image-html";
 import { BLOG_IMAGE_HOST } from "../../shared/blog-images";
 
 const projectRoot = resolve(import.meta.dirname, "..", "..");
@@ -64,13 +64,30 @@ describe("fotoğraf HTML'i (prerender ve React ortak kuralları)", () => {
     expect(page).toContain("width={image.width} height={image.height}");
   });
 
-  it("blog listesinde ve ana sayfa bağlantılarında fotoğraf yoktur (liste hafif kalır)", () => {
+  it("blog listesinde yalnızca kapak fotoğrafı olan yazı küçük resim gösterir: 800 px sürüm, boyutlu, ertelenmiş; fotoğrafsız kart aynı kalır", () => {
     const page = read("client/src/pages/ContentPage.tsx");
     const card = page.slice(page.indexOf("function BlogCard"), page.indexOf("function BlogAuthor"));
-    expect(card).not.toMatch(/cover|<img/);
+    // Proje sahibinin kararı (2026-10-06): kapak varsa kartta küçük resim. Büyük (1600) sürüm ve yazı içi fotoğraflar listeye girmez.
+    expect(card).toContain("const cover=post.cover");
+    expect(card).toContain("src={blogImageSmallUrl(cover.src)} width={thumb.width} height={thumb.height} alt={cover.alt}");
+    expect(card).toContain('{...(featured?{}:{loading:"lazy" as const})}');
+    expect(card).not.toMatch(/srcSet|fetchPriority|post\.blocks/);
+    // Fotoğraf kartın sağında, kategori satırından sonra ve başlıktan önce yer alır; ikon ve kartın geri kalanı fotoğrafsız kartla aynıdır.
+    expect(card).toContain("</small>{cover&&thumb&&<span className=\"blog-card-media\">");
+    expect(card.indexOf("blog-card-media")).toBeLessThan(card.indexOf("<h2>{post.title}</h2>"));
     const prerender = read("scripts/prerender.ts");
-    const index = prerender.slice(prerender.indexOf("function blogIndexHtml"), prerender.indexOf("const legalSectionsByRoute"));
-    expect(index).not.toMatch(/cover|<img|figure/);
+    const index = prerender.slice(prerender.indexOf("function blogIndexHtml"), prerender.indexOf("function blogPostHtml("));
+    expect(index).toContain('${post.cover ? blogCardImageHtml(post.cover) : ""}');
+    expect(index).not.toMatch(/figure|blogImageHtml\(/);
+    const cover = { src: `https://${BLOG_IMAGE_HOST || "ornek.public.blob.vercel-storage.com"}/blog/${"a".repeat(32)}-1600.webp`, alt: 'Açılmış "sebil" musluğu', width: 1200, height: 1600 };
+    const html = blogCardImageHtml(cover);
+    expect(html).toContain("-800.webp");
+    expect(html).not.toContain("-1600.webp");
+    expect(html).toContain('width="600" height="800"');
+    expect(html).toContain('loading="lazy" decoding="async"');
+    expect(html).toContain("&quot;sebil&quot;");
+    const css = read("client/src/index.css");
+    for (const rule of [".blog-card-photo .blog-card-media{grid-column:2;grid-row:2/span 4;", "aspect-ratio:1/1;", ".blog-card-media img{display:block;width:100%;height:100%;object-fit:cover}"]) expect(css).toContain(rule);
   });
 
   it("fotoğraf alanı ayarlıysa Vercel Blob alan adı kalıbına uyar (yazım hatasına karşı)", () => {

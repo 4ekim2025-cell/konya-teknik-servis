@@ -22,6 +22,7 @@ type VercelConfig = {
   trailingSlash: boolean;
   headers: HeaderRule[];
   routes?: RouteRule[];
+  redirects?: Array<{ source: string; destination: string; permanent?: boolean }>;
 };
 
 const config = JSON.parse(
@@ -41,6 +42,20 @@ describe("Vercel statik SPA yapılandırması", () => {
     expect(config.routes).toBeUndefined();
     expect(existsSync(resolve(import.meta.dirname, "../../api/instagram-feed.ts"))).toBe(true);
     expect(existsSync(resolve(import.meta.dirname, "../public/404.html"))).toBe(true);
+  });
+
+  it("adresi düzeltilen yazının eski adresi yeni adrese kalıcı yönlendirilir ve hedef yayındadır", () => {
+    // Proje sahibinin kararı (2026-10-06): Philips yazısının adresinde yanlışlıkla "electrolux" geçiyordu.
+    const redirects = config.redirects ?? [];
+    expect(redirects).toContainEqual({ source: "/blog/karatayda-eksik-kahve-yapan-electrolux-kahve-makinesi-nodul-sorunu/", destination: "/blog/karatayda-eksik-kahve-yapan-philips-kahve-makinesi-nodul-sorunu/", permanent: true });
+    const sitemap = readFileSync(resolve(import.meta.dirname, "../public/sitemap.xml"), "utf8");
+    for (const item of redirects) {
+      expect(item.permanent).toBe(true);
+      expect(existsSync(resolve(import.meta.dirname, "../../content", `${item.destination.slice(1, -1)}.json`))).toBe(true);
+      expect(existsSync(resolve(import.meta.dirname, "../../content", `${item.source.slice(1, -1)}.json`))).toBe(false);
+      expect(sitemap).toContain(`https://esliteknik.com${item.destination}</loc>`);
+      expect(sitemap).not.toContain(`https://esliteknik.com${item.source}</loc>`);
+    }
   });
 
   it("değişmez asset önbelleği ve temel güvenlik başlıklarını içerir", () => {

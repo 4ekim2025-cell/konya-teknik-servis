@@ -1,0 +1,79 @@
+{
+  "slug": "/blog/selcukluda-calismayan-vestel-camasir-makinesi-kapi-kilidi/",
+  "order": 240,
+  "category": "Ustanın Defterinden",
+  "title": "Selçuklu’da çalışmayan Vestel çamaşır makinesi: kapı kilidi",
+  "description": "Selçuklu’da prizde elektrik olmasına rağmen çalışmayan Vestel çamaşır makinesinde kapı kilidini değiştirdik ve arızanın nedenini anlattık.",
+  "excerpt": "Prizde elektrik vardı ancak makine hiç başlamıyordu. Sorunun kapı emniyet kilidinde olduğunu görüp mekanizmayı yeniledik.",
+  "cover": {
+    "src": "https://eyh1wbvuvczprro4.public.blob.vercel-storage.com/blog/43b3eaa1b537d2314a409a2fd76956f6-1600.webp",
+    "alt": "konya selçuklu vestel çamaşır makinesi kapı kilidi mekanizmasını değiştirdik",
+    "width": 574,
+    "height": 1020
+  },
+  "published": "2026-10-17",
+  "updated": "2026-10-17",
+  "device": "Çamaşır Makinesi",
+  "servicePath": "/camasir-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Selçuklu",
+    "brand": "Vestel",
+    "device": "Çamaşır makinesi",
+    "complaint": "Prizde elektrik olmasına rağmen çamaşır makinesi hiç çalışmıyor.",
+    "finding": "Kapı emniyet kilidi bozulduğu için cihaz sistemi başlatmıyor.",
+    "action": "Kapı kilidi mekanizması sökülüp yenisi monte edildi."
+  },
+  "brandPath": "/vestel-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Selçuklu ilçesinden Vestel marka çamaşır makinesinin prizde elektrik olmasına rağmen hiç çalışmadığı yönünde şikâyet aldık. Adrese ulaştık. Makine hiç tepki vermediğinde akla ilk olarak priz ve elektrik beslemesi gelir. Bu tür durumlarda şebeke elektriği ile ilgili temel kontroller öncelikle gözden geçirilir."
+    },
+    {
+      "type": "h2",
+      "text": "Tespit: kapı emniyet kilidi"
+    },
+    {
+      "type": "p",
+      "text": "Elektrik hattında sorun olmadığını gördükten sonra kapağın kilit mekanizmasını kontrol ettik. Kapı emniyet kilidi bozulduğu için cihaz sistemi başlatmıyordu. Arızalı kapı kilidi mekanizmasını söktük ve yerine yenisini monte ettik. Makine yeniden çalışmaya başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Kapı emniyet kilidi ne işe yarar?"
+    },
+    {
+      "type": "p",
+      "text": "Kapı emniyet kilidi, tambur dönerken ve makine su alırken kapağın açılmasını engelleyen bir parçadır. Sistem güvenliği için makine programı başlatmadan önce kapağın kapandığını teyit eder. Kilit bozulduğunda kapak kapalı dursa bile karta kilitlenme bilgisi gitmez. Makine de programı devreye sokmaz."
+    },
+    {
+      "type": "h2",
+      "text": "Servis çağırmadan önce kontrol edebilecekleriniz"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Prizi deneyin",
+          "text": "Prize çalışan küçük bir lamba veya cihaz takarak prizde elektrik olduğundan emin olun."
+        },
+        {
+          "title": "Kapağı kapatın",
+          "text": "Kapağın arasına çamaşır sıkışmadığını kontrol edin ve kapağı sıkıca kapatıp kilitlemeyi deneyin."
+        },
+        {
+          "title": "Başlat tuşunu kontrol edin",
+          "text": "Açma kapama düğmesinin açık ve başlat tuşunun basılı konumda olduğundan emin olun."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "text": "Bu adımlardan sonra cihaz tepki vermiyorsa sorun kilit mekanizmasında veya elektronik kontrol sisteminde olabilir. Cihazın içini açmak güvenlik riski yaratabileceği için müdahale önerilmez."
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Makineye elektrik gelmesine rağmen tepki olmaması her zaman ana kart arızası anlamına gelmez. Kapı emniyet kilidi kapanma sinyali vermediğinde sistem çalışmayı başlatmaz."
+    }
+  ]
+}

@@ -1324,7 +1324,7 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .cookie-consent button:hover,.cookie-consent button:focus-visible{background:#fff;color:#141414}
 .footer-links .footer-cookie-settings{display:flex;margin:8px 0;padding:0;border:0;background:none;color:#999;font:inherit;font-size:12px;text-align:left;cursor:pointer}
 .footer-links .footer-cookie-settings:hover{color:#fff}
-@media(max-width:860px){.cookie-consent{right:12px;left:12px;bottom:132px;flex-direction:column;align-items:stretch;gap:6px;width:auto;max-width:340px;padding:8px 10px;font-size:10px;line-height:1.3}.cookie-consent div{flex-direction:column-reverse;gap:5px}.cookie-consent div button{width:100%;min-height:30px;font-size:11px}}
+@media(max-width:860px){.cookie-consent{flex-direction:column;align-items:stretch;gap:6px;width:auto;max-width:230px;padding:3px 4px;font-size:10px;line-height:1.3;bottom:115px;left:2px;right:12px}.cookie-consent div{flex-direction:row-reverse;justify-content:space-between;gap:5px}.cookie-consent div button{width:45%;min-height:20px;font-size:11px}}
 
 /* Sayfa kodu yüklenirken veya yüklenemezse gösterilen prerender içeriği */
 .prerender-fallback{max-width:960px;margin:0 auto;padding:28px 18px 96px;color:#222;line-height:1.65}

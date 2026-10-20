@@ -12,7 +12,7 @@ import { SITE_DISCLAIMER } from "../shared/site-disclaimer";
 import { redirectPageHtml } from "../shared/blog-redirects";
 import { loadRedirects } from "./build-content";
 import { blogCardImageHtml, blogImageHtml, withCoverHead } from "../shared/blog-image-html";
-import { BLOG_AUTHOR, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, type BlogBlock, type BlogPost } from "../shared/blog-posts";
+import { BLOG_AUTHOR, blogPosts, blogPostsForDevice, blogShareLinks, formatBlogDate, latestBlogPosts, type BlogBlock, type BlogPost } from "../shared/blog-posts";
 
 const root = process.cwd();
 const outputDir = path.join(root, "dist", "public");
@@ -185,6 +185,13 @@ function blogIndexHtml() {
   return `<p>Konya’da sahada karşılaştığımız gerçek arızalar, bakım rehberleri ve servis sürecinde bilmeniz gerekenler. Yazılar ${esc(BLOG_AUTHOR.name)} tarafından hazırlanır.</p>${blogPosts.map(post => `<article>${post.cover ? blogCardImageHtml(post.cover) : ""}<p>${esc(post.category)}${post.caseFile ? ` · ${esc(post.caseFile.district)} · ${esc(post.caseFile.brand)}` : ""}</p><h2><a href="${post.slug}">${esc(post.title)}</a></h2><p>${esc(post.excerpt)}</p>${blogMetaHtml(post)}</article>`).join("")}`;
 }
 
+// Ana sayfadaki "Blogdan son yazılar" bölümünün statik karşılığı (Home.tsx → HomeBlogSection ile aynı yazılar ve sıra).
+const HOME_BLOG_LIMIT = 6;
+function homeBlogHtml() {
+  const posts = latestBlogPosts(blogPosts, HOME_BLOG_LIMIT);
+  return posts.length ? `<section aria-labelledby="home-blog-title"><h2 id="home-blog-title">Blogdan son yazılar</h2><p>Konya’da sahada karşılaştığımız gerçek arızalar, bakım rehberleri ve servis sürecinde bilmeniz gerekenler.</p>${posts.map(post => `<article>${post.cover ? blogCardImageHtml(post.cover) : ""}<p>${esc(post.category)}${post.caseFile ? ` · ${esc(post.caseFile.district)} · ${esc(post.caseFile.brand)}` : ""}</p><h3><a href="${post.slug}">${esc(post.title)}</a></h3><p>${esc(post.excerpt)}</p>${blogMetaHtml(post)}</article>`).join("")}<p><a href="/blog/">Blogdaki tüm yazıları görün</a></p></section>` : "";
+}
+
 const legalSectionsByRoute: Record<string, LegalSection[]> = { "/kvkk/": kvkkSections, "/gizlilik-politikasi/": privacySections, "/cerez-politikasi/": cookieSections };
 
 function legalSectionsHtml(sections: LegalSection[]) {
@@ -213,7 +220,7 @@ function staticContent(title: string, description: string, route: string) {
   if (route === "/hakkimizda/") {
     sections = `<h2>Konya’da teknik servis desteği</h2><p>EŞLİ TEKNİK; Karatay, Meram ve Selçuklu başta olmak üzere Konya’da beyaz eşya ve küçük ev aletleri için teknik servis desteği sunar. Servis talebinizi WhatsApp veya telefon üzerinden iletebilir, cihaz ve arıza bilgilerinizi paylaşarak doğru yönlendirmeyi alabilirsiniz.</p><h2>Şeffaf ve planlı servis süreci</h2><p>Amacımız yalnızca cihazı onarmak değil; servis planını, inceleme kapsamını ve işlem sonrasını anlaşılır biçimde paylaşmaktır. Uygunluk bilgisi adres ve ekip planına göre netleştirilir.</p><h2>Hizmet bölgemiz</h2><p>Karatay, Meram ve Selçuklu ilçelerinde servis planlaması yapılır. Talebinizde cihazın bulunduğu mahalleyi, marka-model bilgisini ve arıza belirtisini paylaşmanız yönlendirme sürecini hızlandırır.</p><p><a href="/iletisim/">İletişim sayfasına geçin</a> · <a href="/camasir-makinesi-tamiri-konya/">Cihaz servis rehberlerini inceleyin</a></p>`;
   } else if (route === "/") {
-    sections += `<nav aria-label="Hızlı servis erişimi"><h2>Hizmet ve servis rehberleri</h2><p><strong>Hizmetlerimiz:</strong> <a href="/camasir-makinesi-tamiri-konya/">Çamaşır Makinesi Tamiri</a> · <a href="/bulasik-makinesi-tamiri-konya/">Bulaşık Makinesi Tamiri</a> · <a href="/buzdolabi-tamiri-konya/">Buzdolabı Tamiri</a> · <a href="/firin-tamiri-konya/">Fırın Tamiri</a> · <a href="/ocak-tamiri-konya/">Ocak Tamiri</a> · <a href="/kurutma-makinesi-tamiri-konya/">Kurutma Makinesi Tamiri</a></p><p><strong>Hizmet bölgelerimiz:</strong> <a href="/karatay/">Karatay</a> · <a href="/meram/">Meram</a> · <a href="/selcuklu/">Selçuklu</a></p><p><strong>Popüler markalar:</strong> <a href="/altus-servisi-konya/">Altus Servisi</a> · <a href="/regal-servisi-konya/">Regal Servisi</a> · <a href="/arcelik-servisi-konya/">Arçelik Servisi</a> · <a href="/beko-servisi-konya/">Beko Servisi</a> · <a href="/bosch-servisi-konya/">Bosch Servisi</a> · <a href="/vestel-servisi-konya/">Vestel Servisi</a></p></nav>`;
+    sections += `<nav aria-label="Hızlı servis erişimi"><h2>Hizmet ve servis rehberleri</h2><p><strong>Hizmetlerimiz:</strong> <a href="/camasir-makinesi-tamiri-konya/">Çamaşır Makinesi Tamiri</a> · <a href="/bulasik-makinesi-tamiri-konya/">Bulaşık Makinesi Tamiri</a> · <a href="/buzdolabi-tamiri-konya/">Buzdolabı Tamiri</a> · <a href="/firin-tamiri-konya/">Fırın Tamiri</a> · <a href="/ocak-tamiri-konya/">Ocak Tamiri</a> · <a href="/kurutma-makinesi-tamiri-konya/">Kurutma Makinesi Tamiri</a></p><p><strong>Hizmet bölgelerimiz:</strong> <a href="/karatay/">Karatay</a> · <a href="/meram/">Meram</a> · <a href="/selcuklu/">Selçuklu</a></p><p><strong>Popüler markalar:</strong> <a href="/altus-servisi-konya/">Altus Servisi</a> · <a href="/regal-servisi-konya/">Regal Servisi</a> · <a href="/arcelik-servisi-konya/">Arçelik Servisi</a> · <a href="/beko-servisi-konya/">Beko Servisi</a> · <a href="/bosch-servisi-konya/">Bosch Servisi</a> · <a href="/vestel-servisi-konya/">Vestel Servisi</a></p></nav>${homeBlogHtml()}`;
   }
 
   if (service && !brand) {

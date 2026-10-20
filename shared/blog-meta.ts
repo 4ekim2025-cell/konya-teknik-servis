@@ -61,6 +61,11 @@ export function blogReadingMinutes(post: BlogPost): number {
   return Math.max(2, Math.round(blogWordCount(post) / 180));
 }
 
+/** En yeni yazılar: yayın tarihine göre yeniden eskiye, aynı gündekiler kaynak sırasıyla (blog listesiyle aynı sıra). Ana sayfa ve prerender kullanır. */
+export function latestBlogPosts(posts: BlogPost[], limit = posts.length): BlogPost[] {
+  return posts.map((post, index) => ({ post, index })).sort((x, y) => y.post.published.localeCompare(x.post.published) || x.index - y.index).slice(0, limit).map(item => item.post);
+}
+
 export function formatBlogDate(isoDate: string): string {
   const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
   const [year, month, day] = isoDate.split("-").map(Number);

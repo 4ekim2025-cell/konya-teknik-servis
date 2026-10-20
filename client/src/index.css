@@ -949,8 +949,8 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 @media(max-width:1100px){.home-repair-guides-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.home-repair-guide-card:last-child{grid-column:2}.home-repair-guides-head{grid-template-columns:1fr 1fr}}
 @media(max-width:860px){.home-repair-guides{padding:65px 20px}.home-repair-guides-head{display:block}.home-repair-guides-head p{margin-top:20px;font-size:14px}.home-repair-guides-grid{grid-template-columns:1fr;gap:10px;margin-top:28px}.home-repair-guide-card,.home-repair-guide-card:last-child{grid-column:auto;display:grid;grid-template-columns:30px minmax(0,1fr) 18px;grid-template-rows:auto;align-items:center;min-height:0;padding:16px 13px;gap:11px}.home-repair-guide-card div{align-self:auto}.home-repair-guide-card h3{font-size:16px}.home-repair-guide-card p{font-size:12px;margin-top:5px}.home-repair-guide-card>svg{grid-column:3;grid-row:1}}
 
-/* Ana sayfa kesin içerik sırası: hero > online takip > arıza rehberleri > güvence > hizmetler > hizmet rehberi > ön bilgi > şeffaf yaklaşım > merak edilenler. */
-.home-primary-flow>.hero{order:1}.home-primary-flow>.tracking-section{order:2}.home-primary-flow>.home-repair-guides{order:3}.home-primary-flow>.guarantee-section{order:4}.home-primary-flow>.services-section{order:5}main>.service-guide{order:6}main>.preform-wrap{order:7}main>.proof-section{order:8}main>.faq-section{order:9}
+/* Ana sayfa kesin içerik sırası: hero > online takip > blogdan son yazılar > arıza rehberleri > güvence > hizmetler > hizmet rehberi > ön bilgi > şeffaf yaklaşım > merak edilenler. */
+.home-primary-flow>.hero{order:1}.home-primary-flow>.tracking-section{order:2}.home-primary-flow>.home-blog{order:3}.home-primary-flow>.home-repair-guides{order:4}.home-primary-flow>.guarantee-section{order:5}.home-primary-flow>.services-section{order:6}main>.service-guide{order:6}main>.preform-wrap{order:7}main>.proof-section{order:8}main>.faq-section{order:9}
 
 /* ARIZA REHBERLERİ: beyaz zemin, kurumsal palet ve yumuşak kart yüzeyleri. */
 .home-repair-guides{background:#fff!important;color:var(--brand-teal);border-top:1px solid #e1d7c8;border-bottom:1px solid #e1d7c8}.home-repair-guides-watermark{color:var(--brand-teal);opacity:.08}.home-repair-guides-head h2{color:var(--brand-teal)}.home-repair-guides-head h2 em{color:var(--brand-burgundy)}.home-repair-guides-head p{color:#685f56}.home-repair-guides .section-kicker{color:var(--brand-burgundy);border-color:#e1b7a5}.home-repair-guide-card{border:1px solid #e4d9ca;border-radius:16px;background:#fffdf8;color:var(--brand-teal);box-shadow:0 8px 20px rgba(73,48,31,.055);transition:transform .18s var(--ease),background .18s var(--ease),border-color .18s var(--ease),box-shadow .18s var(--ease)}.home-repair-guide-card:hover{border-color:#d79b76;background:#fff7f0;box-shadow:0 14px 28px rgba(73,48,31,.1)}.home-repair-guide-number{color:var(--brand-burgundy)}.home-repair-guide-card small{color:var(--brand-burgundy)}.home-repair-guide-card h3{color:var(--brand-teal)}.home-repair-guide-card p{color:#746b62}.home-repair-guide-card>svg{color:var(--brand-burgundy)}.home-repair-guides-link{color:var(--brand-burgundy)}.home-repair-guides-link:hover{color:var(--brand-teal)}
@@ -1374,4 +1374,52 @@ a[href^="https://wa.me/"]:has(>svg:first-child)::before,.smart-preview-footer>sp
 .blog-card-photo>div,.blog-grid .blog-card-photo>div,.blog-card-featured.blog-card-photo>div{grid-template-columns:minmax(0,1fr) 96px;column-gap:14px}
 .blog-card-photo .blog-card-media,.blog-card-featured.blog-card-photo .blog-card-media{grid-row:2;aspect-ratio:1/1;margin-top:9px;border-radius:14px}
 .blog-card-photo>div>p,.blog-card-photo>div>.blog-meta,.blog-card-photo>div>.blog-read{grid-column:1/-1}
+}
+
+/* Ana sayfa: Blogdan son yazılar (online takip ile arıza rehberleri arasında). Arıza rehberleri kartlarıyla aynı dil: krem kart, yumuşak köşe, teal başlık, bordo vurgu.
+   Kapaklı yazıda fotoğraf (800 sürümü) kartın üstünde durur; kapaksız yazıda aynı alanda cihaz ikonu görünür, böylece kartlar aynı hizada kalır. */
+.home-blog{position:relative;overflow:hidden;padding:86px max(30px,calc((100vw - 1280px)/2));background:#f7f2ea;border-top:1px solid #e9e0d3;color:var(--brand-teal)}
+.home-blog-watermark{position:absolute;right:-110px;top:-120px;width:430px;height:430px;color:var(--brand-teal);opacity:.07;pointer-events:none}
+.home-blog-head,.home-blog-grid,.home-blog-link{position:relative;z-index:1}
+.home-blog-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,500px);gap:50px;align-items:end}
+.home-blog-head h2{margin:13px 0 0;color:var(--brand-teal);font-size:clamp(36px,4vw,56px);letter-spacing:-.06em;line-height:.98}
+.home-blog-head h2 em{color:var(--brand-burgundy)}
+.home-blog-head p{margin:0;color:#685f56;font-size:15px;line-height:1.75}
+.home-blog .section-kicker{color:var(--brand-burgundy)}
+.home-blog-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:40px}
+.home-blog-card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid #e4d9ca;border-radius:16px;background:#fffdf8;color:var(--brand-teal);box-shadow:0 8px 20px rgba(73,48,31,.055);text-decoration:none;transition:transform .18s var(--ease),border-color .18s var(--ease),box-shadow .18s var(--ease)}
+a.home-blog-card:hover{transform:translateY(-4px);border-color:#d79b76;box-shadow:0 14px 28px rgba(73,48,31,.1)}
+.home-blog-media{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,#e8f1ef,#f6efe4);color:var(--brand-teal)}
+.home-blog-media img{width:100%;height:100%;object-fit:cover;transition:transform .35s var(--ease)}
+a.home-blog-card:hover .home-blog-media img{transform:scale(1.04)}
+.home-blog-media svg{width:64px;height:64px;opacity:.55}
+.home-blog-body{display:flex;flex:1;flex-direction:column;gap:9px;padding:18px 18px 20px;min-width:0}
+.home-blog-body small{display:flex;flex-wrap:wrap;gap:4px 8px;color:var(--brand-burgundy);font:800 10px Manrope,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.home-blog-body small em{color:#7b7067;font-style:normal;letter-spacing:.04em}
+.home-blog-body h3{margin:0;color:var(--brand-teal);font:800 19px/1.18 Manrope,sans-serif;letter-spacing:-.035em;overflow-wrap:anywhere}
+.home-blog-body p{margin:0;color:#746b62;font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.home-blog-meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:auto;padding-top:6px;color:#8a7f75;font-size:12px}
+.home-blog-meta span{display:inline-flex;align-items:center;gap:5px}
+.home-blog-read{display:inline-flex;align-items:center;gap:6px;color:var(--brand-burgundy);font:900 12px Manrope,sans-serif}
+.home-blog-link{margin-top:26px;color:var(--brand-burgundy)}
+.home-blog-link:hover{color:var(--brand-teal)}
+.home-blog-skeleton{min-height:360px;box-shadow:none}
+.home-blog-skeleton .home-blog-body>div{height:14px;border-radius:6px}
+.home-blog-skeleton .home-blog-body>div:nth-child(2){height:22px;width:85%}
+@media(max-width:1100px){.home-blog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.home-blog-head{grid-template-columns:1fr 1fr}}
+@media(max-width:860px){
+/* Telefonda kart yatay satıra döner: fotoğraf (ya da ikon) solda kare, metin sağda; sayfa çok uzamaz. */
+.home-blog{padding:65px 20px}
+.home-blog-head{display:block}
+.home-blog-head p{margin-top:20px;font-size:14px}
+.home-blog-grid{grid-template-columns:1fr;gap:10px;margin-top:28px}
+.home-blog-card{flex-direction:row;align-items:stretch}
+.home-blog-media{flex:0 0 104px;width:104px;aspect-ratio:auto;min-height:104px}
+.home-blog-media svg{width:40px;height:40px}
+.home-blog-body{gap:6px;padding:13px 14px}
+.home-blog-body h3{font-size:16px;line-height:1.22}
+.home-blog-body p{font-size:12px;-webkit-line-clamp:2}
+.home-blog-meta{font-size:11px;padding-top:2px}
+.home-blog-read{display:none}
+.home-blog-skeleton{min-height:128px}
 }

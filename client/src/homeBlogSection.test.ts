@@ -19,6 +19,13 @@ describe("ana sayfa: Blogdan son yazılar", () => {
     expect(read("client/src/index.css")).toContain(".home-primary-flow>.tracking-section{order:2}.home-primary-flow>.home-blog{order:3}.home-primary-flow>.home-repair-guides{order:4}");
   });
 
+  it("kenar payı diğer ana sayfa bölümleriyle aynıdır, bilgisayarda satırda 4 yazı", () => {
+    const css = read("client/src/index.css");
+    expect(css).toContain(".home-blog{position:relative;overflow:hidden;padding:96px var(--site-gutter,30px);");
+    expect(css).toContain(".home-blog-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));");
+    expect(home).toContain("const HOME_BLOG_LIMIT=8;");
+  });
+
   it("blog verisi ana sayfa paketine girmez, ayrı parça olarak yüklenir", () => {
     expect(home).toContain('import("@shared/blog-posts")');
     expect(home).not.toMatch(/from "@shared\/blog-posts"/);
@@ -29,8 +36,8 @@ describe("ana sayfa: Blogdan son yazılar", () => {
   });
 
   it("en yeni yazılar blog listesiyle aynı sırada gelir", () => {
-    const latest = latestBlogPosts(blogPosts, 6);
-    expect(latest.length).toBe(Math.min(6, blogPosts.length));
+    const latest = latestBlogPosts(blogPosts, 8);
+    expect(latest.length).toBe(Math.min(8, blogPosts.length));
     for (let i = 1; i < latest.length; i++) expect(latest[i - 1].published >= latest[i].published).toBe(true);
     expect(latest[0].published).toBe([...blogPosts].map(post => post.published).sort().at(-1));
   });

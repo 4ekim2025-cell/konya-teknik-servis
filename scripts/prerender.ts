@@ -186,7 +186,7 @@ function blogIndexHtml() {
 }
 
 // Ana sayfadaki "Blogdan son yazılar" bölümünün statik karşılığı (Home.tsx → HomeBlogSection ile aynı yazılar ve sıra).
-const HOME_BLOG_LIMIT = 6;
+const HOME_BLOG_LIMIT = 8;
 function homeBlogHtml() {
   const posts = latestBlogPosts(blogPosts, HOME_BLOG_LIMIT);
   return posts.length ? `<section aria-labelledby="home-blog-title"><h2 id="home-blog-title">Blogdan son yazılar</h2><p>Konya’da sahada karşılaştığımız gerçek arızalar, bakım rehberleri ve servis sürecinde bilmeniz gerekenler.</p>${posts.map(post => `<article>${post.cover ? blogCardImageHtml(post.cover) : ""}<p>${esc(post.category)}${post.caseFile ? ` · ${esc(post.caseFile.district)} · ${esc(post.caseFile.brand)}` : ""}</p><h3><a href="${post.slug}">${esc(post.title)}</a></h3><p>${esc(post.excerpt)}</p>${blogMetaHtml(post)}</article>`).join("")}<p><a href="/blog/">Blogdaki tüm yazıları görün</a></p></section>` : "";

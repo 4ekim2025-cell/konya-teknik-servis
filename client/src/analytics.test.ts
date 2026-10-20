@@ -13,18 +13,21 @@ const page = read("client/src/pages/ContentPage.tsx");
 const indexHtml = read("client/index.html");
 
 describe("Google Analytics ve çerez onayı", () => {
-  it("GA4 betiğini yalnızca onaydan sonra ve yalnızca canlı alan adında yükler", () => {
+  it("GA4 betiğini site açılır açılmaz herkese ve yalnızca canlı alan adında yükler", () => {
     expect(GA_MEASUREMENT_ID).toBe("G-CBLYCZBBY0");
     expect(indexHtml).not.toContain("googletagmanager.com");
-    expect(analytics).toContain('if (choice === "granted") loadAnalytics();');
+    expect(consent).toContain('loadAnalytics();if(readConsent()!=="granted")setOpen(true);');
+    expect(read("shared/legal-pages.ts")).toContain("“Reddet” seçeneğini işaretlerseniz siteden ayrılırsınız");
     expect(analytics).toContain('const PRODUCTION_HOSTS = ["esliteknik.com", "www.esliteknik.com"];');
     expect(analytics).toContain("ad_storage: \"denied\"");
     expect(analytics).toContain("allow_google_signals: false");
   });
 
-  it("onay şeridinde reddetme kabul etmek kadar kolaydır ve tercih sonradan değiştirilebilir", () => {
-    expect(consent).toContain('onClick={()=>choose("denied")}>Reddet</button>');
-    expect(consent).toContain('onClick={()=>choose("granted")}>Kabul et</button>');
+  it("onay şeridinde Reddet ziyaretçiyi boş sayfaya yönlendirir ve şerit sonradan yeniden açılabilir", () => {
+    expect(consent).toContain("Siteyi kullanmaya devam etmeniz durumunda bu verileri size daha iyi hizmet verebilmek için kullanacağız.");
+    expect(consent).toContain('window.location.replace("about:blank")');
+    expect(consent).toContain("onClick={reject}>Reddet</button>");
+    expect(consent).toContain("onClick={accept}>Kabul et</button>");
     expect(app).toContain("<CookieConsent/>");
     expect(chrome).toContain("Çerez Tercihleri</button>");
     expect(read("shared/legal-pages.ts")).toContain('{title:"Google Analytics",paragraphs:');

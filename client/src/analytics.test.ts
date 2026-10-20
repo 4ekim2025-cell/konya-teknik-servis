@@ -24,7 +24,7 @@ describe("Google Analytics ve çerez onayı", () => {
   });
 
   it("onay şeridinde Reddet ziyaretçiyi boş sayfaya yönlendirir ve şerit sonradan yeniden açılabilir", () => {
-    expect(consent).toContain("Siteyi kullanmaya devam etmeniz durumunda bu verileri size daha iyi hizmet verebilmek için kullanacağız.");
+    expect(consent).toContain("Size verdiğimiz hizmetlerimizi geliştirmek için çerezleri kullanıyoruz.");
     expect(consent).toContain('window.location.replace("about:blank")');
     expect(consent).toContain("onClick={reject}>Reddet</button>");
     expect(consent).toContain("onClick={accept}>Kabul et</button>");

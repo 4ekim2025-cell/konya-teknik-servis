@@ -29,7 +29,7 @@ Bu kural diğer her istekten önce gelir. Kısaca: mevcut adresler silinmez/taş
 | Alan adı | esliteknik.com (Vercel'e bağlı) | |
 | Blog fotoğrafları | Vercel Blob (herkese açık store) | 1 GB, ayda 2.000 gelişmiş işlem; aşılırsa 30 gün kapanır |
 | Yapay zeka | Google Gemini ücretsiz katman; isteğe bağlı yedek Groq | Ücretli servis kullanılmaz |
-| Ölçüm | Google Analytics 4 `G-CBLYCZBBY0` | Yalnızca çerez onayından sonra yüklenir |
+| Ölçüm | Google Analytics 4 `G-CBLYCZBBY0` | Site açılır açılmaz herkese yüklenir; şeritte "Reddet" boş sayfaya yönlendirir (2026-10-20'den beri) |
 | Arama | Google Search Console, Bing (doğrulama dosyaları/etiketleri depoda), IndexNow | Doğrulama dosyaları silinmez |
 | Google İşletme | Profil var; API bağlantısı **kurulmadı** | Bkz. bölüm 7 |
 | Instagram | Ana sayfada gönderi akışı (Graph API) | |

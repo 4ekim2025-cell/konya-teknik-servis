@@ -1,6 +1,6 @@
 /**
- * Google Analytics 4 — yalnızca ziyaretçi çerez bildiriminde "Kabul et" dediğinde yüklenir (temel onay modu).
- * Onay yoksa hiçbir Google isteği yapılmaz, çerez yazılmaz. Reklam/kişiselleştirme sinyalleri kapalıdır.
+ * Google Analytics 4 — site açılır açılmaz herkese yüklenir (proje sahibinin kararı, 2026-10-20).
+ * Çerez şeridindeki "Reddet" ziyaretçiyi boş sayfaya yönlendirir. Reklam/kişiselleştirme sinyalleri kapalıdır.
  * WhatsApp ve telefon tıklamaları sayfa ve konum bilgisiyle "whatsapp_click" / "phone_click" olarak ölçülür.
  * Önizleme ve geliştirme ortamında Google betiği yüklenmez; olaylar yalnızca window.dataLayer'a yazılır.
  */

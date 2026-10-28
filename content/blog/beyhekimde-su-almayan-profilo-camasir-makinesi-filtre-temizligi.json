@@ -1,0 +1,79 @@
+{
+  "slug": "/blog/beyhekimde-su-almayan-profilo-camasir-makinesi-filtre-temizligi/",
+  "order": 250,
+  "category": "Ustanın Defterinden",
+  "title": "Beyhekim’de Su Almayan Profilo Çamaşır Makinesi: Filtre Temizliği",
+  "description": "Selçuklu Beyhekim’de su almayan ve musluk işareti yanan Profilo çamaşır makinesinde kireçleşen su giriş filtresini temizleyip cihazı çalışır hale getirdik.",
+  "excerpt": "Profilo çamaşır makinesi su almadığı ve musluk uyarısı verdiği için çağrıldık. Su giriş filtresindeki kireç ve tortuyu temizleyerek sorunu çözdük.",
+  "cover": {
+    "src": "https://eyh1wbvuvczprro4.public.blob.vercel-storage.com/blog/a4f6736c2f978c4766517333822d6b00-1600.webp",
+    "alt": "esliteknik-selcuklu-beyhekim-profilo-camasir-makinesi-su-alma-sorunu",
+    "width": 1200,
+    "height": 1600
+  },
+  "published": "2026-10-28",
+  "updated": "2026-10-28",
+  "device": "Çamaşır Makinesi",
+  "servicePath": "/camasir-makinesi-tamiri-konya/",
+  "caseFile": {
+    "district": "Selçuklu · Beyhekim",
+    "brand": "Profilo",
+    "device": "Çamaşır makinesi",
+    "complaint": "Cihaz su almadığı için çalışmıyordu ve musluk işareti yanıyordu.",
+    "finding": "Su giriş filtresi kireç ve tortu nedeniyle tıkanmıştı.",
+    "action": "Su giriş filtresi sökülüp temizlendi ve tekrar takıldı."
+  },
+  "brandPath": "/profilo-servisi-konya/",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Selçuklu ilçesinden Profilo marka çamaşır makinesinin su almadığı için çalışmadığı ve musluk işaretinin yandığı yönünde şikâyet aldık. Adrese ulaştık. Çamaşır makinesi su almadığında ilk olarak evdeki suların kesik olup olmadığına ve musluğun açık durumuna bakılır."
+    },
+    {
+      "type": "h2",
+      "text": "Tespit: tıkalı filtre"
+    },
+    {
+      "type": "p",
+      "text": "Giriş hortumunu ve bağlantı noktasını inceledik. Su giriş filtresinin kireç ve tortu nedeniyle tıkanmış olduğunu gördük. Filtreyi yerinden söküp temizledik ve tekrar yerine taktık. Makineyi çalıştırıp denediğimizde su alarak normal şekilde yıkama yapmaya başladı."
+    },
+    {
+      "type": "h2",
+      "text": "Su giriş filtresi ne işe yarar?"
+    },
+    {
+      "type": "p",
+      "text": "Su giriş filtresi, şebekeden gelen suyun içindeki kireç, kum ve tortuların makinenin hassas aksamlarına ulaşmasını engeller. Bu filtre tıkandığında su akışı kısıtlanır veya tamamen kesilir. Makine de su alamadığı için programı başlatmaz ve musluk uyarısı verir."
+    },
+    {
+      "type": "h2",
+      "text": "Servis çağırmadan önce kontrol edebilecekleriniz"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "title": "Musluğu kontrol edin",
+          "text": "Şebeke suyunun aktığından ve makineye bağlı musluğun açık olduğundan emin olun."
+        },
+        {
+          "title": "Hortumu inceleyin",
+          "text": "Su giriş hortumunun katlanıp katlanmadığını veya ezilip ezilmediğini gözden geçirin."
+        },
+        {
+          "title": "Filtreyi temizleyin",
+          "text": "Musluğu kapatıp hortum girişindeki filtreyi tortulardan arındırabilirsiniz."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "text": "Bu kontroller yapıldığı halde sorun devam ediyorsa iç aksamdaki ventillerde veya elektronik kartta arıza olabilir. Teşhis için profesyonel müdahale gerekir."
+    },
+    {
+      "type": "note",
+      "title": "Ustanın notu",
+      "text": "Makine musluk uyarısı veriyorsa arıza hemen büyük parçalarda aranmamalıdır. Çoğu zaman basit bir filtre temizliği sorunu çözebilir."
+    }
+  ]
+}

@@ -72,6 +72,7 @@ Eşli Teknik bağımsız bir teknik servis işletmesidir; resmî yetkili servis 
   - [Karatay’da eksik kahve yapan Philips kahve makinesi: nodül sorunu](https://esliteknik.com/blog/karatayda-eksik-kahve-yapan-philips-kahve-makinesi-nodul-sorunu/) (Ustanın Defterinden)
   - [Karatay’da arkasından su akıtan Altus bulaşık makinesi: hortum değişti](https://esliteknik.com/blog/karatayda-arkasindan-su-akitan-altus-bulasik-makinesi-hortum-degisti/) (Ustanın Defterinden)
   - [Selçuklu’da çalışmayan Vestel çamaşır makinesi: kapı kilidi](https://esliteknik.com/blog/selcukluda-calismayan-vestel-camasir-makinesi-kapi-kilidi/) (Ustanın Defterinden)
+  - [Beyhekim’de Su Almayan Profilo Çamaşır Makinesi: Filtre Temizliği](https://esliteknik.com/blog/beyhekimde-su-almayan-profilo-camasir-makinesi-filtre-temizligi/) (Ustanın Defterinden)
 - [Sık Sorulan Sorular](https://esliteknik.com/sss/)
 - [Online Servis Takibi](https://esliteknik.com/online-servis-takibi/)
 - [İletişim](https://esliteknik.com/iletisim/)

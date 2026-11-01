@@ -1805,5 +1805,83 @@ export const blogPostsData: BlogPost[] = [
         "text": "Makine musluk uyarısı veriyorsa arıza hemen büyük parçalarda aranmamalıdır. Çoğu zaman basit bir filtre temizliği sorunu çözebilir."
       }
     ]
+  },
+  {
+    "slug": "/blog/selcukluda-koku-yapan-ve-suyu-isitmayan-arcelik-camasir-makinesi-rezistans-ve/",
+    "category": "Ustanın Defterinden",
+    "title": "Selçuklu’da koku yapan ve suyu ısıtmayan Arçelik çamaşır makinesi: rezistans ve körük",
+    "description": "Selçuklu’da kötü koku yapan ve suyu ısıtmayan Arçelik çamaşır makinesinde arızanın körük lastiği ve rezistans kaynaklı çıkmasını ve çözümü anlatıyoruz.",
+    "excerpt": "Makine yıkama sırasında suyu ısıtmıyor ve nem nedeniyle kötü koku yayıyordu. Sorunun kaynağı arızalı rezistans ve ömrünü doldurmuş ve yıpranmış körük lastiğiydi.",
+    "cover": {
+      "src": "https://eyh1wbvuvczprro4.public.blob.vercel-storage.com/blog/9eefb0ccb63ba6fccf5fad1f38636118-1600.webp",
+      "alt": "yazır-arcelik-camasir-makinesi-koku-ve-su-isitmama-sorunu",
+      "width": 1214,
+      "height": 1295
+    },
+    "published": "2026-11-01",
+    "updated": "2026-11-01",
+    "device": "Çamaşır Makinesi",
+    "servicePath": "/camasir-makinesi-tamiri-konya/",
+    "caseFile": {
+      "district": "Selçuklu · yazır",
+      "brand": "Arçelik",
+      "device": "Çamaşır makinesi",
+      "complaint": "yazırdaki arçelik çamaşır makinesi kötü koku yapıyor ve suyu ısıtmıyor",
+      "finding": "körük lastiği ve rezistans arızalı",
+      "action": "körük lastiği ve rezistans değiştirildi"
+    },
+    "brandPath": "/arcelik-servisi-konya/",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Selçuklu ilçesinden Arçelik marka çamaşır makinesinin kötü koku yaptığı ve suyu ısıtmadığı yönünde şikâyet aldık. Adrese ulaştık. Bu durumda deterjan çekmecesi, kapağın iç kısmı ve tahliye filtresi ilk bakılması gereken yerlerdir."
+      },
+      {
+        "type": "h2",
+        "text": "Tespit: körük lastiği ve rezistans"
+      },
+      {
+        "type": "p",
+        "text": "Makineyi açıp yaptığımız incelemelerde körük lastiğinin yıprandığını ve rezistansın arızalandığını gördük. Körük lastiği ve rezistansı yenileriyle değiştirdik. Değişim sonrası deneme yıkamasını yapıp makineyi teslim ettik."
+      },
+      {
+        "type": "h2",
+        "text": "Körük lastiği ve rezistans ne işe yarar?"
+      },
+      {
+        "type": "p",
+        "text": "Körük lastiği, kazan ile dış gövde arasında su sızdırmazlığını sağlar. Zamanla deterjan artığı ve nem birikmesiyle lastik kıvrımlarında koku oluşabilir. Rezistans ise yıkama suyunu istenen sıcaklığa ulaştıran parçadır. Rezistans arızalandığında su ısınmaz, deterjan iyi çözünmez ve yıkama kalitesi düşer."
+      },
+      {
+        "type": "h2",
+        "text": "Servis çağırmadan önce kontrol edebilecekleriniz"
+      },
+      {
+        "type": "steps",
+        "items": [
+          {
+            "title": "Filtreyi temizleyin",
+            "text": "Makinenin alt tarafındaki tahliye filtresini söküp biriken birikintileri temizleyin."
+          },
+          {
+            "title": "Deterjan gözünü yıkayın",
+            "text": "Deterjan çekmecesini yerinden çıkarıp birikmiş deterjan tortularını ılık suyla yıkayın."
+          },
+          {
+            "title": "Sıcaklık ayarını kontrol edin",
+            "text": "Seçtiğiniz yıkama programının sıcaklık derecesini gözden geçirin."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Bu adımlar koku ve ısıtma sorununu çözmüyorsa rezistans veya lastik aksamında değişim gerekebilir. İç aksama müdahale güvenlik açısından uzmanlık gerektirir."
+      },
+      {
+        "type": "note",
+        "title": "Ustanın notu",
+        "text": "Isınmayan suda deterjan tam çözünmez ve zamanla koku yapabilir. Rezistansın ve sızdırmazlık parçalarının düzgün çalışması etkili bir yıkama için temel şarttır."
+      }
+    ]
   }
 ];

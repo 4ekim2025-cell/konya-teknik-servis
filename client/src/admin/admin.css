@@ -203,3 +203,7 @@
 /* İç içe durumda en yakın etiket kazanır: "Blog" bölümünün içindeki "Google arama" alanı kendi rengini alır */
 .admin-shell .admin-part .admin-field.is-search :is(input,select,textarea){border-color:var(--place-search)}
 .admin-shell .admin-part .admin-field.is-blog :is(input,select,textarea){border-color:var(--place-blog)}
+
+.admin-review-list{display:grid;gap:12px;margin:14px 0}.admin-review-list>.admin-box{margin:0}.admin-review-grid{display:grid;grid-template-columns:minmax(220px,2fr) 90px 150px 150px;gap:12px}.admin-review-stars{color:#b84637;letter-spacing:.08em}.admin-reviews textarea{resize:vertical}.admin-btn-danger{color:#8c1d18;border-color:#e0b4b1}.admin-btn-danger:hover{background:#fff0ef}
+@media(max-width:900px){.admin-review-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.admin-review-grid{grid-template-columns:1fr}}

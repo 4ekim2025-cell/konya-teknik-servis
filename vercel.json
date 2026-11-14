@@ -5,6 +5,12 @@
   "buildCommand": "pnpm build",
   "outputDirectory": "dist/public",
   "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/api/google-reviews",
+      "destination": "/api/admin?public=google-rating"
+    }
+  ],
   "redirects": [
     {
       "source": "/blog/karatayda-eksik-kahve-yapan-electrolux-kahve-makinesi-nodul-sorunu/",

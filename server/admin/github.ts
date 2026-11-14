@@ -18,7 +18,7 @@ export class GithubError extends Error {
 
 /** Panelin yazabildiği yollar: içerik klasörü ve `scripts/build-content.ts`'in ürettiği üç dosya. */
 export const WRITABLE_PREFIXES: readonly string[] = ["content/"];
-export const WRITABLE_FILES: readonly string[] = ["shared/blog-content.generated.ts", "client/public/sitemap.xml", "client/public/llms.txt"];
+export const WRITABLE_FILES: readonly string[] = ["shared/blog-content.generated.ts", "shared/google-reviews.generated.ts", "server/google-public-config.generated.ts", "client/public/sitemap.xml", "client/public/llms.txt"];
 
 const REPO_PATTERN = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/;
 const BRANCH_PATTERN = /^[A-Za-z0-9._/-]+$/;

@@ -1,6 +1,7 @@
 import type { BlogPostInput } from "@shared/blog-schema";
 import type { AiCaseInput, AiSuggestInput, AiSuggestion } from "@shared/blog-ai";
 import type { GoogleButton, PanelSettings, SocialChannel, SocialRecord } from "@shared/blog-social";
+import type { GoogleReviewsFile } from "@shared/google-reviews";
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string, message: string, public errors?: string[]) {
@@ -18,9 +19,12 @@ export type ImageUsage = { storageBytes: number; limitBytes: number; imageCount:
 export type ImageCleanupResponse = { deletedFiles: number; freedBytes: number; remainingImages: number };
 export type HistoryEntry = { sha: string; message: string; date: string; author: string };
 export type BuildRow = { sha: string; message: string; date: string; state: "success" | "pending" | "failure" | "unknown"; description: string; url?: string; skipped: boolean };
-export type AiDraftResponse = { post: BlogPostInput; googleBusiness: string; instagram: string; provider: string; attempts: number; remaining: number };
+export type AiDraftResponse = { post: BlogPostInput; googleBusiness: string; instagram: string; provider: string; attempts: number; remaining: number; styleNotes?: string[] };
 export type SocialResponse = { record: SocialRecord | null; problem?: string; published: boolean };
 export type SettingsResponse = { settings: PanelSettings; problem?: string; googleConfigured: boolean };
+export type GoogleApiReview = { id: string; authorName?: string; anonymous: boolean; rating: 1 | 2 | 3 | 4 | 5; comment: string; createTime: string; updateTime?: string };
+export type GoogleReviewsListResponse = { reviews: GoogleApiReview[]; averageRating?: number; totalReviewCount?: number; refreshedAt: string; cached?: boolean };
+export type GoogleReviewsManualResponse = { data: GoogleReviewsFile; problem?: string };
 export type SocialSaveResponse = { noChange: boolean; record: SocialRecord };
 export type AiSuggestResponse = { complaint: string; options: AiSuggestion[]; remaining: number };
 export type Session = { configured: boolean; authenticated: boolean };
@@ -87,5 +91,9 @@ export const api = {
   saveSettings: (settings: PanelSettings) => call<{ noChange: boolean; settings: PanelSettings; googleConfigured: boolean }>("settings-save", { method: "POST", body: { settings } }),
   /** Bağlantıyı sına: yalnızca okur, hiçbir şey paylaşmaz. */
   googleTest: () => call<{ ok: true }>("google-test", { method: "POST" }),
+  googleReviewsList: () => call<GoogleReviewsListResponse>("google-reviews-list"),
+  googleReviewsRefresh: () => call<GoogleReviewsListResponse>("google-reviews-refresh", { method: "POST" }),
+  googleReviewsManual: () => call<GoogleReviewsManualResponse>("google-reviews-manual-get"),
+  saveGoogleReviewsManual: (data: GoogleReviewsFile) => call<{ noChange: boolean; data: GoogleReviewsFile }>("google-reviews-manual-save", { method: "POST", body: { data } }),
   imageCleanup: () => call<ImageCleanupResponse>("image-cleanup", { method: "POST", body: { confirm: true } }),
 };

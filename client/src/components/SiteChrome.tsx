@@ -4,6 +4,7 @@ import { ChevronDown, Clock3, Droplets, Fan, Flame, Gauge, House, Info, LayoutGr
 import { useLocation } from "wouter";
 import { SITE_PHONE_DISPLAY, SITE_PHONE_HREF, SITE_WHATSAPP_LINK } from "@/siteConfig";
 import { SmartInfoModal } from "@/components/SmartInfoModal";
+import { formatGoogleRating, formatGoogleRatingDate, usePublicGoogleRating } from "@/googleReviews";
 
 import { GOOGLE_BUSINESS_URL } from "@shared/business-contact";
 import { SITE_DISCLAIMER } from "@shared/site-disclaimer";
@@ -194,6 +195,7 @@ export function Footer() {
 }
 
 export function FloatingActions() {
+  const rating = usePublicGoogleRating();
   const openSmartInfo = () => {
     if (document.querySelector(".smart-info-section")) {
       window.dispatchEvent(new Event("esli:open-smart-info"));
@@ -202,7 +204,7 @@ export function FloatingActions() {
     try { window.sessionStorage.setItem("esli-open-smart-info", "1"); } catch {}
     window.location.href = "/#on-bilgi-formu";
   };
-  return <><a className="floating-whatsapp" href={whatsappLink} target="_blank" rel="noreferrer"><MessageCircle size={20} /><span>WhatsApp’tan Yazın</span></a><div className="mobile-action-bar"><a className="mobile-call-action" href={contactPhoneHref} aria-label="EŞLİ TEKNİK’i hemen ara"><Phone size={18} />Hemen ara</a><button type="button" className="mobile-preform-action" onClick={openSmartInfo} aria-label="Hızlı servis talebi oluştur" aria-haspopup="dialog"><span className="mobile-whatsapp-mark" aria-hidden="true"><MessageCircle size={20} /><Phone size={9} /></span>Hızlı servis talebi oluştur</button></div></>;
+  return <><div className="floating-actions-stack">{rating&&<div className="floating-google-rating" aria-label={`Google’da ${formatGoogleRating(rating.averageRating)}; ${formatGoogleRatingDate(rating.refreshedAt)}`}><strong>Google’da {formatGoogleRating(rating.averageRating)}</strong><small>{formatGoogleRatingDate(rating.refreshedAt)}</small></div>}<a className="floating-whatsapp" href={whatsappLink} target="_blank" rel="noreferrer"><MessageCircle size={20} /><span>WhatsApp’tan Yazın</span></a></div><div className="mobile-action-bar"><a className="mobile-call-action" href={contactPhoneHref} aria-label="EŞLİ TEKNİK’i hemen ara"><Phone size={18} />Hemen ara</a><button type="button" className="mobile-preform-action" onClick={openSmartInfo} aria-label="Hızlı servis talebi oluştur" aria-haspopup="dialog"><span className="mobile-whatsapp-mark" aria-hidden="true"><MessageCircle size={20} /><Phone size={9} /></span>Hızlı servis talebi oluştur</button></div></>;
 }
 
 export function SiteChrome({ children }: { children: ReactNode }) {

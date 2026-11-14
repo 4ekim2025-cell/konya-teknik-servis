@@ -9,9 +9,10 @@
  *    BLOB_READ_WRITE_TOKEN (Vercel Blob; kimlik bilgisini SDK ortamdan kendisi okur), GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN.
  *  - Fotoğraf eylemleri (`image-upload`, `image-usage`, `image-cleanup`) aynı oturum, CSRF ve istek sınırından geçer; yeni fonksiyon açılmaz.
  *    Yüklenen dosya güvenilmez girdidir (server/admin/images.ts); dosya adını sunucu üretir. Silme ve temizlik yalnızca canlı (main) dalda çalışır.
- *  - Paylaşım paketi ve Google eylemleri (`settings`, `settings-save`, `social-get`, `social-save`, `social-mark`, `google-test`, `google-share`) aynı oturum,
+ *  - Paylaşım paketi ve Google eylemleri (`settings`, `settings-save`, `social-*`, `google-test`, `google-share`, `google-reviews-*`) aynı oturum,
  *    CSRF ve istek sınırından geçer; yeni fonksiyon açılmaz. Paket ve ayarlar yalnızca `content/` altına yazılır (GitHub anahtarının mevcut izni).
  *    Google anahtarları (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN) yalnızca ortam değişkenidir; yanıta ve günlüğe yazılmaz.
+ *    Genel puan yolu bu işleyiciden önce, api/admin.ts içinde kesin olarak ayrılır; admin yanıtları CDN'de önbelleğe alınmaz.
  *  - `ai-draft` (yapay zeka taslağı) hiçbir şey kaydetmez: GitHub'a dokunmaz, yalnızca editöre dolacak taslağı döndürür. Aynı oturum,
  *    CSRF ve istek sınırından geçer; ayrıca günlük kullanım sınırı vardır. Model çıktısı kurallardan geçmezse taslak dönmez.
  */
@@ -25,7 +26,7 @@ import { BLOG_IMAGE_HOST } from "../../shared/blog-images.js";
 import { BlobError, blobConfigured, createBlobClient, type BlobClient } from "./blob.js";
 import { ImageStoreError, createImageStore, type ImageStore } from "./imageStore.js";
 import { checkUpload } from "./images.js";
-import { GoogleError, createGoogleClient, readGoogleCredentials, type GoogleClient } from "./google.js";
+import { GoogleError, createGoogleClient, readGoogleCredentials, type GoogleClient, type GoogleReviewsResult } from "./google.js";
 import { buildGoogleLocalPost, type SocialRecord } from "../../shared/blog-social.js";
 import { BLOG_SLUG_PATTERN } from "../../shared/blog-schema.js";
 
@@ -111,6 +112,8 @@ const shared = {
   aiQuota: new DailyQuota(),
   imageQuota: new DailyQuota(),
   googleQuota: new DailyQuota(),
+  /** Ham yorumlar yalnız bu sunucu örneğinin belleğinde ve en çok 48 saat tutulur; Git'e/DB'ye yazılmaz. */
+  googleReviews: new Map<string, { expiresAt: number; value: GoogleReviewsResult; refreshedAt: string }>(),
   /** Paylaşımı süren yazılar: aynı yazının iki kez art arda Google'a gönderilmesini (çift tıklama) engeller. */
   googleSharing: new Set<string>(),
   images: undefined as ImageStore | undefined,
@@ -291,6 +294,31 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
   const needGoogle = () => fail(503, "google_not_configured", "Google anahtarları tanımlı değil (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN). Kurulum adımları docs/blog-paneli-kurulum.md dosyasındadır.");
   const needs = (expected: "GET" | "POST") => (method === expected ? undefined : fail(405, "method_not_allowed", `Bu eylem ${expected} ister.`, undefined, { Allow: expected }));
   const body = isRecord(req.body) ? req.body : {};
+  const readGoogleReviews = async (force: boolean): Promise<AdminHttpResponse> => {
+    if (!service) return needGithub();
+    const client = google();
+    if (!client) return needGoogle();
+    const settings = (await service.settings()).settings.google;
+    if (settings.mode !== "api" || !settings.accountId || !settings.locationId) return fail(422, "google_api_off", "Ayarlarda Google Business Profile için API var seçilmeli ve hesap/konum kimlikleri kaydedilmeli.");
+    const key = `${settings.accountId}/${settings.locationId}`;
+    const currentTime = deps.now();
+    for (const [cacheKey, entry] of shared.googleReviews) {
+      if (entry.expiresAt <= currentTime) shared.googleReviews.delete(cacheKey);
+    }
+    const cached = shared.googleReviews.get(key);
+    if (!force && cached) return reply(200, { ...cached.value, refreshedAt: cached.refreshedAt, cached: true });
+    const quota = (deps.googleQuota ?? shared.googleQuota).take(GOOGLE_DAILY_LIMIT);
+    if (!quota.allowed) return fail(429, "google_daily_limit", `Bugünkü Google çağrı sınırına (${GOOGLE_DAILY_LIMIT}) ulaşıldı; yarın tekrar deneyin.`);
+    const value = await client.listReviews(settings.accountId, settings.locationId);
+    const refreshedAt = new Date(deps.now()).toISOString();
+    const expiresAt = deps.now() + 172_800_000;
+    shared.googleReviews.set(key, { value, refreshedAt, expiresAt });
+    const expiryTimer = setTimeout(() => {
+      if (shared.googleReviews.get(key)?.expiresAt === expiresAt) shared.googleReviews.delete(key);
+    }, 172_800_000);
+    expiryTimer.unref();
+    return reply(200, { ...value, refreshedAt, cached: false });
+  };
 
   try {
     switch (action) {
@@ -385,6 +413,28 @@ export async function handleAdminRequest(req: AdminHttpRequest, deps: AdminDeps)
         if (!service) return needGithub();
         const saved = await service.saveSettings(body.settings);
         return reply(200, { ...saved, googleConfigured: Boolean(googleCredentials) });
+      }
+      case "google-reviews-manual-get": {
+        const wrong = needs("GET");
+        if (wrong) return wrong;
+        if (!service) return needGithub();
+        return reply(200, await service.googleReviews());
+      }
+      case "google-reviews-manual-save": {
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        if (!service) return needGithub();
+        return reply(200, await service.saveGoogleReviews(body.data));
+      }
+      case "google-reviews-list": {
+        const wrong = needs("GET");
+        if (wrong) return wrong;
+        return readGoogleReviews(false);
+      }
+      case "google-reviews-refresh": {
+        const wrong = needs("POST");
+        if (wrong) return wrong;
+        return readGoogleReviews(true);
       }
       case "social-get": {
         const wrong = needs("GET");

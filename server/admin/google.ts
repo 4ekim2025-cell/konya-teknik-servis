@@ -11,10 +11,11 @@
  *
  * Uç noktalar (belgeye göre):
  *  - POST https://oauth2.googleapis.com/token                                         (yenileme belirteciyle erişim anahtarı)
- *  - GET  https://mybusiness.googleapis.com/v4/accounts/{a}/locations/{l}/localPosts  (bağlantıyı sına: yalnızca okur)
+ *  - GET  https://mybusiness.googleapis.com/v4/accounts/{a}/locations/{l}/reviews     (yorumları okur ve bağlantıyı sına)
  *  - POST https://mybusiness.googleapis.com/v4/accounts/{a}/locations/{l}/localPosts  (paylaşım oluştur)
  *  - PATCH https://mybusiness.googleapis.com/v4/{name}?updateMask=callToAction         (düğmeyi "Hemen ara"ya çevir)
  */
+import { z } from "zod";
 import { GOOGLE_POST_NAME, type GoogleLocalPost } from "../../shared/blog-social.js";
 
 export type GoogleEnv = Record<string, string | undefined>;
@@ -51,6 +52,44 @@ const TOKEN_MARGIN_MS = 60_000;
 const ID = /^\d{1,30}$/;
 
 export type GoogleCreated = { name: string; state?: string };
+export type GoogleReview = {
+  id: string;
+  authorName?: string;
+  anonymous: boolean;
+  rating: 1 | 2 | 3 | 4 | 5;
+  comment: string;
+  createTime: string;
+  updateTime?: string;
+};
+export type GoogleReviewsResult = {
+  reviews: GoogleReview[];
+  averageRating?: number;
+  /** Yalnız yönetim paneli içindir; ziyaretçi yanıtına aktarılmaz. */
+  totalReviewCount?: number;
+};
+
+const ratingValues = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 } as const;
+const googleReviewSchema = z
+  .object({
+    reviewId: z.string().trim().min(1).max(512),
+    reviewer: z
+      .object({ displayName: z.string().trim().min(1).max(300).optional(), isAnonymous: z.boolean().optional() })
+      .passthrough(),
+    starRating: z.enum(["ONE", "TWO", "THREE", "FOUR", "FIVE"]),
+    comment: z.string().max(20_000).optional().default(""),
+    createTime: z.string().datetime({ offset: true }),
+    updateTime: z.string().datetime({ offset: true }).optional(),
+  })
+  .passthrough()
+  .refine(value => value.reviewer.isAnonymous === true || value.reviewer.displayName !== undefined);
+const googleReviewsPageSchema = z
+  .object({
+    reviews: z.array(z.unknown()).optional().default([]),
+    averageRating: z.number().finite().min(1).max(5).optional(),
+    totalReviewCount: z.number().int().nonnegative().optional(),
+    nextPageToken: z.string().trim().min(1).max(4_096).optional(),
+  })
+  .passthrough();
 
 export function createGoogleClient(credentials: GoogleCredentials, fetchImpl: typeof fetch = fetch, now: () => number = Date.now) {
   let cached: { token: string; expiresAt: number } | undefined;
@@ -112,21 +151,74 @@ export function createGoogleClient(credentials: GoogleCredentials, fetchImpl: ty
     }
   }
 
-  const parent = (accountId: string, locationId: string): string => {
+  const locationParent = (accountId: string, locationId: string): string => {
     if (!ID.test(accountId) || !ID.test(locationId)) throw new GoogleError("invalid", "kimlik", 0);
-    return `${POSTS_API}/accounts/${accountId}/locations/${locationId}/localPosts`;
+    return `${POSTS_API}/accounts/${accountId}/locations/${locationId}`;
   };
 
+  const postsParent = (accountId: string, locationId: string): string => `${locationParent(accountId, locationId)}/localPosts`;
+
+  async function listReviews(accountId: string, locationId: string): Promise<GoogleReviewsResult> {
+    const url = `${locationParent(accountId, locationId)}/reviews`;
+    const reviews: GoogleReview[] = [];
+    const seenTokens = new Set<string>();
+    let pageToken: string | undefined;
+    let averageRating: number | undefined;
+    let totalReviewCount: number | undefined;
+
+    do {
+      const query = new URLSearchParams({ pageSize: "50", ...(pageToken ? { pageToken } : {}) });
+      const parsedPage = googleReviewsPageSchema.safeParse(await call("yorumlar", `${url}?${query}`, "GET"));
+      if (!parsedPage.success) throw new GoogleError("unavailable", "yorumlar", 0);
+      const page = parsedPage.data;
+      if (averageRating === undefined) averageRating = page.averageRating;
+      if (totalReviewCount === undefined) totalReviewCount = page.totalReviewCount;
+      for (const candidate of page.reviews) {
+        const parsed = googleReviewSchema.safeParse(candidate);
+        if (!parsed.success) continue;
+        reviews.push({
+          id: parsed.data.reviewId,
+          ...(parsed.data.reviewer.displayName ? { authorName: parsed.data.reviewer.displayName } : {}),
+          anonymous: parsed.data.reviewer.isAnonymous === true,
+          rating: ratingValues[parsed.data.starRating],
+          comment: parsed.data.comment,
+          createTime: parsed.data.createTime,
+          ...(parsed.data.updateTime ? { updateTime: parsed.data.updateTime } : {}),
+        });
+      }
+      pageToken = page.nextPageToken;
+      if (pageToken) {
+        if (seenTokens.has(pageToken)) throw new GoogleError("unavailable", "yorumlar", 0);
+        seenTokens.add(pageToken);
+      }
+    } while (pageToken);
+
+    return { reviews, ...(averageRating !== undefined ? { averageRating } : {}), ...(totalReviewCount !== undefined ? { totalReviewCount } : {}) };
+  }
+
+  async function getRating(accountId: string, locationId: string): Promise<number | undefined> {
+    const query = new URLSearchParams({ pageSize: "1" });
+    const parsed = googleReviewsPageSchema.safeParse(await call("puan", `${locationParent(accountId, locationId)}/reviews?${query}`, "GET"));
+    if (!parsed.success) throw new GoogleError("unavailable", "puan", 0);
+    return parsed.data.averageRating;
+  }
+
   return {
-    /** Bağlantıyı sına: belirteç alınır ve konumun paylaşımları bir kayıt okunur. Hiçbir şey yazmaz. */
+    /** Bağlantıyı sına: belirteç alınır, hesap/konum erişimi ve yorum okuma yetkisi doğrulanır. Hiçbir şey yazmaz. */
     async test(accountId: string, locationId: string): Promise<void> {
-      await call("sına", `${parent(accountId, locationId)}?pageSize=1`, "GET");
+      await listReviews(accountId, locationId);
     },
+
+    /** Doğrulanmış konumun bütün yorumlarını Google'ın 50 kayıtlık sayfalarını izleyerek yalnızca okur. */
+    listReviews,
+
+    /** Genel sayfa için yalnızca ilk sayfadaki toplu puanı okur; yorumları ve sonraki sayfaları işlemez. */
+    getRating,
 
     /** Yeni paylaşım (localPosts.create). Dönen `name` biçimi denetlenir. Sonucu belirsiz kalan çağrılar `uncertain` olarak ayrılır (gönderi oluşmuş olabilir). */
     async createPost(accountId: string, locationId: string, post: GoogleLocalPost): Promise<GoogleCreated> {
       try {
-        const data = (await call("paylaş", parent(accountId, locationId), "POST", post)) as { name?: unknown; state?: unknown };
+        const data = (await call("paylaş", postsParent(accountId, locationId), "POST", post)) as { name?: unknown; state?: unknown };
         if (typeof data.name !== "string" || !GOOGLE_POST_NAME.test(data.name)) throw new GoogleError("unavailable", "paylaş", 0);
         return { name: data.name, ...(typeof data.state === "string" ? { state: data.state } : {}) };
       } catch (error) {

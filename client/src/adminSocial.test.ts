@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { planBuild } from "../../scripts/build-content";
 import { BLOG_SLUGS_LINKED_FROM_CODE } from "../../shared/blog-protected";
 import { GOOGLE_POST_NAME, SETTINGS_PATH, SOCIAL_SKIP_MARKER, TRACKING, buildGoogleLocalPost, emptySocialRecord, parseSocialFile, plainUrl, serializeSettings, serializeSocial, socialPath, trackedUrl, validateSettings, validateSocialRecord } from "../../shared/blog-social";
+import { GOOGLE_PUBLIC_CONFIG_PATH } from "../../shared/google-reviews";
 import { SITE_URL } from "../../shared/blog-build";
 import { LoginGuard, RateLimiter, hashPassword } from "../../server/admin/auth";
 import { GoogleError, createGoogleClient, readGoogleCredentials } from "../../server/admin/google";
@@ -284,7 +285,7 @@ describe("panel API: oturum ve yetki", () => {
   it("oturumsuz hiçbir yeni eylem veri döndürmez, GitHub'a ya da Google'a dokunmaz", async () => {
     const kit = await setup();
     const before = { github: kit.repo.requests.length, google: kit.google.requests.length };
-    for (const [method, action] of [["GET", "settings"], ["POST", "settings-save"], ["GET", "social-get"], ["POST", "social-save"], ["POST", "social-mark"], ["POST", "google-test"], ["POST", "google-share"]] as const) {
+    for (const [method, action] of [["GET", "settings"], ["POST", "settings-save"], ["GET", "social-get"], ["POST", "social-save"], ["POST", "social-mark"], ["POST", "google-test"], ["POST", "google-share"], ["GET", "google-reviews-list"], ["POST", "google-reviews-refresh"], ["GET", "google-reviews-manual-get"], ["POST", "google-reviews-manual-save"]] as const) {
       const response = await kit.call({ method, action, body: method === "POST" ? { slug: kit.target } : undefined, query: { slug: kit.target } });
       expect(response.status, action).toBe(401);
     }
@@ -294,7 +295,7 @@ describe("panel API: oturum ve yetki", () => {
 
   it("yazan eylemler JSON ve X-Admin-Request başlığı ister; yanlış yöntem 405 verir", async () => {
     const kit = await setup();
-    for (const action of ["settings-save", "social-save", "social-mark", "google-test", "google-share"]) {
+    for (const action of ["settings-save", "social-save", "social-mark", "google-test", "google-share", "google-reviews-refresh", "google-reviews-manual-save"]) {
       const response = await kit.call({ method: "POST", action, body: {}, cookie: kit.cookie, headers: { "x-admin-request": "0" } });
       expect(response.status, action).toBe(403);
     }
@@ -318,7 +319,7 @@ describe("panel API: ayarlar", () => {
     expect((await without.get("settings")).body.googleConfigured).toBe(false);
   });
 
-  it("kaydetme content/settings.json'a tek dosya olarak yazılır, build işareti taşır; aynı ayar tekrar commit atmaz; geçersiz ayar yazılmaz", async () => {
+  it("kaydetme ayarı ve sunucu puan yapılandırmasını birlikte yazar; aynı ayar tekrar commit atmaz; geçersiz ayar yazılmaz", async () => {
     const kit = await setup();
     const bad = await kit.post("settings-save", { settings: { google: { mode: "api", sendPhoto: false } } });
     expect(bad.status).toBe(422);
@@ -327,10 +328,10 @@ describe("panel API: ayarlar", () => {
     expect(saved.status).toBe(200);
     expect(saved.body.noChange).toBe(false);
     const change = lastCommitChanges(kit.repo);
-    expect(change.added).toEqual([SETTINGS_PATH]);
+    expect(change.added).toEqual([GOOGLE_PUBLIC_CONFIG_PATH, SETTINGS_PATH].sort());
     expect(change.modified).toEqual([]);
     expect(change.deleted).toEqual([]);
-    expect(change.message).toContain(SOCIAL_SKIP_MARKER);
+    expect(change.message).not.toContain(SOCIAL_SKIP_MARKER);
     expect(JSON.parse(kit.repo.file(SETTINGS_PATH)!)).toEqual({ google: { mode: "api", accountId: "123456789", locationId: "987654321", sendPhoto: false } });
     const commits = kit.repo.log().length;
     const again = await kit.post("settings-save", { settings: { google: { mode: "api", accountId: "123456789", locationId: "987654321", sendPhoto: false } } });
@@ -776,7 +777,7 @@ describe("yazma izni: paylaşım dosyaları yalnızca content/ altındadır", ()
   it("yeni dosyalar mevcut izin kapsamındadır; GitHub anahtarının izni genişletilmedi", () => {
     const source = read("server/admin/github.ts");
     expect(source).toContain('export const WRITABLE_PREFIXES: readonly string[] = ["content/"];');
-    expect(source).toContain('export const WRITABLE_FILES: readonly string[] = ["shared/blog-content.generated.ts", "client/public/sitemap.xml", "client/public/llms.txt"];');
+    expect(source).toContain('"shared/google-reviews.generated.ts", "server/google-public-config.generated.ts"');
     expect(socialPath(SLUG).startsWith("content/")).toBe(true);
     expect(SETTINGS_PATH.startsWith("content/")).toBe(true);
   });
@@ -797,6 +798,8 @@ describe("panel arayüzü: paylaşım paketi bağlantıları", () => {
     const app = read("client/src/admin/AdminApp.tsx");
     expect(app).toContain('import SocialPackage from "./SocialPackage"');
     expect(app).toContain('import SettingsView from "./SettingsView"');
+    expect(app).toContain('import GoogleReviewsView from "./GoogleReviewsView"');
+    expect(app).toContain('["reviews", "Google Yorumları"]');
     expect(app).toContain('["settings", "Ayarlar"]');
     expect(read("client/src/admin/PostsView.tsx")).toContain("Paylaşım</button>");
     const files = readdirSync(resolve(projectRoot, "client/src"), { recursive: true, encoding: "utf8" }).filter(name => /\.(ts|tsx)$/.test(name) && !/\.test\.ts$/.test(name) && !name.startsWith("admin"));

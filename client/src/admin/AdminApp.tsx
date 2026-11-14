@@ -4,10 +4,11 @@ import PostsView from "./PostsView";
 import EditorView from "./EditorView";
 import SocialPackage from "./SocialPackage";
 import SettingsView from "./SettingsView";
+import GoogleReviewsView from "./GoogleReviewsView";
 import { BuildsView, OverviewView } from "./InsightViews";
 import "./admin.css";
 
-type Tab = "posts" | "overview" | "builds" | "settings";
+type Tab = "posts" | "reviews" | "overview" | "builds" | "settings";
 type Screen = { name: "tab"; tab: Tab } | { name: "editor"; item: PostItem | null } | { name: "package"; item: PostItem };
 
 function Login({ onDone }: { onDone: () => void }) {
@@ -65,9 +66,9 @@ function Panel({ onLogout }: { onLogout: () => void }) {
   return (
     <div className="admin-shell">
       <header className="admin-header">
-        <strong>Eşli Teknik · Blog yönetimi</strong>
+        <strong>Eşli Teknik · Yönetim paneli</strong>
         <nav aria-label="Bölümler">
-          {([["posts", "Yazılar"], ["overview", "Genel bakış"], ["builds", "Yayın durumu"], ["settings", "Ayarlar"]] as [Tab, string][]).map(([name, label]) => (
+          {([["posts", "Blog Yönetimi"], ["reviews", "Google Yorumları"], ["overview", "Genel bakış"], ["builds", "Yayın durumu"], ["settings", "Ayarlar"]] as [Tab, string][]).map(([name, label]) => (
             <button key={name} className={`admin-tab ${tab === name && screen.name === "tab" ? "is-active" : ""}`} onClick={() => setScreen({ name: "tab", tab: name })}>{label}</button>
           ))}
         </nav>
@@ -80,6 +81,7 @@ function Panel({ onLogout }: { onLogout: () => void }) {
       {data && screen.name === "package" && <SocialPackage key={screen.item.post.slug} post={screen.item.post} notify={setToast} onClose={() => setScreen({ name: "tab", tab: "posts" })} />}
       {data && screen.name === "tab" && screen.tab === "posts" && <PostsView data={data} notify={setToast} onChanged={async () => { await reload(); }} onNew={() => setScreen({ name: "editor", item: null })} onEdit={item => setScreen({ name: "editor", item })} onPackage={item => setScreen({ name: "package", item })} />}
       {data && screen.name === "tab" && screen.tab === "overview" && <OverviewView data={data} />}
+      {screen.name === "tab" && screen.tab === "reviews" && <GoogleReviewsView notify={setToast} />}
       {screen.name === "tab" && screen.tab === "builds" && <BuildsView />}
       {screen.name === "tab" && screen.tab === "settings" && <SettingsView notify={setToast} />}
     </div>

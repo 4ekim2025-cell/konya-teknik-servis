@@ -92,7 +92,7 @@ Bilinmesi gerekenler:
 
 ## 3d. Google İşletme paylaşım paketi ve API (aşama 5)
 
-**"API yok" (varsayılan) için kurulum gerekmez.** Yazıyı yayınlayınca editörde "Paylaşım paketini aç" düğmesi çıkar (Yazılar listesinde de her satırda "Paylaşım" düğmesi vardır). Pakette Google İşletme metni, düğme türü (Daha fazla bilgi / Hemen ara), takip etiketli bağlantı, fotoğraflar (JPEG olarak iner), Instagram metni ve iki "paylaşıldı" kutusu bulunur. Paket `content/social/<adres>.json` dosyasında, ayarlar `content/settings.json` dosyasında durur; kaydetmek siteyi yeniden derletmez (commit mesajındaki `[panel-paylasim]` işareti) ve hiçbiri siteye, sitemap'e, `llms.txt`'ye ya da şemaya girmez.
+**"API yok" (varsayılan) için kurulum gerekmez.** Yazıyı yayınlayınca editörde "Paylaşım paketini aç" düğmesi çıkar (Yazılar listesinde de her satırda "Paylaşım" düğmesi vardır). Pakette Google İşletme metni, düğme türü (Daha fazla bilgi / Hemen ara), takip etiketli bağlantı, fotoğraflar (JPEG olarak iner), Instagram metni ve iki "paylaşıldı" kutusu bulunur. Paket `content/social/<adres>.json` dosyasında durur; paket kaydı siteyi yeniden derletmez (`[panel-paylasim]`). Google bağlantı ayarı ise sunucunun puan yapılandırmasını değiştirdiği için kaydedildiğinde build açar. OAuth sırları hiçbir içerik dosyasına girmez.
 
 Takip etiketleri yalnızca pakette kullanılır: Google için `utm_source=google&utm_medium=organic&utm_campaign=gbp-post`, Instagram için `utm_source=instagram&utm_medium=social&utm_campaign=blog-paylasim`.
 
@@ -115,6 +115,15 @@ Kod yazıldı ve bellek içi taklitle sınandı; **gerçek bir Google hesabıyla
 
    Değerleri bana yazmayın; yalnızca Vercel'e girin. Ekledikten sonra yeniden dağıtım (redeploy) gerekir. Üçü birlikte dolu değilse API yolu kapalı kalır, panelin geri kalanı etkilenmez.
 7. **Panelde açma:** Ayarlar → "API var" → hesap ve konum kimliği → "Ayarları kaydet" → **"Bağlantıyı sına"** (yalnızca okur, hiçbir şey paylaşmaz). Yeşil sonuç gelince bir yazının paketinden "Google'da paylaş (API)" düğmesi çıkar; gönderi ancak onay sorusuna "Evet" derseniz gider.
+
+## 3e. Google yorumları ve anasayfa puanı
+
+- Google Yorumları bölümündeki **Yorumları yenile** düğmesi Business Profile `reviews.list` uç noktasını kullanır; sayfa başına 50 kayıt alır ve `nextPageToken` bitene kadar ilerler. Bu işlem Google'daki hiçbir yorumu değiştirmez, yanıtlamaz veya silmez.
+- Ham API yorumları Git'e ya da veritabanına yazılmaz. Yalnız oturumlu panel yanıtında görünür; Google erişimi yoksa ücretsiz manuel yönetim çalışmaya devam eder.
+- API ekranındaki yorum metni kalıcı kayda kopyalanmaz. Bir yorum ancak metin yorum sahibinden bağımsız olarak yeniden sağlandıktan ve web sitesinde kullanım için açık izin alındıktan sonra manuel kayda eklenir. İki onay da zorunludur; izin tarihi saklanır ve yazar adı tam biçimiyle korunur. Kayıt `content/google-reviews.json` içindedir; ziyaretçi paketine yalnız görünür ve doğrulanmış kayıtlar üretilir.
+- Genel `/api/google-reviews` yanıtı yalnız `averageRating` ve güncellik tarihini içerir; yorum sayısını, hesap/konum kimliğini veya OAuth bilgisini göndermez. Başarılı yanıt Vercel CDN'de 48 saat (`s-maxage=172800`) tutulur. Süre dolduktan sonraki ilk istek Business Profile API'den yeniler; ücretli alternatife geçmez. Cron, Places API veya ücretli veri tabanı kullanılmaz.
+- Google API çalışmazsa bölüm puanı ve yüzen puan kutusu kontrollü biçimde gizlenir; WhatsApp eylemi çalışmaya devam eder.
+- Puan “Google’da 4,8” ve “... itibarıyla” tarihiyle gösterilir. Google adı/logosu yanında yıldız yoktur. Yıldızlar yalnız izinli yorum kartında, Google atıf satırından ayrı durur.
 
 ### API ile davranış
 

@@ -18,6 +18,7 @@ import { REDIRECTS_PATH, parseRedirects, removeRedirectFrom, renderRedirectsFile
 import { BLOG_SLUG_PATTERN, blogFileName, validateBlogCollection, validateBlogPost, type BlogPostInput } from "../../shared/blog-schema.js";
 import { GithubError, mapLimit, type BuildStatus, type CommitChange, type GithubClient, type HistoryEntry } from "./github.js";
 import { DEFAULT_SETTINGS, SETTINGS_PATH, SOCIAL_SKIP_MARKER, emptySocialRecord, parseSocialFile, salvageShared, serializeSettings, serializeSocial, socialPath, validateSettings, validateSocialRecord, GOOGLE_POST_NAME, type PanelSettings, type SocialChannel, type SocialRecord } from "../../shared/blog-social.js";
+import { EMPTY_GOOGLE_REVIEWS, GOOGLE_PUBLIC_CONFIG_PATH, GOOGLE_REVIEW_COMMIT_MARKER, GOOGLE_REVIEWS_GENERATED_PATH, GOOGLE_REVIEWS_PATH, renderGooglePublicConfig, renderGoogleReviewsGenerated, serializeGoogleReviews, validateGoogleReviews, type GoogleReviewsFile } from "../../shared/google-reviews.js";
 import { ImageStoreError, type ImageStore } from "./imageStore.js";
 
 /** Commit mesajına konan işaret: `vercel.json` → `ignoreCommand` bu işareti görünce derlemeyi atlar (yalnızca siteyi değiştirmeyen taslak commit'leri). */
@@ -46,6 +47,7 @@ export type SaveOutcome = { noChange: true } | { noChange: false; commit: string
 export type DeleteOutcome = { commit: string; slug: string; redirectedTo?: string; wasPublished: boolean; imagesDeleted?: number; imagesNote?: "kept_preview" | "not_configured" | "failed"; /** Silinen yazının paylaşım paketi (varsa); işleyici Google düğmesini buna göre çevirir, istemciye gönderilmez. */ removedSocial?: SocialRecord; /** Paket dosyası okunamadı ve içinden Google paylaşımı kurtarılamadı: Google tarafı bilinmiyor, düğme elle kontrol edilmeli. */ socialUnreadable?: boolean };
 export type SocialView = { record: SocialRecord | null; /** Dosya var ama okunamadı/kurallara uymuyor: panel boş paket gösterir, kaydedince dosya yeniden yazılır. */ problem?: string; published: boolean };
 export type SettingsView = { settings: PanelSettings; problem?: string };
+export type GoogleReviewsView = { data: GoogleReviewsFile; problem?: string };
 export type ShareContext = { post: BlogPostInput; record: SocialRecord; settings: PanelSettings };
 export type BuildRow = BuildStatus & { skipped: boolean };
 
@@ -170,6 +172,20 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
     }
     const checked = validateSettings(data);
     return checked.ok ? { settings: checked.settings } : { settings: DEFAULT_SETTINGS, problem: checked.errors.join("; ") };
+  }
+
+  /** Anasayfaya yalnız izinli manuel kayıtlar çıkar. Google API yorumları bu dosyaya otomatik kopyalanmaz. */
+  async function readGoogleReviews(ref: string): Promise<GoogleReviewsView> {
+    const text = await github.readFile(GOOGLE_REVIEWS_PATH, ref);
+    if (text === null) return { data: EMPTY_GOOGLE_REVIEWS };
+    let value: unknown;
+    try {
+      value = JSON.parse(text);
+    } catch {
+      return { data: EMPTY_GOOGLE_REVIEWS, problem: `${GOOGLE_REVIEWS_PATH}: geçerli JSON değil` };
+    }
+    const checked = validateGoogleReviews(value);
+    return checked.ok ? { data: checked.data } : { data: EMPTY_GOOGLE_REVIEWS, problem: checked.errors.join("; ") };
   }
 
   /** Taslak yeniden adlandırılırsa paylaşım paketi yeni adrese taşınır (aynı commit'te). Okunamayan paket olduğu yerde bırakılır. */
@@ -343,6 +359,26 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
       return readSettings(await github.headSha());
     },
 
+    async googleReviews(): Promise<GoogleReviewsView> {
+      return readGoogleReviews(await github.headSha());
+    },
+
+    async saveGoogleReviews(input: unknown): Promise<{ noChange: boolean; data: GoogleReviewsFile }> {
+      const checked = validateGoogleReviews(input);
+      if (!checked.ok) throw new AdminError(422, "validation_failed", checked.errors[0], checked.errors);
+      return withRetry(async () => {
+        const head = await github.headSha();
+        const current = await readGoogleReviews(head);
+        const content = serializeGoogleReviews(checked.data);
+        if (!current.problem && serializeGoogleReviews(current.data) === content) return { noChange: true, data: current.data };
+        await github.commit({ upserts: [
+          { path: GOOGLE_REVIEWS_PATH, content },
+          { path: GOOGLE_REVIEWS_GENERATED_PATH, content: renderGoogleReviewsGenerated(checked.data) },
+        ], deletes: [] }, `content: izinli Google yorumları güncellendi ${GOOGLE_REVIEW_COMMIT_MARKER}\n\nKaynak: yönetim paneli`, head);
+        return { noChange: false, data: checked.data };
+      });
+    },
+
     /** Ayarları `content/settings.json` dosyasına yazar. Sır içermez (Google anahtarları ortam değişkenindedir); site dosyalarına dokunmaz. */
     async saveSettings(input: unknown): Promise<{ noChange: boolean; settings: PanelSettings }> {
       const checked = validateSettings(input);
@@ -352,7 +388,10 @@ export function createAdminService(deps: { github: GithubClient; now?: () => Dat
         const current = await readSettings(head);
         const content = serializeSettings(checked.settings);
         if (!current.problem && serializeSettings(current.settings) === content) return { noChange: true, settings: current.settings };
-        await github.commit({ upserts: [{ path: SETTINGS_PATH, content }], deletes: [] }, `content: panel ayarları güncellendi ${SOCIAL_SKIP_MARKER}\n\nKaynak: yönetim paneli`, head);
+        await github.commit({ upserts: [
+          { path: SETTINGS_PATH, content },
+          { path: GOOGLE_PUBLIC_CONFIG_PATH, content: renderGooglePublicConfig(checked.settings.google) },
+        ], deletes: [] }, `content: Google Business Profile ayarları güncellendi\n\nKaynak: yönetim paneli`, head);
         return { noChange: false, settings: checked.settings };
       });
     },

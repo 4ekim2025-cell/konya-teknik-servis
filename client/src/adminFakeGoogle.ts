@@ -5,6 +5,7 @@
  * PATCH `updateMask` ister, her istek geçerli bir erişim anahtarı taşımalıdır. Gerçek Google'a hiçbir çağrı yapılmaz.
  */
 type StoredPost = { name: string; summary?: string; topicType?: string; languageCode?: string; callToAction?: { actionType?: string; url?: string }; media?: { mediaFormat?: string; sourceUrl?: string }[]; state: string };
+type ReviewPage = { reviews?: unknown[]; averageRating?: number; totalReviewCount?: number; nextPageToken?: string };
 
 export class FakeGoogle {
   /** "GET /v4/accounts/…" gibi istek günlüğü (adres + sorgu). */
@@ -22,6 +23,8 @@ export class FakeGoogle {
   forcePatchStatus?: number;
   /** Sonraki oluşturma yanıtında geçersiz bir gönderi adı döndürür. */
   badCreateName = false;
+  /** Yorum sayfalaması; anahtar boş dizeyse ilk sayfadır. */
+  readonly reviewPages = new Map<string, ReviewPage>([["", { reviews: [], averageRating: 4.8, totalReviewCount: 0 }]]);
   private counter = 0;
 
   constructor(
@@ -88,6 +91,13 @@ export class FakeGoogle {
         this.posts.set(name, { ...post, name, state: "PROCESSING" } as StoredPost);
         return this.json(200, { name, state: "PROCESSING", summary: post.summary });
       }
+    }
+
+    const reviews = new RegExp(`^/v4/accounts/${this.accountId}/locations/${this.locationId}/reviews$`);
+    if (reviews.test(url.pathname) && method === "GET") {
+      if (url.searchParams.get("pageSize") !== "50") return this.json(400, { error: { message: "pageSize 50 olmalı" } });
+      const page = this.reviewPages.get(url.searchParams.get("pageToken") ?? "");
+      return page ? this.json(200, page) : this.json(400, { error: { message: "pageToken geçersiz" } });
     }
 
     const item = new RegExp(`^/v4/(accounts/${this.accountId}/locations/${this.locationId}/localPosts/[A-Za-z0-9_-]+)$`).exec(url.pathname);

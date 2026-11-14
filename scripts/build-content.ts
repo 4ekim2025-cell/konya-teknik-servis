@@ -7,6 +7,7 @@
  *   - shared/blog-content.generated.ts  → React ve scripts/prerender.ts'in okuduğu yazı listesi
  *   - client/public/sitemap.xml         → yalnızca blog girişleri (yazılar ve /blog/) eşitlenir
  *   - client/public/llms.txt            → yalnızca blog bölümü yeniden yazılır
+ *   - shared/google-reviews.generated.ts → yalnızca izinli ve görünür manuel yorumlar
  * Blog dışındaki sitemap ve llms.txt satırlarına dokunulmaz.
  *
  * Hesaplama mantığı `shared/blog-build.ts` içindedir (panel API'si de aynısını kullanır); bu dosya yalnızca diskle konuşur.
@@ -21,11 +22,25 @@ import type { BlogPost } from "../shared/blog-meta";
 import { blogFileName, validateBlogCollection, validateBlogPost, type BlogPostInput } from "../shared/blog-schema";
 import { parseRedirects, REDIRECTS_PATH, validateRedirectsAgainstPosts, type BlogRedirect } from "../shared/blog-redirects";
 import { CONTENT_DIR, GENERATED_PATH, LLMS_PATH, SITE_URL, SITEMAP_PATH, renderGeneratedFiles } from "../shared/blog-build";
+import { EMPTY_GOOGLE_REVIEWS, GOOGLE_REVIEWS_GENERATED_PATH, GOOGLE_REVIEWS_PATH, renderGoogleReviewsGenerated, validateGoogleReviews, type GoogleReviewsFile } from "../shared/google-reviews";
 
 export { CONTENT_DIR, GENERATED_PATH, LLMS_PATH, SITE_URL, SITEMAP_PATH } from "../shared/blog-build";
 export { llmsBlogLines, renderGeneratedModule, sitemapPostLine, syncLlmsTxt, syncSitemap, toSitePosts } from "../shared/blog-build";
 
 export type LoadResult = { posts: BlogPostInput[]; errors: string[] };
+
+export function loadGoogleReviews(root = process.cwd()): { data: GoogleReviewsFile; errors: string[] } {
+  const file = path.join(root, GOOGLE_REVIEWS_PATH);
+  if (!fs.existsSync(file)) return { data: EMPTY_GOOGLE_REVIEWS, errors: [] };
+  let value: unknown;
+  try {
+    value = JSON.parse(fs.readFileSync(file, "utf8"));
+  } catch (error) {
+    return { data: EMPTY_GOOGLE_REVIEWS, errors: [`${GOOGLE_REVIEWS_PATH}: geçerli JSON değil (${error instanceof Error ? error.message : String(error)})`] };
+  }
+  const checked = validateGoogleReviews(value);
+  return checked.ok ? { data: checked.data, errors: [] } : { data: EMPTY_GOOGLE_REVIEWS, errors: checked.errors.map(error => `${GOOGLE_REVIEWS_PATH}: ${error}`) };
+}
 
 /** Klasördeki tüm yazıları okur ve doğrular. Hata varsa `errors` doludur; yine de geçerli yazılar `posts` içinde gelir. */
 export function loadContent(root = process.cwd()): LoadResult {
@@ -76,10 +91,13 @@ export function planBuild(root = process.cwd()): BuildResult {
   const { posts: all, errors } = loadContent(root);
   const published = all.filter(post => post.status !== "draft").map(post => post.slug);
   errors.push(...loadRedirects(root, published).errors);
+  const googleReviews = loadGoogleReviews(root);
+  errors.push(...googleReviews.errors);
   if (errors.length) throw new Error(`İçerik doğrulanamadı (${errors.length} hata):\n${errors.map(error => `  - ${error}`).join("\n")}`);
   const read = (file: string) => fs.readFileSync(path.join(root, file), "utf8");
   const existing = (file: string) => (fs.existsSync(path.join(root, file)) ? read(file) : "");
   const { posts, files } = renderGeneratedFiles(all, { sitemap: read(SITEMAP_PATH), llms: read(LLMS_PATH) });
+  files.push({ path: GOOGLE_REVIEWS_GENERATED_PATH, content: renderGoogleReviewsGenerated(googleReviews.data) });
   return { posts, files: files.map(file => ({ ...file, changed: existing(file.path) !== file.content })) };
 }
 

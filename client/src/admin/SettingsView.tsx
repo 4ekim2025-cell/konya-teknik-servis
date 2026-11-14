@@ -5,7 +5,7 @@ import { api, ApiError } from "./api";
 const errorText = (failure: unknown, fallback: string) => (failure instanceof ApiError ? (failure.errors?.length ? failure.errors[0] : failure.message) : fallback);
 
 /**
- * Ayarlar (aşama 5): Google İşletme "API yok / API var" anahtarı. Varsayılan "API yok": paylaşımı paket üzerinden elle yaparsınız.
+ * Google Business Profile bağlantısı: aynı hesap hem blog gönderilerini yayımlar hem yorumları salt okunur biçimde getirir.
  * "API var" için hesap ve konum kimliği buraya yazılır; Google anahtarları (OAuth) yalnızca Vercel ortam değişkenidir, panelde görünmez ve istenmez.
  */
 export default function SettingsView({ notify }: { notify: (message: string) => void }) {
@@ -62,7 +62,7 @@ export default function SettingsView({ notify }: { notify: (message: string) => 
     setTestResult(null);
     try {
       await api.googleTest();
-      setTestResult({ ok: true, text: "Bağlantı çalışıyor: Google anahtarları kabul edildi ve konum okunabildi. Hiçbir şey paylaşılmadı." });
+      setTestResult({ ok: true, text: "Bağlantı çalışıyor: OAuth anahtarı alındı, hesap/konum erişildi ve yorumlar salt okunur biçimde okunabildi. Hiçbir şey değiştirilmedi veya paylaşılmadı." });
     } catch (failure) {
       setTestResult({ ok: false, text: errorText(failure, "Bağlantı sınanamadı.") });
     } finally {
@@ -78,10 +78,11 @@ export default function SettingsView({ notify }: { notify: (message: string) => 
       <h2>Ayarlar</h2>
       {problem && <p className="admin-error" role="alert">{problem}</p>}
       <fieldset className="admin-box">
-        <legend>Google İşletme paylaşımı</legend>
-        <div role="radiogroup" aria-label="Google İşletme modu">
-          <label className="admin-check"><input type="radio" name="gbp-mode" checked={mode === "none"} onChange={() => setMode("none")} /><span><strong>API yok</strong> (varsayılan) — paylaşım paketini kopyalayıp Google’da elle paylaşırsınız, sonra “paylaşıldı” kutusunu işaretlersiniz.</span></label>
-          <label className="admin-check"><input type="radio" name="gbp-mode" checked={mode === "api"} onChange={() => setMode("api")} /><span><strong>API var</strong> — panel gönderiyi Google İşletme API’si ile paylaşır; yazı silinince düğmeyi “Hemen ara”ya çevirir. Google’dan API erişim onayı gerektirir.</span></label>
+        <legend>Google Business Profile bağlantısı</legend>
+        <p className="admin-muted">Bu tek bağlantı blog yazılarını Google Business Profile’a göndermek ve Google yorumlarını salt okunur biçimde almak için kullanılır.</p>
+        <div role="radiogroup" aria-label="Google Business Profile modu">
+          <label className="admin-check"><input type="radio" name="gbp-mode" checked={mode === "none"} onChange={() => setMode("none")} /><span><strong>API yok</strong> (varsayılan) — blog paylaşımını elle yapar, izinli müşteri yorumlarını Google Yorumları bölümünden manuel yönetirsiniz.</span></label>
+          <label className="admin-check"><input type="radio" name="gbp-mode" checked={mode === "api"} onChange={() => setMode("api")} /><span><strong>API var</strong> — aynı bağlantı blog gönderilerini yönetir ve yorumları okur. Google’dan API erişim onayı gerektirir.</span></label>
         </div>
         {mode === "api" && (
           <div className="admin-sub">
@@ -100,7 +101,7 @@ export default function SettingsView({ notify }: { notify: (message: string) => 
         {saved.google.mode === "api" && dirty && <p className="admin-muted">Bağlantıyı sınamadan önce ayarları kaydedin.</p>}
         {testResult && <p className={testResult.ok ? "admin-ok" : "admin-error"} role="status">{testResult.text}</p>}
       </fieldset>
-      <p className="admin-muted">Ayarlar yalnızca panele aittir (content/settings.json); sitede, sitemap’te ya da arama sonuçlarında görünmez ve kaydetmek siteyi yeniden derletmez.</p>
+      <p className="admin-muted">OAuth anahtarları ve panel ayarları ziyaretçi paketine girmez. Bağlantı ayarı değiştiğinde yalnız sunucu tarafındaki puan yapılandırmasını güncellemek için site yeniden oluşturulur.</p>
     </section>
   );
 }

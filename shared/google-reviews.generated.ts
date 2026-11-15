@@ -25,5 +25,64 @@ export const PUBLIC_MANUAL_REVIEWS: readonly PublicManualReview[] = [
     "consentDate": "2026-10-08",
     "visible": true,
     "order": 1
+  },
+  {
+    "id": "manual_df9f12721cd940d5",
+    "author": "Fori P.",
+    "rating": 5,
+    "text": "Esad ustanın ellerine sağlık. ilgili bir esnaf.",
+    "reviewDate": "2026-10-22",
+    "googleReviewUrl": "https://share.google/2kqZdZREt1bc2R1Hq",
+    "consentConfirmed": true,
+    "consentDate": "2026-10-22",
+    "visible": true,
+    "order": 2
+  },
+  {
+    "id": "manual_b69b0e29c6ed45b4",
+    "author": "Sahra Kader K.",
+    "rating": 5,
+    "text": "Gayet başarılı.",
+    "reviewDate": "2026-10-25",
+    "googleReviewUrl": "https://share.google/K5mktlXkx3yIvrWp2",
+    "consentConfirmed": true,
+    "consentDate": "2026-10-25",
+    "visible": true,
+    "order": 3
+  },
+  {
+    "id": "manual_2c934ce619a4446e",
+    "author": "Abdullah Ö.",
+    "rating": 5,
+    "text": "Başarılı",
+    "reviewDate": "2026-10-28",
+    "googleReviewUrl": "https://share.google/50sGzN25fKnoodnc1",
+    "consentConfirmed": true,
+    "consentDate": "2026-10-28",
+    "visible": true,
+    "order": 4
+  },
+  {
+    "id": "manual_1c10b6f60d404dc4",
+    "author": "Esat A.",
+    "rating": 5,
+    "text": "Bu güne kadar gelen en iyi usta yıllardır böyle işini güzel yapan bi insan tanımadım fiyatta çok uygun",
+    "reviewDate": "2026-11-03",
+    "googleReviewUrl": "https://share.google/Wj6jBRZWu5SRGJPby",
+    "consentConfirmed": true,
+    "consentDate": "2026-11-03",
+    "visible": true,
+    "order": 5
+  },
+  {
+    "id": "manual_74477d9710654db8",
+    "author": "İsmail K.",
+    "rating": 5,
+    "text": "Başarılı",
+    "reviewDate": "2026-11-15",
+    "consentConfirmed": true,
+    "consentDate": "2026-11-15",
+    "visible": true,
+    "order": 6
   }
 ];

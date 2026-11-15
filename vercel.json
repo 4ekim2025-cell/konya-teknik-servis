@@ -7,8 +7,8 @@
   "trailingSlash": true,
   "rewrites": [
     {
-      "source": "/api/google-reviews",
-      "destination": "/api/admin?public=google-rating"
+      "source": "/api/google-reviews/",
+      "destination": "/api/admin/?public=google-rating"
     }
   ],
   "redirects": [

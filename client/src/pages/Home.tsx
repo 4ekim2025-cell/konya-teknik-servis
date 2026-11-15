@@ -104,7 +104,7 @@ function GoogleReviewsSection(){
   const canMove=reviews.length>visible;
   const slides=canMove?[...reviews,...reviews.slice(0,visible)]:reviews;
   useEffect(()=>{setActive(0)},[visible]);
-  useEffect(()=>{if(!canMove||paused||window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const timer=window.setTimeout(()=>setActive(current=>current>=reviews.length?current:current+1),1000);return()=>window.clearTimeout(timer)},[active,canMove,manualRevision,paused,reviews.length]);
+  useEffect(()=>{if(!canMove||paused||window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const timer=window.setTimeout(()=>setActive(current=>current>=reviews.length?current:current+1),2000);return()=>window.clearTimeout(timer)},[active,canMove,manualRevision,paused,reviews.length]);
   const onSlideEnd=(event:React.TransitionEvent<HTMLDivElement>)=>{if(event.target!==event.currentTarget||event.propertyName!=="transform"||active<reviews.length)return;setInstant(true);setActive(0);window.requestAnimationFrame(()=>window.requestAnimationFrame(()=>setInstant(false)))};
   const move=(direction:1|-1)=>{if(!canMove)return;setActive(current=>direction===1?(current>=reviews.length-1?(window.matchMedia("(prefers-reduced-motion: reduce)").matches?0:reviews.length):current+1):(current<=0?reviews.length-1:current-1));setManualRevision(value=>value+1)};
   const onKeyDown=(event:React.KeyboardEvent<HTMLElement>)=>{if(event.key==="ArrowRight"){event.preventDefault();move(1)}else if(event.key==="ArrowLeft"){event.preventDefault();move(-1)}};

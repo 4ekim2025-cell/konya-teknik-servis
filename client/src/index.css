@@ -1443,3 +1443,14 @@ a.home-blog-card:hover .home-blog-media img{transform:scale(1.04)}
 
 @media(max-width:680px){.google-review-body{height:144.5px}.google-review-approval{left:-33px}}
 .floating-google-rating{grid-template-columns:28px minmax(0,1fr);align-items:center;gap:9px;border-radius:16px;text-align:left}.floating-google-rating>img{width:28px;height:28px;object-fit:contain}.floating-google-rating>div{display:flex;align-items:center;flex-wrap:wrap;gap:2px 5px;min-width:0}.floating-google-rating>div>strong{flex-basis:100%;font-size:11px;line-height:1.2}.floating-google-rating .floating-google-stars{display:flex;gap:1px;margin:0;color:#d9533f}.floating-google-rating .floating-google-stars:before{content:none}.floating-google-rating>div>small{font-size:11px;color:var(--brand-teal)}
+@media(max-width:860px){
+  body{padding-bottom:96px}
+  .mobile-action-bar{height:96px}
+  .mobile-action-bar .mobile-call-action{font-size:19px}
+  .mobile-review-action{display:flex;flex-direction:column;min-width:0;min-height:0}
+  .mobile-action-bar .mobile-review-action .mobile-preform-action{flex:1;width:100%;min-height:0;font-size:19px}
+  .mobile-action-bar .mobile-google-rating{display:flex;flex:0 0 10px;align-items:center;justify-content:center;gap:3px;max-height:10px;overflow:hidden;background:#fffdf8;color:var(--brand-teal);font:800 8px/10px Manrope,sans-serif}
+  .mobile-google-rating img{width:9px;height:9px;object-fit:contain}
+  .mobile-google-rating span{display:flex;align-items:center;gap:0;color:#d9533f}
+  .mobile-action-bar .mobile-google-rating svg{width:8px;height:8px}
+}

@@ -17,7 +17,7 @@ function parseRating(value: unknown): PublicGoogleRating | null {
 
 export function getPublicGoogleRating() {
   if (!ratingRequest) {
-    ratingRequest = fetch("/api/google-reviews", { headers: { Accept: "application/json" } })
+    ratingRequest = fetch("/api/google-reviews/", { headers: { Accept: "application/json" } })
       .then(response => response.ok ? response.json() : null)
       .then(parseRating)
       .catch(() => null);

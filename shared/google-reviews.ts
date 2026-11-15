@@ -54,7 +54,8 @@ export function renderGoogleReviewsGenerated(value: GoogleReviewsFile): string {
   return `/* Bu dosya yönetim paneli tarafından content/google-reviews.json kaynağından üretilir. Elle düzenlemeyin. */\nimport type { PublicManualReview } from "./google-reviews";\nexport const PUBLIC_MANUAL_REVIEWS: readonly PublicManualReview[] = ${JSON.stringify(reviews, null, 2)};\n`;
 }
 
-export { PUBLIC_MANUAL_REVIEWS } from "./google-reviews.generated";
+// Node ESM (Vercel Functions) uzantısız yerel modülleri çözmez; TypeScript derlemesindeki .js çıktısını açıkça hedefle.
+export { PUBLIC_MANUAL_REVIEWS } from "./google-reviews.generated.js";
 
 export function renderGooglePublicConfig(input: { mode: "none" | "api"; accountId?: string; locationId?: string }): string {
   const safe = input.mode === "api" && input.accountId && input.locationId

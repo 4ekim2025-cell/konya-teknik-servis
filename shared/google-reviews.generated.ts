@@ -80,6 +80,7 @@ export const PUBLIC_MANUAL_REVIEWS: readonly PublicManualReview[] = [
     "rating": 5,
     "text": "Başarılı",
     "reviewDate": "2026-11-15",
+    "googleReviewUrl": "https://maps.app.goo.gl/9syAv9vqGZp9K11M9",
     "consentConfirmed": true,
     "consentDate": "2026-11-15",
     "visible": true,

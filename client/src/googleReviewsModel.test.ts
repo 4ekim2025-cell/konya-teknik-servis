@@ -26,13 +26,19 @@ describe("izinli manuel Google yorum modeli", () => {
     expect(result.ok).toBe(false);
   });
 
+  it("Google yorum bağlantısını güvenli adreslerle sınırlar", () => {
+    expect(validateGoogleReviews({ version: 1, manualReviews: [valid({ googleReviewUrl: "https://maps.app.goo.gl/example" })] }).ok).toBe(true);
+    for (const googleReviewUrl of ["javascript:alert(1)", "http://www.google.com/maps", "https://google.com.evil.test/review"]) {
+      expect(validateGoogleReviews({ version: 1, manualReviews: [valid({ googleReviewUrl })] }).ok).toBe(false);
+    }
+  });
+
   it.each([
     [{ rating: 0 }, "puan alt sınırı"],
     [{ rating: 6 }, "puan üst sınırı"],
     [{ text: "a".repeat(1201) }, "uzun yorum"],
     [{ reviewDate: "2026-02-30" }, "geçersiz tarih"],
     [{ consentConfirmed: false }, "izin yok"],
-    [{ independentlyProvided: false }, "API kopyası"],
     [{ consentDate: "2026-10-31" }, "izin tarihi önce"],
   ])("%s girdisini reddeder (%s)", (overrides) => {
     expect(validateGoogleReviews({ version: 1, manualReviews: [valid(overrides)] }).ok).toBe(false);

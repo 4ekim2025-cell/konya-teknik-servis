@@ -87,3 +87,4 @@ export const PUBLIC_MANUAL_REVIEWS: readonly PublicManualReview[] = [
     "order": 6
   }
 ];
+export const PUBLIC_REVIEW_BADGE = {"label":"Google yorumları","score":"5/5"} as const;

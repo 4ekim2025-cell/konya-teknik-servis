@@ -1,10 +1,10 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { CONSENT_REOPEN_EVENT } from "@/analytics";
-import { ChevronDown, Clock3, Droplets, Fan, Flame, Gauge, House, Info, LayoutGrid, MapPin, Menu, MessageCircle, Mail, Phone, Refrigerator, Sparkles, Tags, WashingMachine, Wrench, X } from "lucide-react";
+import { ChevronDown, Clock3, Droplets, Fan, Flame, Gauge, House, Info, LayoutGrid, MapPin, Menu, MessageCircle, Mail, Phone, Refrigerator, Sparkles, Star, Tags, WashingMachine, Wrench, X } from "lucide-react";
 import { useLocation } from "wouter";
 import { SITE_PHONE_DISPLAY, SITE_PHONE_HREF, SITE_WHATSAPP_LINK } from "@/siteConfig";
 import { SmartInfoModal } from "@/components/SmartInfoModal";
-import { formatGoogleRating, formatGoogleRatingDate, usePublicGoogleRating } from "@/googleReviews";
+import { PUBLIC_REVIEW_BADGE } from "@shared/google-reviews.generated";
 
 import { GOOGLE_BUSINESS_URL } from "@shared/business-contact";
 import { SITE_DISCLAIMER } from "@shared/site-disclaimer";
@@ -195,7 +195,7 @@ export function Footer() {
 }
 
 export function FloatingActions() {
-  const rating = usePublicGoogleRating();
+  const badgeStars = Number(PUBLIC_REVIEW_BADGE.score.trim()[0]);
   const openSmartInfo = () => {
     if (document.querySelector(".smart-info-section")) {
       window.dispatchEvent(new Event("esli:open-smart-info"));
@@ -204,7 +204,7 @@ export function FloatingActions() {
     try { window.sessionStorage.setItem("esli-open-smart-info", "1"); } catch {}
     window.location.href = "/#on-bilgi-formu";
   };
-  return <><div className="floating-actions-stack">{rating&&<div className="floating-google-rating" aria-label={`Google’da ${formatGoogleRating(rating.averageRating)}; ${formatGoogleRatingDate(rating.refreshedAt)}`}><strong>Google’da {formatGoogleRating(rating.averageRating)}</strong><small>{formatGoogleRatingDate(rating.refreshedAt)}</small></div>}<a className="floating-whatsapp" href={whatsappLink} target="_blank" rel="noreferrer"><MessageCircle size={20} /><span>WhatsApp’tan Yazın</span></a></div><div className="mobile-action-bar"><a className="mobile-call-action" href={contactPhoneHref} aria-label="EŞLİ TEKNİK’i hemen ara"><Phone size={18} />Hemen ara</a><button type="button" className="mobile-preform-action" onClick={openSmartInfo} aria-label="Hızlı servis talebi oluştur" aria-haspopup="dialog"><span className="mobile-whatsapp-mark" aria-hidden="true"><MessageCircle size={20} /><Phone size={9} /></span>Hızlı servis talebi oluştur</button></div></>;
+  return <><div className="floating-actions-stack"><div className="floating-google-rating" aria-label={`${PUBLIC_REVIEW_BADGE.label}: ${PUBLIC_REVIEW_BADGE.score}`}><img src="/google-g-logo.png" alt="" aria-hidden="true"/><div><strong>{PUBLIC_REVIEW_BADGE.label}</strong><span className="floating-google-stars" aria-hidden="true">{Array.from({length:5},(_,index)=><Star key={index} size={12} fill={index<badgeStars?"currentColor":"none"}/>)}</span><small>{PUBLIC_REVIEW_BADGE.score}</small></div></div><a className="floating-whatsapp" href={whatsappLink} target="_blank" rel="noreferrer"><MessageCircle size={20} /><span>WhatsApp’tan Yazın</span></a></div><div className="mobile-action-bar"><a className="mobile-call-action" href={contactPhoneHref} aria-label="EŞLİ TEKNİK’i hemen ara"><Phone size={18} />Hemen ara</a><button type="button" className="mobile-preform-action" onClick={openSmartInfo} aria-label="Hızlı servis talebi oluştur" aria-haspopup="dialog"><span className="mobile-whatsapp-mark" aria-hidden="true"><MessageCircle size={20} /><Phone size={9} /></span>Hızlı servis talebi oluştur</button></div></>;
 }
 
 export function SiteChrome({ children }: { children: ReactNode }) {

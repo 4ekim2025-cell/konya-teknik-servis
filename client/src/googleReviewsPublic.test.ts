@@ -29,7 +29,7 @@ describe("anasayfa Google yorumları", () => {
     expect(home).toContain("onMouseEnter={()=>setPaused(true)}");
     expect(home).toContain("onFocusCapture={()=>setPaused(true)}");
     expect(home).toContain("prefers-reduced-motion: reduce");
-    expect(home).toContain("4500");
+    expect(home).toContain("2000");
     expect(home).toContain("onPointerDown={onPointerDown}");
     expect(styles).toContain("--review-visible");
     expect(styles).toContain("@media(max-width:1100px)");
@@ -38,10 +38,11 @@ describe("anasayfa Google yorumları", () => {
 });
 
 describe("yüzen Google puanı", () => {
-  it("WhatsApp eyleminin üstünde yalnız puan ve tarih gösterir", () => {
+  it("WhatsApp eyleminin üstünde yönetilebilir Google rozetini gösterir", () => {
     expect(chrome.indexOf('className="floating-google-rating"')).toBeLessThan(chrome.indexOf('className="floating-whatsapp"'));
-    expect(chrome).toContain("Google’da {formatGoogleRating(rating.averageRating)}");
-    expect(chrome).toContain("formatGoogleRatingDate(rating.refreshedAt)");
+    expect(chrome).toContain("PUBLIC_REVIEW_BADGE.label");
+    expect(chrome).toContain("PUBLIC_REVIEW_BADGE.score");
+    expect(chrome).toContain('/google-g-logo.png');
     expect(chrome).not.toContain("totalReviewCount");
     expect(styles).toContain(".floating-actions-stack .floating-whatsapp{position:static;justify-content:center;width:100%");
     expect(styles).toContain(".floating-actions-stack{display:none}");

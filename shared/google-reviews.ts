@@ -31,6 +31,8 @@ export const manualGoogleReviewSchema = z.object({
 
 export const googleReviewsFileSchema = z.object({
   version: z.literal(1),
+  floatingBadgeLabel: z.string().trim().min(1).max(40).optional(),
+  floatingBadgeScore: z.string().trim().regex(/^[1-5]\s*\/\s*5$/, "Puan 1/5 ile 5/5 arasında olmalı").optional(),
   manualReviews: z.array(manualGoogleReviewSchema).max(50),
 }).strict().superRefine((value, ctx) => {
   const ids = new Set<string>();
@@ -55,7 +57,8 @@ export const serializeGoogleReviews = (value: GoogleReviewsFile) => `${JSON.stri
 
 export function renderGoogleReviewsGenerated(value: GoogleReviewsFile): string {
   const reviews = value.manualReviews.filter(review => review.visible && review.consentConfirmed).sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
-  return `/* Bu dosya yönetim paneli tarafından content/google-reviews.json kaynağından üretilir. Elle düzenlemeyin. */\nimport type { PublicManualReview } from "./google-reviews";\nexport const PUBLIC_MANUAL_REVIEWS: readonly PublicManualReview[] = ${JSON.stringify(reviews, null, 2)};\n`;
+  const badge = { label: value.floatingBadgeLabel ?? "Google yorumları", score: value.floatingBadgeScore ?? "5/5" };
+  return `/* Bu dosya yönetim paneli tarafından content/google-reviews.json kaynağından üretilir. Elle düzenlemeyin. */\nimport type { PublicManualReview } from "./google-reviews";\nexport const PUBLIC_MANUAL_REVIEWS: readonly PublicManualReview[] = ${JSON.stringify(reviews, null, 2)};\nexport const PUBLIC_REVIEW_BADGE = ${JSON.stringify(badge)} as const;\n`;
 }
 
 // Node ESM (Vercel Functions) uzantısız yerel modülleri çözmez; TypeScript derlemesindeki .js çıktısını açıkça hedefle.

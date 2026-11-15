@@ -15,7 +15,7 @@ export function prepareBulkReviews(input: string, current: GoogleReviewsFile, co
     const [author, rawRating, reviewDate, text] = fields;
     const rating = Number(rawRating);
     if (!/^[1-5]$/.test(rawRating)) return { ok: false, error: `${index + 1}. satırdaki puan 1 ile 5 arasında olmalı.` };
-    additions.push({ id: `manual_${crypto.randomUUID().replace(/-/g, "").slice(0, 16)}`, author, rating, reviewDate, text, consentDate, consentConfirmed: true, independentlyProvided: true, visible: true, order: current.manualReviews.length + index });
+    additions.push({ id: `manual_${crypto.randomUUID().replace(/-/g, "").slice(0, 16)}`, author, rating, reviewDate, text, consentDate, consentConfirmed: true, visible: true, order: current.manualReviews.length + index });
   }
   const checked = validateGoogleReviews({ ...current, manualReviews: [...current.manualReviews, ...additions] });
   if (!checked.ok) return { ok: false, error: checked.errors[0] };

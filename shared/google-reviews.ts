@@ -17,7 +17,7 @@ export const manualGoogleReviewSchema = z.object({
   text: z.string().trim().min(1, "Yorum gerekli").max(1200, "Yorum en fazla 1200 karakter olabilir"),
   reviewDate: isoDate,
   consentConfirmed: z.boolean().refine(value => value, "Yorum sahibinin izni doğrulanmalı"),
-  independentlyProvided: z.boolean().refine(value => value, "Metin API çıktısından kopyalanmamalı; bağımsız kaynaktan sağlanmalı"),
+  independentlyProvided: z.boolean().optional(), // Eski kayıtlarla uyumluluk; yeni formda istenmez.
   consentDate: isoDate,
   visible: z.boolean(),
   order: z.number().int().min(0).max(9999),
@@ -50,7 +50,7 @@ export function validateGoogleReviews(value: unknown): { ok: true; data: GoogleR
 export const serializeGoogleReviews = (value: GoogleReviewsFile) => `${JSON.stringify(value, null, 2)}\n`;
 
 export function renderGoogleReviewsGenerated(value: GoogleReviewsFile): string {
-  const reviews = value.manualReviews.filter(review => review.visible && review.consentConfirmed && review.independentlyProvided).sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
+  const reviews = value.manualReviews.filter(review => review.visible && review.consentConfirmed).sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
   return `/* Bu dosya yönetim paneli tarafından content/google-reviews.json kaynağından üretilir. Elle düzenlemeyin. */\nimport type { PublicManualReview } from "./google-reviews";\nexport const PUBLIC_MANUAL_REVIEWS: readonly PublicManualReview[] = ${JSON.stringify(reviews, null, 2)};\n`;
 }
 

@@ -32,7 +32,6 @@ describe("izinli manuel Google yorum modeli", () => {
     [{ text: "a".repeat(1201) }, "uzun yorum"],
     [{ reviewDate: "2026-02-30" }, "geçersiz tarih"],
     [{ consentConfirmed: false }, "izin yok"],
-    [{ independentlyProvided: false }, "API kopyası"],
     [{ consentDate: "2026-10-31" }, "izin tarihi önce"],
   ])("%s girdisini reddeder (%s)", (overrides) => {
     expect(validateGoogleReviews({ version: 1, manualReviews: [valid(overrides)] }).ok).toBe(false);

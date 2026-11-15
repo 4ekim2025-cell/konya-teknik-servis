@@ -195,7 +195,7 @@ function homeBlogHtml() {
 
 function homeGoogleReviewsHtml() {
   if (!PUBLIC_MANUAL_REVIEWS.length) return "";
-  return `<section aria-labelledby="google-reviews-title"><h2 id="google-reviews-title">Selçuklu, Meram ve Karatay'da güvenle tercih edilen teknik servis</h2><p>Müşterilerimizin Google üzerinden paylaştığı deneyimler</p>${PUBLIC_MANUAL_REVIEWS.map(review => `<article><p aria-label="${review.rating} yıldız">${"★".repeat(review.rating)}</p><p>${esc(review.text)}</p><p><strong>${esc(review.author)}</strong> · <time datetime="${review.reviewDate}">${esc(review.reviewDate)}</time> · Google’da paylaşılan deneyim</p></article>`).join("")}</section>`;
+  return `<section aria-labelledby="google-reviews-title"><h2 id="google-reviews-title">Selçuklu, Meram ve Karatay'da güvenle tercih edilen teknik servis</h2><p>Müşterilerimizin Google üzerinden paylaştığı deneyimler</p>${PUBLIC_MANUAL_REVIEWS.map(review => `<article><p aria-label="${review.rating} yıldız">${"★".repeat(review.rating)}</p><p>${esc(review.text)}</p><p><strong>${esc(review.author)}</strong> · <time datetime="${review.reviewDate}">${esc(review.reviewDate)}</time>${review.googleReviewUrl ? ` · <a href="${esc(review.googleReviewUrl)}" target="_blank" rel="noopener noreferrer">Yorumu Google’da aç</a>` : " · Google’da paylaşılan deneyim"}</p></article>`).join("")}</section>`;
 }
 
 const legalSectionsByRoute: Record<string, LegalSection[]> = { "/kvkk/": kvkkSections, "/gizlilik-politikasi/": privacySections, "/cerez-politikasi/": cookieSections };

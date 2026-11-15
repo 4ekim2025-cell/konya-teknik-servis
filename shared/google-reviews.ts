@@ -16,6 +16,10 @@ export const manualGoogleReviewSchema = z.object({
   rating: z.number().int().min(1).max(5),
   text: z.string().trim().min(1, "Yorum gerekli").max(1200, "Yorum en fazla 1200 karakter olabilir"),
   reviewDate: isoDate,
+  googleReviewUrl: z.url().max(2048).refine(value => {
+    const url = new URL(value);
+    return url.protocol === "https:" && !url.username && !url.password && ["google.com", "www.google.com", "maps.google.com", "search.google.com", "maps.app.goo.gl", "g.page", "g.co"].includes(url.hostname);
+  }, "Google yorum bağlantısı geçerli bir Google adresi olmalı").optional(),
   consentConfirmed: z.boolean().refine(value => value, "Yorum sahibinin izni doğrulanmalı"),
   independentlyProvided: z.boolean().optional(), // Eski kayıtlarla uyumluluk; yeni formda istenmez.
   consentDate: isoDate,

@@ -1434,3 +1434,4 @@ a.home-blog-card:hover .home-blog-media img{transform:scale(1.04)}
 
 /* Google marka rehberi: yıldızlar kartın üstünde, resmi atıf logosu yazar satırında ayrı tutulur. */
 .google-review-card footer span:before{content:"";display:inline-block;width:46px;height:15px;margin-right:7px;vertical-align:-4px;background:url("/google-wordmark.png") center/contain no-repeat}
+.google-review-card footer .google-review-source{width:max-content;margin-top:3px;color:#8a5b54;font:800 10px Manrope,sans-serif;text-decoration:underline;text-underline-offset:3px}.google-review-card footer .google-review-source:before{content:"";display:inline-block;width:46px;height:15px;margin-right:7px;vertical-align:-4px;background:url("/google-wordmark.png") center/contain no-repeat}.google-review-card footer .google-review-source:hover{color:var(--brand-teal)}

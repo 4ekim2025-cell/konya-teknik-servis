@@ -13,5 +13,17 @@ export const PUBLIC_MANUAL_REVIEWS: readonly PublicManualReview[] = [
     "consentDate": "2026-10-05",
     "visible": true,
     "order": 0
+  },
+  {
+    "id": "manual_4db867f8aef84ee1",
+    "author": "Kemal B.",
+    "rating": 5,
+    "text": "Eski çamaşır makinemiz vardı. Kazandan ses geliyordu. Pratik şekilde çözdüler. Teşekkürler.",
+    "reviewDate": "2026-10-08",
+    "googleReviewUrl": "https://share.google/rcm0ZbJ9jRENabDSm",
+    "consentConfirmed": true,
+    "consentDate": "2026-10-08",
+    "visible": true,
+    "order": 1
   }
 ];

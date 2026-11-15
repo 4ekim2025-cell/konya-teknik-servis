@@ -26,6 +26,14 @@ describe("izinli manuel Google yorum modeli", () => {
     expect(result.ok).toBe(false);
   });
 
+  it("yüzen rozet metnini doğrular ve yayın modülüne ekler", () => {
+    const data = { version: 1 as const, floatingBadgeLabel: "Müşteri görüşleri", floatingBadgeScore: "4/5", manualReviews: [valid()] };
+    const result = validateGoogleReviews(data);
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(renderGoogleReviewsGenerated(result.data)).toContain('"label":"Müşteri görüşleri","score":"4/5"');
+    expect(validateGoogleReviews({ ...data, floatingBadgeScore: "6/5" }).ok).toBe(false);
+  });
+
   it("Google yorum bağlantısını güvenli adreslerle sınırlar", () => {
     expect(validateGoogleReviews({ version: 1, manualReviews: [valid({ googleReviewUrl: "https://maps.app.goo.gl/example" })] }).ok).toBe(true);
     expect(validateGoogleReviews({ version: 1, manualReviews: [valid({ googleReviewUrl: "https://share.google/cgM2XT8inBBn7WzHn" })] }).ok).toBe(true);

@@ -5,7 +5,7 @@ export const PUBLIC_MANUAL_REVIEWS: readonly PublicManualReview[] = [
     "id": "manual_3f3d0d9b6cae400c",
     "author": "Hakkı M.",
     "rating": 5,
-    "text": "Gayet memnun kaldım, ellerine sağlık. Komşumun tavsiyesiyle bu firmayı aradım, sağolsunlar ilgilendiler. Çamaşır makinesi sıkmaya geçince çok ses yapıyor, yerinden oynuyordu; bir de suyu tam boşaltmıyordu. Gelip baktılar, arızayı bulup hallettiler. Şimdi makine gayet güzel çalışıyor. Karatayda tamirci arayan olursa tavsiye ederim.",
+    "text": "Çamaşır makinesi sıkmaya geçince çok ses yapıyor, yerinden oynuyordu; bir de suyu tam boşaltmıyordu. Esad usta halletti. Karatayda tamirci arayan olursa tavsiye ederim.",
     "reviewDate": "2026-10-05",
     "googleReviewUrl": "https://share.google/cgM2XT8inBBn7WzHn",
     "consentConfirmed": true,

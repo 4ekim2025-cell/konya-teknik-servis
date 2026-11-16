@@ -1420,14 +1420,17 @@ a.home-blog-card:hover .home-blog-media img{transform:scale(1.04)}
 .home-blog{padding:64px 20px}
 .home-blog-head{display:block}
 .home-blog-head p{margin-top:20px;font-size:14px}
-.home-blog-grid{grid-template-columns:1fr;gap:10px;margin-top:28px}
-.home-blog-card{flex-direction:row;align-items:stretch}
-.home-blog-media{flex:0 0 104px;width:104px;aspect-ratio:auto;min-height:104px}
+.home-blog-grid{display:flex;gap:10px;margin:28px -20px 0;padding:0 20px 6px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-left:20px;scrollbar-width:none}
+.home-blog-grid::-webkit-scrollbar{display:none}
+.home-blog-card{flex:0 0 min(86%,340px);flex-direction:row;align-items:stretch;scroll-snap-align:start}
+.home-blog-media{flex:0 0 92px;width:92px;aspect-ratio:auto;min-height:104px}
 .home-blog-media svg{width:40px;height:40px}
 .home-blog-body{gap:6px;padding:13px 14px}
 .home-blog-body h3{font-size:16px;line-height:1.22}
 .home-blog-body p{font-size:12px;-webkit-line-clamp:2}
 .home-blog-meta{font-size:11px;padding-top:2px}
+.home-blog-body small{gap:2px 8px;letter-spacing:.02em}
+.home-blog-body small em{letter-spacing:0}
 .home-blog-read{display:none}
 .home-blog-skeleton{min-height:128px}
 }
@@ -1436,7 +1439,7 @@ a.home-blog-card:hover .home-blog-media img{transform:scale(1.04)}
 .google-reviews-watermark{position:absolute;z-index:0;top:-112px;right:-92px;width:430px;height:auto;opacity:.2;pointer-events:none}.google-reviews-head,.google-reviews-carousel{position:relative;z-index:1}
 @media(max-width:860px){.google-reviews-watermark{top:-86px;right:-100px;width:300px;opacity:.16}}
 
-.floating-google-rating{grid-template-columns:28px minmax(0,1fr);align-items:center;gap:9px;border-radius:16px;text-align:left}.floating-google-rating>img{width:28px;height:28px;object-fit:contain}.floating-google-rating>div{display:flex;align-items:center;flex-wrap:wrap;gap:2px 5px;min-width:0}.floating-google-rating>div>strong{flex-basis:100%;font-size:11px;line-height:1.2}.floating-google-rating .floating-google-stars{display:flex;gap:1px;margin:0;color:#d9533f}.floating-google-rating .floating-google-stars:before{content:none}.floating-google-rating>div>small{font-size:11px;color:var(--brand-teal)}
+.floating-google-rating{grid-template-columns:28px minmax(0,1fr);align-items:center;gap:9px;border-radius:16px;text-align:left}.floating-google-rating>img{width:28px;height:28px;object-fit:contain}.floating-google-rating>div{display:flex;align-items:center;flex-wrap:wrap;gap:2px 5px;min-width:0}.floating-google-rating>div>strong{flex-basis:100%;font-size:11px;line-height:1.2}.floating-google-rating .floating-google-stars{display:flex;gap:1px;margin:0;color:#fbbc04}.floating-google-rating .floating-google-stars:before{content:none}.floating-google-rating>div>small{font-size:11px;color:var(--brand-teal)}
 @media(max-width:860px){
   body{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
   .mobile-action-bar{display:block;height:auto;padding:0 10px calc(11px + env(safe-area-inset-bottom,0px));border-top:1px solid #ded5c9;background:#fff;box-shadow:0 -6px 18px rgba(24,42,43,.1)}
@@ -1453,4 +1456,15 @@ a.home-blog-card:hover .home-blog-media img{transform:scale(1.04)}
 @media(max-width:359px){
   .mobile-action-bar .mobile-action-buttons .mobile-call-action,.mobile-action-bar .mobile-action-buttons .mobile-preform-action{gap:5px;padding:0 6px;font-size:15px}
   .mobile-google-rating small{font-size:11px}
+}
+
+/* Güvence bölümü: dolu turuncu yerine marka kremi (2026-11-16 kararı). */
+.guarantee-intro .button{border-color:#fcf5db;background:#fcf5db;color:var(--brand-teal)}
+.guarantee-intro .button:hover{border-color:#fff;background:#fff;color:var(--brand-teal)}
+.guarantee-list article>b{background:#fcf5db;color:var(--brand-teal)}
+.guarantee-note{border-left-color:#f2c3a6}
+
+/* Telefonda okunabilirlik: hiçbir metin 12 pikselin altına inmez (2026-11-16 kararı). */
+@media(max-width:860px){
+  .hero-trust span,.hero-scroll span,.google-rating-summary small,.home-blog-body>small,.home-blog-body>small em,.home-blog-meta span,.home-repair-guide-card small,.guarantee-badge small,.guarantee-panel-head span,.service-guide-cta,.diagnostic-meta span i,.diagnostic-privacy-note,.proof-image span{font-size:12px!important}
 }

@@ -23,17 +23,34 @@ describe("anasayfa Google yorumları", () => {
     expect(home).not.toContain("Google’da görüntüle");
   });
 
-  it("erişilebilir ve hareket tercihine saygılı kaydırıcı davranışlarını içerir", () => {
+  it("erişilebilir, kendiliğinden kaymayan ve hareket tercihine saygılı sayfalı düzeni içerir", () => {
     expect(home).toContain('aria-roledescription="carousel"');
     expect(home).toContain('event.key==="ArrowRight"');
-    expect(home).toContain("onMouseEnter={()=>setPaused(true)}");
-    expect(home).toContain("onFocusCapture={()=>setPaused(true)}");
     expect(home).toContain("prefers-reduced-motion: reduce");
-    expect(home).toContain("2000");
-    expect(home).toContain("onPointerDown={onPointerDown}");
-    expect(styles).toContain("--review-visible");
+    expect(home).toContain("reviewsLayout");
+    expect(home).toContain('aria-label="Sonraki yorumları göster"');
+    // Yorumlar kendiliğinden kaymaz: zamanlayıcı ve duraklatma durumu yoktur (2026-11-16 kararı).
+    expect(home).not.toContain("setPaused");
+    expect(home).not.toContain("manualRevision");
+    expect(styles).toContain("scroll-snap-type:x mandatory");
+    expect(styles).toContain("--review-cols");
     expect(styles).toContain("@media(max-width:1100px)");
     expect(styles).toContain("@media(max-width:680px)");
+  });
+
+  it("kısa yoruma göre boyutlanan kartlarda uzun yorumu keser ve tüm metni sayfada tutar", () => {
+    expect(styles).toContain("-webkit-line-clamp:3");
+    expect(home).toContain('className="google-review-more"');
+    expect(home).toContain("<p ref={ref}>{text}</p>");
+    expect(styles).not.toContain("google-review-approval");
+    expect(home).not.toContain("review-thumbs-up");
+  });
+
+  it("özet puanı yönetilebilir rozetten, tüm yorumlar bağlantısını işletme profilinden alır", () => {
+    expect(home).toContain("PUBLIC_REVIEW_BADGE.score");
+    expect(home).toContain("PUBLIC_REVIEW_BADGE.label");
+    expect(home).toContain("href={GOOGLE_BUSINESS_URL}");
+    expect(home).toContain("Tüm yorumları Google’da gör");
   });
 });
 

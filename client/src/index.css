@@ -1470,3 +1470,8 @@ a.home-blog-card:hover .home-blog-media img{transform:scale(1.04)}
 @media(max-width:860px){
   .hero-trust span,.hero-scroll span,.google-rating-summary small,.home-blog-body>small,.home-blog-body>small em,.home-blog-meta span,.home-repair-guide-card small,.guarantee-badge small,.guarantee-panel-head span,.service-guide-cta,.diagnostic-meta span i,.diagnostic-privacy-note,.proof-image span{font-size:12px!important}
 }
+
+/* Telefonda giriş: numara (alt çubukta var), ikinci logo (menüde var) ve Keşfet kutusu gizlenir; ilçe etiketleri kalır (2026-11-16 kararı). Bilgisayar ve tablet düzeni değişmez. */
+@media(max-width:860px){
+  .hero .hero-phone,.hero .hero-logo-stack{display:none!important}
+}

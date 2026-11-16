@@ -53,6 +53,12 @@ describe("header ve hero iletişim yerleşimi", () => {
     expect(styles).toContain(".hero-region-stack{position:static;grid-column:2;grid-row:1;width:220px;min-width:0;justify-self:center;align-self:center;transform:none!important}");
   });
 
+  it("telefonda numara ile logo/Keşfet grubunu gizler, ilçe etiketlerini bırakır", () => {
+    expect(styles).toContain("@media(max-width:860px){\n  .hero .hero-phone,.hero .hero-logo-stack{display:none!important}\n}");
+    expect(styles).not.toContain(".hero .hero-regions{display:none");
+    expect(home).toContain('className="hero-regions"');
+  });
+
   it("Keşfet eylemini logo alanının hemen altında ortalar", () => {
     expect(styles).toContain(".hero-logo-stack{flex:0 0 300px;align-items:center}");
     expect(styles).toContain(".hero-logo-stack .hero-scroll{align-self:center}");

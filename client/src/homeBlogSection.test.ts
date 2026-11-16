@@ -9,14 +9,33 @@ const read = (path: string) => readFileSync(resolve(root, path), "utf8");
 describe("ana sayfa: Blogdan son yazılar", () => {
   const home = read("client/src/pages/Home.tsx");
 
-  it("bölüm online takip ile arıza rehberleri arasında durur", () => {
-    const tracking = home.indexOf('<section className="tracking-section" id="takip">');
+  it("bölüm güvence ile arıza rehberleri arasında durur", () => {
+    const guarantee = home.indexOf("<GuaranteeSection/>");
     const blog = home.indexOf("<HomeBlogSection/>");
     const guides = home.indexOf("<HomeRepairGuides/>");
-    expect(tracking).toBeGreaterThan(-1);
-    expect(blog).toBeGreaterThan(tracking);
+    expect(guarantee).toBeGreaterThan(-1);
+    expect(blog).toBeGreaterThan(guarantee);
     expect(guides).toBeGreaterThan(blog);
-    expect(read("client/src/index.css")).toContain(".home-primary-flow>.tracking-section{order:2}.home-primary-flow>.home-blog{order:3}.home-primary-flow>.home-repair-guides{order:4}");
+    expect(read("client/src/index.css")).toContain(".home-primary-flow~.guarantee-section{order:4}.home-primary-flow~.home-blog{order:5}.home-primary-flow~.home-repair-guides{order:6}");
+  });
+
+  it("ana sayfa sırası: yorumlar, hizmetler, online takip, servis talebi; blog ve rehberler sonra gelir", () => {
+    const order = [
+      "<GoogleReviewsSection/>",
+      '<section id="hizmetler" className="services-section">',
+      '<section className="tracking-section" id="takip">',
+      '<div id="on-bilgi-formu" className="preform-wrap">',
+      '<section className="proof-section">',
+      "<GuaranteeSection/>",
+      "<HomeBlogSection/>",
+      "<HomeRepairGuides/>",
+      '<section id="hizmet-rehberi" className="service-guide"',
+      '<section className="faq-section">',
+      "<InstagramFeed/>",
+    ].map(marker => home.indexOf(marker));
+    expect(order.every(index => index > -1)).toBe(true);
+    expect([...order].sort((a, b) => a - b)).toEqual(order);
+    expect(read("client/src/index.css")).toContain(".home-primary-flow>.services-section{order:2}.home-primary-flow>.tracking-section{order:3}.home-primary-flow~.preform-wrap{order:2}");
   });
 
   it("kenar payı diğer ana sayfa bölümleriyle aynıdır, bilgisayarda satırda 4 yazı", () => {
